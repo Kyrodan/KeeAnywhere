@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8E40EDF5-06B8-4059-8B19-CB90D937FEBB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KeeAnywhere</RootNamespace>
+    <AssemblyName>KeeAnywhere</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CredentialManagement, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CredentialManagement.1.0.2\lib\net35\CredentialManagement.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="KeePass, Version=2.30.0.32059, Culture=neutral, PublicKeyToken=7952fc8ece49a093, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\KeePass.exe</HintPath>
+    </Reference>
+    <Reference Include="KoenZomers.OneDrive.Api, Version=1.1.0.0, Culture=neutral, PublicKeyToken=c94340d84666bdcb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\KoenZomers.OneDrive.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration\AccountConfiguration.cs" />
+    <Compile Include="Configuration\PluginConfiguration.cs" />
+    <Compile Include="Configuration\ConfigurationService.cs" />
+    <Compile Include="Configuration\DatabaseConfiguration.cs" />
+    <Compile Include="Configuration\RefreshTokenStorage.cs" />
+    <Compile Include="Forms\OneDriveAuthenticationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OneDriveAuthenticationForm.Designer.cs">
+      <DependentUpon>OneDriveAuthenticationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CloudDriveFilePicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CloudDriveFilePicker.Designer.cs">
+      <DependentUpon>CloudDriveFilePicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Icons.cs" />
+    <Compile Include="KeeAnywhereExt.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorageProviders\IStorageProvider.cs" />
+    <Compile Include="StorageProviders\StorageProviderDescriptor.cs" />
+    <Compile Include="StorageProviders\StorageProviderRegistry.cs" />
+    <Compile Include="StorageProviders\StorageProviderType.cs" />
+    <Compile Include="StorageProviders\StorageProviderUri.cs" />
+    <Compile Include="StorageProviders\OneDrive\OneDriveApiExtensions.cs" />
+    <Compile Include="StorageProviders\OneDrive\OneDriveService.cs" />
+    <Compile Include="StorageProviders\OneDrive\OneDriveStorageProvider.cs" />
+    <Compile Include="StorageProviders\StorageProviderService.cs" />
+    <Compile Include="UIService.cs" />
+    <Compile Include="WebRequest\KeeAnywhereWebResponse.cs" />
+    <Compile Include="WebRequest\KeeAnywhereWebRequest.cs" />
+    <Compile Include="WebRequest\KeeAnywhereWebRequestCreator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\OneDriveAuthenticationForm.resx">
+      <DependentUpon>OneDriveAuthenticationForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CloudDriveFilePicker.resx">
+      <DependentUpon>CloudDriveFilePicker.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <ExcludeFromPlgx />
+    </None>
+    <None Include="KeePass.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromPlgx />
+    </None>
+    <None Include="packages.config">
+      <ExcludeFromPlgx />
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Folder_16x16.png" />
+    <Content Include="Resources\Icon_CloudDrive_16x16.ico" />
+    <Content Include="Resources\CloudDrive_16x16.png" />
+    <Content Include="Resources\CloudDrive_48x48.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- You can add a property group just for the plgx stuff or you can add to existing property groups -->
+  <PropertyGroup>
+    <PlgxConfiguration>
+      <Prerequisites>
+        <!--<KeePassVersion>2.19</KeePassVersion>-->
+        <OS>Windows</OS>
+        <DotNetVersion>4.0</DotNetVersion>
+      </Prerequisites>
+    </PlgxConfiguration>
+  </PropertyGroup>
+  <Import Project="..\packages\PlgxTool.1.0.0\build\PlgxTool.targets" Condition="Exists('..\packages\PlgxTool.1.0.0\build\PlgxTool.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\PlgxTool.1.0.0\build\PlgxTool.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PlgxTool.1.0.0\build\PlgxTool.targets'))" />
+    <Error Condition="!Exists('..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  -->
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+    <CallTarget Targets="BuildPlgx" />
+    <Delete Files="$(TargetPath)" />
+  </Target>
+  <Import Project="..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets')" />
+</Project>

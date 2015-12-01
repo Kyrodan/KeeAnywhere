@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeeAnywhere", "KeeAnywhere\KeeAnywhere.csproj", "{8E40EDF5-06B8-4059-8B19-CB90D937FEBB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{8BD15372-A422-4560-91B5-8BAC592C880E}"
+	ProjectSection(SolutionItems) = preProject
+		lib\KeePass.exe = lib\KeePass.exe
+		lib\KeePass.XmlSerializers.dll = lib\KeePass.XmlSerializers.dll
+		lib\KoenZomers.OneDrive.Api.dll = lib\KoenZomers.OneDrive.Api.dll
+		lib\Newtonsoft.Json.dll = lib\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E40EDF5-06B8-4059-8B19-CB90D937FEBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E40EDF5-06B8-4059-8B19-CB90D937FEBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E40EDF5-06B8-4059-8B19-CB90D937FEBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E40EDF5-06B8-4059-8B19-CB90D937FEBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
