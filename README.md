@@ -4,6 +4,7 @@ KeeAnywhere is a KeePass plugin that provides access to cloud storage providers 
 # Getting started
 * [What is KeeAnywhere?](https://github.com/Kyrodan/KeeAnywhere/wiki)
 * [Screenshots](https://github.com/Kyrodan/KeeAnywhere/wiki/Screenshots)
+* [Download](https://github.com/Kyrodan/KeeAnywhere/releases)
 
 # Status
 This project is in very early state and **NOT** production ready.
