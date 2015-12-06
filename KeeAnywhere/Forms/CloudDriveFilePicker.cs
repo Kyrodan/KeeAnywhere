@@ -133,8 +133,8 @@ namespace KeeAnywhere.Forms
                         PluginResources.OneDrive_48x48, "Save to Cloud Drive",
                         "Here you can pick a location to save to a Cloud Drive.");
                     break;
-                default:
-                    throw new NotImplementedException();
+                //default:
+                //    throw new NotImplementedException();
             }
 
         }
