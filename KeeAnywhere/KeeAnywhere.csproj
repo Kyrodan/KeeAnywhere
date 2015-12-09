@@ -70,6 +70,9 @@
     <Compile Include="Forms\CloudDriveFilePicker.Designer.cs">
       <DependentUpon>CloudDriveFilePicker.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DropDownButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>

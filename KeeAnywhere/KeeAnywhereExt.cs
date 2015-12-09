@@ -141,7 +141,7 @@ namespace KeeAnywhere
 
             while (account == null)
             {
-                account = await _uiService.CreateOrUpdateAccount();
+                account = await _uiService.CreateOrUpdateAccount(StorageType.OneDrive);
 
                 if (account != null) continue;
                 var result = MessageService.Ask("You did not created a new account.\nAt least one account is required to work with KeeAnywhere.", "KeeAnywhere", MessageBoxButtons.RetryCancel);

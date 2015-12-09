@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.StorageProviders;
@@ -17,11 +18,11 @@ namespace KeeAnywhere
             _storageService = storageService;
         }
 
-        public async Task<AccountConfiguration> CreateOrUpdateAccount()
+        public async Task<AccountConfiguration> CreateOrUpdateAccount(StorageType type)
         {
-            var newAccount = await _storageService.CreateAccount(StorageType.OneDrive);
+            var newAccount = await _storageService.CreateAccount(type);
 
-            var existingAccount = _configService.Accounts.SingleOrDefault(_ => _.Id == newAccount.Id);
+            var existingAccount = _configService.Accounts.SingleOrDefault(_ => _.Type == newAccount.Type && _.Id == newAccount.Id);
             if (existingAccount == null) // New Account
             {
                 _configService.Accounts.Add(newAccount);

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 using KeeAnywhere.Configuration;
+using KeeAnywhere.StorageProviders;
 using KeePass.UI;
 
 namespace KeeAnywhere.Forms
@@ -98,6 +99,12 @@ namespace KeeAnywhere.Forms
                     throw new NotImplementedException();
             }
 
+            foreach (var descriptor in StorageRegistry.Descriptors)
+            {
+                var item = m_mnuAdd.Items.Add(descriptor.Type.ToString());
+                item.Tag = descriptor.Type;
+                item.Click += OnAccountAdd;
+            }
 
             m_lvAccounts.Columns.Add("Type");
             m_lvAccounts.Columns.Add("Name");
@@ -147,7 +154,10 @@ namespace KeeAnywhere.Forms
 
         private async void OnAccountAdd(object sender, EventArgs e)
         {
-            await m_uiService.CreateOrUpdateAccount();
+            var item = sender as ToolStripMenuItem;
+            if (item == null) return;
+
+            await m_uiService.CreateOrUpdateAccount((StorageType)item.Tag);
 
             UpdateAccountList();
         }

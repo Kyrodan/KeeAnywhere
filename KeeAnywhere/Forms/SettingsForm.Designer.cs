@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.m_bannerImage = new System.Windows.Forms.PictureBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.m_tabAccounts = new System.Windows.Forms.TabPage();
             this.m_btnAccountRemove = new System.Windows.Forms.Button();
-            this.m_btnAccountAdd = new System.Windows.Forms.Button();
             this.m_lvAccounts = new System.Windows.Forms.ListView();
             this.lnklblHelpMeChooseAccountStorage = new System.Windows.Forms.LinkLabel();
             this.m_rbStorageLocation_Disk = new System.Windows.Forms.RadioButton();
@@ -49,6 +49,8 @@
             this.m_lblAboutHeader = new System.Windows.Forms.Label();
             this.m_btnOK = new System.Windows.Forms.Button();
             this.m_btnCancel = new System.Windows.Forms.Button();
+            this.m_mnuAdd = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.m_btnAccountAdd = new KeeAnywhere.Forms.DropDownButton();
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.m_tabAccounts.SuspendLayout();
@@ -81,8 +83,8 @@
             // 
             // m_tabAccounts
             // 
-            this.m_tabAccounts.Controls.Add(this.m_btnAccountRemove);
             this.m_tabAccounts.Controls.Add(this.m_btnAccountAdd);
+            this.m_tabAccounts.Controls.Add(this.m_btnAccountRemove);
             this.m_tabAccounts.Controls.Add(this.m_lvAccounts);
             this.m_tabAccounts.Controls.Add(this.lnklblHelpMeChooseAccountStorage);
             this.m_tabAccounts.Controls.Add(this.m_rbStorageLocation_Disk);
@@ -106,17 +108,6 @@
             this.m_btnAccountRemove.Text = "Remove";
             this.m_btnAccountRemove.UseVisualStyleBackColor = true;
             this.m_btnAccountRemove.Click += new System.EventHandler(this.OnAccountRemove);
-            // 
-            // m_btnAccountAdd
-            // 
-            this.m_btnAccountAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnAccountAdd.Location = new System.Drawing.Point(489, 38);
-            this.m_btnAccountAdd.Name = "m_btnAccountAdd";
-            this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
-            this.m_btnAccountAdd.TabIndex = 8;
-            this.m_btnAccountAdd.Text = "&Add...";
-            this.m_btnAccountAdd.UseVisualStyleBackColor = true;
-            this.m_btnAccountAdd.Click += new System.EventHandler(this.OnAccountAdd);
             // 
             // m_lvAccounts
             // 
@@ -290,6 +281,22 @@
             this.m_btnCancel.UseVisualStyleBackColor = true;
             this.m_btnCancel.Click += new System.EventHandler(this.OnBtnCancelClick);
             // 
+            // m_mnuAdd
+            // 
+            this.m_mnuAdd.Name = "m_mnuAdd";
+            this.m_mnuAdd.Size = new System.Drawing.Size(61, 4);
+            // 
+            // m_btnAccountAdd
+            // 
+            this.m_btnAccountAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnAccountAdd.Location = new System.Drawing.Point(490, 38);
+            this.m_btnAccountAdd.Menu = this.m_mnuAdd;
+            this.m_btnAccountAdd.Name = "m_btnAccountAdd";
+            this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
+            this.m_btnAccountAdd.TabIndex = 11;
+            this.m_btnAccountAdd.Text = "Add";
+            this.m_btnAccountAdd.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AcceptButton = this.m_btnOK;
@@ -340,9 +347,10 @@
         private System.Windows.Forms.LinkLabel lnklblHelpMeChooseAccountStorage;
         private System.Windows.Forms.ListView m_lvAccounts;
         private System.Windows.Forms.Button m_btnAccountRemove;
-        private System.Windows.Forms.Button m_btnAccountAdd;
         private System.Windows.Forms.Label m_lblAboutVersion;
         private System.Windows.Forms.LinkLabel m_lnkContactAuthor;
         private System.Windows.Forms.LinkLabel m_lnkReportBug;
+        private System.Windows.Forms.ContextMenuStrip m_mnuAdd;
+        private DropDownButton m_btnAccountAdd;
     }
 }
