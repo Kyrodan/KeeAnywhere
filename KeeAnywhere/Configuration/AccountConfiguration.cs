@@ -10,7 +10,7 @@ namespace KeeAnywhere.Configuration
         public string Id { get; set; }
 
         [DataMember]
-        public StorageProviderType Type { get; set; }
+        public StorageType Type { get; set; }
 
         [DataMember]
         public string Name { get; set; }

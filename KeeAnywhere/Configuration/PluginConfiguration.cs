@@ -9,12 +9,12 @@ namespace KeeAnywhere.Configuration
         public bool IsOfflineCacheEnabled { get; set; }
 
         [DataMember]
-        public RefreshTokenStorage RefreshTokenStorage { get; set; }
+        public AccountStorageLocation AccountStorageLocation { get; set; }
 
         public PluginConfiguration()
         {
             this.IsOfflineCacheEnabled = true;
-            this.RefreshTokenStorage = RefreshTokenStorage.WindowsCredentialManager;
+            this.AccountStorageLocation = AccountStorageLocation.WindowsCredentialManager;
         }
     }
 }

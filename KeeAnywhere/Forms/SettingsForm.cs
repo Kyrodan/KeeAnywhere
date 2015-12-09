@@ -37,9 +37,9 @@ namespace KeeAnywhere.Forms
             m_configService.PluginConfiguration.IsOfflineCacheEnabled = m_cbOfflineCache.Checked;
 
             if (m_rbStorageLocation_WindowsCredentialManager.Checked)
-                m_configService.PluginConfiguration.RefreshTokenStorage = RefreshTokenStorage.WindowsCredentialManager;
+                m_configService.PluginConfiguration.AccountStorageLocation = AccountStorageLocation.WindowsCredentialManager;
             else if (m_rbStorageLocation_Disk.Checked)
-                m_configService.PluginConfiguration.RefreshTokenStorage = RefreshTokenStorage.Disk;
+                m_configService.PluginConfiguration.AccountStorageLocation = AccountStorageLocation.KeePassConfig;
             else
                 throw new NotImplementedException();
 
@@ -86,12 +86,12 @@ namespace KeeAnywhere.Forms
 
         private void InitAccountsTab()
         {
-            switch (m_configService.PluginConfiguration.RefreshTokenStorage)
+            switch (m_configService.PluginConfiguration.AccountStorageLocation)
             {
-                case RefreshTokenStorage.WindowsCredentialManager:
+                case AccountStorageLocation.WindowsCredentialManager:
                     m_rbStorageLocation_WindowsCredentialManager.Checked = true;
                     break;
-                case RefreshTokenStorage.Disk:
+                case AccountStorageLocation.KeePassConfig:
                     m_rbStorageLocation_Disk.Checked = true;
                     break;
                 default:
@@ -141,7 +141,7 @@ namespace KeeAnywhere.Forms
         private void OnHelpMeChooseAccountStorage(object sender, LinkLabelLinkClickedEventArgs e)
         {
             //TODO: Change to production URL
-            Process.Start("https://localhost/RefreshTokenStorage.md");
+            Process.Start("https://localhost/AccountStorageLocation.md");
         }
 
 

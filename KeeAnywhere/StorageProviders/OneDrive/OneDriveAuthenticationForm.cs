@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using KoenZomers.OneDrive.Api;
 
-namespace KeeAnywhere.Forms
+namespace KeeAnywhere.StorageProviders.OneDrive
 {
     public partial class OneDriveAuthenticationForm : Form
     {

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.Forms;
 using KeeAnywhere.StorageProviders;
-using KeeAnywhere.StorageProviders.OneDrive;
 using KeePass.Plugins;
 using KeePass.UI;
 using KeePassLib.Native;
@@ -22,10 +19,6 @@ namespace KeeAnywhere
     /// <remarks>KeePass SDK documentation: http://keepass.info/help/v2_dev/plg_index.html</remarks>
     public class KeeAnywhereExt : Plugin
     {
-        #region Attributes
-        /// <summary>
-        /// Reference to the KeePass instance
-        /// </summary>
         private IPluginHost _host;
 
         private ToolStripMenuItem _tsShowSettings;
@@ -33,11 +26,9 @@ namespace KeeAnywhere
         private ToolStripMenuItem _tsSaveToCloudDrive;
 
         private ConfigurationService _configService;
-        private OneDriveService _oneDriveService;
         private UIService _uiService;
-        private StorageProviderService _storageProviderService;
+        private StorageService _storageService;
 
-        #endregion
 
         /// <summary>
         /// Returns the URL where KeePass can check for updates of this plugin
@@ -59,25 +50,16 @@ namespace KeeAnywhere
 
             _host = pluginHost;
 
-            // Initialize OneDriveService
-            _oneDriveService = new OneDriveService();
-
             // Load the configuration
             _configService = new ConfigurationService(pluginHost);
             _configService.Load();
 
             // Initialize storage providers
-            _storageProviderService = new StorageProviderService(_configService);
-            _storageProviderService.Register();
+            _storageService = new StorageService(_configService);
+            _storageService.Register();
 
             // Initialize UIService
-            _uiService = new UIService(_configService, _oneDriveService);
-
-
-            // Bind to the events for loading and saving databases
-            //_host.MainWindow.FileOpened += OnKeePassDatabaseOpened;
-            //_host.MainWindow.FileSaved += OnKeePassDatabaseSaved;
-            //_host.MainWindow.FileClosed += OnKeePassDatabaseClosed;
+            _uiService = new UIService(_configService, _storageService);
 
 
             // Add the menu option for configuration under Tools
@@ -87,7 +69,7 @@ namespace KeeAnywhere
             _tsShowSettings.Click += OnShowSetting;
             menu.Add(_tsShowSettings);
 
-            // Add "Open in OneDrive..." to File\Open menu.
+            // Add "Open from Cloud Drive..." to File\Open menu.
             var fileMenu = _host.MainWindow.MainMenu.Items["m_menuFile"] as ToolStripMenuItem;
             if (fileMenu != null)
             {
@@ -122,7 +104,7 @@ namespace KeeAnywhere
             if (!await HasAccounts()) return;
 
             var form = new CloudDriveFilePicker();
-            form.InitEx(_configService, _oneDriveService, CloudDriveFilePicker.Mode.Save);
+            form.InitEx(_configService, _storageService, CloudDriveFilePicker.Mode.Save);
             var result = UIUtil.ShowDialogAndDestroy(form);
 
             if (result != DialogResult.OK)
@@ -130,7 +112,6 @@ namespace KeeAnywhere
 
             var ci = IOConnectionInfo.FromPath(form.ResultUri);
             ci.CredSaveMode = IOCredSaveMode.SaveCred;
-            //_host.Database.SaveAs(ci, true, null);
             _host.MainWindow.SaveDatabaseAs(_host.Database, ci, true,null, true);
         }
 
@@ -140,7 +121,7 @@ namespace KeeAnywhere
             if (!await HasAccounts()) return;
 
             var form = new CloudDriveFilePicker();
-            form.InitEx(_configService, _oneDriveService, CloudDriveFilePicker.Mode.Open);
+            form.InitEx(_configService, _storageService, CloudDriveFilePicker.Mode.Open);
             var result = UIUtil.ShowDialogAndDestroy(form);
 
             if (result != DialogResult.OK)

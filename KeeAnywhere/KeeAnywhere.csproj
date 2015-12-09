@@ -63,14 +63,7 @@
     <Compile Include="Configuration\AccountConfiguration.cs" />
     <Compile Include="Configuration\PluginConfiguration.cs" />
     <Compile Include="Configuration\ConfigurationService.cs" />
-    <Compile Include="Configuration\DatabaseConfiguration.cs" />
-    <Compile Include="Configuration\RefreshTokenStorage.cs" />
-    <Compile Include="Forms\OneDriveAuthenticationForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\OneDriveAuthenticationForm.Designer.cs">
-      <DependentUpon>OneDriveAuthenticationForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Configuration\AccountStorageLocation.cs" />
     <Compile Include="Forms\CloudDriveFilePicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,25 +84,31 @@
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorageProviders\IStorageConfigurator.cs" />
     <Compile Include="StorageProviders\IStorageProvider.cs" />
-    <Compile Include="StorageProviders\StorageProviderDescriptor.cs" />
-    <Compile Include="StorageProviders\StorageProviderRegistry.cs" />
-    <Compile Include="StorageProviders\StorageProviderType.cs" />
-    <Compile Include="StorageProviders\StorageProviderUri.cs" />
+    <Compile Include="StorageProviders\OneDrive\OneDriveAuthenticationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StorageProviders\OneDrive\OneDriveAuthenticationForm.Designer.cs">
+      <DependentUpon>OneDriveAuthenticationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StorageProviders\OneDrive\OneDriveStorageConfigurator.cs" />
+    <Compile Include="StorageProviders\StorageDescriptor.cs" />
+    <Compile Include="StorageProviders\StorageProviderItem.cs" />
+    <Compile Include="StorageProviders\StorageProviderItemType.cs" />
+    <Compile Include="StorageProviders\StorageRegistry.cs" />
+    <Compile Include="StorageProviders\StorageType.cs" />
+    <Compile Include="StorageProviders\StorageUri.cs" />
     <Compile Include="StorageProviders\OneDrive\OneDriveApiExtensions.cs" />
-    <Compile Include="StorageProviders\OneDrive\OneDriveService.cs" />
+    <Compile Include="StorageProviders\OneDrive\OneDriveHelper.cs" />
     <Compile Include="StorageProviders\OneDrive\OneDriveStorageProvider.cs" />
-    <Compile Include="StorageProviders\StorageProviderService.cs" />
+    <Compile Include="StorageProviders\StorageService.cs" />
     <Compile Include="UIService.cs" />
     <Compile Include="WebRequest\KeeAnywhereWebResponse.cs" />
     <Compile Include="WebRequest\KeeAnywhereWebRequest.cs" />
     <Compile Include="WebRequest\KeeAnywhereWebRequestCreator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\OneDriveAuthenticationForm.resx">
-      <DependentUpon>OneDriveAuthenticationForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CloudDriveFilePicker.resx">
       <DependentUpon>CloudDriveFilePicker.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -121,6 +120,10 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StorageProviders\OneDrive\OneDriveAuthenticationForm.resx">
+      <DependentUpon>OneDriveAuthenticationForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

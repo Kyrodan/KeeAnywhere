@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.StorageProviders;
-using KeeAnywhere.StorageProviders.OneDrive;
 using KeePass.UI;
 using KeePassLib.Utility;
-using KoenZomers.OneDrive.Api;
-using KoenZomers.OneDrive.Api.Entities;
 
 namespace KeeAnywhere.Forms
 {
@@ -23,14 +20,14 @@ namespace KeeAnywhere.Forms
             Save,
         }
 
-        private OneDriveApi m_api;
-        private readonly Dictionary<OneDriveItem, ItemInfo> m_cache = new Dictionary<OneDriveItem, ItemInfo>();
-        private readonly Stack<OneDriveItem> m_stack = new Stack<OneDriveItem>();
+        private IStorageProvider m_provider;
+        private readonly Dictionary<StorageProviderItem, ItemInfo> m_cache = new Dictionary<StorageProviderItem, ItemInfo>();
+        private readonly Stack<StorageProviderItem> m_stack = new Stack<StorageProviderItem>();
         private ConfigurationService m_configService;
         private bool m_isInit;
-        private OneDriveService m_oneDriveService;
+        private StorageService m_storageService;
         private Cursor m_savedCursor;
-        private OneDriveItem m_selectedItem;
+        private StorageProviderItem m_selectedItem;
         private Mode m_mode;
 
         public CloudDriveFilePicker()
@@ -38,14 +35,14 @@ namespace KeeAnywhere.Forms
             InitializeComponent();
         }
 
-        public void InitEx(ConfigurationService configService, OneDriveService oneDriveService, Mode mode)
+        public void InitEx(ConfigurationService configService, StorageService storageService, Mode mode)
         {
             if (configService == null) throw new ArgumentNullException("configService");
-            if (oneDriveService == null) throw new ArgumentNullException("oneDriveService");
+            if (storageService == null) throw new ArgumentNullException("storageService");
             if (mode == Mode.Unknown) throw new ArgumentException("mode");
 
             m_configService = configService;
-            m_oneDriveService = oneDriveService;
+            m_storageService = storageService;
             m_mode = mode;
         }
 
@@ -61,7 +58,7 @@ namespace KeeAnywhere.Forms
             var path = GetPath();
             var account = ((AccountConfiguration) m_cbAccount.SelectedItem);
 
-            var s = StorageProviderUri.BuildUriString(account.Type, account.Name, path);
+            var s = StorageUri.BuildUriString(account.Type, account.Name, path);
 
             return s;
         }
@@ -152,8 +149,8 @@ namespace KeeAnywhere.Forms
             if (account == null) return;
 
             SetWaitState(true);
-            var api = await m_oneDriveService.TryGetApi(account);
-            await SetApi(api);
+            var api = m_storageService.GetProviderByAccount(account);
+            SetApi(api);
 
             SetWaitState(false);
         }
@@ -178,9 +175,9 @@ namespace KeeAnywhere.Forms
             }
         }
 
-        private async Task SetSelectedItem(OneDriveItem item)
+        private async Task SetSelectedItem(StorageProviderItem item)
         {
-            if (m_selectedItem == item || !item.IsFolder()) return;
+            if (m_selectedItem == item || item.Type != StorageProviderItemType.Folder) return;
 
             m_selectedItem = item;
 
@@ -207,10 +204,10 @@ namespace KeeAnywhere.Forms
                 lvi.SubItems.Add("(unknown)");
             }
 
-            foreach (var child in info.Children.Collection)
+            foreach (var child in info.Children)
             {
                 var ext = Path.GetExtension(child.Name);
-                if (m_cbFilter.SelectedIndex == 0 && child.IsFile() && !string.IsNullOrEmpty(ext) && ext.ToLower() != ".kdbx")
+                if (m_cbFilter.SelectedIndex == 0 && child.Type == StorageProviderItemType.File && !string.IsNullOrEmpty(ext) && ext.ToLower() != ".kdbx")
                     continue;
 
                 var lvi = m_lvDetails.Items.Add(child.Name);
@@ -218,18 +215,20 @@ namespace KeeAnywhere.Forms
 
                 lvi.SubItems.Add(child.Id);
 
-                if (child.IsFolder())
+                switch (child.Type)
                 {
-                    lvi.ImageIndex = 0;
-                    lvi.SubItems.Add("Folder");
+                    case StorageProviderItemType.Folder:
+                        lvi.ImageIndex = 0;
+                        lvi.SubItems.Add("Folder");
+                        break;
+                    case StorageProviderItemType.File:
+                        lvi.ImageIndex = GetIconIndex(child.Name);
+                        lvi.SubItems.Add("File");
+                        break;
+                    default:
+                        lvi.SubItems.Add("Unknown");
+                        break;
                 }
-                else if (child.IsFile())
-                {
-                    lvi.ImageIndex = GetIconIndex(child.Name);
-                    lvi.SubItems.Add("File");
-                }
-                else
-                    lvi.SubItems.Add("Unknown");
 
                 lvi.SubItems.Add(child.LastModifiedDateTime.ToString());
             }
@@ -252,21 +251,21 @@ namespace KeeAnywhere.Forms
             return m_ilIcons.Images.IndexOfKey(extension);
         }
 
-        private async Task SetApi(OneDriveApi api)
+        private async Task SetApi(IStorageProvider provider)
         {
-            if (m_api == api) return;
+            if (m_provider == provider) return;
 
-            m_api = api;
+            m_provider = provider;
             m_cache.Clear();
             m_stack.Clear();
 
-            if (m_api == null)
+            if (m_provider == null)
             {
                 await SetSelectedItem(null);
             }
             else
             {
-                var root = await m_api.GetDriveRoot();
+                var root = await m_provider.GetRootItem();
                 await SetSelectedItem(root);
             }
         }
@@ -275,44 +274,45 @@ namespace KeeAnywhere.Forms
         {
             if (m_lvDetails.FocusedItem == null) return;
 
-            var item = m_lvDetails.FocusedItem.Tag as OneDriveItem;
+            var item = m_lvDetails.FocusedItem.Tag as StorageProviderItem;
             if (item == null) return;
 
-            if (item.IsFolder())
+            switch (item.Type)
             {
-                SetWaitState(true);
+                case StorageProviderItemType.Folder:
+                    SetWaitState(true);
 
-                if (m_lvDetails.FocusedItem.Text == @"..")
-                    m_stack.Pop();
-                else
-                    m_stack.Push(item);
+                    if (m_lvDetails.FocusedItem.Text == @"..")
+                        m_stack.Pop();
+                    else
+                        m_stack.Push(item);
 
-                await SetSelectedItem(item);
-                SetWaitState(false);
-            }
-            else if (item.IsFile())
-            {
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                    await SetSelectedItem(item);
+                    SetWaitState(false);
+                    break;
+                case StorageProviderItemType.File:
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                    break;
             }
         }
 
-        private async Task<ItemInfo> GetItemInfo(OneDriveItem item)
+        private async Task<ItemInfo> GetItemInfo(StorageProviderItem item)
         {
             if (m_cache.ContainsKey(item))
                 return m_cache[item];
 
             var info = new ItemInfo();
-            info.Children = await m_api.GetChildrenByParentItem(item);
+            info.Children = await m_provider.GetChildrenByParentItem(item);
 
-            if (item.ParentReference != null)
+            if (!string.IsNullOrEmpty(item.ParentReferenceId))
             {
-                var parent = m_cache.Keys.SingleOrDefault(_ => _.Id == item.ParentReference.Id);
+                var parent = m_cache.Keys.SingleOrDefault(_ => _.Id == item.ParentReferenceId);
                 if (parent != null)
                     info.Parent = parent;
                 else
                     throw new NotImplementedException();
-                //await m_api.GetItem(item.ParentReference.Id);
+                //await m_provider.GetItem(item.ParentReference.Id);
             }
 
             m_cache.Add(item, info);
@@ -327,8 +327,8 @@ namespace KeeAnywhere.Forms
 
         private class ItemInfo
         {
-            public OneDriveItemCollection Children;
-            public OneDriveItem Parent;
+            public IEnumerable<StorageProviderItem> Children;
+            public StorageProviderItem Parent;
         }
 
         private async void OnOpenClick(object sender, EventArgs e)
@@ -341,24 +341,31 @@ namespace KeeAnywhere.Forms
                 return;
 
             var itemInfo = await GetItemInfo(m_selectedItem);
-            var subItem = itemInfo.Children.Collection.SingleOrDefault(_ => _.Name == filename);
+            var subItem = itemInfo.Children.SingleOrDefault(_ => _.Name == filename);
 
             switch (m_mode)
             {
                 case Mode.Open:
                     if (subItem == null)
                         MessageService.ShowWarning("File/Folder does not exist.");
-                    else if (subItem.IsFile())
-                        DialogResult = DialogResult.OK;
-                    else if (subItem.IsFolder())
+                    else 
                     {
-                        SetWaitState(true);
+                        switch (subItem.Type)
+                        {
+                            case StorageProviderItemType.File:
+                                DialogResult = DialogResult.OK;
+                                break;
 
-                        m_txtFilename.Text = null;
-                        m_stack.Push(subItem);
-                        await SetSelectedItem(subItem);
+                            case StorageProviderItemType.Folder:
+                                SetWaitState(true);
 
-                        SetWaitState(false);
+                                m_txtFilename.Text = null;
+                                m_stack.Push(subItem);
+                                await SetSelectedItem(subItem);
+
+                                SetWaitState(false);
+                                break;
+                        }
                     }
 
                     break;
@@ -368,23 +375,27 @@ namespace KeeAnywhere.Forms
                     {
                         DialogResult = DialogResult.OK;
                     }
-                    else if (subItem.IsFile())
+                    else 
                     {
-                        var result = MessageService.AskYesNo("The file already exists.\nWould you like to override?",
-                            "Overwrite file");
+                        switch (subItem.Type)
+                        {
+                            case StorageProviderItemType.File:
+                                var result = MessageService.AskYesNo("The file already exists.\nWould you like to override?",
+                                    "Overwrite file");
 
-                        if (result)
-                            DialogResult = DialogResult.OK;
-                    }
-                    else if (subItem.IsFolder())
-                    {
-                        SetWaitState(true);
+                                if (result)
+                                    DialogResult = DialogResult.OK;
+                                break;
+                            case StorageProviderItemType.Folder:
+                                SetWaitState(true);
 
-                        m_txtFilename.Text = null;
-                        m_stack.Push(subItem);
-                        await SetSelectedItem(subItem);
+                                m_txtFilename.Text = null;
+                                m_stack.Push(subItem);
+                                await SetSelectedItem(subItem);
 
-                        SetWaitState(false);
+                                SetWaitState(false);
+                                break;
+                        }
                     }
 
                     break;
@@ -398,9 +409,9 @@ namespace KeeAnywhere.Forms
         {
             if (e.Item == null) return;
 
-            var item = e.Item.Tag as OneDriveItem;
+            var item = e.Item.Tag as StorageProviderItem;
 
-            if (item != null && item.IsFile())
+            if (item != null && item.Type == StorageProviderItemType.File)
                 m_txtFilename.Text = item.Name;
 
             m_txtUrl.Text = GetResultUri();

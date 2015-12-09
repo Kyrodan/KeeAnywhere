@@ -61,19 +61,22 @@
             this.m_bannerImage.Dock = System.Windows.Forms.DockStyle.Top;
             this.m_bannerImage.Location = new System.Drawing.Point(0, 0);
             this.m_bannerImage.Name = "m_bannerImage";
-            this.m_bannerImage.Size = new System.Drawing.Size(586, 60);
+            this.m_bannerImage.Size = new System.Drawing.Size(622, 60);
             this.m_bannerImage.TabIndex = 4;
             this.m_bannerImage.TabStop = false;
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.m_tabAccounts);
             this.tabControl1.Controls.Add(this.m_tabGeneral);
             this.tabControl1.Controls.Add(this.m_tabAbout);
             this.tabControl1.Location = new System.Drawing.Point(12, 66);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(562, 247);
+            this.tabControl1.Size = new System.Drawing.Size(598, 287);
             this.tabControl1.TabIndex = 5;
             // 
             // m_tabAccounts
@@ -88,14 +91,15 @@
             this.m_tabAccounts.Location = new System.Drawing.Point(4, 22);
             this.m_tabAccounts.Name = "m_tabAccounts";
             this.m_tabAccounts.Padding = new System.Windows.Forms.Padding(3);
-            this.m_tabAccounts.Size = new System.Drawing.Size(554, 221);
+            this.m_tabAccounts.Size = new System.Drawing.Size(590, 261);
             this.m_tabAccounts.TabIndex = 1;
             this.m_tabAccounts.Text = "Accounts";
             this.m_tabAccounts.UseVisualStyleBackColor = true;
             // 
             // m_btnAccountRemove
             // 
-            this.m_btnAccountRemove.Location = new System.Drawing.Point(473, 67);
+            this.m_btnAccountRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnAccountRemove.Location = new System.Drawing.Point(489, 67);
             this.m_btnAccountRemove.Name = "m_btnAccountRemove";
             this.m_btnAccountRemove.Size = new System.Drawing.Size(75, 23);
             this.m_btnAccountRemove.TabIndex = 10;
@@ -105,7 +109,8 @@
             // 
             // m_btnAccountAdd
             // 
-            this.m_btnAccountAdd.Location = new System.Drawing.Point(473, 38);
+            this.m_btnAccountAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnAccountAdd.Location = new System.Drawing.Point(489, 38);
             this.m_btnAccountAdd.Name = "m_btnAccountAdd";
             this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
             this.m_btnAccountAdd.TabIndex = 8;
@@ -115,19 +120,20 @@
             // 
             // m_lvAccounts
             // 
+            this.m_lvAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lvAccounts.Location = new System.Drawing.Point(7, 38);
             this.m_lvAccounts.Name = "m_lvAccounts";
-            this.m_lvAccounts.Size = new System.Drawing.Size(460, 177);
+            this.m_lvAccounts.Size = new System.Drawing.Size(476, 217);
             this.m_lvAccounts.TabIndex = 9;
             this.m_lvAccounts.UseCompatibleStateImageBehavior = false;
             this.m_lvAccounts.View = System.Windows.Forms.View.Details;
             // 
             // lnklblHelpMeChooseAccountStorage
             // 
-            this.lnklblHelpMeChooseAccountStorage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.lnklblHelpMeChooseAccountStorage.AutoSize = true;
-            this.lnklblHelpMeChooseAccountStorage.Location = new System.Drawing.Point(392, 9);
+            this.lnklblHelpMeChooseAccountStorage.Location = new System.Drawing.Point(408, 9);
             this.lnklblHelpMeChooseAccountStorage.Name = "lnklblHelpMeChooseAccountStorage";
             this.lnklblHelpMeChooseAccountStorage.Size = new System.Drawing.Size(156, 13);
             this.lnklblHelpMeChooseAccountStorage.TabIndex = 8;
@@ -139,18 +145,18 @@
             // m_rbStorageLocation_Disk
             // 
             this.m_rbStorageLocation_Disk.AutoSize = true;
-            this.m_rbStorageLocation_Disk.Location = new System.Drawing.Point(313, 7);
+            this.m_rbStorageLocation_Disk.Location = new System.Drawing.Point(270, 7);
             this.m_rbStorageLocation_Disk.Name = "m_rbStorageLocation_Disk";
-            this.m_rbStorageLocation_Disk.Size = new System.Drawing.Size(46, 17);
+            this.m_rbStorageLocation_Disk.Size = new System.Drawing.Size(132, 17);
             this.m_rbStorageLocation_Disk.TabIndex = 2;
             this.m_rbStorageLocation_Disk.TabStop = true;
-            this.m_rbStorageLocation_Disk.Text = "Disk";
+            this.m_rbStorageLocation_Disk.Text = "KeePass Configuration";
             this.m_rbStorageLocation_Disk.UseVisualStyleBackColor = true;
             // 
             // m_rbStorageLocation_WindowsCredentialManager
             // 
             this.m_rbStorageLocation_WindowsCredentialManager.AutoSize = true;
-            this.m_rbStorageLocation_WindowsCredentialManager.Location = new System.Drawing.Point(143, 7);
+            this.m_rbStorageLocation_WindowsCredentialManager.Location = new System.Drawing.Point(100, 7);
             this.m_rbStorageLocation_WindowsCredentialManager.Name = "m_rbStorageLocation_WindowsCredentialManager";
             this.m_rbStorageLocation_WindowsCredentialManager.Size = new System.Drawing.Size(164, 17);
             this.m_rbStorageLocation_WindowsCredentialManager.TabIndex = 1;
@@ -163,9 +169,9 @@
             this.lblAccountStorageLocation.AutoSize = true;
             this.lblAccountStorageLocation.Location = new System.Drawing.Point(3, 9);
             this.lblAccountStorageLocation.Name = "lblAccountStorageLocation";
-            this.lblAccountStorageLocation.Size = new System.Drawing.Size(134, 13);
+            this.lblAccountStorageLocation.Size = new System.Drawing.Size(91, 13);
             this.lblAccountStorageLocation.TabIndex = 0;
-            this.lblAccountStorageLocation.Text = "Account Storage Location:";
+            this.lblAccountStorageLocation.Text = "Storage Location:";
             // 
             // m_tabGeneral
             // 
@@ -173,7 +179,7 @@
             this.m_tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.m_tabGeneral.Name = "m_tabGeneral";
             this.m_tabGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.m_tabGeneral.Size = new System.Drawing.Size(554, 221);
+            this.m_tabGeneral.Size = new System.Drawing.Size(590, 261);
             this.m_tabGeneral.TabIndex = 0;
             this.m_tabGeneral.Text = "General";
             this.m_tabGeneral.UseVisualStyleBackColor = true;
@@ -197,7 +203,7 @@
             this.m_tabAbout.Controls.Add(this.m_lblAboutHeader);
             this.m_tabAbout.Location = new System.Drawing.Point(4, 22);
             this.m_tabAbout.Name = "m_tabAbout";
-            this.m_tabAbout.Size = new System.Drawing.Size(554, 221);
+            this.m_tabAbout.Size = new System.Drawing.Size(590, 261);
             this.m_tabAbout.TabIndex = 2;
             this.m_tabAbout.Text = "About";
             this.m_tabAbout.UseVisualStyleBackColor = true;
@@ -231,7 +237,7 @@
             this.m_lblAboutVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_lblAboutVersion.Location = new System.Drawing.Point(12, 35);
             this.m_lblAboutVersion.Name = "m_lblAboutVersion";
-            this.m_lblAboutVersion.Size = new System.Drawing.Size(524, 21);
+            this.m_lblAboutVersion.Size = new System.Drawing.Size(560, 21);
             this.m_lblAboutVersion.TabIndex = 10;
             this.m_lblAboutVersion.Text = "Version";
             this.m_lblAboutVersion.UseMnemonic = false;
@@ -243,7 +249,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lblAboutExplanation.Location = new System.Drawing.Point(12, 66);
             this.m_lblAboutExplanation.Name = "m_lblAboutExplanation";
-            this.m_lblAboutExplanation.Size = new System.Drawing.Size(524, 91);
+            this.m_lblAboutExplanation.Size = new System.Drawing.Size(560, 131);
             this.m_lblAboutExplanation.TabIndex = 8;
             this.m_lblAboutExplanation.Text = resources.GetString("m_lblAboutExplanation.Text");
             this.m_lblAboutExplanation.UseMnemonic = false;
@@ -255,15 +261,16 @@
             this.m_lblAboutHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_lblAboutHeader.Location = new System.Drawing.Point(11, 12);
             this.m_lblAboutHeader.Name = "m_lblAboutHeader";
-            this.m_lblAboutHeader.Size = new System.Drawing.Size(356, 23);
+            this.m_lblAboutHeader.Size = new System.Drawing.Size(392, 23);
             this.m_lblAboutHeader.TabIndex = 7;
             this.m_lblAboutHeader.Text = "KeeAnywhere";
             this.m_lblAboutHeader.UseMnemonic = false;
             // 
             // m_btnOK
             // 
+            this.m_btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.m_btnOK.Location = new System.Drawing.Point(418, 319);
+            this.m_btnOK.Location = new System.Drawing.Point(454, 359);
             this.m_btnOK.Name = "m_btnOK";
             this.m_btnOK.Size = new System.Drawing.Size(75, 23);
             this.m_btnOK.TabIndex = 6;
@@ -273,8 +280,9 @@
             // 
             // m_btnCancel
             // 
+            this.m_btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.m_btnCancel.Location = new System.Drawing.Point(499, 319);
+            this.m_btnCancel.Location = new System.Drawing.Point(535, 359);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(75, 23);
             this.m_btnCancel.TabIndex = 7;
@@ -288,7 +296,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
-            this.ClientSize = new System.Drawing.Size(586, 357);
+            this.ClientSize = new System.Drawing.Size(622, 397);
             this.Controls.Add(this.m_btnOK);
             this.Controls.Add(this.m_btnCancel);
             this.Controls.Add(this.tabControl1);

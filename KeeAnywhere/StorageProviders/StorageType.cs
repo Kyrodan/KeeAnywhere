@@ -1,6 +1,6 @@
 namespace KeeAnywhere.StorageProviders
 {
-    public enum StorageProviderType
+    public enum StorageType
     {
         OneDrive,
     }

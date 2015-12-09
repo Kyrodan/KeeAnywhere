@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using KeeAnywhere.StorageProviders;
 using KeePassLib.Serialization;
-using KoenZomers.OneDrive.Api;
 
 namespace KeeAnywhere.WebRequest
 {
@@ -50,9 +50,9 @@ namespace KeeAnywhere.WebRequest
 
             if (this.Method == IOConnection.WrmDeleteFile)
             {
-                var isOk = _provider.Delete(_itemPath);
+                var isOk = Task.Run(async () => await _provider.Delete(_itemPath));
 
-                if (!isOk)
+                if (!isOk.Result)
                     throw new InvalidOperationException(string.Format("OneDrive: Delete of item {0} failed", _itemPath));
 
                 _response = new KeeAnywhereWebResponse();
@@ -60,17 +60,17 @@ namespace KeeAnywhere.WebRequest
             else if (this.Method == IOConnection.WrmMoveFile)
             {
                 //TODO: Is check for same account needed?
-                var destUrl = new StorageProviderUri(Headers[IOConnection.WrhMoveFileTo]);
+                var destUrl = new StorageUri(Headers[IOConnection.WrhMoveFileTo]);
                 var itemDestPath = destUrl.GetPath();
 
-                _provider.Move(_itemPath, itemDestPath);
+                Task.Run(async () => await _provider.Move(_itemPath, itemDestPath));
 
                 return new KeeAnywhereWebResponse();
             }
             else if (this.Method == WebRequestMethods.Http.Post)
             {
-                var isOk = _provider.Save(_requestStream, _itemPath);
-                if (!isOk)
+                var isOk = Task.Run(async () => await _provider.Save(_requestStream, _itemPath));
+                if (!isOk.Result)
                 {
                     throw new InvalidOperationException(string.Format("OneDrive: Upload to folder {0} failed", _itemPath));
                 }
@@ -79,9 +79,9 @@ namespace KeeAnywhere.WebRequest
             }
             else // Get File
             {
-                var stream = _provider.Load(_itemPath);
+                var stream = Task.Run(async () => await _provider.Load(_itemPath));
 
-                _response = new KeeAnywhereWebResponse(stream);
+                _response = new KeeAnywhereWebResponse(stream.Result);
             }
 
             return _response;

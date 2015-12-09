@@ -1,31 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace KeeAnywhere.StorageProviders
 {
-    public class StorageProviderUri : Uri
+    public class StorageUri : Uri
     {
-        //public const string OneDriveScheme = "onedrive";
-
-        public static string BuildUriString(StorageProviderType type, string accountName, string path)
+        public static string BuildUriString(StorageType type, string accountName, string path)
         {
             if (accountName == null) throw new ArgumentNullException("accountName");
             if (path == null) throw new ArgumentNullException("path");
 
-            var scheme = StorageProviderRegistry.Descriptors.First(_ => _.Type == type).Scheme;
+            var scheme = StorageRegistry.Descriptors.First(_ => _.Type == type).Scheme;
 
             return string.Format("{0}:///{1}/{2}", scheme, accountName, path);
         }
 
-        public StorageProviderUri(string uriString) : base(uriString)
+        public StorageUri(string uriString) : base(uriString)
         {
             if (uriString == null) throw new ArgumentNullException("uriString");
-
-            //if (this.Scheme != OneDriveScheme) throw new InvalidOperationException("URI has not 'onedrive:' scheme");
         }
 
-        public StorageProviderUri(Uri uri) : this(uri.OriginalString)
+        public StorageUri(Uri uri) : this(uri.OriginalString)
         {
         }
 
