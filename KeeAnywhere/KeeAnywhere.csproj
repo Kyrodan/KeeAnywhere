@@ -43,13 +43,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\KeePass.exe</HintPath>
     </Reference>
-    <Reference Include="KoenZomers.OneDrive.Api, Version=1.1.0.0, Culture=neutral, PublicKeyToken=c94340d84666bdcb, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\KoenZomers.OneDrive.Api.dll</HintPath>
+    <Reference Include="KoenZomers.OneDrive.Api, Version=1.4.0.0, Culture=neutral, PublicKeyToken=c94340d84666bdcb, processorArchitecture=MSIL">
+      <HintPath>..\packages\KoenZomers.OneDrive.Api.1.4.0.0\lib\KoenZomers.OneDrive.Api.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

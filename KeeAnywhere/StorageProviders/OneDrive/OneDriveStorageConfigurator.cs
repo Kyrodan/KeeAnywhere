@@ -8,11 +8,11 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 {
     public class OneDriveStorageConfigurator : IStorageConfigurator
     {
-        private readonly OneDriveApi _api;
+        private readonly OneDriveConsumerApi _api;
 
         public OneDriveStorageConfigurator()
         {
-            _api = new OneDriveApi(OneDriveHelper.OneDriveClientId, OneDriveHelper.OneDriveClientSecret);
+            _api = new OneDriveConsumerApi(OneDriveHelper.OneDriveClientId, OneDriveHelper.OneDriveClientSecret);
         }
 
         public async Task<AccountConfiguration> CreateAccount()

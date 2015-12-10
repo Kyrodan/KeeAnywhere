@@ -30,7 +30,6 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         internal const string OneDriveClientId = "dummy";
         internal const string OneDriveClientSecret = "dummy";
 
-
         //private readonly Dictionary<string, OneDriveApi> _cache = new Dictionary<string, OneDriveApi>(); 
 
         //public OneDriveApi GetApi()

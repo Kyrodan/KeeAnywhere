@@ -8,9 +8,9 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         /// <summary>
         /// OneDrive API instance
         /// </summary>
-        public OneDriveApi m_api { get; private set; }
+        public OneDriveConsumerApi m_api { get; private set; }
 
-        public OneDriveAuthenticationForm(OneDriveApi api)
+        public OneDriveAuthenticationForm(OneDriveConsumerApi api)
         {
             InitializeComponent();
             this.Icon = PluginResources.Icon_OneDrive_16x16;

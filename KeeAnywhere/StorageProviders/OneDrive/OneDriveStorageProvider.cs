@@ -16,19 +16,21 @@ namespace KeeAnywhere.StorageProviders.OneDrive
     public class OneDriveStorageProvider : IStorageProvider
     {
         private readonly AccountConfiguration _account;
-        private readonly OneDriveApi _api;
+        private readonly OneDriveConsumerApi _api;
 
         public OneDriveStorageProvider(AccountConfiguration account)
         {
             if (account == null) throw new ArgumentNullException("account");
             _account = account;
 
-            var api =
+            var api = new OneDriveConsumerApi(OneDriveHelper.OneDriveClientId, OneDriveHelper.OneDriveClientSecret);
+            var task =
                 Task.Run(async () => await
-                    OneDriveApi.GetOneDriveApiFromRefreshToken(OneDriveHelper.OneDriveClientId,
-                        OneDriveHelper.OneDriveClientSecret, account.RefreshToken));
+                    api.AuthenticateUsingRefreshToken(account.RefreshToken));
 
-            _api = api.Result;
+            task.Wait();
+
+            _api = api;
         }
 
         public async Task<bool> Delete(string path)

@@ -87,7 +87,7 @@ namespace KeeAnywhere.Forms
 
             m_cbAccount.BeginUpdate();
             m_cbAccount.DataSource = m_configService.Accounts;
-            m_cbAccount.DisplayMember = "Name";
+            m_cbAccount.DisplayMember = "DisplayName";
             m_cbAccount.ValueMember = "Id";
             m_cbAccount.EndUpdate();
 

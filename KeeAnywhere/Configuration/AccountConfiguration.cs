@@ -17,5 +17,10 @@ namespace KeeAnywhere.Configuration
 
         [DataMember]
         public string RefreshToken { get; set; }
+
+        public string DisplayName
+        {
+            get { return string.Format("{0} ({1})", Name, Type); }
+        }
     }
 }
