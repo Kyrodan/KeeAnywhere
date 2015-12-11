@@ -92,7 +92,7 @@ namespace KeeAnywhere.Configuration
                 Type = (StorageType)Enum.Parse(typeof(StorageType), c.Target.Substring(c.Target.IndexOf('.') + 1, (c.Target.IndexOf(':') - c.Target.IndexOf('.') - 1))),
                 Name = c.Target.Substring(c.Target.IndexOf(':') + 1),
                 Id = c.Username,
-                RefreshToken = c.Password,
+                Secret = c.Password,
             });
 
             this.Accounts = accountsQuery.ToList();
@@ -150,7 +150,7 @@ namespace KeeAnywhere.Configuration
                 {
                     Target = string.Format("{0}.{1}:{2}", CredentialsStore_TargetPrefix, a.Type, a.Name),
                     Username =  a.Id,
-                    Password = a.RefreshToken,
+                    Password = a.Secret,
                     PersistanceType = PersistanceType.LocalComputer,
                     Type = CredentialType.Generic
                 });

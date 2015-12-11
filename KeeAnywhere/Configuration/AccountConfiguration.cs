@@ -16,7 +16,7 @@ namespace KeeAnywhere.Configuration
         public string Name { get; set; }
 
         [DataMember]
-        public string RefreshToken { get; set; }
+        public string Secret { get; set; }
 
         public string DisplayName
         {

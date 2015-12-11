@@ -37,7 +37,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         //    if (account == null) throw new ArgumentNullException("account");
 
-        //    var refreshToken = account.RefreshToken;
+        //    var refreshToken = account.Secret;
 
         //    if (string.IsNullOrEmpty(refreshToken)) return null;
 
@@ -57,7 +57,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         //    try
         //    {
-        //        if (account.RefreshToken != null)
+        //        if (account.Secret != null)
         //        {
         //            var api = await GetApi(account);
         //            return api;
@@ -83,11 +83,11 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         //            var drive = await api.GetDrive();
         //            var id = drive.Id;
         //            //var name = drive.Owner.User.DisplayName;
-        //            var refreshToken = api.AccessToken.RefreshToken;
+        //            var refreshToken = api.AccessToken.Secret;
 
         //            if (account.Id == id)
         //            {
-        //                account.RefreshToken = refreshToken;
+        //                account.Secret = refreshToken;
         //                return api;
         //            }
         //            else

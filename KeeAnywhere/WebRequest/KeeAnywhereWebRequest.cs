@@ -12,7 +12,7 @@ namespace KeeAnywhere.WebRequest
         private readonly IStorageProvider _provider;
         private readonly string _itemPath;
 
-        private MemoryStream _requestStream;
+        private RequestStream _requestStream;
         private WebResponse _response;
         private WebHeaderCollection _headers;
 
@@ -53,7 +53,7 @@ namespace KeeAnywhere.WebRequest
                 var isOk = Task.Run(async () => await _provider.Delete(_itemPath));
 
                 if (!isOk.Result)
-                    throw new InvalidOperationException(string.Format("OneDrive: Delete of item {0} failed", _itemPath));
+                    throw new InvalidOperationException(string.Format("KeeAnywhere: Delete of item {0} failed", _itemPath));
 
                 _response = new KeeAnywhereWebResponse();
             }
@@ -69,10 +69,18 @@ namespace KeeAnywhere.WebRequest
             }
             else if (this.Method == WebRequestMethods.Http.Post)
             {
-                var isOk = Task.Run(async () => await _provider.Save(_requestStream, _itemPath));
+                var isOk = Task.Run(async () =>
+                {
+                    using (var stream = this._requestStream.GetReadableStream())
+                    {
+                        return await _provider.Save(stream, _itemPath);
+                    }
+                });
+
                 if (!isOk.Result)
                 {
-                    throw new InvalidOperationException(string.Format("OneDrive: Upload to folder {0} failed", _itemPath));
+                    throw new InvalidOperationException(string.Format("KeeAnywhere: Upload to folder {0} failed",
+                        _itemPath));
                 }
 
                 _response = new KeeAnywhereWebResponse();
@@ -90,7 +98,7 @@ namespace KeeAnywhere.WebRequest
         public override Stream GetRequestStream()
         {
             if (_requestStream == null)
-                _requestStream = new MemoryStream();
+                _requestStream = new RequestStream(this);
 
             return _requestStream;
         }

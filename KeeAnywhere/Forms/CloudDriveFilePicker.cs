@@ -201,7 +201,7 @@ namespace KeeAnywhere.Forms
                 lvi.ImageIndex = 0;
                 lvi.SubItems.Add(info.Parent.Id);
                 lvi.SubItems.Add("Folder");
-                lvi.SubItems.Add("(unknown)");
+                lvi.SubItems.Add(string.Empty);
             }
 
             foreach (var child in info.Children)
@@ -303,9 +303,10 @@ namespace KeeAnywhere.Forms
                 return m_cache[item];
 
             var info = new ItemInfo();
-            info.Children = await m_provider.GetChildrenByParentItem(item);
+            var result = await m_provider.GetChildrenByParentItem(item);
+            info.Children = result.OrderByDescending(_ => _.Type).ThenBy(_ => _.Name).ToArray();
 
-            if (!string.IsNullOrEmpty(item.ParentReferenceId))
+            if (item.ParentReferenceId != null)
             {
                 var parent = m_cache.Keys.SingleOrDefault(_ => _.Id == item.ParentReferenceId);
                 if (parent != null)

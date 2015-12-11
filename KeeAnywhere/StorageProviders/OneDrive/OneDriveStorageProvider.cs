@@ -35,35 +35,44 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             var api = await GetApi();
 
-            var tempFilename = Path.GetTempFileName();
+            //var tempFilename = Path.GetTempFileName();
 
-            // Workaround due to Bug #2 in OneAdriveApi.DownloadItemAndSave(string path, string filename)
-            var item = await api.GetItem(path);
-            if (item == null) return null;
+            //// Workaround due to Bug #2 in OneAdriveApi.DownloadItemAndSave(string path, string filename)
+            //var item = await api.GetItem(path);
+            //if (item == null) return null;
 
-            var isOk = await api.DownloadItemAndSaveAs(item, tempFilename);
+            //var isOk = await api.DownloadItemAndSaveAs(item, tempFilename);
 
-            if (!isOk)
-            {
-                File.Delete(tempFilename);
-                throw new FileNotFoundException("OneDrive: File not found", path);
-            }
+            //if (!isOk)
+            //{
+            //    File.Delete(tempFilename);
+            //    throw new FileNotFoundException("OneDrive: File not found", path);
+            //}
 
-            var content = File.ReadAllBytes(tempFilename);
-            File.Delete(tempFilename);
-            var stream = new MemoryStream(content, false);
+            //var content = File.ReadAllBytes(tempFilename);
+            //File.Delete(tempFilename);
+            //var stream = new MemoryStream(content, false);
+            var stream = await api.DownloadItem(path);
 
             return stream;
         }
 
 
-        public async Task<bool> Save(MemoryStream stream, string path)
+        public async Task<bool> Save(Stream stream, string path)
         {
             var api = await GetApi();
 
             var tempFilename = Path.GetTempFileName();
-            var bytes = stream.ToArray();
-            File.WriteAllBytes(tempFilename, bytes);
+
+            using (var fileStream = File.Create(tempFilename))
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+                stream.CopyTo(fileStream);
+            }
+
+            //var memoryStream = new MemoryStream();
+            //var bytes = stream.ToArray();
+            //File.WriteAllBytes(tempFilename, bytes);
 
             var directory = Path.GetDirectoryName(path);
             var filename = Path.GetFileName(path);
@@ -126,7 +135,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         public async Task<OneDriveConsumerApi> GetApi()
         {
             if (_api == null)
-                _api = await OneDriveHelper.GetApi(_account.RefreshToken);
+                _api = await OneDriveHelper.GetApi(_account.Secret);
 
             return _api;
         }

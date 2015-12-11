@@ -27,7 +27,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
                 Type = StorageType.OneDrive,
                 Name = drive.Owner.User.DisplayName,
                 Id = drive.Id,
-                RefreshToken = api.AccessToken.RefreshToken
+                Secret = api.AccessToken.RefreshToken
             };
 
 

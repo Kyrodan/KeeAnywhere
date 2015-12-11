@@ -112,7 +112,7 @@ namespace KeeAnywhere
 
             var ci = IOConnectionInfo.FromPath(form.ResultUri);
             ci.CredSaveMode = IOCredSaveMode.SaveCred;
-            _host.MainWindow.SaveDatabaseAs(_host.Database, ci, true,null, true);
+            _host.MainWindow.SaveDatabaseAs(_host.Database, ci, true,null, false);
         }
 
         private async void OnOpenFromCloudDrive(object sender, EventArgs eventArgs)

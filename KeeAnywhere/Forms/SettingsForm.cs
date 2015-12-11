@@ -132,7 +132,7 @@ namespace KeeAnywhere.Forms
                 lviNew.Tag = account;
                 lviNew.SubItems.Add(account.Name);
                 lviNew.SubItems.Add(account.Id);
-                lviNew.SubItems.Add(account.RefreshToken);
+                lviNew.SubItems.Add(account.Secret);
             }
 
             UIUtil.Scroll(m_lvAccounts, s, true);

@@ -32,7 +32,7 @@ namespace KeeAnywhere
             MessageService.ShowInfo("This account already exists.\r\nUpdating account data only.");
 
             existingAccount.Name = newAccount.Name;
-            existingAccount.RefreshToken = newAccount.RefreshToken;
+            existingAccount.Secret = newAccount.Secret;
 
             return existingAccount;
         }

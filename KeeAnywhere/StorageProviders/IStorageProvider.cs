@@ -9,7 +9,7 @@ namespace KeeAnywhere.StorageProviders
         // File operations
         Task<bool> Delete(string path);
         Task<Stream> Load(string path);
-        Task<bool> Save(MemoryStream stream, string path);
+        Task<bool> Save(Stream stream, string path);
         Task<bool> Move(string pathFrom, string pathTo);
 
         // Query operations
