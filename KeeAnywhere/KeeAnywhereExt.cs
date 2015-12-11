@@ -14,7 +14,7 @@ using KeePassLib.Utility;
 namespace KeeAnywhere
 {
     /// <summary>
-    /// Plugin for KeePass to allow synchronization with OneDrive
+    /// Plugin for KeePass to allow access to cloud storage providers
     /// </summary>
     /// <remarks>KeePass SDK documentation: http://keepass.info/help/v2_dev/plg_index.html</remarks>
     public class KeeAnywhereExt : Plugin

@@ -242,7 +242,7 @@ namespace KeeAnywhere.Forms
 
             if (!m_ilIcons.Images.ContainsKey(extension))
             {
-                var image = Icons.IconFromExtension(extension, Icons.SystemIconSize.Small);
+                var image = IconHelper.IconFromExtension(extension, IconHelper.SystemIconSize.Small);
                 if (image == null) return 0;
                 
                 m_ilIcons.Images.Add(extension, image);

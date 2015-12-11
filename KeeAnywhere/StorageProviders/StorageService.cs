@@ -59,35 +59,8 @@ namespace KeeAnywhere.StorageProviders
                 throw new NotImplementedException(string.Format("A provider for type '{0}' is not implemented.", type));
 
             var configurator = descriptor.ConfiguratorFactory();
-
             var account = await configurator.CreateAccount();
-
-            //var drive = await _api.GetDrive();
-            //var id = drive.Id;
-            //var name = drive.Owner.User.DisplayName;
-            //var refreshToken = _api.AccessToken.RefreshToken;
-
-            //var account = configService.Accounts.SingleOrDefault(_ => _.Id == id);
-            //if (account == null) // New Account
-            //{
-            //    account = new AccountConfiguration
-            //    {
-            //        Type = StorageType.OneDrive,
-            //        Name = name,
-            //        Id = id,
-            //        RefreshToken = refreshToken,
-            //    };
-
-            //    configService.Accounts.Add(account);
-            //}
-            //else // Account exists: updating data
-            //{
-            //    MessageService.ShowInfo("This Account already exists.\r\nUpdating account data only.");
-
-            //    account.Name = name;
-            //    account.RefreshToken = refreshToken;
-            //}
-
+   
             return account;
         }
 

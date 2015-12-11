@@ -79,7 +79,7 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Icons.cs" />
+    <Compile Include="IconHelper.cs" />
     <Compile Include="KeeAnywhereExt.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>

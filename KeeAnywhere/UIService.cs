@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.StorageProviders;

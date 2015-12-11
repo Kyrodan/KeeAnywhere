@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using KeeAnywhere.Configuration;
-using KeeAnywhere.Forms;
-using KeePass.UI;
-using KeePassLib.Utility;
 using KoenZomers.OneDrive.Api;
 using KoenZomers.OneDrive.Api.Entities;
 
@@ -102,9 +98,10 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             if (parent == null) throw new ArgumentNullException("parent");
 
             var api = await GetApi();
-            var odChildren = await api.GetChildrenByParentItem(new OneDriveItem() {Id = parent.Id});
+            var odChildren = await api.GetChildrenByParentItem(new OneDriveItem {Id = parent.Id});
 
-            var children = odChildren.Collection.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
+            var children =
+                odChildren.Collection.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
 
             return children;
         }
@@ -113,11 +110,14 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             var providerItem = new StorageProviderItem
             {
-                Type = item.IsFolder() ? StorageProviderItemType.Folder : (item.IsFile() ? StorageProviderItemType.File : StorageProviderItemType.Unknown),
+                Type =
+                    item.IsFolder()
+                        ? StorageProviderItemType.Folder
+                        : (item.IsFile() ? StorageProviderItemType.File : StorageProviderItemType.Unknown),
                 Id = item.Id,
                 Name = item.Name,
                 LastModifiedDateTime = item.LastModifiedDateTime,
-                ParentReferenceId = item.ParentReference != null ? item.ParentReference.Id : null,
+                ParentReferenceId = item.ParentReference != null ? item.ParentReference.Id : null
             };
 
             return providerItem;

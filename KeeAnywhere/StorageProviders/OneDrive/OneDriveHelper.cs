@@ -32,10 +32,10 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             return api;
         }
 
-        //    if (account == null) throw new ArgumentNullException("account");
+        //public async Task<OneDriveApi> GetApi(AccountConfiguration account)
         //{
 
-        //public async Task<OneDriveApi> GetApi(AccountConfiguration account)
+        //    if (account == null) throw new ArgumentNullException("account");
 
         //    var refreshToken = account.RefreshToken;
 
