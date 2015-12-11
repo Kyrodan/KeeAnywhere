@@ -8,16 +8,11 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 {
     public class OneDriveStorageConfigurator : IStorageConfigurator
     {
-        private readonly OneDriveConsumerApi _api;
-
-        public OneDriveStorageConfigurator()
-        {
-            _api = new OneDriveConsumerApi(OneDriveHelper.OneDriveClientId, OneDriveHelper.OneDriveClientSecret);
-        }
-
         public async Task<AccountConfiguration> CreateAccount()
         {
-            var oneDriveAuthenticateForm = new OneDriveAuthenticationForm(_api);
+            var api = new OneDriveConsumerApi(OneDriveHelper.OneDriveClientId, OneDriveHelper.OneDriveClientSecret);
+
+            var oneDriveAuthenticateForm = new OneDriveAuthenticationForm(api);
             var result = UIUtil.ShowDialogAndDestroy(oneDriveAuthenticateForm);
 
             if (result != DialogResult.OK)
@@ -25,14 +20,14 @@ namespace KeeAnywhere.StorageProviders.OneDrive
                 return null;
             }
 
-            var drive = await _api.GetDrive();
+            var drive = await api.GetDrive();
 
             var account = new AccountConfiguration
             {
                 Type = StorageType.OneDrive,
                 Name = drive.Owner.User.DisplayName,
                 Id = drive.Id,
-                RefreshToken = _api.AccessToken.RefreshToken
+                RefreshToken = api.AccessToken.RefreshToken
             };
 
 

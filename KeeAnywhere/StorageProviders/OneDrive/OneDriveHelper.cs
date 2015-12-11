@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using KeeAnywhere.Configuration;
-using KeeAnywhere.Forms;
-using KeePass.UI;
-using KeePassLib.Utility;
+﻿using System.Threading.Tasks;
 using KoenZomers.OneDrive.Api;
 
 namespace KeeAnywhere.StorageProviders.OneDrive
@@ -32,14 +24,18 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         //private readonly Dictionary<string, OneDriveApi> _cache = new Dictionary<string, OneDriveApi>(); 
 
-        //public OneDriveApi GetApi()
+        public static async Task<OneDriveConsumerApi> GetApi(string refreshToken)
+        {
+            var api = new OneDriveConsumerApi(OneDriveClientId, OneDriveClientSecret);
+            await api.AuthenticateUsingRefreshToken(refreshToken);
+
+            return api;
+        }
+
+        //    if (account == null) throw new ArgumentNullException("account");
         //{
-        //    return new OneDriveApi(OneDriveClientId, OneDriveClientSecret);
-        //}
 
         //public async Task<OneDriveApi> GetApi(AccountConfiguration account)
-        //{
-        //    if (account == null) throw new ArgumentNullException("account");
 
         //    var refreshToken = account.RefreshToken;
 

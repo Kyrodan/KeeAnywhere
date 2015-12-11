@@ -16,42 +16,36 @@ namespace KeeAnywhere.StorageProviders.OneDrive
     public class OneDriveStorageProvider : IStorageProvider
     {
         private readonly AccountConfiguration _account;
-        private readonly OneDriveConsumerApi _api;
+        private OneDriveConsumerApi _api;
 
         public OneDriveStorageProvider(AccountConfiguration account)
         {
             if (account == null) throw new ArgumentNullException("account");
             _account = account;
-
-            var api = new OneDriveConsumerApi(OneDriveHelper.OneDriveClientId, OneDriveHelper.OneDriveClientSecret);
-            var task =
-                Task.Run(async () => await
-                    api.AuthenticateUsingRefreshToken(account.RefreshToken));
-
-            task.Wait();
-
-            _api = api;
         }
 
         public async Task<bool> Delete(string path)
         {
-            var item = await _api.GetItem(path);
+            var api = await GetApi();
+            var item = await api.GetItem(path);
             if (item == null) return true;
 
-            var isOk = await _api.Delete(path);
+            var isOk = await api.Delete(path);
 
             return isOk;
         }
 
         public async Task<Stream> Load(string path)
         {
+            var api = await GetApi();
+
             var tempFilename = Path.GetTempFileName();
 
             // Workaround due to Bug #2 in OneAdriveApi.DownloadItemAndSave(string path, string filename)
-            var item = await _api.GetItem(path);
+            var item = await api.GetItem(path);
             if (item == null) return null;
 
-            var isOk = await _api.DownloadItemAndSaveAs(item, tempFilename);
+            var isOk = await api.DownloadItemAndSaveAs(item, tempFilename);
 
             if (!isOk)
             {
@@ -69,6 +63,8 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task<bool> Save(MemoryStream stream, string path)
         {
+            var api = await GetApi();
+
             var tempFilename = Path.GetTempFileName();
             var bytes = stream.ToArray();
             File.WriteAllBytes(tempFilename, bytes);
@@ -76,7 +72,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             var directory = Path.GetDirectoryName(path);
             var filename = Path.GetFileName(path);
 
-            var uploadedItem = await _api.UploadFileAs(tempFilename, filename, directory);
+            var uploadedItem = await api.UploadFileAs(tempFilename, filename, directory);
 
             File.Delete(tempFilename);
 
@@ -90,7 +86,8 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task<StorageProviderItem> GetRootItem()
         {
-            var odItem = await _api.GetDriveRoot();
+            var api = await GetApi();
+            var odItem = await api.GetDriveRoot();
 
             if (odItem == null)
                 return null;
@@ -104,7 +101,8 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             if (parent == null) throw new ArgumentNullException("parent");
 
-            var odChildren = await _api.GetChildrenByParentItem(new OneDriveItem() {Id = parent.Id});
+            var api = await GetApi();
+            var odChildren = await api.GetChildrenByParentItem(new OneDriveItem() {Id = parent.Id});
 
             var children = odChildren.Collection.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
 
@@ -123,6 +121,14 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             };
 
             return providerItem;
+        }
+
+        public async Task<OneDriveConsumerApi> GetApi()
+        {
+            if (_api == null)
+                _api = await OneDriveHelper.GetApi(_account.RefreshToken);
+
+            return _api;
         }
     }
 }

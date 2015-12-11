@@ -149,8 +149,8 @@ namespace KeeAnywhere.Forms
             if (account == null) return;
 
             SetWaitState(true);
-            var api = m_storageService.GetProviderByAccount(account);
-            SetApi(api);
+            var provider = m_storageService.GetProviderByAccount(account);
+            await SetProvider(provider);
 
             SetWaitState(false);
         }
@@ -251,7 +251,7 @@ namespace KeeAnywhere.Forms
             return m_ilIcons.Images.IndexOfKey(extension);
         }
 
-        private async Task SetApi(IStorageProvider provider)
+        private async Task SetProvider(IStorageProvider provider)
         {
             if (m_provider == provider) return;
 

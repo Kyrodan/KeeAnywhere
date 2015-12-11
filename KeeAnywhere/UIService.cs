@@ -21,6 +21,7 @@ namespace KeeAnywhere
         public async Task<AccountConfiguration> CreateOrUpdateAccount(StorageType type)
         {
             var newAccount = await _storageService.CreateAccount(type);
+            if (newAccount == null) return null;
 
             var existingAccount = _configService.Accounts.SingleOrDefault(_ => _.Type == newAccount.Type && _.Id == newAccount.Id);
             if (existingAccount == null) // New Account
