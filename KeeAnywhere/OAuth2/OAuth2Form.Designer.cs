@@ -33,13 +33,16 @@
             // 
             // m_browser
             // 
+            this.m_browser.AllowWebBrowserDrop = false;
             this.m_browser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_browser.IsWebBrowserContextMenuEnabled = false;
             this.m_browser.Location = new System.Drawing.Point(0, 0);
             this.m_browser.MinimumSize = new System.Drawing.Size(20, 20);
             this.m_browser.Name = "m_browser";
             this.m_browser.Size = new System.Drawing.Size(511, 497);
             this.m_browser.TabIndex = 0;
-            this.m_browser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.OnNavigating);
+            this.m_browser.WebBrowserShortcutsEnabled = false;
+            this.m_browser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.OnDocumentCompleted);
             // 
             // OAuth2Form
             // 

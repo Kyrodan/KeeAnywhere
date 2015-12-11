@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -33,7 +34,7 @@ namespace KeeAnywhere.OAuth2
             m_browser.Navigate(m_provider.AuthorizationUrl);
         }
 
-        private void OnNavigating(object sender, WebBrowserNavigatingEventArgs e)
+        private void OnDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             if (!e.Url.ToString().StartsWith(m_provider.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase))
             {
@@ -52,15 +53,10 @@ namespace KeeAnywhere.OAuth2
             }
             catch (ArgumentException)
             {
-                // There was an error in the URI passed to ParseTokenFragment
-            }
-            finally
-            {
-//                e.Cancel = true;
+                //                e.Cancel = true;
                 this.DialogResult = DialogResult.Cancel;
                 this.Close();
             }
-
         }
     }
 }

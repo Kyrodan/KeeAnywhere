@@ -109,6 +109,7 @@
     <Compile Include="IconHelper.cs" />
     <Compile Include="KeeAnywhereExt.cs" />
     <Compile Include="OAuth2\IOAuth2Provider.cs" />
+    <Compile Include="OAuth2\OAuth2Flow.cs" />
     <Compile Include="OAuth2\OAuth2Form.cs">
       <SubType>Form</SubType>
     </Compile>

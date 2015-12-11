@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using KeeAnywhere.Configuration;
@@ -124,7 +125,7 @@ namespace KeeAnywhere.Forms
             m_lvAccounts.BeginUpdate();
             m_lvAccounts.Items.Clear();
 
-            foreach (var account in m_configService.Accounts)
+            foreach (var account in m_configService.Accounts.OrderBy(_ => _.Type).ThenBy(_ => _.Name))
             {
                 var lvi = new ListViewItem(account.Type.ToString());
                 var lviNew = m_lvAccounts.Items.Add(lvi);

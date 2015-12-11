@@ -86,7 +86,7 @@ namespace KeeAnywhere.Forms
             m_isInit = true;
 
             m_cbAccount.BeginUpdate();
-            m_cbAccount.DataSource = m_configService.Accounts;
+            m_cbAccount.DataSource = m_configService.Accounts.OrderBy(_ => _.Type).ThenBy(_ => _.Name).ToArray();
             m_cbAccount.DisplayMember = "DisplayName";
             m_cbAccount.ValueMember = "Id";
             m_cbAccount.EndUpdate();

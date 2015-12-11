@@ -9,7 +9,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
     public class DropboxStorageConfigurator : IStorageConfigurator, IOAuth2Provider
     {
         private string _state;
-        private string _accessToken;
+        private OAuth2Response _oauthResponse;
 
         public async Task<AccountConfiguration> CreateAccount()
         {
@@ -17,16 +17,16 @@ namespace KeeAnywhere.StorageProviders.Dropbox
 
             if (!isOk) return null;
 
-            var api = new DropboxClient(_accessToken);
+            var api = new DropboxClient(_oauthResponse.AccessToken);
 
             var owner = await api.Users.GetCurrentAccountAsync();
 
             var account = new AccountConfiguration()
             {
                 Id = owner.AccountId,
-                Name = owner.Name.DisplayName,
+                Name = owner.Email,
                 Type = StorageType.Dropbox,
-                Secret = _accessToken,
+                Secret = _oauthResponse.AccessToken,
             };
 
             return account;
@@ -35,7 +35,6 @@ namespace KeeAnywhere.StorageProviders.Dropbox
         public void Initialize()
         {
             _state = Guid.NewGuid().ToString("N");
-            //this.AuthorizationUrl = DropboxOAuth2Helper.GetAuthorizeUri(DropboxHelper.DropboxClientId);
             this.AuthorizationUrl = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, DropboxHelper.DropboxClientId, RedirectionUrl, _state);
         }
 
@@ -50,7 +49,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
                     return false;
                 }
 
-                _accessToken = result.AccessToken;
+                _oauthResponse = result;
                 return true;
             }
             catch
@@ -60,7 +59,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
         }
 
         public Uri AuthorizationUrl { get; private set; }
-        public Uri RedirectionUrl { get { return new Uri("https://localhost/auth_redirection"); } }
-        //public Uri RedirectionUrl { get { return new Uri("https://www.dropbox.com/1/oauth2/redirect_receiver"); } }
+        //public Uri RedirectionUrl { get { return new Uri("http://localhost/auth_redirection"); } }
+        public Uri RedirectionUrl { get { return new Uri("https://www.dropbox.com/1/oauth2/redirect_receiver"); } }
     }
 }
