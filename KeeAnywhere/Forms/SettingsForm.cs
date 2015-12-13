@@ -71,18 +71,28 @@ namespace KeeAnywhere.Forms
 
         private void InitAboutTab()
         {
+            var version = "(unknown)";
             try
             {
                 var assembly = Assembly.GetExecutingAssembly();
-                var assemblyName = assembly.GetName().Name;
-                var gitVersionInformationType = assembly.GetType(assemblyName + ".GitVersionInformation");
-                var versionField = gitVersionInformationType.GetField("SemVer");
-                var version = versionField.GetValue(null);
-                m_lblAboutVersion.Text = string.Format("Version {0}", version);
+                var versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+
+                if (versionAttribute != null)
+                    version = versionAttribute.InformationalVersion;
+
+                //var assemblyName = assembly.GetName().Name;
+                //var gitVersionInformationType = assembly.GetType(assemblyName + ".GitVersionInformation");
+                //var versionField = gitVersionInformationType.GetField("SemVer");
+                //var version = versionField.GetValue(null);
+                
             }
             catch
             {
-                m_lblAboutVersion.Text = "Version (unknown)";
+                // ignored
+            }
+            finally
+            {
+                m_lblAboutVersion.Text = string.Format("Version {0}", version);
             }
         }
 

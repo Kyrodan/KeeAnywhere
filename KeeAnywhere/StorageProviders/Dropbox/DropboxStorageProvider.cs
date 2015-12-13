@@ -78,7 +78,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent)
         {
-            if (parent == null) throw new ArgumentNullException(nameof(parent));
+            if (parent == null) throw new ArgumentNullException("parent");
 
             var dbxItems = await Api.Files.ListFolderAsync(parent.Id);
             var items = dbxItems.Entries.Select(_ => CreateStorageProviderItem(parent, _));

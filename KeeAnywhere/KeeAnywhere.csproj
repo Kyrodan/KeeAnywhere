@@ -201,7 +201,7 @@
       <Prerequisites>
         <!--<KeePassVersion>2.19</KeePassVersion>-->
         <OS>Windows</OS>
-        <DotNetVersion>4.0</DotNetVersion>
+        <DotNetVersion>4.5</DotNetVersion>
       </Prerequisites>
     </PlgxConfiguration>
   </PropertyGroup>
@@ -211,7 +211,6 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\PlgxTool.1.0.0\build\PlgxTool.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PlgxTool.1.0.0\build\PlgxTool.targets'))" />
-    <Error Condition="!Exists('..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -220,7 +219,6 @@
   -->
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
     <CallTarget Targets="BuildPlgx" />
-    <Delete Files="$(TargetPath)" />
+    <!--<Delete Files="$(TargetPath)" />-->
   </Target>
-  <Import Project="..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets" Condition="Exists('..\packages\GitVersionTask.3.3.0\build\dotnet\GitVersionTask.targets')" />
 </Project>

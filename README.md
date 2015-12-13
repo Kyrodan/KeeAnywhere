@@ -13,7 +13,7 @@ This project is in very early state and **NOT** production ready.
 Especially only OneDrive ist supported as cloud storage provider. Others will follow if the code basis is more stable and the main features are implemented.
 
 # Building
-
+Run *build.cmd* and see output in folder *build*. For further details see [BUILD.md](BUILD.md).
 
 # Contributing
 Contributing is welcome. Please read [Source Code Guidelines](https://github.com/Kyrodan/KeeAnywhere/wiki/Source-Code-Guidelines) first.

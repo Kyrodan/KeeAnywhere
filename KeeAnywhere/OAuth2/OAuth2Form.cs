@@ -22,7 +22,7 @@ namespace KeeAnywhere.OAuth2
 
         public void InitEx(IOAuth2Provider provider)
         {
-            if (provider == null) throw new ArgumentNullException(nameof(provider));
+            if (provider == null) throw new ArgumentNullException("provider");
             m_provider = provider;
 
             provider.Initialize();
