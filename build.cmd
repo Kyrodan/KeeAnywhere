@@ -12,6 +12,7 @@ if not exist build\bin mkdir build\bin
 if not exist build\dist mkdir build\dist
 
 :build
+nuget.exe restore
 msbuild KeeAnywhere.sln /p:Configuration=Release /t:Clean,Build /fl /flp:logfile=build\build.log
 if %errorlevel% NEQ 0 goto error
 
