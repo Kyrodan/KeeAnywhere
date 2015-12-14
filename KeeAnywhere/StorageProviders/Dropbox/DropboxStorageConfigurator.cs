@@ -38,7 +38,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             this.AuthorizationUrl = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, DropboxHelper.DropboxClientId, RedirectionUrl, _state);
         }
 
-        public bool Claim(Uri uri)
+        public bool Claim(Uri uri, string documentTitle)
         {
             try
             {

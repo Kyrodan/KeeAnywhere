@@ -44,7 +44,7 @@ namespace KeeAnywhere.OAuth2
 
             try
             {
-                var isOk = m_provider.Claim(e.Url);
+                var isOk = m_provider.Claim(e.Url, m_browser.DocumentTitle);
                 if (isOk)
                 {
                     this.DialogResult = DialogResult.OK;

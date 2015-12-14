@@ -4,5 +4,6 @@ namespace KeeAnywhere.StorageProviders
     {
         OneDrive,
         Dropbox,
+        GoogleDrive
     }
 }
