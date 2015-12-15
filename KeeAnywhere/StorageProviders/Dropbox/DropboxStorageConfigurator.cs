@@ -32,13 +32,13 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             return account;
         }
 
-        public void Initialize()
+        public async Task Initialize()
         {
             _state = Guid.NewGuid().ToString("N");
             this.AuthorizationUrl = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, DropboxHelper.DropboxClientId, RedirectionUrl, _state);
         }
 
-        public bool Claim(Uri uri, string documentTitle)
+        public async Task<bool> Claim(Uri uri, string documentTitle)
         {
             try
             {
