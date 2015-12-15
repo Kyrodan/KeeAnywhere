@@ -43,12 +43,40 @@
       <HintPath>..\packages\Dropbox.Api.2.1.0\lib\portable-net45+sl50+win+wpa81+wp80\Dropbox.Api.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Google.Apis">
+      <HintPath>..\packages\Google.Apis.1.9.2\lib\net40\Google.Apis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth">
+      <HintPath>..\packages\Google.Apis.Auth.1.9.2\lib\net40\Google.Apis.Auth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices">
+      <HintPath>..\packages\Google.Apis.Auth.1.9.2\lib\net40\Google.Apis.Auth.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Core">
+      <HintPath>..\packages\Google.Apis.Core.1.9.2\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Drive.v3">
+      <HintPath>..\packages\Google.Apis.Drive.v3.1.9.2.10\lib\portable-net40+sl50+win+wpa81+wp80\Google.Apis.Drive.v3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.PlatformServices">
+      <HintPath>..\packages\Google.Apis.1.9.2\lib\net40\Google.Apis.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="KeePass, Version=2.30.0.32059, Culture=neutral, PublicKeyToken=7952fc8ece49a093, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\KeePass.exe</HintPath>
     </Reference>
     <Reference Include="KoenZomers.OneDrive.Api, Version=1.4.0.0, Culture=neutral, PublicKeyToken=c94340d84666bdcb, processorArchitecture=MSIL">
       <HintPath>..\packages\KoenZomers.OneDrive.Api.1.4.0.0\lib\KoenZomers.OneDrive.Api.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -85,6 +113,10 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Zlib.Portable">
+      <HintPath>..\packages\Zlib.Portable.Signed.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\AccountConfiguration.cs" />
@@ -125,6 +157,9 @@
     <Compile Include="StorageProviders\Dropbox\DropboxHelper.cs" />
     <Compile Include="StorageProviders\Dropbox\DropboxStorageConfigurator.cs" />
     <Compile Include="StorageProviders\Dropbox\DropboxStorageProvider.cs" />
+    <Compile Include="StorageProviders\GoogleDrive\GoogleDriveHelper.cs" />
+    <Compile Include="StorageProviders\GoogleDrive\GoogleDriveStorageConfigurator.cs" />
+    <Compile Include="StorageProviders\GoogleDrive\GoogleDriveStorageProvider.cs" />
     <Compile Include="StorageProviders\IStorageConfigurator.cs" />
     <Compile Include="StorageProviders\IStorageProvider.cs" />
     <Compile Include="StorageProviders\OneDrive\OneDriveAuthenticationForm.cs">
@@ -182,6 +217,7 @@
     </None>
     <None Include="packages.config">
       <ExcludeFromPlgx />
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +226,7 @@
     <Content Include="Resources\CloudDrive_16x16.png" />
     <Content Include="Resources\CloudDrive_48x48.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
@@ -211,6 +248,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\PlgxTool.1.0.0\build\PlgxTool.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PlgxTool.1.0.0\build\PlgxTool.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -221,4 +259,5 @@
     <CallTarget Targets="BuildPlgx" />
     <!--<Delete Files="$(TargetPath)" />-->
   </Target>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
 </Project>

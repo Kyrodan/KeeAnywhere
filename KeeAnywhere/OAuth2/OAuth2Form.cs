@@ -20,12 +20,12 @@ namespace KeeAnywhere.OAuth2
             InitializeComponent();
         }
 
-        public void InitEx(IOAuth2Provider provider)
+        public async void InitEx(IOAuth2Provider provider)
         {
             if (provider == null) throw new ArgumentNullException("provider");
             m_provider = provider;
 
-            provider.Initialize();
+            await provider.Initialize();
         }
 
         private void OnLoad(object sender, EventArgs e)
@@ -34,7 +34,7 @@ namespace KeeAnywhere.OAuth2
             m_browser.Navigate(m_provider.AuthorizationUrl);
         }
 
-        private void OnDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private async void OnDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             if (!e.Url.ToString().StartsWith(m_provider.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase))
             {
@@ -44,17 +44,15 @@ namespace KeeAnywhere.OAuth2
 
             try
             {
-                var isOk = m_provider.Claim(e.Url);
-                if (isOk)
-                {
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
-                }
+                var isOk = await m_provider.Claim(e.Url, m_browser.DocumentTitle);
+                this.DialogResult = isOk ? DialogResult.OK : DialogResult.Cancel;
             }
-            catch (ArgumentException)
+            catch 
             {
-                //                e.Cancel = true;
                 this.DialogResult = DialogResult.Cancel;
+            }
+            finally
+            {
                 this.Close();
             }
         }

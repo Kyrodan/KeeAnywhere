@@ -50,22 +50,24 @@ namespace KeeAnywhere.WebRequest
 
             if (this.Method == IOConnection.WrmDeleteFile)
             {
-                var isOk = Task.Run(async () => await _provider.Delete(_itemPath));
+                //var isOk = Task.Run(async () => await _provider.Delete(_itemPath));
 
-                if (!isOk.Result)
-                    throw new InvalidOperationException(string.Format("KeeAnywhere: Delete of item {0} failed", _itemPath));
+                //if (!isOk.Result)
+                //throw new InvalidOperationException(string.Format("KeeAnywhere: Delete of item {0} failed.", _itemPath));
 
-                _response = new KeeAnywhereWebResponse();
+                //_response = new KeeAnywhereWebResponse();
+                throw new InvalidOperationException(string.Format("KeeAnywhere: Delete item {0} not supported.", _itemPath));
             }
             else if (this.Method == IOConnection.WrmMoveFile)
             {
-                //TODO: Is check for same account needed?
-                var destUrl = new StorageUri(Headers[IOConnection.WrhMoveFileTo]);
-                var itemDestPath = destUrl.GetPath();
+                ////TODO: Is check for same account needed?
+                //var destUrl = new StorageUri(Headers[IOConnection.WrhMoveFileTo]);
+                //var itemDestPath = destUrl.GetPath();
 
-                Task.Run(async () => await _provider.Move(_itemPath, itemDestPath));
+                //Task.Run(async () => await _provider.Move(_itemPath, itemDestPath));
 
-                return new KeeAnywhereWebResponse();
+                //return new KeeAnywhereWebResponse();
+                throw new InvalidOperationException(string.Format("KeeAnywhere: Move item {0} not supported.", _itemPath));
             }
             else if (this.Method == WebRequestMethods.Http.Post)
             {

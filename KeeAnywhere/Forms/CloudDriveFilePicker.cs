@@ -149,8 +149,17 @@ namespace KeeAnywhere.Forms
             if (account == null) return;
 
             SetWaitState(true);
-            var provider = m_storageService.GetProviderByAccount(account);
-            await SetProvider(provider);
+            try
+            {
+                var provider = m_storageService.GetProviderByAccount(account);
+                await SetProvider(provider);
+            }
+            catch (Exception ex)
+            {
+                MessageService.ShowWarning(
+                    string.Format("Error loading file list for account {0}.\r\nException:", account.DisplayName),
+                    ex);
+            }
 
             SetWaitState(false);
         }
@@ -207,7 +216,7 @@ namespace KeeAnywhere.Forms
             foreach (var child in info.Children)
             {
                 var ext = Path.GetExtension(child.Name);
-                if (m_cbFilter.SelectedIndex == 0 && child.Type == StorageProviderItemType.File && !string.IsNullOrEmpty(ext) && ext.ToLower() != ".kdbx")
+                if (m_cbFilter.SelectedIndex == 0 && child.Type == StorageProviderItemType.File && (string.IsNullOrEmpty(ext) || ext.ToLower() != ".kdbx"))
                     continue;
 
                 var lvi = m_lvDetails.Items.Add(child.Name);
@@ -239,6 +248,8 @@ namespace KeeAnywhere.Forms
         private int GetIconIndex(string filename)
         {
             var extension = Path.GetExtension(filename);
+
+            if (string.IsNullOrEmpty(extension)) return -1;
 
             if (!m_ilIcons.Images.ContainsKey(extension))
             {
