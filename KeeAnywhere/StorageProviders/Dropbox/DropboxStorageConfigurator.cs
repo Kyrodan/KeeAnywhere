@@ -32,30 +32,37 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             return account;
         }
 
-        public async Task Initialize()
+        public Task Initialize()
         {
-            _state = Guid.NewGuid().ToString("N");
-            this.AuthorizationUrl = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token, DropboxHelper.DropboxClientId, RedirectionUrl, _state);
+            return TaskEx.Run(() =>
+            {
+                _state = Guid.NewGuid().ToString("N");
+                this.AuthorizationUrl = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token,
+                    DropboxHelper.DropboxClientId, RedirectionUrl, _state);
+            });
         }
 
-        public async Task<bool> Claim(Uri uri, string documentTitle)
+        public Task<bool> Claim(Uri uri, string documentTitle)
         {
-            try
+            return TaskEx.Run(() =>
             {
-                OAuth2Response result = DropboxOAuth2Helper.ParseTokenFragment(uri);
-                if (result.State != _state)
+                try
                 {
-                    // The state in the response doesn't match the state in the request.
+                    var result = DropboxOAuth2Helper.ParseTokenFragment(uri);
+                    if (result.State != _state)
+                    {
+                        // The state in the response doesn't match the state in the request.
+                        return false;
+                    }
+
+                    _oauthResponse = result;
+                    return true;
+                }
+                catch
+                {
                     return false;
                 }
-
-                _oauthResponse = result;
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            });
         }
 
         public Uri AuthorizationUrl { get; private set; }

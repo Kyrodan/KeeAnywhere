@@ -30,14 +30,6 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             }
         }
 
-        public async Task<bool> Delete(string path)
-        {
-            path = RootPath(path);
-            var result = await Api.Files.DeleteAsync(path);
-
-            return result.IsDeleted;
-        }
-
         public async Task<Stream> Load(string path)
         {
             path = RootPath(path);
@@ -59,21 +51,15 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             return result.IsFile;
         }
 
-        public Task<bool> Move(string pathFrom, string pathTo)
+        public Task<StorageProviderItem> GetRootItem()
         {
-            throw new NotImplementedException();
-        }
-
-#pragma warning disable 1998
-        public async Task<StorageProviderItem> GetRootItem()
-#pragma warning restore 1998
-        {
-            return new StorageProviderItem
-            {
-                Id = string.Empty,
-                Name = "Root",
-                Type = StorageProviderItemType.Folder
-            };
+            return TaskEx.FromResult(
+                new StorageProviderItem
+                {
+                    Id = string.Empty,
+                    Name = "Root",
+                    Type = StorageProviderItemType.Folder
+                });
         }
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent)

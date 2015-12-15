@@ -20,17 +20,6 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             _account = account;
         }
 
-        public async Task<bool> Delete(string path)
-        {
-            var api = await GetApi();
-            var item = await api.GetItem(path);
-            if (item == null) return true;
-
-            var isOk = await api.Delete(path);
-
-            return isOk;
-        }
-
         public async Task<Stream> Load(string path)
         {
             var api = await GetApi();
@@ -82,11 +71,6 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             File.Delete(tempFilename);
 
             return uploadedItem != null;
-        }
-
-        public Task<bool> Move(string pathFrom, string pathTo)
-        {
-            throw new NotImplementedException("OneDrive: Move-Operation not implemented");
         }
 
         public async Task<StorageProviderItem> GetRootItem()

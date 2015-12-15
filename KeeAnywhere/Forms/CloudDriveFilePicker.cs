@@ -154,8 +154,11 @@ namespace KeeAnywhere.Forms
                 var provider = m_storageService.GetProviderByAccount(account);
                 await SetProvider(provider);
             }
-            catch
+            catch (Exception ex)
             {
+                MessageService.ShowWarning(
+                    string.Format("Error loading file list for account {0}.\r\nException:", account.DisplayName),
+                    ex);
             }
 
             SetWaitState(false);

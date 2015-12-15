@@ -5,7 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Google.Apis.Download;
 using Google.Apis.Drive.v3;
+using Google.Apis.Drive.v3.Data;
+using Google.Apis.Upload;
 using KeeAnywhere.Configuration;
+using File = Google.Apis.Drive.v3.Data.File;
 
 namespace KeeAnywhere.StorageProviders.GoogleDrive
 {
@@ -18,11 +21,6 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         {
             if (account == null) throw new ArgumentNullException(nameof(account));
             _account = account;
-        }
-
-        public Task<bool> Delete(string path)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<Stream> Load(string path)
@@ -45,24 +43,48 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         }
 
 
-        public Task<bool> Save(Stream stream, string path)
+        public async Task<bool> Save(Stream stream, string path)
         {
-            throw new NotImplementedException();
-        }
+            var api = await GetApi();
 
-        public Task<bool> Move(string pathFrom, string pathTo)
-        {
-            throw new NotImplementedException();
-        }
+            IUploadProgress progress;
 
-        public async Task<StorageProviderItem> GetRootItem()
-        {
-            return new StorageProviderItem()
+            var file = await api.GetFileByPath(path);
+            if (file != null)
             {
-                Id = "root",
-                Name = "root",
-                Type = StorageProviderItemType.Folder,
-            };
+                progress = await api.Files.Update(null, file.Id, stream, "application/octet-stream").UploadAsync();
+            }
+            else // not found: creating new
+            {
+
+                var folderName = Path.GetDirectoryName(path);
+                var fileName = Path.GetFileName(path);
+
+                var folder = await api.GetFileByPath(folderName);
+                if (folder == null)
+                    throw new InvalidOperationException(string.Format("Folder does not exist: {0}", folderName));
+
+                file = new File()
+                {
+                    Name = fileName,
+                    Parents = new[] {folder.Id},
+                };
+
+                progress = await api.Files.Create(file, stream, "application/octet-stream").UploadAsync();
+            }
+
+            return progress.Status == UploadStatus.Completed && progress.Exception == null;
+        }
+
+        public Task<StorageProviderItem> GetRootItem()
+        {
+            return TaskEx.FromResult(
+                new StorageProviderItem()
+                {
+                    Id = "root",
+                    Name = "root",
+                    Type = StorageProviderItemType.Folder,
+                });
         }
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent)

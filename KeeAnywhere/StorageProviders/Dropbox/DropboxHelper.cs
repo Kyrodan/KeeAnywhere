@@ -22,6 +22,5 @@ namespace KeeAnywhere.StorageProviders.Dropbox
 
         internal const string DropboxClientId = "dummy";
         internal const string DropboxClientSecret = "dummy";
-
     }
 }

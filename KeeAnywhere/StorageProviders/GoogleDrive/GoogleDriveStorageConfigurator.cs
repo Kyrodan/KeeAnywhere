@@ -37,32 +37,38 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         private GoogleAuthorizationCodeFlow _flow;
         private TokenResponse _token;
 
-        public async Task<AccountConfiguration> CreateAccount()
+        public Task<AccountConfiguration> CreateAccount()
         {
-            var isOk = OAuth2Flow.TryAuthenticate(this);
+            return TaskEx.Run(() =>
+            {
 
-            if (!isOk) return null;
+                var isOk = OAuth2Flow.TryAuthenticate(this);
+
+                if (!isOk) return null;
 
 
-            return null;
+                return (AccountConfiguration)null;
+            });
         }
 
-        public async Task Initialize()
+        public Task Initialize()
         {
-
-            var initializer = new GoogleAuthorizationCodeFlow.Initializer();
-            initializer.ClientSecrets = new ClientSecrets
+            return Task.Run(() =>
             {
-                ClientId = GoogleDriveHelper.GoogleDriveClientId,
-                ClientSecret = GoogleDriveHelper.GoogleDriveClientSecret,
-            };
-            initializer.Scopes = new[] { DriveService.Scope.Drive };
-            initializer.DataStore = null;
+                var initializer = new GoogleAuthorizationCodeFlow.Initializer();
+                initializer.ClientSecrets = new ClientSecrets
+                {
+                    ClientId = GoogleDriveHelper.GoogleDriveClientId,
+                    ClientSecret = GoogleDriveHelper.GoogleDriveClientSecret,
+                };
+                initializer.Scopes = new[] {DriveService.Scope.Drive};
+                initializer.DataStore = null;
 
-            _flow = new GoogleAuthorizationCodeFlow(initializer);
-            var authUrl = _flow.CreateAuthorizationCodeRequest(GoogleDriveHelper.RedirectUri);
-            this.AuthorizationUrl = authUrl.Build();
-            this.RedirectionUrl = new Uri(GoogleAuthConsts.ApprovalUrl);
+                _flow = new GoogleAuthorizationCodeFlow(initializer);
+                var authUrl = _flow.CreateAuthorizationCodeRequest(GoogleDriveHelper.RedirectUri);
+                this.AuthorizationUrl = authUrl.Build();
+                this.RedirectionUrl = new Uri(GoogleAuthConsts.ApprovalUrl);
+            });
         }
 
         public async Task<bool> Claim(Uri uri, string documentTitle)

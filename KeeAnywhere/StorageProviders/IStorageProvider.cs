@@ -7,10 +7,8 @@ namespace KeeAnywhere.StorageProviders
     public interface IStorageProvider
     {
         // File operations
-        Task<bool> Delete(string path);
         Task<Stream> Load(string path);
         Task<bool> Save(Stream stream, string path);
-        Task<bool> Move(string pathFrom, string pathTo);
 
         // Query operations
         Task<StorageProviderItem> GetRootItem();
