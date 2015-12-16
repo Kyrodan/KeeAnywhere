@@ -68,5 +68,6 @@ namespace KeeAnywhere.StorageProviders.Dropbox
         public Uri AuthorizationUrl { get; private set; }
         //public Uri RedirectionUrl { get { return new Uri("http://localhost/auth_redirection"); } }
         public Uri RedirectionUrl { get { return new Uri("https://www.dropbox.com/1/oauth2/redirect_receiver"); } }
+        public string FriendlyProviderName { get { return "Dropbox"; } }
     }
 }

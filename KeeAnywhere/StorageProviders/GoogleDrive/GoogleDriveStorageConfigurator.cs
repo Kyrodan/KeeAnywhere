@@ -96,5 +96,6 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
         public Uri AuthorizationUrl { get; protected set; }
         public Uri RedirectionUrl { get; protected set; }
+        public string FriendlyProviderName { get { return "Google Drive"; } }
     }
 }

@@ -13,5 +13,7 @@ namespace KeeAnywhere.OAuth2
 
         Uri AuthorizationUrl { get; }
         Uri RedirectionUrl { get; }
+
+        string FriendlyProviderName { get; }
     }
 }
