@@ -19,7 +19,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
         public GoogleDriveStorageProvider(AccountConfiguration account)
         {
-            if (account == null) throw new ArgumentNullException(nameof(account));
+            if (account == null) throw new ArgumentNullException("account");
             _account = account;
         }
 
@@ -76,15 +76,14 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             return progress.Status == UploadStatus.Completed && progress.Exception == null;
         }
 
-        public Task<StorageProviderItem> GetRootItem()
+        public async Task<StorageProviderItem> GetRootItem()
         {
-            return TaskEx.FromResult(
-                new StorageProviderItem()
+            return new StorageProviderItem()
                 {
                     Id = "root",
                     Name = "root",
                     Type = StorageProviderItemType.Folder,
-                });
+                };
         }
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent)

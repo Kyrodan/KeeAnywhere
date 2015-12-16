@@ -34,22 +34,16 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             return account;
         }
 
-        public Task Initialize()
+        public async Task Initialize()
         {
-            return TaskEx.Run(() =>
-            {
-                this.PreAuthorizationUrl = _api.GetSignOutUri();
-                this.AuthorizationUrl = _api.GetAuthenticationUri("wl.offline_access wl.skydrive_update");
-            });
+            this.PreAuthorizationUrl = _api.GetSignOutUri();
+            this.AuthorizationUrl = _api.GetAuthenticationUri("wl.offline_access wl.skydrive_update");
         }
 
-        public Task<bool> Claim(Uri uri, string documentTitle)
+        public async Task<bool> Claim(Uri uri, string documentTitle)
         {
-            return TaskEx.Run(() =>
-            {
-                _token = _api.GetAuthorizationTokenFromUrl(uri.ToString());
-                return (_token != null);
-            });
+            _token = _api.GetAuthorizationTokenFromUrl(uri.ToString());
+            return (_token != null);
         }
 
         public Uri AuthorizationUrl { get; protected set; }

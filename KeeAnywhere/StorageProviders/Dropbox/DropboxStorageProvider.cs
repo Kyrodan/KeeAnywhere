@@ -51,15 +51,14 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             return result.IsFile;
         }
 
-        public Task<StorageProviderItem> GetRootItem()
+        public async Task<StorageProviderItem> GetRootItem()
         {
-            return TaskEx.FromResult(
-                new StorageProviderItem
+            return new StorageProviderItem
                 {
                     Id = string.Empty,
                     Name = "Root",
                     Type = StorageProviderItemType.Folder
-                });
+                };
         }
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent)

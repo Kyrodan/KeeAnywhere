@@ -90,11 +90,11 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
         public AccountDataStore(AccountConfiguration account)
         {
-            if (account == null) throw new ArgumentNullException(nameof(account));
+            if (account == null) throw new ArgumentNullException("account");
             _account = account;
         }
 
-        public Task StoreAsync<T>(string key, T value)
+        public async Task StoreAsync<T>(string key, T value)
         {
             _token = value as TokenResponse;
             if (_token != null)
@@ -102,13 +102,13 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
                 _account.Secret = _token.RefreshToken;
             }
 
-            return TaskEx.Delay(0);
+            //return TaskEx.Delay(0);
         }
 
-        public Task DeleteAsync<T>(string key)
+        public async Task DeleteAsync<T>(string key)
         {
             _account.Secret = null;
-            return TaskEx.Delay(0);
+            //return TaskEx.Delay(0);
         }
 
         public Task<T> GetAsync<T>(string key)
@@ -130,10 +130,10 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             return completionSource.Task;
         }
 
-        public Task ClearAsync()
+        public async Task ClearAsync()
         {
             _account.Secret = null;
-            return TaskEx.Delay(0);
+            // return TaskEx.Delay(0);
         }
     }
 }

@@ -32,37 +32,36 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             return account;
         }
 
-        public Task Initialize()
+        public async Task Initialize()
         {
-            return TaskEx.Run(() =>
-            {
-                _state = Guid.NewGuid().ToString("N");
-                this.AuthorizationUrl = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token,
-                    DropboxHelper.DropboxClientId, RedirectionUrl, _state);
-            });
+            _state = Guid.NewGuid().ToString("N");
+            this.AuthorizationUrl = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token,
+                DropboxHelper.DropboxClientId, RedirectionUrl, _state);
         }
 
         public Task<bool> Claim(Uri uri, string documentTitle)
         {
-            return TaskEx.Run(() =>
-            {
-                try
-                {
-                    var result = DropboxOAuth2Helper.ParseTokenFragment(uri);
-                    if (result.State != _state)
-                    {
-                        // The state in the response doesn't match the state in the request.
-                        return false;
-                    }
+            var cs = new TaskCompletionSource<bool>();
 
-                    _oauthResponse = result;
-                    return true;
-                }
-                catch
+            try
+            {
+                var result = DropboxOAuth2Helper.ParseTokenFragment(uri);
+                if (result.State != _state)
                 {
-                    return false;
+                    // The state in the response doesn't match the state in the request.
+                    cs.SetResult(false);
+                    return cs.Task;
                 }
-            });
+
+                _oauthResponse = result;
+                cs.SetResult(true);
+                return cs.Task;
+            }
+            catch
+            {
+                cs.SetResult(false);
+                return cs.Task;
+            }
         }
 
         public Uri PreAuthorizationUrl { get { return new Uri("https://www.dropbox.com/logout"); }  }
