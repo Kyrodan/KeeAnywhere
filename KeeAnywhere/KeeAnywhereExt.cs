@@ -50,6 +50,9 @@ namespace KeeAnywhere
 
             _host = pluginHost;
 
+            // Some binding redirection fixes for Google Drive API
+            FixGoogleApiDependencyLoading();
+
             // Load the configuration
             _configService = new ConfigurationService(pluginHost);
             _configService.Load();
@@ -191,6 +194,26 @@ namespace KeeAnywhere
             var form = new SettingsForm();
             form.InitEx(_configService, _uiService);
             UIUtil.ShowDialogAndDestroy(form);
+        }
+
+        private static void FixGoogleApiDependencyLoading()
+        {
+            // Google.Api relies on System.Net.Http.Primitives version 1.5.0.0
+            // In general a binding redirect is added to the App.config file.
+            // Due to this is a KeePass plugin which has no App.config, a workaround is implemented.
+            //
+            // See https://github.com/google/google-api-dotnet-client/issues/554 for details.
+
+            var httpasm = System.Reflection.Assembly.Load("System.Net.Http.Primitives");
+            var httpver = new Version(1, 5, 0, 0);
+
+            AppDomain.CurrentDomain.AssemblyResolve += (s, a) => {
+                var requestedAssembly = new System.Reflection.AssemblyName(a.Name);
+                if (requestedAssembly.Name != "System.Net.Http.Primitives" || requestedAssembly.Version != httpver)
+                    return null;
+
+                return httpasm;
+            };
         }
     }
 }
