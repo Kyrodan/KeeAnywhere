@@ -36,7 +36,11 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public Task Initialize()
         {
-            return TaskEx.Run(() => this.AuthorizationUrl = _api.GetAuthenticationUri("wl.offline_access wl.skydrive_update"));
+            return TaskEx.Run(() =>
+            {
+                this.PreAuthorizationUrl = _api.GetSignOutUri();
+                this.AuthorizationUrl = _api.GetAuthenticationUri("wl.offline_access wl.skydrive_update");
+            });
         }
 
         public Task<bool> Claim(Uri uri, string documentTitle)
@@ -49,6 +53,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         }
 
         public Uri AuthorizationUrl { get; protected set; }
+        public Uri PreAuthorizationUrl { get; protected set; }
         public Uri RedirectionUrl { get {return new Uri("https://login.live.com/oauth20_desktop.srf");} }
         public string FriendlyProviderName { get { return "OneDrive"; } }
     }

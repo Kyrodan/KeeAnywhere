@@ -9,6 +9,7 @@ namespace KeeAnywhere.OAuth2
     public partial class OAuth2Form : Form
     {
         private IOAuth2Provider m_provider;
+        private bool m_isPreAuthorization;
 
         public OAuth2Form()
         {
@@ -32,7 +33,8 @@ namespace KeeAnywhere.OAuth2
 
             UpdateBanner();
 
-            m_browser.Navigate(m_provider.AuthorizationUrl);
+            m_isPreAuthorization = m_provider.PreAuthorizationUrl != null;
+            m_browser.Navigate(m_provider.PreAuthorizationUrl ?? m_provider.AuthorizationUrl);
         }
 
         private void UpdateBanner()
@@ -47,15 +49,25 @@ namespace KeeAnywhere.OAuth2
 
         private void OnDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            Trace.WriteLine("DocumentCompleted " + e.Url);
+            Debug.WriteLine("DocumentCompleted " + e.Url);
         }
 
         private async void OnNavigated(object sender, WebBrowserNavigatedEventArgs e)
         {
-            Trace.WriteLine("Navigated " + e.Url);
+            Debug.WriteLine("Navigated " + e.Url);
+
+            // Pre-Authorization performed?
+            if (m_isPreAuthorization)
+            {
+                m_isPreAuthorization = false;
+                m_browser.Navigate(m_provider.AuthorizationUrl);
+                return;
+            }
+
+
+            // we need to ignore all navigation that isn't to the redirect uri.
             if (!e.Url.ToString().StartsWith(m_provider.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase))
             {
-                // we need to ignore all navigation that isn't to the redirect uri.
                 return;
             }
 
@@ -77,12 +89,12 @@ namespace KeeAnywhere.OAuth2
 
         private void OnNavigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            Trace.WriteLine("Navigating " + e.Url);
+            Debug.WriteLine("Navigating " + e.Url);
         }
 
         private void OnNewWindow(object sender, CancelEventArgs e)
         {
-            Trace.WriteLine("NewWindow");
+            Debug.WriteLine("NewWindow");
             e.Cancel = true;
         }
 
