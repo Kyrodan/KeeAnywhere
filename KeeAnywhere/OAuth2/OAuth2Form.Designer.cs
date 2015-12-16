@@ -43,6 +43,9 @@
             this.m_browser.TabIndex = 0;
             this.m_browser.WebBrowserShortcutsEnabled = false;
             this.m_browser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.OnDocumentCompleted);
+            this.m_browser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.OnNavigated);
+            this.m_browser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.OnNavigating);
+            this.m_browser.NewWindow += new System.ComponentModel.CancelEventHandler(this.OnNewWindow);
             // 
             // OAuth2Form
             // 

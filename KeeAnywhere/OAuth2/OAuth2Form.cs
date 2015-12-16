@@ -34,8 +34,15 @@ namespace KeeAnywhere.OAuth2
             m_browser.Navigate(m_provider.AuthorizationUrl);
         }
 
-        private async void OnDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void OnDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            Trace.WriteLine("DocumentCompleted " + e.Url);
+
+        }
+
+        private async void OnNavigated(object sender, WebBrowserNavigatedEventArgs e)
+        {
+            Trace.WriteLine("Navigated " + e.Url);
             if (!e.Url.ToString().StartsWith(m_provider.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 // we need to ignore all navigation that isn't to the redirect uri.
@@ -47,14 +54,26 @@ namespace KeeAnywhere.OAuth2
                 var isOk = await m_provider.Claim(e.Url, m_browser.DocumentTitle);
                 this.DialogResult = isOk ? DialogResult.OK : DialogResult.Cancel;
             }
-            catch 
+            catch
             {
                 this.DialogResult = DialogResult.Cancel;
             }
             finally
             {
+                m_browser.Stop();
                 this.Close();
             }
+        }
+
+        private void OnNavigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            Trace.WriteLine("Navigating " + e.Url);
+        }
+
+        private void OnNewWindow(object sender, CancelEventArgs e)
+        {
+            Trace.WriteLine("NewWindow");
+            e.Cancel = true;
         }
     }
 }
