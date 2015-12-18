@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using KeeAnywhere.Configuration;
+using KeeAnywhere.Forms.ImagedComboBox;
 using KeeAnywhere.StorageProviders;
 using KeePass.UI;
 using KeePassLib.Utility;
@@ -56,7 +58,8 @@ namespace KeeAnywhere.Forms
         private string GetResultUri()
         {
             var path = GetPath();
-            var account = ((AccountConfiguration) m_cbAccount.SelectedItem);
+            var item = (ImageComboBoxItem) m_cbAccounts.SelectedItem;
+            var account = item.Item as AccountConfiguration;
 
             var s = StorageUri.BuildUriString(account.Type, account.Name, path);
 
@@ -85,13 +88,14 @@ namespace KeeAnywhere.Forms
 
             m_isInit = true;
 
-            m_cbAccount.BeginUpdate();
-            m_cbAccount.DataSource = m_configService.Accounts.OrderBy(_ => _.Type).ThenBy(_ => _.Name).ToArray();
-            m_cbAccount.DisplayMember = "DisplayName";
-            m_cbAccount.ValueMember = "Id";
-            m_cbAccount.EndUpdate();
 
-            m_ilIcons.Images.Add(PluginResources.Folder_16x16);
+            m_ilFiletypeIcons.Images.Add(PluginResources.Folder_16x16);
+
+            foreach (var descriptor in StorageRegistry.Descriptors)
+            {
+                m_ilProviderIcons.Images.Add(descriptor.Type.ToString(), descriptor.SmallImage);
+            }
+
 
             m_cbFilter.Items.Add("KeePass KDBX Files (*.kdbx)");
             m_cbFilter.Items.Add("All Files (*.*)");
@@ -107,11 +111,48 @@ namespace KeeAnywhere.Forms
 
             m_isInit = false;
 
-            if (m_cbAccount.Items.Count > 0)
+
+            UpdateAccountsCombobox();
+
+            if (m_cbAccounts.Items.Count > 1)
             {
-                m_cbAccount.SelectedIndex = -1;
-                m_cbAccount.SelectedIndex = 0;
+                m_cbAccounts.SelectedIndex = -1;
+                m_cbAccounts.SelectedIndex = 1;
             }
+        }
+
+        private void UpdateAccountsCombobox()
+        {
+            m_cbAccounts.BeginUpdate();
+
+            foreach (var descriptor in StorageRegistry.Descriptors)
+            {
+                ImageComboBoxItem item;
+
+                item = new ImageComboBoxItem()
+                {
+                    Text = descriptor.FriendlyName,
+                    ImageIndex = m_ilProviderIcons.Images.IndexOfKey(descriptor.Type.ToString()),
+                    IndentLevel = 0,
+                    Font = new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold),
+                };
+                m_cbAccounts.Items.Add(item);
+
+                foreach (var account in m_configService.Accounts.Where(_ => _.Type == descriptor.Type).OrderBy(_ => _.Name))
+                {
+                    item = new ImageComboBoxItem()
+                    {
+                        Text = account.Name,
+                        ImageIndex = m_ilProviderIcons.Images.IndexOfKey(account.Type.ToString()),
+                        Item = account,
+                        IndentLevel = 1,
+                    };
+
+                    m_cbAccounts.Items.Add(item);
+                }
+
+            };
+            m_cbAccounts.EndUpdate();
         }
 
         private void UpdateBanner()
@@ -121,13 +162,13 @@ namespace KeeAnywhere.Forms
                 case Mode.Open:
                     this.Text = "Open from Cloud Drive";
                     BannerFactory.CreateBannerEx(this, m_bannerImage,
-                        PluginResources.OneDrive_48x48, "Open from Cloud Drive",
+                        PluginResources.KeeAnywhere_48x48, "Open from Cloud Drive",
                         "Here you can pick your database to open from a Cloud Drive.");
                     break;
                 case Mode.Save:
                     this.Text = "Save to cloud drive";
                     BannerFactory.CreateBannerEx(this, m_bannerImage,
-                        PluginResources.OneDrive_48x48, "Save to Cloud Drive",
+                        PluginResources.KeeAnywhere_48x48, "Save to Cloud Drive",
                         "Here you can pick a location to save to a Cloud Drive.");
                     break;
                 //default:
@@ -145,7 +186,10 @@ namespace KeeAnywhere.Forms
         {
             if (m_isInit) return;
 
-            var account = m_cbAccount.SelectedItem as AccountConfiguration;
+            var item = m_cbAccounts.SelectedItem as ImageComboBoxItem;
+            if (item == null) return;
+
+            var account = item.Item as AccountConfiguration;
             if (account == null) return;
 
             SetWaitState(true);
@@ -168,7 +212,7 @@ namespace KeeAnywhere.Forms
         {
             if (isWait && m_savedCursor != null) return;
 
-            m_cbAccount.Enabled = !isWait;
+            m_cbAccounts.Enabled = !isWait;
             m_lvDetails.Enabled = !isWait;
             m_btnOpen.Enabled = !isWait;
 
@@ -251,15 +295,15 @@ namespace KeeAnywhere.Forms
 
             if (string.IsNullOrEmpty(extension)) return -1;
 
-            if (!m_ilIcons.Images.ContainsKey(extension))
+            if (!m_ilFiletypeIcons.Images.ContainsKey(extension))
             {
                 var image = IconHelper.IconFromExtension(extension, IconHelper.SystemIconSize.Small);
                 if (image == null) return 0;
                 
-                m_ilIcons.Images.Add(extension, image);
+                m_ilFiletypeIcons.Images.Add(extension, image);
             }
 
-            return m_ilIcons.Images.IndexOfKey(extension);
+            return m_ilFiletypeIcons.Images.IndexOfKey(extension);
         }
 
         private async Task SetProvider(IStorageProvider provider)

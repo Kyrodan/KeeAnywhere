@@ -136,6 +136,18 @@
     <Compile Include="Forms\DropDownButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Forms\ImagedComboBox\ComboEditWindow.cs" />
+    <Compile Include="Forms\ImagedComboBox\DropDownDrawModes.cs" />
+    <Compile Include="Forms\ImagedComboBox\DropDownImages.cs" />
+    <Compile Include="Forms\ImagedComboBox\ImageComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\ImagedComboBox\ImageComboBoxItem.cs" />
+    <Compile Include="Forms\ImagedComboBox\ImageComboBoxItemCollection.cs" />
+    <Compile Include="Forms\ImagedComboBox\ImageComboItemConverter.cs" />
+    <Compile Include="Forms\ImagedComboBox\ItemImagesContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -194,6 +206,9 @@
       <DependentUpon>CloudDriveFilePicker.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ImagedComboBox\ItemImagesContainer.resx">
+      <DependentUpon>ItemImagesContainer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -225,7 +240,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\OneDrive_16x16.png" />
+    <None Include="Resources\Dropbox_16x16.png" />
     <Content Include="Resources\Folder_16x16.png" />
+    <None Include="Resources\GoogleDrive_16x16.png" />
     <Content Include="Resources\Icon_CloudDrive_16x16.ico" />
     <Content Include="Resources\CloudDrive_16x16.png" />
     <Content Include="Resources\CloudDrive_48x48.png" />

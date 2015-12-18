@@ -61,7 +61,7 @@ namespace KeeAnywhere.Forms
             this.Icon = PluginResources.Icon_OneDrive_16x16;
 
             BannerFactory.CreateBannerEx(this, m_bannerImage,
-                PluginResources.OneDrive_48x48, "KeeAnywhere Settings",
+                PluginResources.KeeAnywhere_48x48, "KeeAnywhere Settings",
                 "Here you can manage KeeAnywhere's settings.");
 
             InitGeneralTab();
@@ -112,13 +112,15 @@ namespace KeeAnywhere.Forms
 
             foreach (var descriptor in StorageRegistry.Descriptors)
             {
-                var item = m_mnuAdd.Items.Add(descriptor.Type.ToString());
-                item.Tag = descriptor.Type;
+                var item = m_mnuAdd.Items.Add(descriptor.FriendlyName, descriptor.SmallImage);
+                item.Tag = descriptor;
                 item.Click += OnAccountAdd;
+
+                m_imlProviderIcons.Images.Add(descriptor.Type.ToString(), descriptor.SmallImage);
             }
 
-            m_lvAccounts.Columns.Add("Type");
             m_lvAccounts.Columns.Add("Name");
+            m_lvAccounts.Columns.Add("Type");
             m_lvAccounts.Columns.Add("ID");
             m_lvAccounts.Columns.Add("Refresh Token");
 
@@ -137,11 +139,12 @@ namespace KeeAnywhere.Forms
 
             foreach (var account in m_configService.Accounts.OrderBy(_ => _.Type).ThenBy(_ => _.Name))
             {
-                var lvi = new ListViewItem(account.Type.ToString());
+                var lvi = new ListViewItem(account.Name);
                 var lviNew = m_lvAccounts.Items.Add(lvi);
 
                 lviNew.Tag = account;
-                lviNew.SubItems.Add(account.Name);
+                lviNew.ImageKey = account.Type.ToString();
+                lviNew.SubItems.Add(account.Type.ToString());
                 lviNew.SubItems.Add(account.Id);
                 lviNew.SubItems.Add(account.Secret);
             }
@@ -168,7 +171,7 @@ namespace KeeAnywhere.Forms
             var item = sender as ToolStripMenuItem;
             if (item == null) return;
 
-            await m_uiService.CreateOrUpdateAccount((StorageType)item.Tag);
+            await m_uiService.CreateOrUpdateAccount(((StorageDescriptor)item.Tag).Type);
 
             UpdateAccountList();
         }

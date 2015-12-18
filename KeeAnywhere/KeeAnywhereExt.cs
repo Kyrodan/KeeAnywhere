@@ -67,8 +67,7 @@ namespace KeeAnywhere
 
             // Add the menu option for configuration under Tools
             var menu = _host.MainWindow.ToolsMenu.DropDownItems;
-
-            _tsShowSettings = new ToolStripMenuItem("KeeAnywhere Settings...", PluginResources.OneDrive_16x16);
+            _tsShowSettings = new ToolStripMenuItem("KeeAnywhere Settings...", PluginResources.KeeAnywhere_16x16);
             _tsShowSettings.Click += OnShowSetting;
             menu.Add(_tsShowSettings);
 
@@ -79,7 +78,7 @@ namespace KeeAnywhere
                 var openMenu = fileMenu.DropDownItems["m_menuFileOpen"] as ToolStripMenuItem;
                 if (openMenu != null)
                 {
-                    _tsOpenFromCloudDrive = new ToolStripMenuItem("Open from Cloud Drive...", PluginResources.OneDrive_16x16);
+                    _tsOpenFromCloudDrive = new ToolStripMenuItem("Open from Cloud Drive...", PluginResources.KeeAnywhere_16x16);
                     _tsOpenFromCloudDrive.Click += OnOpenFromCloudDrive;
                     openMenu.DropDownItems.Add(_tsOpenFromCloudDrive);
                 }
@@ -89,7 +88,7 @@ namespace KeeAnywhere
                 {
                     var index = saveMenu.DropDownItems.IndexOfKey("m_menuFileSaveAsSep0");
 
-                    _tsSaveToCloudDrive = new ToolStripMenuItem("Save to Cloud Drive...", PluginResources.OneDrive_16x16);
+                    _tsSaveToCloudDrive = new ToolStripMenuItem("Save to Cloud Drive...", PluginResources.KeeAnywhere_16x16);
                     _tsSaveToCloudDrive.Click += OnSaveToCloudDrive;
                     saveMenu.DropDownItems.Insert(index, _tsSaveToCloudDrive);
                 }

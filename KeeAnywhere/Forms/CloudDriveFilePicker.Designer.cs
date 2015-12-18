@@ -32,15 +32,16 @@
             this.m_btnOpen = new System.Windows.Forms.Button();
             this.m_btnCancel = new System.Windows.Forms.Button();
             this.m_lblAccount = new System.Windows.Forms.Label();
-            this.m_cbAccount = new System.Windows.Forms.ComboBox();
             this.m_lvDetails = new System.Windows.Forms.ListView();
-            this.m_ilIcons = new System.Windows.Forms.ImageList(this.components);
+            this.m_ilFiletypeIcons = new System.Windows.Forms.ImageList(this.components);
             this.m_lblFilename = new System.Windows.Forms.Label();
             this.m_txtFilename = new System.Windows.Forms.TextBox();
             this.m_cbFilter = new System.Windows.Forms.ComboBox();
             this.m_bannerImage = new System.Windows.Forms.PictureBox();
             this.m_txtUrl = new System.Windows.Forms.TextBox();
             this.m_lblUrl = new System.Windows.Forms.Label();
+            this.m_ilProviderIcons = new System.Windows.Forms.ImageList(this.components);
+            this.m_cbAccounts = new KeeAnywhere.Forms.ImagedComboBox.ImageComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,16 +77,6 @@
             this.m_lblAccount.TabIndex = 10;
             this.m_lblAccount.Text = "Account:";
             // 
-            // m_cbAccount
-            // 
-            this.m_cbAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.m_cbAccount.FormattingEnabled = true;
-            this.m_cbAccount.Location = new System.Drawing.Point(68, 66);
-            this.m_cbAccount.Name = "m_cbAccount";
-            this.m_cbAccount.Size = new System.Drawing.Size(229, 21);
-            this.m_cbAccount.TabIndex = 11;
-            this.m_cbAccount.SelectedValueChanged += new System.EventHandler(this.OnAccountChanged);
-            // 
             // m_lvDetails
             // 
             this.m_lvDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -97,18 +88,18 @@
             this.m_lvDetails.MultiSelect = false;
             this.m_lvDetails.Name = "m_lvDetails";
             this.m_lvDetails.Size = new System.Drawing.Size(561, 383);
-            this.m_lvDetails.SmallImageList = this.m_ilIcons;
+            this.m_lvDetails.SmallImageList = this.m_ilFiletypeIcons;
             this.m_lvDetails.TabIndex = 12;
             this.m_lvDetails.UseCompatibleStateImageBehavior = false;
             this.m_lvDetails.View = System.Windows.Forms.View.Details;
             this.m_lvDetails.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.OnItemSelectionChanged);
             this.m_lvDetails.DoubleClick += new System.EventHandler(this.OnItemDoubleClick);
             // 
-            // m_ilIcons
+            // m_ilFiletypeIcons
             // 
-            this.m_ilIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.m_ilIcons.ImageSize = new System.Drawing.Size(16, 16);
-            this.m_ilIcons.TransparentColor = System.Drawing.Color.Transparent;
+            this.m_ilFiletypeIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.m_ilFiletypeIcons.ImageSize = new System.Drawing.Size(16, 16);
+            this.m_ilFiletypeIcons.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // m_lblFilename
             // 
@@ -171,6 +162,26 @@
             this.m_lblUrl.TabIndex = 18;
             this.m_lblUrl.Text = "URL:";
             // 
+            // m_ilProviderIcons
+            // 
+            this.m_ilProviderIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.m_ilProviderIcons.ImageSize = new System.Drawing.Size(16, 16);
+            this.m_ilProviderIcons.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // m_cbAccounts
+            // 
+            this.m_cbAccounts.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.m_cbAccounts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.m_cbAccounts.FormattingEnabled = true;
+            this.m_cbAccounts.ImageList = this.m_ilProviderIcons;
+            this.m_cbAccounts.Indent = 20;
+            this.m_cbAccounts.ItemHeight = 16;
+            this.m_cbAccounts.Location = new System.Drawing.Point(68, 66);
+            this.m_cbAccounts.Name = "m_cbAccounts";
+            this.m_cbAccounts.Size = new System.Drawing.Size(261, 22);
+            this.m_cbAccounts.TabIndex = 19;
+            this.m_cbAccounts.SelectedValueChanged += new System.EventHandler(this.OnAccountChanged);
+            // 
             // CloudDriveFilePicker
             // 
             this.AcceptButton = this.m_btnOpen;
@@ -178,13 +189,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
             this.ClientSize = new System.Drawing.Size(588, 556);
+            this.Controls.Add(this.m_cbAccounts);
             this.Controls.Add(this.m_lblUrl);
             this.Controls.Add(this.m_txtUrl);
             this.Controls.Add(this.m_cbFilter);
             this.Controls.Add(this.m_txtFilename);
             this.Controls.Add(this.m_lblFilename);
             this.Controls.Add(this.m_lvDetails);
-            this.Controls.Add(this.m_cbAccount);
             this.Controls.Add(this.m_lblAccount);
             this.Controls.Add(this.m_btnOpen);
             this.Controls.Add(this.m_btnCancel);
@@ -208,14 +219,15 @@
         private System.Windows.Forms.Button m_btnOpen;
         private System.Windows.Forms.Button m_btnCancel;
         private System.Windows.Forms.Label m_lblAccount;
-        private System.Windows.Forms.ComboBox m_cbAccount;
         private System.Windows.Forms.ListView m_lvDetails;
         private System.Windows.Forms.Label m_lblFilename;
         private System.Windows.Forms.TextBox m_txtFilename;
         private System.Windows.Forms.ComboBox m_cbFilter;
         private System.Windows.Forms.PictureBox m_bannerImage;
-        private System.Windows.Forms.ImageList m_ilIcons;
+        private System.Windows.Forms.ImageList m_ilFiletypeIcons;
         private System.Windows.Forms.TextBox m_txtUrl;
         private System.Windows.Forms.Label m_lblUrl;
+        private ImagedComboBox.ImageComboBox m_cbAccounts;
+        private System.Windows.Forms.ImageList m_ilProviderIcons;
     }
 }

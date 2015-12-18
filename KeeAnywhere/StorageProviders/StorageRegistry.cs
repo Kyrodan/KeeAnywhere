@@ -9,9 +9,9 @@ namespace KeeAnywhere.StorageProviders
     {
         public static IEnumerable<StorageDescriptor> Descriptors = new[]
         {
-            new StorageDescriptor(StorageType.OneDrive, "onedrive", account => new OneDriveStorageProvider(account), () => new OneDriveStorageConfigurator()),
-            new StorageDescriptor(StorageType.Dropbox, "dropbox", account => new DropboxStorageProvider(account), () => new DropboxStorageConfigurator()),
-            new StorageDescriptor(StorageType.GoogleDrive, "gdrive", account => new GoogleDriveStorageProvider(account), () => new GoogleDriveStorageConfigurator()),
+            new StorageDescriptor(StorageType.OneDrive, "OneDrive", "onedrive", account => new OneDriveStorageProvider(account), () => new OneDriveStorageConfigurator(), PluginResources.OneDrive_16x16),
+            new StorageDescriptor(StorageType.Dropbox, "Dropbox", "dropbox", account => new DropboxStorageProvider(account), () => new DropboxStorageConfigurator(), PluginResources.Dropbox_16x16),
+            new StorageDescriptor(StorageType.GoogleDrive, "Google Drive", "gdrive", account => new GoogleDriveStorageProvider(account), () => new GoogleDriveStorageConfigurator(), PluginResources.GoogleDrive_16x16),
         };
     }
 }

@@ -43,7 +43,7 @@ namespace KeeAnywhere.OAuth2
             var text = string.Format("Authorize to {0}", m_provider.FriendlyProviderName);
             this.Text = text;
             BannerFactory.CreateBannerEx(this, m_bannerImage,
-                PluginResources.OneDrive_48x48, text,
+                PluginResources.KeeAnywhere_48x48, text,
                 string.Format("Please follow the instructions to authorize KeeAnywhere to access your {0} account.", m_provider.FriendlyProviderName));
         }
 

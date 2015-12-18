@@ -24,7 +24,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             var account = new AccountConfiguration()
             {
                 Id = owner.AccountId,
-                Name = owner.Email,
+                Name = owner.Name.DisplayName,
                 Type = StorageType.Dropbox,
                 Secret = _oauthResponse.AccessToken,
             };
