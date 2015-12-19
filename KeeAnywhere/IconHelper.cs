@@ -30,7 +30,7 @@ namespace KeeAnywhere
      * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
     */
 
-    public static class Icons
+    public static class IconHelper
     {
         #region Custom exceptions class
 

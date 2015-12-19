@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{8BD15372-A42
 	ProjectSection(SolutionItems) = preProject
 		lib\KeePass.exe = lib\KeePass.exe
 		lib\KeePass.XmlSerializers.dll = lib\KeePass.XmlSerializers.dll
-		lib\KoenZomers.OneDrive.Api.dll = lib\KoenZomers.OneDrive.Api.dll
-		lib\Newtonsoft.Json.dll = lib\Newtonsoft.Json.dll
 	EndProjectSection
 EndProject
 Global

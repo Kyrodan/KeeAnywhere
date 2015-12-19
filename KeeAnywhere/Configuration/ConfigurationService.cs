@@ -22,8 +22,6 @@ namespace KeeAnywhere.Configuration
 
         public PluginConfiguration PluginConfiguration { get; private set; }
 
-        public IList<DatabaseConfiguration> Databases { get; private set; }
-
         public IList<AccountConfiguration> Accounts { get; private set; }
 
         public bool IsLoaded { get; private set; }
@@ -41,20 +39,18 @@ namespace KeeAnywhere.Configuration
 
             LoadPluginConfiguration();
 
-            LoadDatabases();
-
-            switch (PluginConfiguration.RefreshTokenStorage)
+            switch (PluginConfiguration.AccountStorageLocation)
             {
-                case RefreshTokenStorage.Disk:
+                case AccountStorageLocation.KeePassConfig:
                     LoadAccountsFromDisk();
                     break;
 
-                case RefreshTokenStorage.WindowsCredentialManager:
+                case AccountStorageLocation.WindowsCredentialManager:
                     LoadAccountsFromWindowsCredentialManager();
                     break;
 
                 default:
-                    throw new NotImplementedException(string.Format("RefreshTokenStorage {0} not implemented.", PluginConfiguration.RefreshTokenStorage));
+                    throw new NotImplementedException(string.Format("AccountStorageLocation {0} not implemented.", PluginConfiguration.AccountStorageLocation));
             }
 
 
@@ -93,10 +89,10 @@ namespace KeeAnywhere.Configuration
 
             var accountsQuery = credentials.Select(c => new AccountConfiguration
             {
-                Type = (StorageProviderType)Enum.Parse(typeof(StorageProviderType), c.Target.Substring(c.Target.IndexOf('.') + 1, (c.Target.IndexOf(':') - c.Target.IndexOf('.') - 1))),
+                Type = (StorageType)Enum.Parse(typeof(StorageType), c.Target.Substring(c.Target.IndexOf('.') + 1, (c.Target.IndexOf(':') - c.Target.IndexOf('.') - 1))),
                 Name = c.Target.Substring(c.Target.IndexOf(':') + 1),
                 Id = c.Username,
-                RefreshToken = c.Password,
+                Secret = c.Password,
             });
 
             this.Accounts = accountsQuery.ToList();
@@ -126,50 +122,24 @@ namespace KeeAnywhere.Configuration
             }
         }
 
-        private void LoadDatabases()
-        {
-            var configString = _pluginHost.CustomConfig.GetString(ConfigurationKey_Databases);
-
-            if (!string.IsNullOrEmpty(configString))
-            {
-                try
-                {
-                    this.Databases = JsonConvert.DeserializeObject<IList<DatabaseConfiguration>>(configString);
-                }
-                catch (JsonSerializationException)
-                {
-                    MessageService.ShowWarning(
-                        "Unable to parse the plugin configuration for the KeeAnywhere plugin. If this happens again, please let me know. Sorry for the inconvinience. Koen Zomers <mail@koenzomers.nl>",
-                        "KeeAnywhere Plugin");
-                }
-            }
-
-            if (Databases == null)
-            {
-                this.Databases = new List<DatabaseConfiguration>();
-            }
-        }
-
         public void Save()
         {
             if (!IsLoaded) return;
 
             SavePluginConfiguration();
 
-            SaveDatabases();
-
-            switch (PluginConfiguration.RefreshTokenStorage)
+            switch (PluginConfiguration.AccountStorageLocation)
             {
-                case RefreshTokenStorage.Disk:
+                case AccountStorageLocation.KeePassConfig:
                     SaveAccountsToDisk();
                     break;
 
-                case RefreshTokenStorage.WindowsCredentialManager:
+                case AccountStorageLocation.WindowsCredentialManager:
                     SaveAccountsToWindowsCredentialManager();
                     break;
 
                 default:
-                    throw new NotImplementedException(string.Format("RefreshTokeStorage {0} not implemented.", PluginConfiguration.RefreshTokenStorage));
+                    throw new NotImplementedException(string.Format("RefreshTokeStorage {0} not implemented.", PluginConfiguration.AccountStorageLocation));
             }
         }
 
@@ -180,7 +150,7 @@ namespace KeeAnywhere.Configuration
                 {
                     Target = string.Format("{0}.{1}:{2}", CredentialsStore_TargetPrefix, a.Type, a.Name),
                     Username =  a.Id,
-                    Password = a.RefreshToken,
+                    Password = a.Secret,
                     PersistanceType = PersistanceType.LocalComputer,
                     Type = CredentialType.Generic
                 });
@@ -212,19 +182,13 @@ namespace KeeAnywhere.Configuration
             _pluginHost.CustomConfig.SetString(ConfigurationKey_Accounts, configString);
         }
 
-        private void SaveDatabases()
-        {
-            var configString = JsonConvert.SerializeObject(this.Databases);
-            _pluginHost.CustomConfig.SetString(ConfigurationKey_Databases, configString);
-        }
-
         private void SavePluginConfiguration()
         {
             var configString = JsonConvert.SerializeObject(this.PluginConfiguration);
             _pluginHost.CustomConfig.SetString(ConfigurationKey_Plugin, configString);
         }
 
-        public AccountConfiguration FindAccount(StorageProviderType type, string name)
+        public AccountConfiguration FindAccount(StorageType type, string name)
         {
             var account = this.Accounts.FirstOrDefault(_ => _.Type == type && _.Name == name);
 

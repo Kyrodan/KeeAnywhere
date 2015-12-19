@@ -1,4 +1,4 @@
-﻿namespace KeeAnywhere.Forms
+﻿namespace KeeAnywhere.StorageProviders.OneDrive
 {
     partial class OneDriveAuthenticationForm
     {

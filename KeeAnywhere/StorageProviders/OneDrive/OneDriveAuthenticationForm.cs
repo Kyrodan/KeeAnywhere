@@ -1,16 +1,16 @@
 ﻿using System.Windows.Forms;
 using KoenZomers.OneDrive.Api;
 
-namespace KeeAnywhere.Forms
+namespace KeeAnywhere.StorageProviders.OneDrive
 {
     public partial class OneDriveAuthenticationForm : Form
     {
         /// <summary>
         /// OneDrive API instance
         /// </summary>
-        public OneDriveApi m_api { get; private set; }
+        public OneDriveConsumerApi m_api { get; private set; }
 
-        public OneDriveAuthenticationForm(OneDriveApi api)
+        public OneDriveAuthenticationForm(OneDriveConsumerApi api)
         {
             InitializeComponent();
             this.Icon = PluginResources.Icon_OneDrive_16x16;
@@ -50,7 +50,7 @@ namespace KeeAnywhere.Forms
             }
 
             // If we're on this page, but we didn't get an authorization token, it means that we just signed out, proceed with signing in again
-            if (e.Url.ToString().StartsWith("https://login.live.com/oauth20_desktop.srf"))
+            if (e.Url.ToString().StartsWith("https://login.live.com/oauth20_logout.srf"))
             {
                 var authenticateUri = m_api.GetAuthenticationUri("wl.offline_access wl.skydrive_update");
                 WebBrowser.Navigate(authenticateUri);

@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using KeeAnywhere.StorageProviders;
 using KeePassLib.Serialization;
-using KoenZomers.OneDrive.Api;
 
 namespace KeeAnywhere.WebRequest
 {
@@ -12,7 +12,7 @@ namespace KeeAnywhere.WebRequest
         private readonly IStorageProvider _provider;
         private readonly string _itemPath;
 
-        private MemoryStream _requestStream;
+        private RequestStream _requestStream;
         private WebResponse _response;
         private WebHeaderCollection _headers;
 
@@ -50,38 +50,48 @@ namespace KeeAnywhere.WebRequest
 
             if (this.Method == IOConnection.WrmDeleteFile)
             {
-                var isOk = _provider.Delete(_itemPath);
+                //var isOk = Task.Run(async () => await _provider.Delete(_itemPath));
 
-                if (!isOk)
-                    throw new InvalidOperationException(string.Format("OneDrive: Delete of item {0} failed", _itemPath));
+                //if (!isOk.Result)
+                //throw new InvalidOperationException(string.Format("KeeAnywhere: Delete of item {0} failed.", _itemPath));
 
-                _response = new KeeAnywhereWebResponse();
+                //_response = new KeeAnywhereWebResponse();
+                throw new InvalidOperationException(string.Format("KeeAnywhere: Delete item {0} not supported.", _itemPath));
             }
             else if (this.Method == IOConnection.WrmMoveFile)
             {
-                //TODO: Is check for same account needed?
-                var destUrl = new StorageProviderUri(Headers[IOConnection.WrhMoveFileTo]);
-                var itemDestPath = destUrl.GetPath();
+                ////TODO: Is check for same account needed?
+                //var destUrl = new StorageUri(Headers[IOConnection.WrhMoveFileTo]);
+                //var itemDestPath = destUrl.GetPath();
 
-                _provider.Move(_itemPath, itemDestPath);
+                //Task.Run(async () => await _provider.Move(_itemPath, itemDestPath));
 
-                return new KeeAnywhereWebResponse();
+                //return new KeeAnywhereWebResponse();
+                throw new InvalidOperationException(string.Format("KeeAnywhere: Move item {0} not supported.", _itemPath));
             }
             else if (this.Method == WebRequestMethods.Http.Post)
             {
-                var isOk = _provider.Save(_requestStream, _itemPath);
-                if (!isOk)
+                var isOk = Task.Run(async () =>
                 {
-                    throw new InvalidOperationException(string.Format("OneDrive: Upload to folder {0} failed", _itemPath));
+                    using (var stream = this._requestStream.GetReadableStream())
+                    {
+                        return await _provider.Save(stream, _itemPath);
+                    }
+                });
+
+                if (!isOk.Result)
+                {
+                    throw new InvalidOperationException(string.Format("KeeAnywhere: Upload to folder {0} failed",
+                        _itemPath));
                 }
 
                 _response = new KeeAnywhereWebResponse();
             }
             else // Get File
             {
-                var stream = _provider.Load(_itemPath);
+                var stream = Task.Run(async () => await _provider.Load(_itemPath));
 
-                _response = new KeeAnywhereWebResponse(stream);
+                _response = new KeeAnywhereWebResponse(stream.Result);
             }
 
             return _response;
@@ -90,7 +100,7 @@ namespace KeeAnywhere.WebRequest
         public override Stream GetRequestStream()
         {
             if (_requestStream == null)
-                _requestStream = new MemoryStream();
+                _requestStream = new RequestStream(this);
 
             return _requestStream;
         }

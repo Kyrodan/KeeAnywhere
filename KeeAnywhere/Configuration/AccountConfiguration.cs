@@ -10,12 +10,17 @@ namespace KeeAnywhere.Configuration
         public string Id { get; set; }
 
         [DataMember]
-        public StorageProviderType Type { get; set; }
+        public StorageType Type { get; set; }
 
         [DataMember]
         public string Name { get; set; }
 
         [DataMember]
-        public string RefreshToken { get; set; }
+        public string Secret { get; set; }
+
+        public string DisplayName
+        {
+            get { return string.Format("{0} ({1})", Name, Type); }
+        }
     }
 }
