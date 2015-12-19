@@ -2,8 +2,9 @@ namespace KeeAnywhere.StorageProviders
 {
     public enum StorageType
     {
-        OneDrive,
+        // Preserve sort order: ascending!
         Dropbox,
-        GoogleDrive
+        GoogleDrive,
+        OneDrive,
     }
 }

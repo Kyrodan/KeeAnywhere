@@ -107,7 +107,7 @@
             this.m_btnAccountAdd.Name = "m_btnAccountAdd";
             this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
             this.m_btnAccountAdd.TabIndex = 11;
-            this.m_btnAccountAdd.Text = "Add";
+            this.m_btnAccountAdd.Text = "Add...";
             this.m_btnAccountAdd.UseVisualStyleBackColor = true;
             // 
             // m_mnuAdd
@@ -143,7 +143,6 @@
             this.m_lvAccounts.UseCompatibleStateImageBehavior = false;
             this.m_lvAccounts.View = System.Windows.Forms.View.Details;
             this.m_lvAccounts.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.OnAfterLabelEdit);
-            this.m_lvAccounts.BeforeLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.OnBeforeLabelEdit);
             // 
             // m_imlProviderIcons
             // 

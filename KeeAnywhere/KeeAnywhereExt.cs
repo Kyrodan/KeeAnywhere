@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows.Forms;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.Forms;
@@ -14,24 +14,23 @@ using KeePassLib.Utility;
 namespace KeeAnywhere
 {
     /// <summary>
-    /// Plugin for KeePass to allow access to cloud storage providers
+    ///     Plugin for KeePass to allow access to cloud storage providers
     /// </summary>
     /// <remarks>KeePass SDK documentation: http://keepass.info/help/v2_dev/plg_index.html</remarks>
     public class KeeAnywhereExt : Plugin
     {
+        private ConfigurationService _configService;
         private IPluginHost _host;
-
-        private ToolStripMenuItem _tsShowSettings;
+        private StorageService _storageService;
         private ToolStripMenuItem _tsOpenFromCloudDrive;
         private ToolStripMenuItem _tsSaveToCloudDrive;
 
-        private ConfigurationService _configService;
+        private ToolStripMenuItem _tsShowSettings;
         private UIService _uiService;
-        private StorageService _storageService;
 
 
         /// <summary>
-        /// Returns the URL where KeePass can check for updates of this plugin
+        ///     Returns the URL where KeePass can check for updates of this plugin
         /// </summary>
         public override string UpdateUrl
         {
@@ -39,7 +38,7 @@ namespace KeeAnywhere
         }
 
         /// <summary>
-        /// Called when the Plugin is being loaded which happens on startup of KeePass
+        ///     Called when the Plugin is being loaded which happens on startup of KeePass
         /// </summary>
         /// <returns>True if the plugin loaded successfully, false if not</returns>
         public override bool Initialize(IPluginHost pluginHost)
@@ -78,7 +77,8 @@ namespace KeeAnywhere
                 var openMenu = fileMenu.DropDownItems["m_menuFileOpen"] as ToolStripMenuItem;
                 if (openMenu != null)
                 {
-                    _tsOpenFromCloudDrive = new ToolStripMenuItem("Open from Cloud Drive...", PluginResources.KeeAnywhere_16x16);
+                    _tsOpenFromCloudDrive = new ToolStripMenuItem("Open from Cloud Drive...",
+                        PluginResources.KeeAnywhere_16x16);
                     _tsOpenFromCloudDrive.Click += OnOpenFromCloudDrive;
                     _tsOpenFromCloudDrive.ShortcutKeys = Keys.Control | Keys.Alt | Keys.O;
                     openMenu.DropDownItems.Add(_tsOpenFromCloudDrive);
@@ -89,7 +89,8 @@ namespace KeeAnywhere
                 {
                     var index = saveMenu.DropDownItems.IndexOfKey("m_menuFileSaveAsSep0");
 
-                    _tsSaveToCloudDrive = new ToolStripMenuItem("Save to Cloud Drive...", PluginResources.KeeAnywhere_16x16);
+                    _tsSaveToCloudDrive = new ToolStripMenuItem("Save to Cloud Drive...",
+                        PluginResources.KeeAnywhere_16x16);
                     _tsSaveToCloudDrive.Click += OnSaveToCloudDrive;
                     saveMenu.DropDownItems.Insert(index, _tsSaveToCloudDrive);
                 }
@@ -99,12 +100,12 @@ namespace KeeAnywhere
             return true;
         }
 
-        private async void OnSaveToCloudDrive(object sender, EventArgs e)
+        private void OnSaveToCloudDrive(object sender, EventArgs e)
         {
             if (_host.Database == null) return;
 
             // First usage: register new account
-            if (!await HasAccounts()) return;
+            if (!HasAccounts()) return;
 
             var form = new CloudDriveFilePicker();
             form.InitEx(_configService, _storageService, CloudDriveFilePicker.Mode.Save);
@@ -115,13 +116,13 @@ namespace KeeAnywhere
 
             var ci = IOConnectionInfo.FromPath(form.ResultUri);
             ci.CredSaveMode = IOCredSaveMode.SaveCred;
-            _host.MainWindow.SaveDatabaseAs(_host.Database, ci, true,null, false);
+            _host.MainWindow.SaveDatabaseAs(_host.Database, ci, true, null, false);
         }
 
-        private async void OnOpenFromCloudDrive(object sender, EventArgs eventArgs)
+        private void OnOpenFromCloudDrive(object sender, EventArgs eventArgs)
         {
             // First usage: register new account
-            if (!await HasAccounts()) return;
+            if (!HasAccounts()) return;
 
             var form = new CloudDriveFilePicker();
             form.InitEx(_configService, _storageService, CloudDriveFilePicker.Mode.Open);
@@ -129,33 +130,44 @@ namespace KeeAnywhere
 
             if (result != DialogResult.OK)
                 return;
-            
+
             var ci = IOConnectionInfo.FromPath(form.ResultUri);
             ci.CredSaveMode = IOCredSaveMode.SaveCred;
 
             _host.MainWindow.OpenDatabase(ci, null, false);
         }
 
-        private async Task<bool> HasAccounts()
+        private bool HasAccounts()
         {
             if (_configService.Accounts.Any()) return true;
 
-            AccountConfiguration account = null;
+            var result = MessageService.Ask(
+                "At least one account is required to work with KeeAnywhere.\r\nWould you like to open KeeAnywhere Settings to create a new account?",
+                "KeeAnywhere", MessageBoxButtons.YesNo);
 
-            while (account == null)
+            if (result == DialogResult.Yes)
             {
-                account = await _uiService.CreateOrUpdateAccount(StorageType.OneDrive);
-
-                if (account != null) continue;
-                var result = MessageService.Ask("You did not created a new account.\nAt least one account is required to work with KeeAnywhere.", "KeeAnywhere", MessageBoxButtons.RetryCancel);
-
-                if (result != DialogResult.Retry)
-                {
-                    return false;
-                }
+                OnShowSetting(this, EventArgs.Empty);
             }
 
-            return true;
+            return false;
+
+            //AccountConfiguration account = null;
+
+            //while (account == null)
+            //{
+            //    account = await _uiService.CreateOrUpdateAccount(StorageType.OneDrive);
+
+            //    if (account != null) continue;
+            //    var result = MessageService.Ask("You did not created a new account.\nAt least one account is required to work with KeeAnywhere.", "KeeAnywhere", MessageBoxButtons.RetryCancel);
+
+            //    if (result != DialogResult.Retry)
+            //    {
+            //        return false;
+            //    }
+            //}
+
+            //return true;
         }
 
         public override void Terminate()
@@ -186,9 +198,6 @@ namespace KeeAnywhere
             _tsOpenFromCloudDrive = null;
         }
 
-        /// <summary>
-        /// Triggered when clicking on the KeeAnywhere menu item under Tools
-        /// </summary>
         private void OnShowSetting(object sender, EventArgs e)
         {
             var form = new SettingsForm();
@@ -204,11 +213,12 @@ namespace KeeAnywhere
             //
             // See https://github.com/google/google-api-dotnet-client/issues/554 for details.
 
-            var httpasm = System.Reflection.Assembly.Load("System.Net.Http.Primitives");
+            var httpasm = Assembly.Load("System.Net.Http.Primitives");
             var httpver = new Version(1, 5, 0, 0);
 
-            AppDomain.CurrentDomain.AssemblyResolve += (s, a) => {
-                var requestedAssembly = new System.Reflection.AssemblyName(a.Name);
+            AppDomain.CurrentDomain.AssemblyResolve += (s, a) =>
+            {
+                var requestedAssembly = new AssemblyName(a.Name);
                 if (requestedAssembly.Name != "System.Net.Http.Primitives" || requestedAssembly.Version != httpver)
                     return null;
 

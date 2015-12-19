@@ -125,33 +125,37 @@ namespace KeeAnywhere.Forms
         {
             m_cbAccounts.BeginUpdate();
 
-            foreach (var descriptor in StorageRegistry.Descriptors)
+            ImageComboBoxItem item;
+            StorageDescriptor descriptor = null;
+
+            foreach (var account in m_configService.Accounts.OrderBy(_ => _.Type).ThenBy(_ => _.Name))
             {
-                ImageComboBoxItem item;
-
-                item = new ImageComboBoxItem()
+                if (descriptor == null || (account.Type != descriptor.Type))
                 {
-                    Text = descriptor.FriendlyName,
-                    ImageIndex = m_ilProviderIcons.Images.IndexOfKey(descriptor.Type.ToString()),
-                    IndentLevel = 0,
-                    Font = new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold),
-                };
-                m_cbAccounts.Items.Add(item);
+                    descriptor = StorageRegistry.Descriptors.Single(_ => _.Type == account.Type);
 
-                foreach (var account in m_configService.Accounts.Where(_ => _.Type == descriptor.Type).OrderBy(_ => _.Name))
-                {
                     item = new ImageComboBoxItem()
                     {
-                        Text = account.Name,
-                        ImageIndex = m_ilProviderIcons.Images.IndexOfKey(account.Type.ToString()),
-                        Item = account,
-                        IndentLevel = 1,
+                        Text = descriptor.FriendlyName,
+                        ImageIndex = m_ilProviderIcons.Images.IndexOfKey(descriptor.Type.ToString()),
+                        IndentLevel = 0,
+                        Font = new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold),
                     };
 
                     m_cbAccounts.Items.Add(item);
                 }
 
+                item = new ImageComboBoxItem()
+                {
+                    Text = account.Name,
+                    ImageIndex = m_ilProviderIcons.Images.IndexOfKey(account.Type.ToString()),
+                    Item = account,
+                    IndentLevel = 1,
+                };
+
+                m_cbAccounts.Items.Add(item);
             };
+
             m_cbAccounts.EndUpdate();
         }
 

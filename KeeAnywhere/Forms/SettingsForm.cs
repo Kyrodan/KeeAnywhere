@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.StorageProviders;
@@ -206,31 +207,34 @@ namespace KeeAnywhere.Forms
             Process.Start("https://github.com/Kyrodan");
         }
 
-        private void OnBeforeLabelEdit(object sender, LabelEditEventArgs e)
-        {
-            Debug.WriteLine("BeforeLabelEdit");
-        }
-
         private void OnAfterLabelEdit(object sender, LabelEditEventArgs e)
         {
+            var name = e.Label;
+
+            var disallowedChars = "!*';:&=+$,/?#[]";
+            if (name.IndexOfAny(disallowedChars.ToCharArray()) != -1)
+            {
+                MessageService.ShowWarning("The name must not contain disallowed chars:", disallowedChars);
+                e.CancelEdit = true;
+                return;
+            }
+
             var item = m_lvAccounts.Items[e.Item];
             var account = item.Tag as AccountConfiguration;
-
             if (account == null) return;
 
-            var name = e.Label;
             var nameExists =
                 m_configService.Accounts.Any(
                     _ => _.Type == account.Type && _.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
-            if (!nameExists) // Change accepted
+            if (nameExists) // Change accepted
             {
-                account.Name = name;
+                MessageService.ShowWarning("An account with this name already exists.", "Discarding new name.");
+                e.CancelEdit = true;
                 return;
             }
 
-            e.CancelEdit = true;
-            MessageService.ShowWarning("An account with this name already exists.", "Discarding new name.");
+            account.Name = name;
             
         }
     }
