@@ -393,6 +393,12 @@ namespace KeeAnywhere.Forms
             DialogResult = DialogResult.None;
             if (string.IsNullOrEmpty(m_txtFilename.Text)) return;
 
+            // Ckech whether an extension is given for saving
+            if (m_mode == Mode.Save && !Path.HasExtension(m_txtFilename.Text))
+            {
+                m_txtFilename.Text = Path.ChangeExtension(m_txtFilename.Text, "kdbx");
+            }
+
             var filename = m_txtFilename.Text;
             if (string.IsNullOrEmpty(filename))
                 return;
