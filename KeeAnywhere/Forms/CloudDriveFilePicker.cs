@@ -215,6 +215,7 @@ namespace KeeAnywhere.Forms
             m_cbAccounts.Enabled = !isWait;
             m_lvDetails.Enabled = !isWait;
             m_btnOpen.Enabled = !isWait;
+            m_txtFilename.Enabled = !isWait;
 
             if (isWait)
             {

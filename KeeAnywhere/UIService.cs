@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.StorageProviders;
@@ -25,6 +26,17 @@ namespace KeeAnywhere
             var existingAccount = _configService.Accounts.SingleOrDefault(_ => _.Type == newAccount.Type && _.Id == newAccount.Id);
             if (existingAccount == null) // New Account
             {
+                // ensure account's name is unique
+                var i = 1;
+                var name = newAccount.Name;
+                while (
+                    _configService.Accounts.Any(
+                        _ => _.Type == newAccount.Type && _.Name.Equals(newAccount.Name, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    i++;
+                    newAccount.Name = string.Format("{0} ({1})", name, i);
+                }
+
                 _configService.Accounts.Add(newAccount);
                 return newAccount;
             }

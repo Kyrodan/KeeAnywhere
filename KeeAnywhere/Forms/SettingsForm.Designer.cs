@@ -33,9 +33,11 @@
             this.m_bannerImage = new System.Windows.Forms.PictureBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.m_tabAccounts = new System.Windows.Forms.TabPage();
+            this.m_btnAccountAdd = new KeeAnywhere.Forms.DropDownButton();
             this.m_mnuAdd = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_btnAccountRemove = new System.Windows.Forms.Button();
             this.m_lvAccounts = new System.Windows.Forms.ListView();
+            this.m_imlProviderIcons = new System.Windows.Forms.ImageList(this.components);
             this.lnklblHelpMeChooseAccountStorage = new System.Windows.Forms.LinkLabel();
             this.m_rbStorageLocation_Disk = new System.Windows.Forms.RadioButton();
             this.m_rbStorageLocation_WindowsCredentialManager = new System.Windows.Forms.RadioButton();
@@ -50,8 +52,6 @@
             this.m_lblAboutHeader = new System.Windows.Forms.Label();
             this.m_btnOK = new System.Windows.Forms.Button();
             this.m_btnCancel = new System.Windows.Forms.Button();
-            this.m_btnAccountAdd = new KeeAnywhere.Forms.DropDownButton();
-            this.m_imlProviderIcons = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.m_tabAccounts.SuspendLayout();
@@ -99,6 +99,17 @@
             this.m_tabAccounts.Text = "Accounts";
             this.m_tabAccounts.UseVisualStyleBackColor = true;
             // 
+            // m_btnAccountAdd
+            // 
+            this.m_btnAccountAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnAccountAdd.Location = new System.Drawing.Point(490, 38);
+            this.m_btnAccountAdd.Menu = this.m_mnuAdd;
+            this.m_btnAccountAdd.Name = "m_btnAccountAdd";
+            this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
+            this.m_btnAccountAdd.TabIndex = 11;
+            this.m_btnAccountAdd.Text = "Add";
+            this.m_btnAccountAdd.UseVisualStyleBackColor = true;
+            // 
             // m_mnuAdd
             // 
             this.m_mnuAdd.Name = "m_mnuAdd";
@@ -120,13 +131,25 @@
             this.m_lvAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_lvAccounts.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.m_lvAccounts.LabelEdit = true;
             this.m_lvAccounts.Location = new System.Drawing.Point(7, 38);
+            this.m_lvAccounts.MultiSelect = false;
             this.m_lvAccounts.Name = "m_lvAccounts";
             this.m_lvAccounts.Size = new System.Drawing.Size(476, 217);
             this.m_lvAccounts.SmallImageList = this.m_imlProviderIcons;
+            this.m_lvAccounts.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.m_lvAccounts.TabIndex = 9;
             this.m_lvAccounts.UseCompatibleStateImageBehavior = false;
             this.m_lvAccounts.View = System.Windows.Forms.View.Details;
+            this.m_lvAccounts.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.OnAfterLabelEdit);
+            this.m_lvAccounts.BeforeLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.OnBeforeLabelEdit);
+            // 
+            // m_imlProviderIcons
+            // 
+            this.m_imlProviderIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.m_imlProviderIcons.ImageSize = new System.Drawing.Size(16, 16);
+            this.m_imlProviderIcons.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // lnklblHelpMeChooseAccountStorage
             // 
@@ -287,23 +310,6 @@
             this.m_btnCancel.Text = "Cancel";
             this.m_btnCancel.UseVisualStyleBackColor = true;
             this.m_btnCancel.Click += new System.EventHandler(this.OnBtnCancelClick);
-            // 
-            // m_btnAccountAdd
-            // 
-            this.m_btnAccountAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnAccountAdd.Location = new System.Drawing.Point(490, 38);
-            this.m_btnAccountAdd.Menu = this.m_mnuAdd;
-            this.m_btnAccountAdd.Name = "m_btnAccountAdd";
-            this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
-            this.m_btnAccountAdd.TabIndex = 11;
-            this.m_btnAccountAdd.Text = "Add";
-            this.m_btnAccountAdd.UseVisualStyleBackColor = true;
-            // 
-            // m_imlProviderIcons
-            // 
-            this.m_imlProviderIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.m_imlProviderIcons.ImageSize = new System.Drawing.Size(16, 16);
-            this.m_imlProviderIcons.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // SettingsForm
             // 

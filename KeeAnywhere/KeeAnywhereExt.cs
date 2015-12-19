@@ -80,6 +80,7 @@ namespace KeeAnywhere
                 {
                     _tsOpenFromCloudDrive = new ToolStripMenuItem("Open from Cloud Drive...", PluginResources.KeeAnywhere_16x16);
                     _tsOpenFromCloudDrive.Click += OnOpenFromCloudDrive;
+                    _tsOpenFromCloudDrive.ShortcutKeys = Keys.Control | Keys.Alt | Keys.O;
                     openMenu.DropDownItems.Add(_tsOpenFromCloudDrive);
                 }
 
