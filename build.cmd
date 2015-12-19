@@ -1,5 +1,5 @@
 @echo off
-set version=0.2.0-unstable
+set version=0.2.0-alpha
 set zip="packages\7-Zip.CommandLine.9.20.0\tools\7za.exe"
 
 call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
