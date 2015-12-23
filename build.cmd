@@ -1,8 +1,10 @@
 @echo off
 set version=0.3.0-unstable
 set zip="packages\7-Zip.CommandLine.9.20.0\tools\7za.exe"
+set msbuildcmd="C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\VsMSBuildCmd.bat"
 
-call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+if not exist %msbuildcmd% goto error
+call %msbuildcmd%
 
 :cleanup
 if not exist build mkdir build
