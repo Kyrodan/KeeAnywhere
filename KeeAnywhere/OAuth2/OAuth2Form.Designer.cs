@@ -43,6 +43,7 @@
             this.m_browser.Location = new System.Drawing.Point(0, 66);
             this.m_browser.MinimumSize = new System.Drawing.Size(20, 20);
             this.m_browser.Name = "m_browser";
+            this.m_browser.ScriptErrorsSuppressed = true;
             this.m_browser.Size = new System.Drawing.Size(653, 559);
             this.m_browser.TabIndex = 0;
             this.m_browser.WebBrowserShortcutsEnabled = false;

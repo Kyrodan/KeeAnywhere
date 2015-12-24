@@ -127,6 +127,9 @@
   <data name="GoogleDrive_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\GoogleDrive_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="HubiC_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\HubiC_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Icon_OneDrive_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Icon_CloudDrive_16x16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
