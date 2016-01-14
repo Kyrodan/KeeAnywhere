@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.OAuth2;
-using net.openstack.Core.Domain;
-using net.openstack.Core.Providers;
-using net.openstack.Providers.Rackspace;
 
 namespace KeeAnywhere.StorageProviders.HubiC
 {

@@ -47,14 +47,6 @@
       <HintPath>..\packages\Dropbox.Api.2.1.0\lib\portable-net45+sl50+win+wpa81+wp80\Dropbox.Api.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Flurl, Version=1.0.8.0, Culture=neutral, PublicKeyToken=1308302a96879dfb, processorArchitecture=MSIL">
-      <HintPath>..\packages\Flurl.Signed.1.0.8\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Flurl.Http, Version=0.6.2.0, Culture=neutral, PublicKeyToken=1308302a96879dfb, processorArchitecture=MSIL">
-      <HintPath>..\packages\Flurl.Http.Signed.0.6.2.2015062601\lib\net45\Flurl.Http.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Google.Apis, Version=1.10.0.25332, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Apis.1.10.0\lib\net40\Google.Apis.dll</HintPath>
       <Private>True</Private>
@@ -91,10 +83,6 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Marvin.JsonPatch, Version=0.7.0.0, Culture=neutral, PublicKeyToken=686c63b2d045ab44, processorArchitecture=MSIL">
-      <HintPath>..\packages\Marvin.JsonPatch.Signed.0.7.0\lib\portable-net40+win+wpa81\Marvin.JsonPatch.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
       <Private>True</Private>
@@ -109,10 +97,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="openstacknet, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\openstack.net.1.5.0.1\lib\net45\openstacknet.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -194,9 +178,13 @@
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveStorageConfigurator.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveStorageProvider.cs" />
     <Compile Include="StorageProviders\HubiC\HubiCAccount.cs" />
+    <Compile Include="StorageProviders\HubiC\HubiCCredentials.cs" />
     <Compile Include="StorageProviders\HubiC\HubiCHelper.cs" />
     <Compile Include="StorageProviders\HubiC\HubiCStorageConfigurator.cs" />
     <Compile Include="StorageProviders\HubiC\HubiCStorageProvider.cs" />
+    <Compile Include="StorageProviders\HubiC\SwiftContainer.cs" />
+    <Compile Include="StorageProviders\HubiC\SwiftClient.cs" />
+    <Compile Include="StorageProviders\HubiC\SwiftObject.cs" />
     <Compile Include="StorageProviders\IStorageConfigurator.cs" />
     <Compile Include="StorageProviders\IStorageProvider.cs" />
     <Compile Include="StorageProviders\OneDrive\OneDriveAuthenticationForm.cs">
@@ -267,9 +255,9 @@
     <Content Include="Resources\Folder_16x16.png" />
     <None Include="Resources\GoogleDrive_16x16.png" />
     <None Include="Resources\HubiC_16x16.png" />
-    <Content Include="Resources\Icon_CloudDrive_16x16.ico" />
-    <Content Include="Resources\CloudDrive_16x16.png" />
-    <Content Include="Resources\CloudDrive_48x48.png" />
+    <Content Include="Resources\Icon_KeeAnywhere_16x16.ico" />
+    <Content Include="Resources\KeeAnywhere_16x16.png" />
+    <Content Include="Resources\KeeAnywhere_48x48.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

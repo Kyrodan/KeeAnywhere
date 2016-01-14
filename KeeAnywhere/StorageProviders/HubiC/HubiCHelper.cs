@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Dropbox.Api;
 using KeeAnywhere.OAuth2;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace KeeAnywhere.StorageProviders.HubiC
 {
-    class HubiCHelper
+    internal class HubiCHelper
     {
         /*
             The consumer key and the secret key included here are dummy keys.
@@ -36,14 +33,47 @@ namespace KeeAnywhere.StorageProviders.HubiC
         public const string TokenUri = "https://api.hubic.com/oauth/token";
         public const string AccountUri = "https://api.hubic.com/1.0/account";
         public const string AccountCredentialsUri = "https://api.hubic.com/1.0/account/credentials";
-            
+
         public static Uri GetAuthorizationUri()
         {
-            var uriString = string.Format("{0}?client_id={1}&redirect_uri={2}&response_type=code&scope=account.r,usage.r,credentials.r",
-                AuthorizationUri, HubiCClientId, Uri.EscapeUriString(RedirectUri));
+            var uriString =
+                string.Format(
+                    "{0}?client_id={1}&redirect_uri={2}&response_type=code&scope=account.r,usage.r,credentials.r",
+                    AuthorizationUri, HubiCClientId, Uri.EscapeUriString(RedirectUri));
 
             return new Uri(uriString);
         }
+
+        //public static async Task<OAuth2Token> GetAccessToken(string refreshToken)
+        //{
+        //    if (string.IsNullOrEmpty(refreshToken))
+        //    {
+        //        throw new ArgumentNullException("refreshToken");
+        //    }
+
+        //    var httpClient = new HttpClient();
+        //    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+        //        "Basic",
+        //        Convert.ToBase64String(
+        //            Encoding.ASCII.GetBytes(
+        //                string.Format("{0}:{1}", HubiCClientId, HubiCClientSecret))));
+
+        //    var uri = string.Format("{0}?refresh_token={1}&grant_type=refresh_token", TokenUri, refreshToken);
+
+        //    try
+        //    {
+        //        var response = await httpClient.PostAsync(uri, null);
+
+        //        var bytes = await response.Content.ReadAsByteArrayAsync();
+        //        var raw = Encoding.UTF8.GetString(bytes);
+        //        var token = JsonConvert.DeserializeObject<OAuth2Token>(raw);
+        //        return token;
+        //    }
+        //    finally
+        //    {
+        //        httpClient.Dispose();
+        //    }
+        //}
 
         public static async Task<HubiCAccount> GetAccountAsync(string accessToken)
         {
@@ -52,12 +82,9 @@ namespace KeeAnywhere.StorageProviders.HubiC
                 throw new ArgumentNullException("accessToken");
             }
 
-            var httpClient = new HttpClient();
+            var httpClient = GetHttpClient(accessToken);
             try
             {
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                httpClient.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
-                httpClient.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf-8"));
                 var response = await httpClient.GetAsync(AccountUri);
 
                 var bytes = await response.Content.ReadAsByteArrayAsync();
@@ -70,6 +97,39 @@ namespace KeeAnywhere.StorageProviders.HubiC
                 httpClient.Dispose();
             }
         }
+
+        public static async Task<HubiCCredentials> GetCredentialsAsync(string accessToken)
+        {
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                throw new ArgumentNullException("accessToken");
+            }
+
+            var httpClient = GetHttpClient(accessToken);
+            try
+            {
+                var response = await httpClient.GetAsync(AccountCredentialsUri);
+
+                var bytes = await response.Content.ReadAsByteArrayAsync();
+                var raw = Encoding.UTF8.GetString(bytes);
+                var credentials = JsonConvert.DeserializeObject<HubiCCredentials>(raw);
+                return credentials;
+            }
+            finally
+            {
+                httpClient.Dispose();
+            }
+        }
+
+        private static HttpClient GetHttpClient(string accessToken)
+        {
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            httpClient.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
+            httpClient.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf-8"));
+            return httpClient;
+        }
+
         public static async Task<OAuth2Token> ProcessCodeFlowAsync(string code)
         {
             if (string.IsNullOrEmpty(code))
@@ -82,10 +142,10 @@ namespace KeeAnywhere.StorageProviders.HubiC
             {
                 var parameters = new Dictionary<string, string>
                 {
-                    { "code", code },
-                    { "grant_type", "authorization_code" },
-                    { "client_id", HubiCClientId },
-                    { "client_secret", HubiCClientSecret }
+                    {"code", code},
+                    {"grant_type", "authorization_code"},
+                    {"client_id", HubiCClientId},
+                    {"client_secret", HubiCClientSecret}
                 };
 
                 if (!string.IsNullOrEmpty(RedirectUri))
@@ -123,10 +183,10 @@ namespace KeeAnywhere.StorageProviders.HubiC
             {
                 var parameters = new Dictionary<string, string>
                 {
-                    { "refresh_token", refreshToken },
-                    { "grant_type", "refresh_token" },
-                    { "client_id", HubiCClientId },
-                    { "client_secret", HubiCClientSecret }
+                    {"refresh_token", refreshToken},
+                    {"grant_type", "refresh_token"},
+                    {"client_id", HubiCClientId},
+                    {"client_secret", HubiCClientSecret}
                 };
 
                 var content = new FormUrlEncodedContent(parameters);
@@ -198,8 +258,7 @@ namespace KeeAnywhere.StorageProviders.HubiC
                 }
             }
 
-            return new OAuth2Token(accessToken, tokenType, expiresIn != null ? int.Parse(expiresIn) : (int?)null);
+            return new OAuth2Token(accessToken, tokenType, expiresIn != null ? int.Parse(expiresIn) : (int?) null);
         }
-
     }
 }

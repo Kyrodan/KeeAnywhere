@@ -1,9 +1,15 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace KeeAnywhere.OAuth2
 {
+    [DataContract]
     public class OAuth2Token
     {
+        public OAuth2Token()
+        {
+        }
+
         internal OAuth2Token(string accessToken, string tokenType, int? expiresIn = null, string refreshToken = null)
         {
             if (string.IsNullOrEmpty(accessToken))
@@ -15,12 +21,16 @@ namespace KeeAnywhere.OAuth2
             RefreshToken = refreshToken;
         }
 
-        public string AccessToken { get; private set; }
+        [DataMember(Name = "access_token")]
+        public string AccessToken { get; set; }
 
-        public int? ExpiresIn { get; private set; }
+        [DataMember(Name = "expires_in")]
+        public int? ExpiresIn { get; set; }
 
-        public string TokenType { get; private set; }
+        [DataMember(Name = "token_type")]
+        public string TokenType { get; set; }
 
-        public string RefreshToken { get; private set; }
+        [DataMember(Name = "refresh_token")]
+        public string RefreshToken { get; set; }
     }
 }
