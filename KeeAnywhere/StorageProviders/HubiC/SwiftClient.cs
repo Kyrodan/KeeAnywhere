@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Google.Apis.Auth.OAuth2.Responses;
 using Newtonsoft.Json;
 
 namespace KeeAnywhere.StorageProviders.HubiC
@@ -31,7 +33,7 @@ namespace KeeAnywhere.StorageProviders.HubiC
 
         public async Task<IEnumerable<SwiftContainer>> GetContainers()
         {
-            var client = GetClient();            
+            var client = GetClient();
             var response = await client.GetAsync(_credentials.Endpoint);
 
             var bytes = await response.Content.ReadAsByteArrayAsync();
@@ -60,8 +62,34 @@ namespace KeeAnywhere.StorageProviders.HubiC
             var raw = Encoding.UTF8.GetString(bytes);
             var objects = JsonConvert.DeserializeObject<IEnumerable<SwiftObject>>(raw);
 
-            return objects.Where(_ =>  string.IsNullOrEmpty(_.VirtualSubDirectory)).ToArray();
+            return objects.Where(_ => string.IsNullOrEmpty(_.VirtualSubDirectory)).ToArray();
         }
 
+        public async Task<Stream> DownloadObject(string container, string path)
+        {
+            if (container == null) throw new ArgumentNullException("container");
+            if (path == null) throw new ArgumentNullException("path");
+
+            var uri = _credentials.Endpoint + "/" + container + "/" + path;
+            var client = GetClient();
+            var stream = await client.GetStreamAsync(uri);
+
+            return stream;
+        }
+
+        public async Task<bool> UploadObject(string container, string path, Stream stream)
+        {
+            if (container == null) throw new ArgumentNullException("container");
+            if (path == null) throw new ArgumentNullException("path");
+            if (stream == null) throw new ArgumentNullException("stream");
+
+            var uri = _credentials.Endpoint + "/" + container + "/" + path;
+            var client = GetClient();
+
+            var content = new StreamContent(stream);
+            var response = await client.PutAsync(uri, content);
+
+            return response.IsSuccessStatusCode;
+        }
     }
 }

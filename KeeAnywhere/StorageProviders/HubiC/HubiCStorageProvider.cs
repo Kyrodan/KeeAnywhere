@@ -11,6 +11,7 @@ namespace KeeAnywhere.StorageProviders.HubiC
     {
         private readonly AccountConfiguration _account;
         private SwiftClient _client;
+        private string _defaultContainer;
 
         public HubiCStorageProvider(AccountConfiguration account)
         {
@@ -18,36 +19,51 @@ namespace KeeAnywhere.StorageProviders.HubiC
             this._account = account;
         }
 
-        public Task<Stream> Load(string path)
+        public async Task<Stream> Load(string path)
         {
-            throw new NotImplementedException();
+            if (path == null) throw new ArgumentNullException("path");
+
+            var container = await GetDefaultContainer();
+
+            var client = await GetClient();
+            var normalizedPath = path.StartsWith("/") ? path.Remove(0, 1) : path;
+
+            var stream = await client.DownloadObject(container, normalizedPath);
+
+            return stream;
         }
 
-        public Task<bool> Save(Stream stream, string path)
+        public async Task<bool> Save(Stream stream, string path)
         {
-            throw new NotImplementedException();
+            if (stream == null) throw new ArgumentNullException("stream");
+            if (path == null) throw new ArgumentNullException("path");
+
+            var container = await GetDefaultContainer();
+
+            var client = await GetClient();
+            var normalizedPath = path.StartsWith("/") ? path.Remove(0, 1) : path;
+
+            var isOk = await client.UploadObject(container, normalizedPath, stream);
+
+            return isOk;
         }
 
         public async Task<StorageProviderItem> GetRootItem()
         {
-            var client = await GetClient();
-            var containers = await client.GetContainers();
-            var root = containers.First();
+            var container = await GetDefaultContainer();
 
-            return new StorageProviderItem {Id = root.Name, Name = root.Name, Type = StorageProviderItemType.Folder};
+            return new StorageProviderItem {
+                Id = "/",
+                Name = "/",
+                Type = StorageProviderItemType.Folder
+            };
         }
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent)
         {
             var client = await GetClient();
-            var id = parent.Id;
-            var posOfFirstSlash = id.IndexOf("/", StringComparison.InvariantCultureIgnoreCase);
-
-            var container = posOfFirstSlash >= 0 ? id.Substring(0, posOfFirstSlash) : id;
-            var path = posOfFirstSlash >= 0 ? id.Substring(posOfFirstSlash + 1) : null;
-
-
-            var objects = await client.GetObjects(container, path);
+            var container = await GetDefaultContainer();
+            var objects = await client.GetObjects(container, parent.Id);
 
             var ret = objects.Select(_ => new StorageProviderItem
             {
@@ -56,8 +72,8 @@ namespace KeeAnywhere.StorageProviders.HubiC
                         ? StorageProviderItemType.Folder
                         : StorageProviderItemType.File,
                 Name = NormalizeName(_.Name),
-                Id = container + "/" + _.Name,
-                ParentReferenceId = id,
+                Id = _.Name,
+                ParentReferenceId = parent.Id,
                 LastModifiedDateTime = _.LastModified
             });
 
@@ -82,6 +98,20 @@ namespace KeeAnywhere.StorageProviders.HubiC
             _client = new SwiftClient(credentials);
 
             return _client;
+        }
+
+        protected async Task<string> GetDefaultContainer()
+        {
+            if (_defaultContainer != null) return _defaultContainer;
+
+            var client = await GetClient();
+            var containers = await client.GetContainers();
+            var container =
+                containers.Single(_ => _.Name.Equals("default", StringComparison.InvariantCultureIgnoreCase));
+
+            _defaultContainer = container.Name;
+
+            return _defaultContainer;
         }
     }
 }
