@@ -243,6 +243,7 @@
     <None Include="KeePass.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromPlgx />
+      <SubType>Designer</SubType>
     </None>
     <None Include="packages.config">
       <ExcludeFromPlgx />
@@ -269,7 +270,7 @@
   <PropertyGroup>
     <PlgxConfiguration>
       <Prerequisites>
-        <!--<KeePassVersion>2.19</KeePassVersion>-->
+        <KeePassVersion>2.31</KeePassVersion>
         <OS>Windows</OS>
         <DotNetVersion>4.5</DotNetVersion>
       </Prerequisites>

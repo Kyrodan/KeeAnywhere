@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Google.Apis.Auth.OAuth2.Responses;
 using Newtonsoft.Json;
 
 namespace KeeAnywhere.StorageProviders.HubiC

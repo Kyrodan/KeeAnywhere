@@ -22,7 +22,7 @@ if %errorlevel% NEQ 0 goto error
 copy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\dist\KeeAnywhere-%version%.plgx
 
 xcopy KeeAnywhere\bin\Release\*.* build\bin
-del build\bin\*.plgx build\bin\*.pdb build\bin\*.xml
+del build\bin\*.plgx build\bin\*.pdb build\bin\*.xml build\bin\*.config build\bin\KeePass.*
 %zip% a -tzip build\dist\KeeAnywhere-%version%.zip .\build\bin\*
 
 
