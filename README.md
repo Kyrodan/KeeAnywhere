@@ -10,11 +10,12 @@ Supported providers (in alphabetical order):
 ![KeeAnywhere in Action](doc/screenshots/KeeAnywhere_Teaser.png)
 
 
-# Getting started
+# Documentation
 * [What is KeeAnywhere?](https://github.com/Kyrodan/KeeAnywhere/wiki)
-* [Screenshots](https://github.com/Kyrodan/KeeAnywhere/wiki/Screenshots)
 * [Download](https://github.com/Kyrodan/KeeAnywhere/releases)
-
+* [Getting Started](https://github.com/Kyrodan/KeeAnywhere/wiki/Getting-Started)
+* [FAQ](https://github.com/Kyrodan/KeeAnywhere/wiki/FAQ)
+* [Contributing](https://github.com/Kyrodan/KeeAnywhere/wiki/Contributing)
 
 # Prerequisites
 * KeePass 2.31 or newer
@@ -29,10 +30,6 @@ Supported providers (in alphabetical order):
 
 # Building
 Run *build.cmd* and see output in folder *build*. For further details see [BUILD.md](BUILD.md).
-
-
-# Contributing
-Contributing is welcome. Please read [Source Code Guidelines](https://github.com/Kyrodan/KeeAnywhere/wiki/Source-Code-Guidelines) first.
 
 
 # License
