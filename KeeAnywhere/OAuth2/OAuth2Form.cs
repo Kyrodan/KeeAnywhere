@@ -87,7 +87,7 @@ namespace KeeAnywhere.OAuth2
             }
         }
 
-        private void OnNavigating(object sender, WebBrowserNavigatingEventArgs e)
+        private async void OnNavigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             Debug.WriteLine("Navigating " + e.Url);
         }

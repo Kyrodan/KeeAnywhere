@@ -19,6 +19,8 @@ namespace KeeAnywhere.Forms
         public SettingsForm()
         {
             InitializeComponent();
+
+            m_tcSettings.TabPages.Remove(m_tabGeneral);
         }
 
         public void InitEx(ConfigurationService configService, UIService uiService)

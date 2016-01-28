@@ -216,13 +216,21 @@ namespace KeeAnywhere
             var httpasm = Assembly.Load("System.Net.Http.Primitives");
             var httpver = new Version(1, 5, 0, 0);
 
+            var jsonasm = Assembly.Load("Newtonsoft.Json");
+            var jsonver = new Version(6, 0, 0, 0);
+
+
             AppDomain.CurrentDomain.AssemblyResolve += (s, a) =>
             {
                 var requestedAssembly = new AssemblyName(a.Name);
-                if (requestedAssembly.Name != "System.Net.Http.Primitives" || requestedAssembly.Version != httpver)
-                    return null;
 
-                return httpasm;
+                if (requestedAssembly.Name == "System.Net.Http.Primitives" && requestedAssembly.Version == httpver)
+                    return httpasm;
+
+                //if (requestedAssembly.Name == "Newtonsoft.Json" && requestedAssembly.Version == jsonver)
+                //    return jsonasm;
+
+                return null;
             };
         }
     }

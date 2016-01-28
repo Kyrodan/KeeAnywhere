@@ -1,8 +1,10 @@
 @echo off
-set version=0.2.0-alpha
+set version=1.0.0
 set zip="packages\7-Zip.CommandLine.9.20.0\tools\7za.exe"
+set msbuildcmd="C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\VsMSBuildCmd.bat"
 
-call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+if not exist %msbuildcmd% goto error
+call %msbuildcmd%
 
 :cleanup
 if not exist build mkdir build
@@ -20,7 +22,7 @@ if %errorlevel% NEQ 0 goto error
 copy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\dist\KeeAnywhere-%version%.plgx
 
 xcopy KeeAnywhere\bin\Release\*.* build\bin
-del build\bin\*.plgx build\bin\*.pdb build\bin\*.xml
+del build\bin\*.plgx build\bin\*.pdb build\bin\*.xml build\bin\*.config build\bin\KeePass.*
 %zip% a -tzip build\dist\KeeAnywhere-%version%.zip .\build\bin\*
 
 

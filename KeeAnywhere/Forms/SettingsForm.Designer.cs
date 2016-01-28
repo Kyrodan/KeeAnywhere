@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.m_bannerImage = new System.Windows.Forms.PictureBox();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.m_tcSettings = new System.Windows.Forms.TabControl();
             this.m_tabAccounts = new System.Windows.Forms.TabPage();
             this.m_btnAccountAdd = new KeeAnywhere.Forms.DropDownButton();
             this.m_mnuAdd = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -53,7 +53,7 @@
             this.m_btnOK = new System.Windows.Forms.Button();
             this.m_btnCancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).BeginInit();
-            this.tabControl1.SuspendLayout();
+            this.m_tcSettings.SuspendLayout();
             this.m_tabAccounts.SuspendLayout();
             this.m_tabGeneral.SuspendLayout();
             this.m_tabAbout.SuspendLayout();
@@ -68,19 +68,19 @@
             this.m_bannerImage.TabIndex = 4;
             this.m_bannerImage.TabStop = false;
             // 
-            // tabControl1
+            // m_tcSettings
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.m_tcSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.m_tabAccounts);
-            this.tabControl1.Controls.Add(this.m_tabGeneral);
-            this.tabControl1.Controls.Add(this.m_tabAbout);
-            this.tabControl1.Location = new System.Drawing.Point(12, 66);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(598, 287);
-            this.tabControl1.TabIndex = 5;
+            this.m_tcSettings.Controls.Add(this.m_tabAccounts);
+            this.m_tcSettings.Controls.Add(this.m_tabGeneral);
+            this.m_tcSettings.Controls.Add(this.m_tabAbout);
+            this.m_tcSettings.Location = new System.Drawing.Point(12, 66);
+            this.m_tcSettings.Name = "m_tcSettings";
+            this.m_tcSettings.SelectedIndex = 0;
+            this.m_tcSettings.Size = new System.Drawing.Size(598, 287);
+            this.m_tcSettings.TabIndex = 5;
             // 
             // m_tabAccounts
             // 
@@ -118,7 +118,7 @@
             // m_btnAccountRemove
             // 
             this.m_btnAccountRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnAccountRemove.Location = new System.Drawing.Point(489, 67);
+            this.m_btnAccountRemove.Location = new System.Drawing.Point(490, 67);
             this.m_btnAccountRemove.Name = "m_btnAccountRemove";
             this.m_btnAccountRemove.Size = new System.Drawing.Size(75, 23);
             this.m_btnAccountRemove.TabIndex = 10;
@@ -319,7 +319,7 @@
             this.ClientSize = new System.Drawing.Size(622, 397);
             this.Controls.Add(this.m_btnOK);
             this.Controls.Add(this.m_btnCancel);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.m_tcSettings);
             this.Controls.Add(this.m_bannerImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -331,7 +331,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.Load += new System.EventHandler(this.OnFormLoad);
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).EndInit();
-            this.tabControl1.ResumeLayout(false);
+            this.m_tcSettings.ResumeLayout(false);
             this.m_tabAccounts.ResumeLayout(false);
             this.m_tabAccounts.PerformLayout();
             this.m_tabGeneral.ResumeLayout(false);
@@ -345,7 +345,7 @@
         #endregion
 
         private System.Windows.Forms.PictureBox m_bannerImage;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl m_tcSettings;
         private System.Windows.Forms.TabPage m_tabGeneral;
         private System.Windows.Forms.TabPage m_tabAccounts;
         private System.Windows.Forms.TabPage m_tabAbout;

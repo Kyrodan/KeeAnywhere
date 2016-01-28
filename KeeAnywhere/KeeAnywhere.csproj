@@ -164,6 +164,7 @@
     <Compile Include="OAuth2\OAuth2Form.Designer.cs">
       <DependentUpon>OAuth2Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="OAuth2\OAuth2Token.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -176,6 +177,14 @@
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveHelper.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveStorageConfigurator.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveStorageProvider.cs" />
+    <Compile Include="StorageProviders\HubiC\HubiCAccount.cs" />
+    <Compile Include="StorageProviders\HubiC\HubiCCredentials.cs" />
+    <Compile Include="StorageProviders\HubiC\HubiCHelper.cs" />
+    <Compile Include="StorageProviders\HubiC\HubiCStorageConfigurator.cs" />
+    <Compile Include="StorageProviders\HubiC\HubiCStorageProvider.cs" />
+    <Compile Include="StorageProviders\HubiC\SwiftContainer.cs" />
+    <Compile Include="StorageProviders\HubiC\SwiftClient.cs" />
+    <Compile Include="StorageProviders\HubiC\SwiftObject.cs" />
     <Compile Include="StorageProviders\IStorageConfigurator.cs" />
     <Compile Include="StorageProviders\IStorageProvider.cs" />
     <Compile Include="StorageProviders\OneDrive\OneDriveAuthenticationForm.cs">
@@ -229,10 +238,12 @@
   <ItemGroup>
     <None Include="app.config">
       <ExcludeFromPlgx />
+      <SubType>Designer</SubType>
     </None>
     <None Include="KeePass.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromPlgx />
+      <SubType>Designer</SubType>
     </None>
     <None Include="packages.config">
       <ExcludeFromPlgx />
@@ -244,9 +255,10 @@
     <None Include="Resources\Dropbox_16x16.png" />
     <Content Include="Resources\Folder_16x16.png" />
     <None Include="Resources\GoogleDrive_16x16.png" />
-    <Content Include="Resources\Icon_CloudDrive_16x16.ico" />
-    <Content Include="Resources\CloudDrive_16x16.png" />
-    <Content Include="Resources\CloudDrive_48x48.png" />
+    <None Include="Resources\HubiC_16x16.png" />
+    <Content Include="Resources\Icon_KeeAnywhere_16x16.ico" />
+    <Content Include="Resources\KeeAnywhere_16x16.png" />
+    <Content Include="Resources\KeeAnywhere_48x48.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -258,7 +270,7 @@
   <PropertyGroup>
     <PlgxConfiguration>
       <Prerequisites>
-        <!--<KeePassVersion>2.19</KeePassVersion>-->
+        <KeePassVersion>2.31</KeePassVersion>
         <OS>Windows</OS>
         <DotNetVersion>4.5</DotNetVersion>
       </Prerequisites>
