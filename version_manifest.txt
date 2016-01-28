@@ -1,3 +1,3 @@
 :
-KeeAnywhere:0.2.0.0
+KeeAnywhere:1.0.0.0
 :
