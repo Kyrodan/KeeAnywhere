@@ -63,8 +63,8 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             //var bytes = stream.ToArray();
             //File.WriteAllBytes(tempFilename, bytes);
 
-            var directory = Path.GetDirectoryName(path);
-            var filename = Path.GetFileName(path);
+            var directory = CloudPath.GetDirectoryName(path);
+            var filename = CloudPath.GetFileName(path);
 
             var uploadedItem = await api.UploadFileAs(tempFilename, filename, directory);
 
@@ -97,6 +97,22 @@ namespace KeeAnywhere.StorageProviders.OneDrive
                 odChildren.Collection.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
 
             return children;
+        }
+
+        public bool IsFilenameValid(string filename)
+        {
+            if (string.IsNullOrEmpty(filename)) return false;
+
+            for (var i = 0; i < filename.Length; i++)
+            {
+                var c = filename[i];
+                var invalidChars = Path.GetInvalidFileNameChars();
+
+                if (c < 32 || invalidChars.Contains(c))
+                    return false;
+            }
+
+            return true;
         }
 
         protected StorageProviderItem CreateStorageProviderItemFromOneDriveItem(OneDriveItem item)

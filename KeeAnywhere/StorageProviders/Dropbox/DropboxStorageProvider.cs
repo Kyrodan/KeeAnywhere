@@ -71,10 +71,25 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             return items.ToArray();
         }
 
+        public bool IsFilenameValid(string filename)
+        {
+            if (string.IsNullOrEmpty(filename)) return false;
+
+            for (var i = 0; i < filename.Length; i++)
+            {
+                var c = filename[i];
+
+                if (c < 32 || c == '<' || c == '>' || c == '/' || c == '\\' || c == ':' || c == '?' || c == '*' || c == '"' || c == '|')
+                    return false;
+            }
+
+            return true;
+        }
+
         private static string RootPath(string path)
         {
-            if (!path.StartsWith("/"))
-                path = "/" + path;
+            if (path[0] != CloudPath.DirectorySeparatorChar)
+                path = CloudPath.DirectorySeparatorChar + path;
 
             return path;
         }
@@ -84,7 +99,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             var result = new StorageProviderItem
             {
                 Name = item.Name,
-                Id = Path.Combine(parent.Id, item.PathLower),
+                Id = CloudPath.Combine(parent.Id, item.PathLower),
                 ParentReferenceId = parent.Id
             };
 

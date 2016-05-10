@@ -80,6 +80,21 @@ namespace KeeAnywhere.StorageProviders.HubiC
             return ret.ToArray();
         }
 
+        public bool IsFilenameValid(string filename)
+        {
+            if (string.IsNullOrEmpty(filename)) return false;
+
+            for (var i = 0; i < filename.Length; i++)
+            {
+                var c = filename[i];
+
+                if (c < 32)
+                    return false;
+            }
+
+            return true;
+        }
+
         protected string NormalizeName(string path)
         {
             var ret = path.EndsWith("/") ? path.Remove(path.Length - 1, 1) : path;
