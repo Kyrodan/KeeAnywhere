@@ -172,8 +172,7 @@ namespace KeeAnywhere.Forms
 
         private void OnHelpMeChooseAccountStorage(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            //TODO: Change to production URL
-            Process.Start("https://localhost/AccountStorageLocation.md");
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki/Getting-Started#which-account-storage-location-should-i-choose");
         }
 
 
