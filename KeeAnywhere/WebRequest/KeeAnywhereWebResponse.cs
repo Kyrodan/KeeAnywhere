@@ -8,6 +8,8 @@ namespace KeeAnywhere.WebRequest
     {
         private readonly Stream _stream;
 
+        public override long ContentLength { get; set; }
+
         public KeeAnywhereWebResponse()
         {
         }
@@ -17,6 +19,7 @@ namespace KeeAnywhere.WebRequest
             if (stream == null) throw new ArgumentNullException("stream");
 
             _stream = stream;
+            this.ContentLength = _stream.Length;
         }
 
         public override Stream GetResponseStream()
