@@ -11,7 +11,6 @@ using KeePass.UI;
 using KeePassLib.Native;
 using KeePassLib.Serialization;
 using KeePassLib.Utility;
-using Microsoft.Win32;
 
 namespace KeeAnywhere
 {
