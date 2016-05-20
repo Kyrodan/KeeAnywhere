@@ -13,7 +13,7 @@ namespace KeeAnywhere.StorageProviders.HubiC
         public string ContentType { get; set; }
 
         [DataMember(Name = "bytes")]
-        public int Bytes { get; set; }
+        public ulong Bytes { get; set; }
 
         [DataMember(Name = "last_modified")]
         public DateTime LastModified { get; set; }

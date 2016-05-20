@@ -12,6 +12,6 @@ namespace KeeAnywhere.StorageProviders.HubiC
         public int Count { get; set; }
 
         [DataMember(Name = "bytes")]
-        public int Bytes { get; set; }
+        public ulong Bytes { get; set; }
     }
 }
