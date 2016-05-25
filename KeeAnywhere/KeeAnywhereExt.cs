@@ -259,7 +259,7 @@ namespace KeeAnywhere
             var httpver = new Version(1, 5, 0, 0);
 
             var jsonasm = Assembly.Load("Newtonsoft.Json");
-            var jsonver = new Version(6, 0, 0, 0);
+            var jsonver = new Version(7, 0, 0, 0);
 
 
             AppDomain.CurrentDomain.AssemblyResolve += (s, a) =>
@@ -269,8 +269,8 @@ namespace KeeAnywhere
                 if (requestedAssembly.Name == "System.Net.Http.Primitives" && requestedAssembly.Version == httpver)
                     return httpasm;
 
-                //if (requestedAssembly.Name == "Newtonsoft.Json" && requestedAssembly.Version == jsonver)
-                //    return jsonasm;
+                if (requestedAssembly.Name == "Newtonsoft.Json" && requestedAssembly.Version < jsonasm.GetName().Version)
+                    return jsonasm;
 
                 return null;
             };

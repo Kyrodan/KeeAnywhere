@@ -44,8 +44,6 @@ namespace KeeAnywhere.StorageProviders.Dropbox
         {
             path = RootPath(path);
 
-            //var ci = new CommitInfo(path);
-
             var result = await Api.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: stream);
 
             return result.IsFile;
@@ -75,15 +73,8 @@ namespace KeeAnywhere.StorageProviders.Dropbox
         {
             if (string.IsNullOrEmpty(filename)) return false;
 
-            for (var i = 0; i < filename.Length; i++)
-            {
-                var c = filename[i];
-
-                if (c < 32 || c == '<' || c == '>' || c == '/' || c == '\\' || c == ':' || c == '?' || c == '*' || c == '"' || c == '|')
-                    return false;
-            }
-
-            return true;
+            char[] invalidChars = { '<', '>', '/', '\\', ':', '*', '?', '"', '|' };
+            return filename.All(c => c >= 32 && !invalidChars.Contains(c));
         }
 
         private static string RootPath(string path)

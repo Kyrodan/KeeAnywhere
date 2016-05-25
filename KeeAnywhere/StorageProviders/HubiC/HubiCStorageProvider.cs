@@ -84,15 +84,8 @@ namespace KeeAnywhere.StorageProviders.HubiC
         {
             if (string.IsNullOrEmpty(filename)) return false;
 
-            for (var i = 0; i < filename.Length; i++)
-            {
-                var c = filename[i];
-
-                if (c < 32)
-                    return false;
-            }
-
-            return true;
+            char[] invalidChars = { '/', '\\' };
+            return filename.All(c => c >= 32 && !invalidChars.Contains(c));
         }
 
         protected string NormalizeName(string path)

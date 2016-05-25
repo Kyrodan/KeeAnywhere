@@ -48,6 +48,8 @@ namespace KeeAnywhere.WebRequest
         {
             if (_response != null) return _response;
 
+            if (!_provider.IsCompletePathValid(_itemPath)) throw new IOException(string.Format("Path is invalid: {0}", _itemPath));
+
             if (this.Method == IOConnection.WrmDeleteFile)
             {
                 //var isOk = Task.Run(async () => await _provider.Delete(_itemPath));
