@@ -25,6 +25,7 @@ namespace KeeAnywhere
         private StorageService _storageService;
         private ToolStripMenuItem _tsOpenFromCloudDrive;
         private ToolStripMenuItem _tsSaveToCloudDrive;
+        private ToolStripMenuItem _tsSaveCopyToCloudDrive;
 
         private ToolStripMenuItem _tsShowSettings;
         private UIService _uiService;
@@ -97,6 +98,12 @@ namespace KeeAnywhere
                         PluginResources.KeeAnywhere_16x16);
                     _tsSaveToCloudDrive.Click += OnSaveToCloudDrive;
                     saveMenu.DropDownItems.Insert(index, _tsSaveToCloudDrive);
+
+                    _tsSaveCopyToCloudDrive = new ToolStripMenuItem("Save Copy to Cloud Drive...",
+                        PluginResources.KeeAnywhere_16x16);
+                    _tsSaveCopyToCloudDrive.Click += OnSaveToCloudDrive;
+                    saveMenu.DropDownItems.Add(_tsSaveCopyToCloudDrive);
+
                 }
             }
 
@@ -158,7 +165,9 @@ namespace KeeAnywhere
 
             var ci = IOConnectionInfo.FromPath(form.ResultUri);
             ci.CredSaveMode = IOCredSaveMode.SaveCred;
-            _host.MainWindow.SaveDatabaseAs(_host.Database, ci, true, null, false);
+
+            var isCopy = sender == _tsSaveCopyToCloudDrive;
+            _host.MainWindow.SaveDatabaseAs(_host.Database, ci, true, null, isCopy);
         }
 
         private void OnOpenFromCloudDrive(object sender, EventArgs eventArgs)
@@ -233,6 +242,7 @@ namespace KeeAnywhere
                 if (saveAsMenu != null)
                 {
                     saveAsMenu.DropDownItems.Remove(_tsSaveToCloudDrive);
+                    saveAsMenu.DropDownItems.Remove(_tsSaveCopyToCloudDrive);
                 }
             }
 
