@@ -57,9 +57,9 @@ namespace KeeAnywhere.StorageProviders.Dropbox
                 cs.SetResult(true);
                 return cs.Task;
             }
-            catch
+            catch (Exception ex)
             {
-                cs.SetResult(false);
+                cs.SetException(ex);
                 return cs.Task;
             }
         }

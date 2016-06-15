@@ -90,7 +90,8 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             var result = new StorageProviderItem
             {
                 Name = item.Name,
-                Id = CloudPath.Combine(parent.Id, item.PathLower),
+                Id = item.PathLower,
+                //Id = CloudPath.Combine(parent.Id, item.PathLower),
                 ParentReferenceId = parent.Id
             };
 

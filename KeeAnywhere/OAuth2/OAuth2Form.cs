@@ -74,11 +74,12 @@ namespace KeeAnywhere.OAuth2
             try
             {
                 var isOk = await m_provider.Claim(e.Url, m_browser.DocumentTitle);
-                DialogResult = isOk ? DialogResult.OK : DialogResult.Cancel;
+                DialogResult = isOk ? DialogResult.OK : DialogResult.Abort;
             }
-            catch
+            catch (Exception ex)
             {
-                DialogResult = DialogResult.Cancel;
+                this.LastException = ex;
+                DialogResult = DialogResult.Abort;
             }
             finally
             {
@@ -86,6 +87,8 @@ namespace KeeAnywhere.OAuth2
                 Close();
             }
         }
+
+        public Exception LastException { get; set; }
 
         private async void OnNavigating(object sender, WebBrowserNavigatingEventArgs e)
         {
