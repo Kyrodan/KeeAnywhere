@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeeAnywhere", "KeeAnywhere\KeeAnywhere.csproj", "{8E40EDF5-06B8-4059-8B19-CB90D937FEBB}"
 EndProject
@@ -9,6 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{8BD15372-A42
 	ProjectSection(SolutionItems) = preProject
 		lib\KeePass.exe = lib\KeePass.exe
 		lib\KeePass.XmlSerializers.dll = lib\KeePass.XmlSerializers.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{1B11D744-407F-41E1-B78B-D9C9B0834D24}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
 Global

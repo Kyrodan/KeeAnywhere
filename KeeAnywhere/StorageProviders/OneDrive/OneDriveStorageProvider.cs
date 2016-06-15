@@ -24,24 +24,8 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             var api = await GetApi();
 
-            //var tempFilename = Path.GetTempFileName();
-
-            //// Workaround due to Bug #2 in OneAdriveApi.DownloadItemAndSave(string path, string filename)
-            //var item = await api.GetItem(path);
-            //if (item == null) return null;
-
-            //var isOk = await api.DownloadItemAndSaveAs(item, tempFilename);
-
-            //if (!isOk)
-            //{
-            //    File.Delete(tempFilename);
-            //    throw new FileNotFoundException("OneDrive: File not found", path);
-            //}
-
-            //var content = File.ReadAllBytes(tempFilename);
-            //File.Delete(tempFilename);
-            //var stream = new MemoryStream(content, false);
-            var stream = await api.DownloadItem(path);
+            var escapedpath = Uri.EscapeDataString(path);
+            var stream = await api.DownloadItem(escapedpath);
 
             return stream;
         }
@@ -51,24 +35,10 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             var api = await GetApi();
 
-            var tempFilename = Path.GetTempFileName();
+            var directory = Uri.EscapeDataString(CloudPath.GetDirectoryName(path));
+            var filename = Uri.EscapeDataString(CloudPath.GetFileName(path));
 
-            using (var fileStream = File.Create(tempFilename))
-            {
-                stream.Seek(0, SeekOrigin.Begin);
-                stream.CopyTo(fileStream);
-            }
-
-            //var memoryStream = new MemoryStream();
-            //var bytes = stream.ToArray();
-            //File.WriteAllBytes(tempFilename, bytes);
-
-            var directory = Path.GetDirectoryName(path);
-            var filename = Path.GetFileName(path);
-
-            var uploadedItem = await api.UploadFileAs(tempFilename, filename, directory);
-
-            File.Delete(tempFilename);
+            var uploadedItem = await api.UploadFileAs(stream, filename, directory);
 
             return uploadedItem != null;
         }
@@ -97,6 +67,14 @@ namespace KeeAnywhere.StorageProviders.OneDrive
                 odChildren.Collection.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
 
             return children;
+        }
+
+        public bool IsFilenameValid(string filename)
+        {
+            if (string.IsNullOrEmpty(filename)) return false;
+
+            char[] invalidChars = { ':', '*', '?', '<', '>', '|', '/', '\\' };
+            return filename.All(c => c >= 32 && !invalidChars.Contains(c));
         }
 
         protected StorageProviderItem CreateStorageProviderItemFromOneDriveItem(OneDriveItem item)

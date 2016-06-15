@@ -1,5 +1,6 @@
 using System.Windows.Forms;
 using KeePass.UI;
+using KeePassLib.Utility;
 
 namespace KeeAnywhere.OAuth2
 {
@@ -10,6 +11,11 @@ namespace KeeAnywhere.OAuth2
             var dlg = new OAuth2Form();
             dlg.InitEx(provider);
             var result = UIUtil.ShowDialogAndDestroy(dlg);
+
+            if (result == DialogResult.Abort) // Faulted - no user cancellation
+            {
+                MessageService.ShowFatal("Authentication failed!", dlg.LastException);
+            }
 
             return result == DialogResult.OK;
         }

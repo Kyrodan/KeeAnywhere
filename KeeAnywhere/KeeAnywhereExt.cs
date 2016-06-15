@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -24,6 +25,7 @@ namespace KeeAnywhere
         private StorageService _storageService;
         private ToolStripMenuItem _tsOpenFromCloudDrive;
         private ToolStripMenuItem _tsSaveToCloudDrive;
+        private ToolStripMenuItem _tsSaveCopyToCloudDrive;
 
         private ToolStripMenuItem _tsShowSettings;
         private UIService _uiService;
@@ -51,6 +53,9 @@ namespace KeeAnywhere
 
             // Some binding redirection fixes for Google Drive API
             FixGoogleApiDependencyLoading();
+
+            // WebBrowser Feature Control 
+            SetBrowserFeatureControl();
 
             // Load the configuration
             _configService = new ConfigurationService(pluginHost);
@@ -93,11 +98,55 @@ namespace KeeAnywhere
                         PluginResources.KeeAnywhere_16x16);
                     _tsSaveToCloudDrive.Click += OnSaveToCloudDrive;
                     saveMenu.DropDownItems.Insert(index, _tsSaveToCloudDrive);
+
+                    _tsSaveCopyToCloudDrive = new ToolStripMenuItem("Save Copy to Cloud Drive...",
+                        PluginResources.KeeAnywhere_16x16);
+                    _tsSaveCopyToCloudDrive.Click += OnSaveToCloudDrive;
+                    saveMenu.DropDownItems.Add(_tsSaveCopyToCloudDrive);
+
                 }
             }
 
             // Indicate that the plugin started successfully
             return true;
+        }
+
+        private void SetBrowserFeatureControl()
+        {
+            // http://msdn.microsoft.com/en-us/library/ee330720(v=vs.85).aspx
+
+            // FeatureControl settings are per-process
+            var fileName = System.IO.Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
+
+            // make the control is not running inside Visual Studio Designer
+            if (string.Compare(fileName, "devenv.exe", true) == 0 || string.Compare(fileName, "XDesProc.exe", true) == 0)
+                return;
+
+            BrowserHelper.SetBrowserFeatureControlKey("FEATURE_BROWSER_EMULATION", fileName, BrowserHelper.GetBrowserEmulationMode()); // Webpages containing standards-based !DOCTYPE directives are displayed in IE10 Standards mode.
+            //BrowserHelper.SetBrowserFeatureControlKey("FEATURE_SCRIPTURL_MITIGATION", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_AJAX_CONNECTIONEVENTS", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_ENABLE_CLIPCHILDREN_OPTIMIZATION", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_MANAGE_SCRIPT_CIRCULAR_REFS", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_DOMSTORAGE ", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_GPU_RENDERING ", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_IVIEWOBJECTDRAW_DMLT9_WITH_GDI  ", fileName, 0);
+            //SetBrowserFeatureControlKey("FEATURE_DISABLE_LEGACY_COMPRESSION", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_LOCALMACHINE_LOCKDOWN", fileName, 0);
+            //SetBrowserFeatureControlKey("FEATURE_BLOCK_LMZ_OBJECT", fileName, 0);
+            //SetBrowserFeatureControlKey("FEATURE_BLOCK_LMZ_SCRIPT", fileName, 0);
+            //SetBrowserFeatureControlKey("FEATURE_DISABLE_NAVIGATION_SOUNDS", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_SCRIPTURL_MITIGATION", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_SPELLCHECKING", fileName, 0);
+            //SetBrowserFeatureControlKey("FEATURE_STATUS_BAR_THROTTLING", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_TABBED_BROWSING", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_VALIDATE_NAVIGATE_URL", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_WEBOC_DOCUMENT_ZOOM", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_WEBOC_POPUPMANAGEMENT", fileName, 0);
+            //SetBrowserFeatureControlKey("FEATURE_WEBOC_MOVESIZECHILD", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_ADDON_MANAGEMENT", fileName, 0);
+            //SetBrowserFeatureControlKey("FEATURE_WEBSOCKET", fileName, 1);
+            //SetBrowserFeatureControlKey("FEATURE_WINDOW_RESTRICTIONS ", fileName, 0);
+            //SetBrowserFeatureControlKey("FEATURE_XMLHTTP", fileName, 1);
         }
 
         private void OnSaveToCloudDrive(object sender, EventArgs e)
@@ -116,7 +165,9 @@ namespace KeeAnywhere
 
             var ci = IOConnectionInfo.FromPath(form.ResultUri);
             ci.CredSaveMode = IOCredSaveMode.SaveCred;
-            _host.MainWindow.SaveDatabaseAs(_host.Database, ci, true, null, false);
+
+            var isCopy = sender == _tsSaveCopyToCloudDrive;
+            _host.MainWindow.SaveDatabaseAs(_host.Database, ci, true, null, isCopy);
         }
 
         private void OnOpenFromCloudDrive(object sender, EventArgs eventArgs)
@@ -191,6 +242,7 @@ namespace KeeAnywhere
                 if (saveAsMenu != null)
                 {
                     saveAsMenu.DropDownItems.Remove(_tsSaveToCloudDrive);
+                    saveAsMenu.DropDownItems.Remove(_tsSaveCopyToCloudDrive);
                 }
             }
 
@@ -217,7 +269,7 @@ namespace KeeAnywhere
             var httpver = new Version(1, 5, 0, 0);
 
             var jsonasm = Assembly.Load("Newtonsoft.Json");
-            var jsonver = new Version(6, 0, 0, 0);
+            var jsonver = new Version(7, 0, 0, 0);
 
 
             AppDomain.CurrentDomain.AssemblyResolve += (s, a) =>
@@ -227,8 +279,8 @@ namespace KeeAnywhere
                 if (requestedAssembly.Name == "System.Net.Http.Primitives" && requestedAssembly.Version == httpver)
                     return httpasm;
 
-                //if (requestedAssembly.Name == "Newtonsoft.Json" && requestedAssembly.Version == jsonver)
-                //    return jsonasm;
+                if (requestedAssembly.Name == "Newtonsoft.Json" && requestedAssembly.Version < jsonasm.GetName().Version)
+                    return jsonasm;
 
                 return null;
             };

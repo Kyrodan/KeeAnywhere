@@ -13,5 +13,8 @@ namespace KeeAnywhere.StorageProviders
         // Query operations
         Task<StorageProviderItem> GetRootItem();
         Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent);
+
+        // Validation operations
+        bool IsFilenameValid(string filename);
     }
 }

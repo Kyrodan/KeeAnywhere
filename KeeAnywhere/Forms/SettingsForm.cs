@@ -172,8 +172,7 @@ namespace KeeAnywhere.Forms
 
         private void OnHelpMeChooseAccountStorage(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            //TODO: Change to production URL
-            Process.Start("https://localhost/AccountStorageLocation.md");
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki/Getting-Started#which-account-storage-location-should-i-choose");
         }
 
 
@@ -211,8 +210,27 @@ namespace KeeAnywhere.Forms
 
         private void OnAfterLabelEdit(object sender, LabelEditEventArgs e)
         {
+            if (e.Label == null) return;
+
             var name = e.Label;
 
+            // Has the name been removed?
+            if (name == string.Empty)
+            {
+                MessageService.ShowWarning("An account name must be given.", "Discarding change.");
+                e.CancelEdit = true;
+                return;
+            }
+
+            // Does the input contains leading or trailing spaces?
+            if (char.IsWhiteSpace(name, 0) || char.IsWhiteSpace(name, name.Length - 1))
+            {
+                MessageService.ShowWarning("The name must not contain leading or trailing spaces.", "Discarding change.");
+                e.CancelEdit = true;
+                return;
+            }
+
+            // Does the input contains disallowed chars?
             var disallowedChars = "!*';:&=+$,/?#[]";
             if (name.IndexOfAny(disallowedChars.ToCharArray()) != -1)
             {
@@ -225,19 +243,22 @@ namespace KeeAnywhere.Forms
             var account = item.Tag as AccountConfiguration;
             if (account == null) return;
 
+            // The user typed but the name has not been changed?
+            if (name.Equals(account.Name, StringComparison.InvariantCultureIgnoreCase)) return;
+
+            // Does another account of the same type exists with the same name?
             var nameExists =
                 m_configService.Accounts.Any(
-                    _ => _.Type == account.Type && _.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+                    _ => _ != account && _.Type == account.Type && _.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
             if (nameExists) // Change accepted
             {
-                MessageService.ShowWarning("An account with this name already exists.", "Discarding new name.");
+                MessageService.ShowWarning("An account with this name already exists.", "Discarding change.");
                 e.CancelEdit = true;
                 return;
             }
 
             account.Name = name;
-            
         }
     }
 }

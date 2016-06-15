@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -218,7 +217,7 @@ namespace KeeAnywhere.Forms
 
             m_cbAccounts.Enabled = !isWait;
             m_lvDetails.Enabled = !isWait;
-            m_btnOpen.Enabled = !isWait;
+            m_btnOk.Enabled = !isWait;
             m_txtFilename.Enabled = !isWait;
 
             if (isWait)
@@ -264,7 +263,7 @@ namespace KeeAnywhere.Forms
 
             foreach (var child in info.Children)
             {
-                var ext = Path.GetExtension(child.Name);
+                var ext = CloudPath.GetExtension(child.Name);
                 if (m_cbFilter.SelectedIndex == 0 && child.Type == StorageProviderItemType.File && (string.IsNullOrEmpty(ext) || ext.ToLower() != ".kdbx"))
                     continue;
 
@@ -296,7 +295,7 @@ namespace KeeAnywhere.Forms
 
         private int GetIconIndex(string filename)
         {
-            var extension = Path.GetExtension(filename);
+            var extension = CloudPath.GetExtension(filename);
 
             if (string.IsNullOrEmpty(extension)) return -1;
 
@@ -392,15 +391,15 @@ namespace KeeAnywhere.Forms
             public StorageProviderItem Parent;
         }
 
-        private async void OnOpenClick(object sender, EventArgs e)
+        private async void OnOkClick(object sender, EventArgs e)
         {
             DialogResult = DialogResult.None;
             if (string.IsNullOrEmpty(m_txtFilename.Text)) return;
 
             // Ckech whether an extension is given for saving
-            if (m_mode == Mode.Save && !Path.HasExtension(m_txtFilename.Text))
+            if (m_mode == Mode.Save && !CloudPath.HasExtension(m_txtFilename.Text))
             {
-                m_txtFilename.Text = Path.ChangeExtension(m_txtFilename.Text, "kdbx");
+                m_txtFilename.Text = CloudPath.ChangeExtension(m_txtFilename.Text, "kdbx");
             }
 
             var filename = m_txtFilename.Text;
@@ -414,8 +413,10 @@ namespace KeeAnywhere.Forms
             {
                 case Mode.Open:
                     if (subItem == null)
+                    {
                         MessageService.ShowWarning("File/Folder does not exist.");
-                    else 
+                    }
+                    else
                     {
                         switch (subItem.Type)
                         {
@@ -438,7 +439,11 @@ namespace KeeAnywhere.Forms
                     break;
 
                 case Mode.Save:
-                    if (subItem == null)
+                    if (!m_provider.IsFilenameValid(filename))
+                    {
+                        MessageService.ShowWarning("Filename is invalid.");
+                    }
+                    else if (subItem == null)
                     {
                         DialogResult = DialogResult.OK;
                     }
@@ -494,5 +499,6 @@ namespace KeeAnywhere.Forms
         {
             m_txtUrl.Text = GetResultUri();
         }
+
     }
 }

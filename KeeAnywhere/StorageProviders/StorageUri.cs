@@ -26,31 +26,25 @@ namespace KeeAnywhere.StorageProviders
 
         public string GetAccountName()
         {
-            var segments = this.Segments;
-            if (segments.Length < 3)
+            var segments = this.OriginalString.Split('/');
+            if (segments.Length < 4)
                 return null;
 
-            var account = UnescapeDataString(segments[1]);
-            account = StripSlashes(account);
+            var account = UnescapeDataString(segments[3]);
             return account;
         }
 
         public string GetPath()
         {
-            var segments = this.Segments;
-            if (segments.Length < 3)
+            var segments = this.OriginalString.Split('/');
+            if (segments.Length < 5)
                 return null;
 
-            segments = segments.Where((val, idx) => idx >= 2).ToArray();
+            segments = segments.Where((val, idx) => idx >= 4).ToArray();
 
-            var path = string.Concat(segments);
+            var path = string.Join("/", segments);
             path = UnescapeDataString(path);
             return path;
-        }
-
-        private string StripSlashes(string s)
-        {
-            return s.Replace("/", string.Empty);
         }
     }
 }

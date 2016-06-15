@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Google.Apis.Download;
 using Google.Apis.Drive.v3;
-using Google.Apis.Drive.v3.Data;
 using Google.Apis.Upload;
 using KeeAnywhere.Configuration;
 using File = Google.Apis.Drive.v3.Data.File;
@@ -57,8 +56,8 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             else // not found: creating new
             {
 
-                var folderName = Path.GetDirectoryName(path);
-                var fileName = Path.GetFileName(path);
+                var folderName = CloudPath.GetDirectoryName(path);
+                var fileName = CloudPath.GetFileName(path);
 
                 var folder = await api.GetFileByPath(folderName);
                 if (folder == null)
@@ -106,6 +105,14 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             });
 
             return newItems.ToArray();
+        }
+
+        public bool IsFilenameValid(string filename)
+        {
+            if (string.IsNullOrEmpty(filename)) return false;
+
+            char[] invalidChars = { '/', '\\'};
+            return filename.All(c => c >= 32 && !invalidChars.Contains(c));
         }
 
         protected async Task<DriveService> GetApi()
