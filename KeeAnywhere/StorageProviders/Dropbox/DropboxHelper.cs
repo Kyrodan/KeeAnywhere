@@ -20,7 +20,9 @@ namespace KeeAnywhere.StorageProviders.Dropbox
 
         //TODO: Change API keys!!!
 
-        internal const string DropboxClientId = "dummy";
-        internal const string DropboxClientSecret = "dummy";
+        internal const string DropboxFullAccessClientId = "dummy";
+        internal const string DropboxFullAccessClientSecret = "dummy";
+        internal const string DropboxAppFolderOnlyClientId = "dummy";
+        internal const string DropboxAppFolderOnlyClientSecret = "dummy";
     }
 }

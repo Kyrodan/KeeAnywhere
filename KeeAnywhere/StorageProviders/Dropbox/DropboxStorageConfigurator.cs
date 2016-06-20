@@ -8,8 +8,15 @@ namespace KeeAnywhere.StorageProviders.Dropbox
 {
     public class DropboxStorageConfigurator : IStorageConfigurator, IOAuth2Provider
     {
+        private readonly bool _isSecure;
+
         private string _state;
         private OAuth2Response _oauthResponse;
+
+        public DropboxStorageConfigurator(bool isSecure)
+        {
+            this._isSecure = isSecure;
+        }
 
         public async Task<AccountConfiguration> CreateAccount()
         {
@@ -25,7 +32,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             {
                 Id = owner.AccountId,
                 Name = owner.Name.DisplayName,
-                Type = StorageType.Dropbox,
+                Type = _isSecure ? StorageType.DropboxSecure : StorageType.Dropbox,
                 Secret = _oauthResponse.AccessToken,
             };
 
@@ -36,7 +43,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
         {
             _state = Guid.NewGuid().ToString("N");
             this.AuthorizationUrl = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Token,
-                DropboxHelper.DropboxClientId, RedirectionUrl, _state);
+                _isSecure ? DropboxHelper.DropboxAppFolderOnlyClientId : DropboxHelper.DropboxFullAccessClientId, RedirectionUrl, _state);
         }
 
         public Task<bool> Claim(Uri uri, string documentTitle)
