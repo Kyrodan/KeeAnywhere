@@ -126,6 +126,7 @@
     <Compile Include="BrowserHelper.cs" />
     <Compile Include="CloudPath.cs" />
     <Compile Include="Configuration\AccountConfiguration.cs" />
+    <Compile Include="Configuration\AccountIdentifier.cs" />
     <Compile Include="Configuration\PluginConfiguration.cs" />
     <Compile Include="Configuration\ConfigurationService.cs" />
     <Compile Include="Configuration\AccountStorageLocation.cs" />

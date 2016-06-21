@@ -113,11 +113,36 @@ namespace KeeAnywhere.Forms
 
             UpdateAccountsCombobox();
 
-            if (m_cbAccounts.Items.Count > 1)
+            SelectInitialAccount();
+        }
+
+        private void SelectInitialAccount()
+        {
+            if (m_cbAccounts.Items.Count <= 1) return;
+
+            var selidx = 1;
+
+            var accountInfo = m_configService.PluginConfiguration.FilePickerLastUsedAccount;
+            if (accountInfo != null)
             {
-                m_cbAccounts.SelectedIndex = -1;
-                m_cbAccounts.SelectedIndex = 1;
+                var account = m_configService.FindAccount(accountInfo.Type, accountInfo.Name);
+                if (account != null)
+                {
+                    for (var i = 0; i < m_cbAccounts.Items.Count; i++)
+                    {
+                        var item = m_cbAccounts.Items[i];
+
+                        if (item.Item == account)
+                        {
+                            selidx = i;
+                            break;
+                        }
+                    }
+                }
             }
+
+            m_cbAccounts.SelectedIndex = -1;
+            m_cbAccounts.SelectedIndex = selidx;
         }
 
         private void UpdateAccountsCombobox()
@@ -196,6 +221,7 @@ namespace KeeAnywhere.Forms
             if (account == null) return;
 
             SetWaitState(true);
+            m_configService.PluginConfiguration.FilePickerLastUsedAccount = account.GetAccountIdentifier();
             try
             {
                 var provider = m_storageService.GetProviderByAccount(account);

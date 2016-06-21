@@ -22,5 +22,10 @@ namespace KeeAnywhere.Configuration
         {
             get { return string.Format("{0} ({1})", Name, Type); }
         }
+
+        public AccountIdentifier GetAccountIdentifier()
+        {
+            return new AccountIdentifier {Name = this.Name, Type = this.Type};
+        }
     }
 }

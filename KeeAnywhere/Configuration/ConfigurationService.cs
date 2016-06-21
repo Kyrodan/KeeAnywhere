@@ -192,8 +192,8 @@ namespace KeeAnywhere.Configuration
         {
             var account = this.Accounts.FirstOrDefault(_ => _.Type == type && _.Name == name);
 
-            if (account == null)
-                throw new InvalidOperationException(string.Format("Account '{0}' for type '{1}' not found.", name, type));
+            //if (account == null)
+            //    throw new InvalidOperationException(string.Format("Account '{0}' for type '{1}' not found.", name, type));
 
             return account;
         }
