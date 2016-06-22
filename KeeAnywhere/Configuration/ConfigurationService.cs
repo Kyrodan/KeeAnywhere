@@ -87,15 +87,22 @@ namespace KeeAnywhere.Configuration
             credentialSet.Load();
             var credentials = credentialSet.FindAll(c => c.Target.StartsWith(CredentialsStore_TargetPrefix));
 
-            var accountsQuery = credentials.Select(c => new AccountConfiguration
+            StorageType type;
+            var filterQuery = credentials.Where(c => Enum.TryParse(GetCredentialTypeAsString(c), out type));
+            var accountsQuery = filterQuery.Select(c => new AccountConfiguration
             {
-                Type = (StorageType)Enum.Parse(typeof(StorageType), c.Target.Substring(c.Target.IndexOf('.') + 1, (c.Target.IndexOf(':') - c.Target.IndexOf('.') - 1))),
+                Type = (StorageType)Enum.Parse(typeof(StorageType), GetCredentialTypeAsString(c)),
                 Name = c.Target.Substring(c.Target.IndexOf(':') + 1),
                 Id = c.Username,
                 Secret = c.Password,
             });
 
             this.Accounts = accountsQuery.ToList();
+        }
+
+        private static string GetCredentialTypeAsString(Credential c)
+        {
+            return c.Target.Substring(c.Target.IndexOf('.') + 1, (c.Target.IndexOf(':') - c.Target.IndexOf('.') - 1));
         }
 
         private void LoadPluginConfiguration()
