@@ -260,5 +260,17 @@ namespace KeeAnywhere.Forms
 
             account.Name = name;
         }
+
+        private async void OnAccountCheck(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in m_lvAccounts.SelectedItems)
+            {
+                var account = item.Tag as AccountConfiguration;
+                if (account == null) continue;
+
+                await m_uiService.CheckOrUpdateAccount(account);
+            }
+
+        }
     }
 }
