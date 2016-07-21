@@ -16,6 +16,7 @@ Supported providers (in alphabetical order):
 * [Getting Started](https://github.com/Kyrodan/KeeAnywhere/wiki/Getting-Started)
 * [FAQ](https://github.com/Kyrodan/KeeAnywhere/wiki/FAQ)
 * [Contributing](https://github.com/Kyrodan/KeeAnywhere/wiki/Contributing)
+* [What's new?](CHANGELOG.md)
 
 # Prerequisites
 * KeePass 2.31 or newer
