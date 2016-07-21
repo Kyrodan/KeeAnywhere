@@ -93,7 +93,8 @@ namespace KeeAnywhere.WebRequest
             {
                 var stream = Task.Run(async () => await _provider.Load(_itemPath));
 
-                _response = new KeeAnywhereWebResponse(stream.Result);
+                var wrappeedStream = new WrapperStream(stream.Result); // Issue #44: Sometimes can't load kdbx file (Dropbox, hubiC)
+                _response = new KeeAnywhereWebResponse(wrappeedStream);
             }
 
             return _response;

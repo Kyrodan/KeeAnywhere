@@ -9,6 +9,7 @@
 ### Fixed
 
 - \#32 hubiC: Save with a full path name in a non-existent folder works but could not be reopened bug
+- \#44 Sometimes can't load kdbx file (Dropbox, hubiC)
 
 ## 1.1.0 (2016-06-15)
 
