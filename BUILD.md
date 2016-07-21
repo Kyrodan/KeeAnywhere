@@ -12,6 +12,7 @@ When preparing for a new release the last steps before merging *develop* to *mas
 
 * KeeAnywhere\Properties\AssemblyInfo.cs
 * build.cmd
+* CHANGELOG.md
 * version_manifest.txt (change only for production releases)
 
 After merging *develop* to *master* change version in *develop* to **next** unstable version (e. g. 0.2.0-unstable) - just to make clear ths is a development snapshot and generally not released to public.
