@@ -11,6 +11,9 @@ namespace KeeAnywhere.Configuration
         [DataMember]
         public AccountStorageLocation AccountStorageLocation { get; set; }
 
+        [DataMember]
+        public AccountIdentifier FilePickerLastUsedAccount { get; set; }
+
         public PluginConfiguration()
         {
             this.IsOfflineCacheEnabled = true;

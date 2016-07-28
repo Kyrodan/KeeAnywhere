@@ -52,6 +52,7 @@
             this.m_lblAboutHeader = new System.Windows.Forms.Label();
             this.m_btnOK = new System.Windows.Forms.Button();
             this.m_btnCancel = new System.Windows.Forms.Button();
+            this.m_btnAccountCheck = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).BeginInit();
             this.m_tcSettings.SuspendLayout();
             this.m_tabAccounts.SuspendLayout();
@@ -84,6 +85,7 @@
             // 
             // m_tabAccounts
             // 
+            this.m_tabAccounts.Controls.Add(this.m_btnAccountCheck);
             this.m_tabAccounts.Controls.Add(this.m_btnAccountAdd);
             this.m_tabAccounts.Controls.Add(this.m_btnAccountRemove);
             this.m_tabAccounts.Controls.Add(this.m_lvAccounts);
@@ -310,6 +312,17 @@
             this.m_btnCancel.UseVisualStyleBackColor = true;
             this.m_btnCancel.Click += new System.EventHandler(this.OnBtnCancelClick);
             // 
+            // m_btnAccountCheck
+            // 
+            this.m_btnAccountCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnAccountCheck.Location = new System.Drawing.Point(490, 96);
+            this.m_btnAccountCheck.Name = "m_btnAccountCheck";
+            this.m_btnAccountCheck.Size = new System.Drawing.Size(75, 23);
+            this.m_btnAccountCheck.TabIndex = 12;
+            this.m_btnAccountCheck.Text = "Check";
+            this.m_btnAccountCheck.UseVisualStyleBackColor = true;
+            this.m_btnAccountCheck.Click += new System.EventHandler(this.OnAccountCheck);
+            // 
             // SettingsForm
             // 
             this.AcceptButton = this.m_btnOK;
@@ -366,5 +379,6 @@
         private System.Windows.Forms.ContextMenuStrip m_mnuAdd;
         private DropDownButton m_btnAccountAdd;
         private System.Windows.Forms.ImageList m_imlProviderIcons;
+        private System.Windows.Forms.Button m_btnAccountCheck;
     }
 }

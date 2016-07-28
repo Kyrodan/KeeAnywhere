@@ -126,6 +126,7 @@
     <Compile Include="BrowserHelper.cs" />
     <Compile Include="CloudPath.cs" />
     <Compile Include="Configuration\AccountConfiguration.cs" />
+    <Compile Include="Configuration\AccountIdentifier.cs" />
     <Compile Include="Configuration\PluginConfiguration.cs" />
     <Compile Include="Configuration\ConfigurationService.cs" />
     <Compile Include="Configuration\AccountStorageLocation.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="WebRequest\KeeAnywhereWebRequest.cs" />
     <Compile Include="WebRequest\KeeAnywhereWebRequestCreator.cs" />
     <Compile Include="WebRequest\RequestStream.cs" />
+    <Compile Include="WebRequest\WrapperStream.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\CloudDriveFilePicker.resx">

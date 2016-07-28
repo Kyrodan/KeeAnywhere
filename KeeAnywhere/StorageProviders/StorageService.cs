@@ -26,6 +26,9 @@ namespace KeeAnywhere.StorageProviders
 
             var accountName = uri.GetAccountName();
             var account = _configService.FindAccount(descriptor.Type, accountName);
+            if (account == null)
+                throw new InvalidOperationException(string.Format("Account '{0}' for type '{1}' not found.", accountName, descriptor.Type));
+
             var provider = descriptor.ProviderFactory(account);
 
             return provider;

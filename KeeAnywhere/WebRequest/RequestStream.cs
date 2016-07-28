@@ -6,7 +6,7 @@ using KeePassLib.Native;
 
 namespace KeeAnywhere.WebRequest
 {
-    class RequestStream : Stream
+    internal class RequestStream : Stream
     {
         private readonly KeeAnywhereWebRequest request;
 
