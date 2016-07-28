@@ -1,3 +1,10 @@
+## 1.3.0 (unreleased)
+
+### New
+
+### Fixed
+
+
 ## 1.2.0 (2016-07-28)
 
 ### New
@@ -10,6 +17,7 @@
 
 - \#32 hubiC: Save with a full path name in a non-existent folder works but could not be reopened bug
 - \#44 Sometimes can't load kdbx file (Dropbox, hubiC)
+
 
 ## 1.1.0 (2016-06-15)
 
@@ -27,13 +35,16 @@
 - \#19 "Help me choose" help link incorrect bug
 
 
+
 ## 1.0.0 (2016-01-28)
 
 First production ready release
 
+
 ## 0.2.0-alpha (2015-12-19)
 
 Second Alpha-Release
+
 
 ## 0.1.0-alpha (2015-12-06)
 
