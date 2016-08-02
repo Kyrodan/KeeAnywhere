@@ -1,9 +1,10 @@
 ## 1.3.0 (unreleased)
 
 ### New
+- \#10 Access to Amazon Cloud Drive
 
 ### Fixed
-
+- \#42 After Updating to 1.2.0 account type is wrong, if using KeePass Configuration as Storage Location
 
 ## 1.2.0 (2016-07-28)
 
