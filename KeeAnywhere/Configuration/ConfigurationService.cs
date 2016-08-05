@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using CredentialManagement;
 using KeeAnywhere.StorageProviders;
@@ -12,8 +13,8 @@ namespace KeeAnywhere.Configuration
 {
     public class ConfigurationService
     {
+        private const string ConfigurationKey_LastUsedPluginVersion = "KeeAnywhere.LastUsedPluginVersion";
         private const string ConfigurationKey_Plugin = "KeeAnywhere.Plugin";
-        private const string ConfigurationKey_Databases = "KeeAnywhere.Databases";
         private const string ConfigurationKey_Accounts = "KeeAnywhere.Accounts";
 
         private const string CredentialsStore_TargetPrefix = "KeeAnywhere";
@@ -23,6 +24,10 @@ namespace KeeAnywhere.Configuration
         public PluginConfiguration PluginConfiguration { get; private set; }
 
         public IList<AccountConfiguration> Accounts { get; private set; }
+
+        public Version LastUsedPluginVersion { get; private set; }
+
+        public Version CurrentPluginVersion { get { return Assembly.GetExecutingAssembly().GetName().Version; } }
 
         public bool IsLoaded { get; private set; }
 
@@ -36,6 +41,8 @@ namespace KeeAnywhere.Configuration
         public void Load()
         {
             if (IsLoaded) return;
+
+            this.LastUsedPluginVersion = LoadLastUsedPluginVersion();
 
             LoadPluginConfiguration();
 
@@ -57,6 +64,21 @@ namespace KeeAnywhere.Configuration
             IsLoaded = true;
         }
 
+        private Version LoadLastUsedPluginVersion()
+        {
+            var lastUsedPluginVersionString = _pluginHost.CustomConfig.GetString(ConfigurationKey_LastUsedPluginVersion);
+            if (string.IsNullOrEmpty(lastUsedPluginVersionString)) return null;
+
+            try
+            {
+                return new Version(lastUsedPluginVersionString);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         private void LoadAccountsFromDisk()
         {
             var configString = _pluginHost.CustomConfig.GetString(ConfigurationKey_Accounts);
@@ -65,6 +87,9 @@ namespace KeeAnywhere.Configuration
             {
                 try
                 {
+                    if (this.LastUsedPluginVersion == null || this.LastUsedPluginVersion < new Version(1, 3))
+                        configString = MigrateAccountTo130(configString);
+
                     this.Accounts = JsonConvert.DeserializeObject<IList<AccountConfiguration>>(configString);
                 }
                 catch (JsonSerializationException)
@@ -79,6 +104,29 @@ namespace KeeAnywhere.Configuration
             {
                 this.Accounts = new List<AccountConfiguration>();
             }
+        }
+
+        private string MigratePluginConfigurationTo130(string configString)
+        {
+            var s = configString;
+            s = s.Replace("\"AccountStorageLocation\":0", "\"AccountStorageLocation\":\"KeePassConfig\"");
+            s = s.Replace("\"AccountStorageLocation\":1", "\"AccountStorageLocation\":\"WindowsCredentialManager\"");
+
+            s = MigrateAccountTo130(s); // For Last Used Account
+
+            return s;
+        }
+
+        private string MigrateAccountTo130(string configString)
+        {
+            var s = configString;
+            s = s.Replace("\"Type\":0", "\"Type\":\"Dropbox\"");
+            s = s.Replace("\"Type\":1", "\"Type\":\"DropboxRestricted\"");
+            s = s.Replace("\"Type\":2", "\"Type\":\"GoogleDrive\"");
+            s = s.Replace("\"Type\":3", "\"Type\":\"HubiC\"");
+            s = s.Replace("\"Type\":4", "\"Type\":\"OneDrive\"");
+
+            return s;
         }
 
         private void LoadAccountsFromWindowsCredentialManager()
@@ -113,6 +161,9 @@ namespace KeeAnywhere.Configuration
             {
                 try
                 {
+                    if (this.LastUsedPluginVersion == null || this.LastUsedPluginVersion < new Version(1, 3))
+                        configString = MigratePluginConfigurationTo130(configString);
+
                     this.PluginConfiguration = JsonConvert.DeserializeObject<PluginConfiguration>(configString);
                 }
                 catch (JsonSerializationException)
@@ -148,6 +199,13 @@ namespace KeeAnywhere.Configuration
                 default:
                     throw new NotImplementedException(string.Format("RefreshTokeStorage {0} not implemented.", PluginConfiguration.AccountStorageLocation));
             }
+
+            SaveLastUsedPluginVersion();
+        }
+
+        private void SaveLastUsedPluginVersion()
+        {
+            _pluginHost.CustomConfig.SetString(ConfigurationKey_LastUsedPluginVersion, this.CurrentPluginVersion.ToString());
         }
 
         private void SaveAccountsToWindowsCredentialManager()
