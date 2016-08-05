@@ -1,4 +1,7 @@
+using System;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace KeeAnywhere.Configuration
 {
@@ -9,6 +12,7 @@ namespace KeeAnywhere.Configuration
         public bool IsOfflineCacheEnabled { get; set; }
 
         [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
         public AccountStorageLocation AccountStorageLocation { get; set; }
 
         [DataMember]
