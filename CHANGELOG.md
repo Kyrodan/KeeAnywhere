@@ -3,7 +3,13 @@
 ### New
 
 ### Fixed
+
 - \#49 After Updating to 1.2.0 account type is wrong, if using KeePass Configuration as Storage Location
+
+
+### Changed
+
+- \#2 Replace currently used OneDrive client with the official one
 
 ## 1.2.0 (2016-07-28)
 

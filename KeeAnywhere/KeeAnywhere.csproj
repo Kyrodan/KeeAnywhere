@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KeeAnywhere</RootNamespace>
     <AssemblyName>KeeAnywhere</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -75,12 +75,28 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\KeePass.exe</HintPath>
     </Reference>
-    <Reference Include="KoenZomers.OneDrive.Api, Version=1.5.0.4, Culture=neutral, PublicKeyToken=c94340d84666bdcb, processorArchitecture=MSIL">
-      <HintPath>..\packages\KoenZomers.OneDrive.Api.1.5.0.4\lib\KoenZomers.OneDrive.Api.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Graph.Core, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Graph.Core.1.1.1\lib\portable45-net45+win8+wpa81\Microsoft.Graph.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=2.21.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.21.301221612\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms, Version=2.21.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.21.301221612\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.OneDrive.Sdk, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OneDriveSDK.2.0.0\lib\portable-net45+netcore45+wpa81+win8\Microsoft.OneDrive.Sdk.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.OneDrive.Sdk.Authentication.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OneDriveSDK.Authentication.1.0.0\lib\net451\Microsoft.OneDrive.Sdk.Authentication.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -190,12 +206,7 @@
     <Compile Include="StorageProviders\HubiC\SwiftObject.cs" />
     <Compile Include="StorageProviders\IStorageConfigurator.cs" />
     <Compile Include="StorageProviders\IStorageProvider.cs" />
-    <Compile Include="StorageProviders\OneDrive\OneDriveAuthenticationForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="StorageProviders\OneDrive\OneDriveAuthenticationForm.Designer.cs">
-      <DependentUpon>OneDriveAuthenticationForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="StorageProviders\OneDrive\OneDriveAuthenticationProvider.cs" />
     <Compile Include="StorageProviders\OneDrive\OneDriveStorageConfigurator.cs" />
     <Compile Include="StorageProviders\StorageDescriptor.cs" />
     <Compile Include="StorageProviders\StorageProviderExtensions.cs" />
@@ -233,10 +244,6 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StorageProviders\OneDrive\OneDriveAuthenticationForm.resx">
-      <DependentUpon>OneDriveAuthenticationForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -277,7 +284,7 @@
       <Prerequisites>
         <KeePassVersion>2.31</KeePassVersion>
         <OS>Windows</OS>
-        <DotNetVersion>4.5</DotNetVersion>
+        <DotNetVersion>4.5.1</DotNetVersion>
       </Prerequisites>
     </PlgxConfiguration>
   </PropertyGroup>
