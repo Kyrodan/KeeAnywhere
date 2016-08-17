@@ -2,6 +2,8 @@
 
 ### New
 
+- \#11 Access to box
+
 ### Fixed
 
 - \#49 After Updating to 1.2.0 account type is wrong, if using KeePass Configuration as Storage Location
