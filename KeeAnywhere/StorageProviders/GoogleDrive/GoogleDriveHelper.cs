@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Security.Policy;
-using System.Text;
-using System.Threading;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
-using Google.Apis.Util.Store;
 using KeeAnywhere.Configuration;
 
 namespace KeeAnywhere.StorageProviders.GoogleDrive
 {
-    static class GoogleDriveHelper
+    public static class GoogleDriveHelper
     {
         /*
           The consumer key and the secret key included here are dummy keys.
@@ -35,32 +29,50 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         internal const string GoogleDriveClientId = "dummy";
         internal const string GoogleDriveClientSecret = "dummy";
 
+
         internal const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob:auto";
+        internal const string LogoutUri = "https://accounts.google.com/Logout?continue={0}";
+        internal static string[] Scopes = { DriveService.Scope.Drive };
+        internal static IAuthorizationCodeFlow AuthFlow;
+
+        static GoogleDriveHelper()
+        {
+            var flowInitializer = new GoogleAuthorizationCodeFlow.Initializer
+            {
+                ClientSecrets = new ClientSecrets
+                {
+                    ClientId = GoogleDriveClientId,
+                    ClientSecret = GoogleDriveClientSecret
+                },
+                Scopes = Scopes,
+            };
+
+            AuthFlow = new GoogleAuthorizationCodeFlow(flowInitializer);
+        }
 
         public static async Task<DriveService> GetClient(AccountConfiguration account)
         {
-            var credentials = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                new ClientSecrets()
-                {
-                    ClientId = GoogleDriveClientId,
-                    ClientSecret = GoogleDriveClientSecret,
-                },
-                new []{ DriveService.Scope.Drive }, 
-                account.Id, 
-                CancellationToken.None,
-                new AccountDataStore(account)
-                );
+            return await GetClient(new TokenResponse { RefreshToken = account.Secret } );
+        }
 
-            var initializer = new BaseClientService.Initializer()
+        public static async Task<DriveService> GetClient(TokenResponse token)
+        {
+            var credentials = new UserCredential(
+               AuthFlow,
+               null,
+               token);
+
+            var driveInitializer = new BaseClientService.Initializer
             {
                 HttpClientInitializer = credentials,
                 ApplicationName = "KeeAnywhere",
             };
 
-            var client = new DriveService(initializer);
+            var client = new DriveService(driveInitializer);
 
             return client;
         }
+
         public static async Task<File> GetFileByPath(this DriveService api, string path)
         {
             var parts = path.Split('/');
@@ -80,60 +92,6 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             }
 
             return file;
-        }
-    }
-
-    public class AccountDataStore : IDataStore
-    {
-        private readonly AccountConfiguration _account;
-        private TokenResponse _token;
-
-        public AccountDataStore(AccountConfiguration account)
-        {
-            if (account == null) throw new ArgumentNullException("account");
-            _account = account;
-        }
-
-        public async Task StoreAsync<T>(string key, T value)
-        {
-            _token = value as TokenResponse;
-            if (_token != null)
-            {
-                _account.Secret = _token.RefreshToken;
-            }
-
-            //return TaskEx.Delay(0);
-        }
-
-        public async Task DeleteAsync<T>(string key)
-        {
-            _account.Secret = null;
-            //return TaskEx.Delay(0);
-        }
-
-        public Task<T> GetAsync<T>(string key)
-        {
-            var completionSource = new TaskCompletionSource<T>();
-
-            var i = Activator.CreateInstance<T>();
-            var token = i as TokenResponse;
-            if (token == null)
-            {
-                completionSource.SetResult(default(T));
-                return completionSource.Task;
-            }
-
-            token.RefreshToken = _account.Secret;
-
-            completionSource.SetResult(i);
-
-            return completionSource.Task;
-        }
-
-        public async Task ClearAsync()
-        {
-            _account.Secret = null;
-            // return TaskEx.Delay(0);
         }
     }
 }
