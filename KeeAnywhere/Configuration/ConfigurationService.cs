@@ -143,6 +143,8 @@ namespace KeeAnywhere.Configuration
                 Name = c.Target.Substring(c.Target.IndexOf(':') + 1),
                 Id = c.Username,
                 Secret = c.Password,
+                AdditionalSettings = !string.IsNullOrEmpty(c.Description) ? JsonConvert.DeserializeObject<Dictionary<string, string>>(c.Description) : null
+
             });
 
             this.Accounts = accountsQuery.ToList();
@@ -218,7 +220,8 @@ namespace KeeAnywhere.Configuration
                     Username =  a.Id,
                     Password = a.Secret,
                     PersistanceType = PersistanceType.LocalComputer,
-                    Type = CredentialType.Generic
+                    Type = CredentialType.Generic,
+                    Description = a.AdditionalSettings != null ? JsonConvert.SerializeObject(a.AdditionalSettings) : null
                 });
 
             var credentials = credentialsQuery.ToArray();

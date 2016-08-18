@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using KeeAnywhere.StorageProviders.AmazonS3;
 using KeeAnywhere.StorageProviders.Box;
 using KeeAnywhere.StorageProviders.Dropbox;
 using KeeAnywhere.StorageProviders.GoogleDrive;
@@ -12,6 +13,7 @@ namespace KeeAnywhere.StorageProviders
         public static IEnumerable<StorageDescriptor> Descriptors = new[]
         {
             // Preserve sort order: ascending!
+            new StorageDescriptor(StorageType.AmazonS3, "Amazon S3", "s3", account => new AmazonS3StorageProvider(account), () => new AmazonS3StorageConfigurator(), PluginResources.AmazonS3_16x16),
             new StorageDescriptor(StorageType.Box, "Box", "box", account => new BoxStorageProvider(account), () => new BoxStorageConfigurator(), PluginResources.Box_16x16),
             new StorageDescriptor(StorageType.Dropbox, "Dropbox", "dropbox", account => new DropboxStorageProvider(account), () => new DropboxStorageConfigurator(false), PluginResources.Dropbox_16x16),
             new StorageDescriptor(StorageType.DropboxRestricted, "Dropbox-Restricted", "dropbox-r", account => new DropboxStorageProvider(account), () => new DropboxStorageConfigurator(true), PluginResources.Dropbox_16x16),

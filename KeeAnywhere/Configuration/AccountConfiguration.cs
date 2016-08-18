@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using KeeAnywhere.StorageProviders;
 using Newtonsoft.Json;
@@ -20,6 +21,9 @@ namespace KeeAnywhere.Configuration
 
         [DataMember]
         public string Secret { get; set; }
+
+        [DataMember]
+        public Dictionary<string, string> AdditionalSettings { get; set; }
 
         public string DisplayName
         {

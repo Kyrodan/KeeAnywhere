@@ -35,6 +35,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.Core.3.1.10.0\lib\net45\AWSSDK.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AWSSDK.S3, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.S3.3.1.9.0\lib\net45\AWSSDK.S3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
       <Private>True</Private>
@@ -215,6 +223,15 @@
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorageProviders\AmazonS3\AmazonS3AccountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StorageProviders\AmazonS3\AmazonS3AccountForm.Designer.cs">
+      <DependentUpon>AmazonS3AccountForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StorageProviders\AmazonS3\AmazonS3Helper.cs" />
+    <Compile Include="StorageProviders\AmazonS3\AmazonS3StorageConfigurator.cs" />
+    <Compile Include="StorageProviders\AmazonS3\AmazonS3StorageProvider.cs" />
     <Compile Include="StorageProviders\Box\BoxHelper.cs" />
     <Compile Include="StorageProviders\Box\BoxStorageConfigurator.cs" />
     <Compile Include="StorageProviders\Box\BoxStorageProvider.cs" />
@@ -274,6 +291,9 @@
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="StorageProviders\AmazonS3\AmazonS3AccountForm.resx">
+      <DependentUpon>AmazonS3AccountForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -294,6 +314,7 @@
     <None Include="Resources\OneDrive_16x16.png" />
     <None Include="Resources\Dropbox_16x16.png" />
     <None Include="Resources\Box_16x16.png" />
+    <None Include="Resources\AmazonS3_16x16.png" />
     <Content Include="Resources\Folder_16x16.png" />
     <None Include="Resources\GoogleDrive_16x16.png" />
     <None Include="Resources\HubiC_16x16.png" />
@@ -301,7 +322,9 @@
     <Content Include="Resources\KeeAnywhere_16x16.png" />
     <Content Include="Resources\KeeAnywhere_48x48.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="..\packages\AWSSDK.S3.3.1.9.0\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
