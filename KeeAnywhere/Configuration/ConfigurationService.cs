@@ -205,7 +205,8 @@ namespace KeeAnywhere.Configuration
 
         private void SaveLastUsedPluginVersion()
         {
-            _pluginHost.CustomConfig.SetString(ConfigurationKey_LastUsedPluginVersion, this.CurrentPluginVersion.ToString());
+            this.LastUsedPluginVersion = this.CurrentPluginVersion;
+            _pluginHost.CustomConfig.SetString(ConfigurationKey_LastUsedPluginVersion, this.LastUsedPluginVersion.ToString());
         }
 
         private void SaveAccountsToWindowsCredentialManager()
