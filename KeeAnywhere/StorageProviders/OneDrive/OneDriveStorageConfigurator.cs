@@ -1,33 +1,33 @@
 using System;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.OAuth2;
-using KeePass.UI;
-using KoenZomers.OneDrive.Api;
+using Microsoft.Graph;
+using Microsoft.OneDrive.Sdk.Authentication;
 
 namespace KeeAnywhere.StorageProviders.OneDrive
 {
     public class OneDriveStorageConfigurator : IStorageConfigurator, IOAuth2Provider
     {
-        private OneDriveConsumerApi _api;
-        private string _token;
+        private OAuthHelper _oAuthHelper;
+        private AccountSession _accountSession;
 
         public async Task<AccountConfiguration> CreateAccount()
         {
-            _api = new OneDriveConsumerApi(OneDriveHelper.OneDriveClientId, OneDriveHelper.OneDriveClientSecret);
+            _oAuthHelper = new OAuthHelper();
 
             var isOk = OAuth2Flow.TryAuthenticate(this);
             if (!isOk) return null;
 
-            var drive = await _api.GetDrive();
+            var api = await OneDriveHelper.GetApi(_accountSession);
+            var drive = await api.Drive.Request().GetAsync().ConfigureAwait(false);
 
             var account = new AccountConfiguration
             {
                 Type = StorageType.OneDrive,
                 Name = drive.Owner.User.DisplayName,
-                Id = drive.Id,
-                Secret = _api.AccessToken.RefreshToken
+                Id = drive.Owner.User.Id,
+                Secret = _accountSession.RefreshToken
             };
 
 
@@ -36,19 +36,34 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task Initialize()
         {
-            this.PreAuthorizationUrl = _api.GetSignOutUri();
-            this.AuthorizationUrl = _api.GetAuthenticationUri("wl.offline_access wl.skydrive_update");
+            var url =_oAuthHelper.GetAuthorizationCodeRequestUrl(OneDriveHelper.OneDriveClientId, this.RedirectionUrl.ToString(), OneDriveHelper.Scopes);
+            this.AuthorizationUrl = new Uri(url);
         }
 
         public async Task<bool> Claim(Uri uri, string documentTitle)
         {
-            _token = _api.GetAuthorizationTokenFromUrl(uri.ToString());
-            return (_token != null);
+            var authenticationResponseValues = UrlHelper.GetQueryOptions(uri);
+            OAuthErrorHandler.ThrowIfError(authenticationResponseValues);
+
+            string code;
+            if (authenticationResponseValues != null && authenticationResponseValues.TryGetValue("code", out code))
+            {
+                using (var httpProvider = new HttpProvider())
+                {
+                    _accountSession =
+                        await
+                            _oAuthHelper.RedeemAuthorizationCodeAsync(code, OneDriveHelper.OneDriveClientId,
+                                OneDriveHelper.OneDriveClientSecret, this.RedirectionUrl.ToString(), OneDriveHelper.Scopes,
+                                httpProvider).ConfigureAwait(false);
+                }
+            }
+
+            return (_accountSession != null);
         }
 
         public Uri AuthorizationUrl { get; protected set; }
-        public Uri PreAuthorizationUrl { get; protected set; }
-        public Uri RedirectionUrl { get {return new Uri("https://login.live.com/oauth20_desktop.srf");} }
+        public Uri PreAuthorizationUrl { get { return new Uri(OneDriveHelper.SignOutUrl); } }
+        public Uri RedirectionUrl { get {return new Uri(OneDriveHelper.RedirectionUrl);} }
         public string FriendlyProviderName { get { return "OneDrive"; } }
     }
 }

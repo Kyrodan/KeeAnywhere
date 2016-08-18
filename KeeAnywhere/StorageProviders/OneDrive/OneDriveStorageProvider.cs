@@ -4,15 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
-using KoenZomers.OneDrive.Api;
-using KoenZomers.OneDrive.Api.Entities;
+using Microsoft.OneDrive.Sdk;
 
 namespace KeeAnywhere.StorageProviders.OneDrive
 {
     public class OneDriveStorageProvider : IStorageProvider
     {
         private readonly AccountConfiguration _account;
-        private OneDriveConsumerApi _api;
 
         public OneDriveStorageProvider(AccountConfiguration account)
         {
@@ -22,10 +20,15 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task<Stream> Load(string path)
         {
-            var api = await GetApi();
+            var api = await OneDriveHelper.GetApi(_account);
 
             var escapedpath = Uri.EscapeDataString(path);
-            var stream = await api.DownloadItem(escapedpath);
+            var stream = await api.Drive
+                                    .Root
+                                    .ItemWithPath(escapedpath)
+                                    .Content
+                                    .Request()
+                                    .GetAsync();
 
             return stream;
         }
@@ -33,20 +36,24 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task<bool> Save(Stream stream, string path)
         {
-            var api = await GetApi();
+            var api = await OneDriveHelper.GetApi(_account);
 
-            var directory = Uri.EscapeDataString(CloudPath.GetDirectoryName(path));
-            var filename = Uri.EscapeDataString(CloudPath.GetFileName(path));
+            var escapedpath = Uri.EscapeDataString(path);
 
-            var uploadedItem = await api.UploadFileAs(stream, filename, directory);
+            var uploadedItem = await api.Drive
+                        .Root
+                        .ItemWithPath(escapedpath)
+                        .Content
+                        .Request()
+                        .PutAsync<Item>(stream);
 
             return uploadedItem != null;
         }
 
         public async Task<StorageProviderItem> GetRootItem()
         {
-            var api = await GetApi();
-            var odItem = await api.GetDriveRoot();
+            var api = await OneDriveHelper.GetApi(_account);
+            var odItem = await api.Drive.Root.Request().GetAsync();
 
             if (odItem == null)
                 return null;
@@ -60,11 +67,12 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             if (parent == null) throw new ArgumentNullException("parent");
 
-            var api = await GetApi();
-            var odChildren = await api.GetChildrenByParentItem(new OneDriveItem {Id = parent.Id});
+            var api = await OneDriveHelper.GetApi(_account);
+
+            var odChildren = await api.Drive.Items[parent.Id].Children.Request().GetAsync();
 
             var children =
-                odChildren.Collection.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
+                odChildren.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
 
             return children;
         }
@@ -77,11 +85,11 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             return filename.All(c => c >= 32 && !invalidChars.Contains(c));
         }
 
-        protected StorageProviderItem CreateStorageProviderItemFromOneDriveItem(OneDriveItem item)
+        protected StorageProviderItem CreateStorageProviderItemFromOneDriveItem(Item item)
         {
             var providerItem = new StorageProviderItem
             {
-                Type =
+                Type = 
                     item.IsFolder()
                         ? StorageProviderItemType.Folder
                         : (item.IsFile() ? StorageProviderItemType.File : StorageProviderItemType.Unknown),
@@ -92,14 +100,6 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             };
 
             return providerItem;
-        }
-
-        public async Task<OneDriveConsumerApi> GetApi()
-        {
-            if (_api == null)
-                _api = await OneDriveHelper.GetApi(_account.Secret);
-
-            return _api;
         }
     }
 }

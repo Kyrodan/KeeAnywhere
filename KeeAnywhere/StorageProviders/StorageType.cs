@@ -4,6 +4,7 @@ namespace KeeAnywhere.StorageProviders
     {
         // Preserve sort order: ascending!
         AmazonDrive,
+        Box,
         Dropbox,
         DropboxRestricted,
         GoogleDrive,

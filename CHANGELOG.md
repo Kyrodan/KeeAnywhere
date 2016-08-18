@@ -2,9 +2,17 @@
 
 ### New
 - \#10 Access to Amazon Cloud Drive
+- \#11 Access to Box
 
 ### Fixed
+
 - \#49 After Updating to 1.2.0 account type is wrong, if using KeePass Configuration as Storage Location
+- \#14 Google Drive: Registering new account takes place in default browser
+
+### Improved
+
+- \#2 Replace currently used OneDrive client with the official one
+- Updated Provider Client Libraries to latest Versions and .Net 4.5.1
 
 ## 1.2.0 (2016-07-28)
 
