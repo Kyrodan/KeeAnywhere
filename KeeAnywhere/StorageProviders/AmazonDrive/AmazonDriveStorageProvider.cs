@@ -1,4 +1,4 @@
-﻿using Amazon = Azi.Amazon.CloudDrive;
+﻿using ACD = Azi.Amazon.CloudDrive;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,18 +12,18 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
     public class AmazonDriveStorageProvider : IStorageProvider
     {
         private readonly AccountConfiguration account;
-        private Amazon.IAmazonDrive _api;
+        private ACD.IAmazonDrive _api;
 
         public AmazonDriveStorageProvider(AccountConfiguration account)
         {
             this.account = account;
         }
 
-        protected async Task<Amazon.IAmazonDrive> GetApi()
+        protected async Task<ACD.IAmazonDrive> GetApi()
         {
             if (_api == null)
             {
-                _api = new Amazon.AmazonDrive(AmazonDriveHelper.AmazonDriveClientId, AmazonDriveHelper.AmazonDriveClientSecret);
+                _api = new ACD.AmazonDrive(AmazonDriveHelper.AmazonDriveClientId, AmazonDriveHelper.AmazonDriveClientSecret);
                 var isOk = await _api.AuthenticationByTokens(null, this.account.Secret, DateTime.Now);
 
                 if (!isOk)

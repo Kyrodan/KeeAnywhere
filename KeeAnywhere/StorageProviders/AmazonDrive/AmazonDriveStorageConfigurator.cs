@@ -1,4 +1,4 @@
-﻿using Amazon = Azi.Amazon.CloudDrive;
+﻿using ACD = Azi.Amazon.CloudDrive;
 using System;
 using System.Threading.Tasks;
 using System.Web;
@@ -7,14 +7,14 @@ using KeeAnywhere.OAuth2;
 
 namespace KeeAnywhere.StorageProviders.AmazonDrive
 {
-    public class AmazonDriveStorageConfigurator : IStorageConfigurator, IOAuth2Provider, Amazon.ITokenUpdateListener
+    public class AmazonDriveStorageConfigurator : IStorageConfigurator, IOAuth2Provider, ACD.ITokenUpdateListener
     {
-        private readonly Amazon.IAmazonDrive _api;
+        private readonly ACD.IAmazonDrive _api;
         private OAuth2Token _token;
 
         public AmazonDriveStorageConfigurator()
         {
-            _api = new Amazon.AmazonDrive(AmazonDriveHelper.AmazonDriveClientId, AmazonDriveHelper.AmazonDriveClientSecret);
+            _api = new ACD.AmazonDrive(AmazonDriveHelper.AmazonDriveClientId, AmazonDriveHelper.AmazonDriveClientSecret);
             _api.OnTokenUpdate = this;
         }
 
@@ -60,7 +60,7 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
         public Uri PreAuthorizationUrl { get { return null; }  }
 
         public Uri AuthorizationUrl {
-            get { return new Uri(_api.BuildLoginUrl(this.RedirectionUrl.ToString(), Amazon.CloudDriveScopes.ReadOther | Amazon.CloudDriveScopes.Write)); }
+            get { return new Uri(_api.BuildLoginUrl(this.RedirectionUrl.ToString(), ACD.CloudDriveScopes.ReadOther | ACD.CloudDriveScopes.Write)); }
         }
 
         public Uri RedirectionUrl { get { return new Uri("http://localhost/auth_redirection"); } }

@@ -3,6 +3,7 @@
 ### New
 - \#10 Access to Amazon Cloud Drive
 - \#11 Access to Box
+- \#26 AWS S3 support
 
 ### Fixed
 
