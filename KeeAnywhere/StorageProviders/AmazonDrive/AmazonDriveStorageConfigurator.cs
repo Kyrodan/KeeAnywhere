@@ -24,12 +24,12 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
 
             if (!isOk) return null;
 
-            var amazonAccount = _api.Account;
+            var profile = await _api.Profile.GetProfile();
 
             var account = new AccountConfiguration()
             {
-                Id = "amzn",
-                Name = "Amazon Account",
+                Id = profile.user_id,
+                Name = profile.name,
                 Type = StorageType.AmazonDrive,
                 Secret = _token.RefreshToken,
             };
@@ -39,6 +39,10 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
 
         public async Task Initialize()
         {
+            var loginUri = _api.BuildLoginUrl(this.RedirectionUrl.ToString(),
+                ACD.CloudDriveScopes.ReadOther | ACD.CloudDriveScopes.Write | ACD.CloudDriveScopes.Profile);
+
+            this.AuthorizationUrl = new Uri(loginUri);
         }
 
         public async Task<bool> Claim(Uri uri, string documentTitle)
@@ -59,9 +63,7 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
 
         public Uri PreAuthorizationUrl { get { return null; }  }
 
-        public Uri AuthorizationUrl {
-            get { return new Uri(_api.BuildLoginUrl(this.RedirectionUrl.ToString(), ACD.CloudDriveScopes.ReadOther | ACD.CloudDriveScopes.Write)); }
-        }
+        public Uri AuthorizationUrl { get; protected set; }
 
         public Uri RedirectionUrl { get { return new Uri("http://localhost/auth_redirection"); } }
 
