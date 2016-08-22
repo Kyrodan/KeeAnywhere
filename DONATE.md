@@ -29,9 +29,9 @@ You can switch to english language in the upper toolbar. Please fill in my E-Mai
 
 ## BitCoin
 
-Send me BitCoins to Address `1G3ybP13mRdJhMX6wySWMH4JYEErNXfwMm`
+Send me Bitcoins to Address `1G3ybP13mRdJhMX6wySWMH4JYEErNXfwMm`
 
-![QR Code](https://blockchain.info/de/qr?data=1G3ybP13mRdJhMX6wySWMH4JYEErNXfwMm&size=100 "QR Code")
+![Bitcoin QR Code](https://blockchain.info/de/qr?data=1G3ybP13mRdJhMX6wySWMH4JYEErNXfwMm&size=100)
 
 ## Bank Transfer 
 E-Mail me at [daniel@boelts.de](mailto:daniel@boelts.de) for my IBAN and BIC.
