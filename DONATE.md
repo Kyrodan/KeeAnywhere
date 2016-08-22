@@ -27,7 +27,7 @@ Gift Cards can be found [here](https://www.amazon.de/Amazon-Gutschein-per-E-Mail
 You can switch to english language in the upper toolbar. Please fill in my E-Mail-Address `daniel@boelts.de` in field "An" (= "To").
 
 
-## BitCoin
+## Bitcoin
 
 Send me Bitcoins to Address `1G3ybP13mRdJhMX6wySWMH4JYEErNXfwMm`
 
