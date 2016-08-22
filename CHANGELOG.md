@@ -4,6 +4,7 @@
 - \#10 Access to Amazon Cloud Drive
 - \#11 Access to Box
 - \#26 AWS S3 support
+- Possibility to donate
 
 ### Fixed
 
@@ -13,6 +14,7 @@
 ### Improved
 
 - \#2 Replace currently used OneDrive client with the official one
+- \#51 Improve Authorization Dialog
 - Updated Provider Client Libraries to latest Versions and .Net 4.5.1
 
 ## 1.2.0 (2016-07-28)

@@ -170,12 +170,6 @@ namespace KeeAnywhere.Forms
             m_cbOfflineCache.Checked = m_configService.PluginConfiguration.IsOfflineCacheEnabled;
         }
 
-        private void OnHelpMeChooseAccountStorage(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki/Getting-Started#which-account-storage-location-should-i-choose");
-        }
-
-
         private async void OnAccountAdd(object sender, EventArgs e)
         {
             var item = sender as ToolStripMenuItem;
@@ -198,14 +192,44 @@ namespace KeeAnywhere.Forms
             UpdateAccountList();
         }
 
-        private void OnReportBug(object sender, LinkLabelLinkClickedEventArgs e)
+        private void OnWhatsNew(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md");
+        }
+
+        private void OnReportBug(object sender, EventArgs e)
         {
             Process.Start("https://github.com/Kyrodan/KeeAnywhere/issues");
         }
 
-        private void OnContactAuthor(object sender, LinkLabelLinkClickedEventArgs e)
+        private void OnContactAuthor(object sender, EventArgs e)
         {
             Process.Start("https://github.com/Kyrodan");
+        }
+
+        private void OnDonate(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/blob/master/DONATE.md");
+        }
+
+        private void OnHomepage(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere");
+        }
+
+        private void OnDocumentation(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki");
+        }
+
+        private void OnHelpMeChooseAccountStorage(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki/Getting-Started#which-account-storage-location-should-i-choose");
+        }
+
+        private void OnLicense(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE");
         }
 
         private void OnAfterLabelEdit(object sender, LabelEditEventArgs e)
@@ -272,5 +296,7 @@ namespace KeeAnywhere.Forms
             }
 
         }
+
+       
     }
 }

@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
+using KeeAnywhere.Forms;
 using KeeAnywhere.StorageProviders;
+using KeePass.UI;
 using KeePassLib.Utility;
 
 namespace KeeAnywhere
@@ -86,6 +88,22 @@ namespace KeeAnywhere
                 account.Secret = newAccount.Secret;
                 MessageService.ShowInfo("Re-Authorization succeeded!");
             }
+        }
+
+        public void ShowDonationDialog()
+        {
+            var lastShown = _configService.PluginConfiguration.DonationDialogLastShown;
+            var isUpgraded = _configService.LastUsedPluginVersion != _configService.CurrentPluginVersion;
+
+            if (!isUpgraded && (lastShown == DateTime.MaxValue || lastShown.AddMonths(1) > DateTime.Today))
+                return;
+
+            var dlg = new DonationForm();
+            UIUtil.ShowDialogAndDestroy(dlg);
+
+            _configService.PluginConfiguration.DonationDialogLastShown = dlg.IsDontShowMessageAgain
+                ? DateTime.MaxValue
+                : DateTime.Today;
         }
     }
 }

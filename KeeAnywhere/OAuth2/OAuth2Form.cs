@@ -71,6 +71,9 @@ namespace KeeAnywhere.OAuth2
                 return;
             }
 
+            m_pnlWait.Visible = true;
+            m_browser.Visible = false;
+
             try
             {
                 var isOk = await m_provider.Claim(e.Url, m_browser.DocumentTitle);

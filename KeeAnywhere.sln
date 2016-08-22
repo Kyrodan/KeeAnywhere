@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{4CC0AA8D-734
 	ProjectSection(SolutionItems) = preProject
 		BUILD.md = BUILD.md
 		CHANGELOG.md = CHANGELOG.md
+		DONATE.md = DONATE.md
 		README.md = README.md
 		version_manifest.txt = version_manifest.txt
 	EndProjectSection
