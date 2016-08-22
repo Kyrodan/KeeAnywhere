@@ -18,10 +18,15 @@ namespace KeeAnywhere.Configuration
         [DataMember]
         public AccountIdentifier FilePickerLastUsedAccount { get; set; }
 
+        [DataMember]
+        public DateTime DonationDialogLastShown { get; set; }
+
+
         public PluginConfiguration()
         {
             this.IsOfflineCacheEnabled = true;
             this.AccountStorageLocation = AccountStorageLocation.WindowsCredentialManager;
+            this.DonationDialogLastShown = DateTime.MinValue;
         }
     }
 }

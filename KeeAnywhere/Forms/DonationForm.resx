@@ -117,22 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="m_mnuAdd.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="m_imlProviderIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>131, 17</value>
-  </metadata>
-  <data name="m_lblAboutExplanation.Text" xml:space="preserve">
-    <value>This KeePass plugin allows you to open and save databases from one or multiple cloud drive accounts (OneDrive, Dropbox, Google Drive, etc.). It is inspired by KeePassOneDriveSync by Koen Zomers, which therefore was inspired by KeeSkyDrive by Oleksandr Senyuk. It is free to use and open source. Please leave these credits in place if you decide to use my source code. Feel free to contact me in case of questions or suggestions.
+  <data name="label1.Text" xml:space="preserve">
+    <value>If you like KeeAnywhere, why not spend me a beer? Or just drop me line and say "Thank you, I like your work"? This is something you might do if we meet in real life. In anonymous internet where everything is for free, it got uncommon to appreciate someones work in such a simple way. 
 
-Daniel Bölts
-</value>
+I do not want to earn money with KeeAnywhere. And I continue to provide KeeAnywhere for free. But it would give me a great pleasure to welcome your tribute.
+
+Regards,
+Daniel Bölts</value>
   </data>
-  <metadata name="m_mnuHelp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>289, 17</value>
-  </metadata>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>101</value>
-  </metadata>
 </root>

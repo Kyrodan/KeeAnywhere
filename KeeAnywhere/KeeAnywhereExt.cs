@@ -156,6 +156,8 @@ namespace KeeAnywhere
             // First usage: register new account
             if (!HasAccounts()) return;
 
+            _uiService.ShowDonationDialog();
+
             var form = new CloudDriveFilePicker();
             form.InitEx(_configService, _storageService, CloudDriveFilePicker.Mode.Save);
             var result = UIUtil.ShowDialogAndDestroy(form);
@@ -174,6 +176,8 @@ namespace KeeAnywhere
         {
             // First usage: register new account
             if (!HasAccounts()) return;
+
+            _uiService.ShowDonationDialog();
 
             var form = new CloudDriveFilePicker();
             form.InitEx(_configService, _storageService, CloudDriveFilePicker.Mode.Open);
@@ -252,6 +256,7 @@ namespace KeeAnywhere
 
         private void OnShowSetting(object sender, EventArgs e)
         {
+            _uiService.ShowDonationDialog();
             var form = new SettingsForm();
             form.InitEx(_configService, _uiService);
             UIUtil.ShowDialogAndDestroy(form);

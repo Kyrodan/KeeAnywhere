@@ -19,6 +19,7 @@ Supported providers (in alphabetical order):
 * [FAQ](https://github.com/Kyrodan/KeeAnywhere/wiki/FAQ)
 * [Contributing](https://github.com/Kyrodan/KeeAnywhere/wiki/Contributing)
 * [What's new?](CHANGELOG.md)
+* [Donate](DONATE.md)
 
 # Prerequisites
 * KeePass 2.31 or newer
@@ -28,7 +29,6 @@ Supported providers (in alphabetical order):
 
 # Known noteworthy issues:
 * Registering a Dropbox account on Windows 7 opens the default browser at the end of the registration process. This window/tab could be ignored/closed.
-* Registration process for Google Drive takes place in default browser. At the end of the registration process an error occures: this does not interfere with KeeAnywhere. Just close the browser window/tab.  
 
 
 # Building

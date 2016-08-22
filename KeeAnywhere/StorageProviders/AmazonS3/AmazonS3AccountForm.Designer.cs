@@ -169,6 +169,8 @@
             this.Controls.Add(this.m_btnCancel);
             this.Controls.Add(this.m_bannerImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AmazonS3AccountForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Amazon S3 Account Configuration";

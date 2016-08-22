@@ -185,6 +185,12 @@
     <Compile Include="Forms\CloudDriveFilePicker.Designer.cs">
       <DependentUpon>CloudDriveFilePicker.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DonationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DonationForm.Designer.cs">
+      <DependentUpon>DonationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DropDownButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -275,6 +281,9 @@
     <EmbeddedResource Include="Forms\CloudDriveFilePicker.resx">
       <DependentUpon>CloudDriveFilePicker.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DonationForm.resx">
+      <DependentUpon>DonationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImagedComboBox\ItemImagesContainer.resx">
       <DependentUpon>ItemImagesContainer.cs</DependentUpon>

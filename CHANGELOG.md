@@ -4,6 +4,7 @@
 
 - \#11 Access to box
 - \#26 AWS S3 support
+- Possibility to donate
 
 ### Fixed
 
