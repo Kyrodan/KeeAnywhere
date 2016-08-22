@@ -165,6 +165,7 @@
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Threading.Tasks">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -181,9 +182,13 @@
     <Compile Include="CloudPath.cs" />
     <Compile Include="Configuration\AccountConfiguration.cs" />
     <Compile Include="Configuration\AccountIdentifier.cs" />
+    <Compile Include="Configuration\ConfigurationServiceKeePassConfig.cs" />
+    <Compile Include="Configuration\ConfigurationServiceLocalSecureStore.cs" />
+    <Compile Include="Configuration\ConfigurationServiceWindowsCredentialManager.cs" />
     <Compile Include="Configuration\PluginConfiguration.cs" />
     <Compile Include="Configuration\ConfigurationService.cs" />
     <Compile Include="Configuration\AccountStorageLocation.cs" />
+    <Compile Include="Configuration\ConfigurationMigration.cs" />
     <Compile Include="Forms\CloudDriveFilePicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -218,6 +223,8 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IconHelper.cs" />
+    <Compile Include="Json\JsonEncryptAttribute.cs" />
+    <Compile Include="Json\ProtectedDataStringPropertyResolver.cs" />
     <Compile Include="KeeAnywhereExt.cs" />
     <Compile Include="OAuth2\IOAuth2Provider.cs" />
     <Compile Include="OAuth2\OAuth2Flow.cs" />

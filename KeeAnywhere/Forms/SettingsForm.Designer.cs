@@ -41,7 +41,7 @@
             this.m_imlProviderIcons = new System.Windows.Forms.ImageList(this.components);
             this.lnklblHelpMeChooseAccountStorage = new System.Windows.Forms.LinkLabel();
             this.m_rbStorageLocation_Disk = new System.Windows.Forms.RadioButton();
-            this.m_rbStorageLocation_WindowsCredentialManager = new System.Windows.Forms.RadioButton();
+            this.m_rbStorageLocation_LocalUserSecureStore = new System.Windows.Forms.RadioButton();
             this.lblAccountStorageLocation = new System.Windows.Forms.Label();
             this.m_tabGeneral = new System.Windows.Forms.TabPage();
             this.m_cbOfflineCache = new System.Windows.Forms.CheckBox();
@@ -101,7 +101,7 @@
             this.m_tabAccounts.Controls.Add(this.m_lvAccounts);
             this.m_tabAccounts.Controls.Add(this.lnklblHelpMeChooseAccountStorage);
             this.m_tabAccounts.Controls.Add(this.m_rbStorageLocation_Disk);
-            this.m_tabAccounts.Controls.Add(this.m_rbStorageLocation_WindowsCredentialManager);
+            this.m_tabAccounts.Controls.Add(this.m_rbStorageLocation_LocalUserSecureStore);
             this.m_tabAccounts.Controls.Add(this.lblAccountStorageLocation);
             this.m_tabAccounts.Location = new System.Drawing.Point(4, 22);
             this.m_tabAccounts.Name = "m_tabAccounts";
@@ -196,16 +196,16 @@
             this.m_rbStorageLocation_Disk.Text = "KeePass Configuration";
             this.m_rbStorageLocation_Disk.UseVisualStyleBackColor = true;
             // 
-            // m_rbStorageLocation_WindowsCredentialManager
+            // m_rbStorageLocation_LocalUserSecureStore
             // 
-            this.m_rbStorageLocation_WindowsCredentialManager.AutoSize = true;
-            this.m_rbStorageLocation_WindowsCredentialManager.Location = new System.Drawing.Point(100, 7);
-            this.m_rbStorageLocation_WindowsCredentialManager.Name = "m_rbStorageLocation_WindowsCredentialManager";
-            this.m_rbStorageLocation_WindowsCredentialManager.Size = new System.Drawing.Size(164, 17);
-            this.m_rbStorageLocation_WindowsCredentialManager.TabIndex = 1;
-            this.m_rbStorageLocation_WindowsCredentialManager.TabStop = true;
-            this.m_rbStorageLocation_WindowsCredentialManager.Text = "Windows Credential Manager";
-            this.m_rbStorageLocation_WindowsCredentialManager.UseVisualStyleBackColor = true;
+            this.m_rbStorageLocation_LocalUserSecureStore.AutoSize = true;
+            this.m_rbStorageLocation_LocalUserSecureStore.Location = new System.Drawing.Point(100, 7);
+            this.m_rbStorageLocation_LocalUserSecureStore.Name = "m_rbStorageLocation_LocalUserSecureStore";
+            this.m_rbStorageLocation_LocalUserSecureStore.Size = new System.Drawing.Size(141, 17);
+            this.m_rbStorageLocation_LocalUserSecureStore.TabIndex = 1;
+            this.m_rbStorageLocation_LocalUserSecureStore.TabStop = true;
+            this.m_rbStorageLocation_LocalUserSecureStore.Text = "Local User Secure Store";
+            this.m_rbStorageLocation_LocalUserSecureStore.UseVisualStyleBackColor = true;
             // 
             // lblAccountStorageLocation
             // 
@@ -440,7 +440,7 @@
         private System.Windows.Forms.Label m_lblAboutExplanation;
         private System.Windows.Forms.Label m_lblAboutHeader;
         private System.Windows.Forms.RadioButton m_rbStorageLocation_Disk;
-        private System.Windows.Forms.RadioButton m_rbStorageLocation_WindowsCredentialManager;
+        private System.Windows.Forms.RadioButton m_rbStorageLocation_LocalUserSecureStore;
         private System.Windows.Forms.Label lblAccountStorageLocation;
         private System.Windows.Forms.LinkLabel lnklblHelpMeChooseAccountStorage;
         private System.Windows.Forms.ListView m_lvAccounts;

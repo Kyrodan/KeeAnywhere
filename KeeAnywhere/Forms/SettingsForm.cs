@@ -42,8 +42,8 @@ namespace KeeAnywhere.Forms
             // General Settings
             m_configService.PluginConfiguration.IsOfflineCacheEnabled = m_cbOfflineCache.Checked;
 
-            if (m_rbStorageLocation_WindowsCredentialManager.Checked)
-                m_configService.PluginConfiguration.AccountStorageLocation = AccountStorageLocation.WindowsCredentialManager;
+            if (m_rbStorageLocation_LocalUserSecureStore.Checked)
+                m_configService.PluginConfiguration.AccountStorageLocation = AccountStorageLocation.LocalUserSecureStore;
             else if (m_rbStorageLocation_Disk.Checked)
                 m_configService.PluginConfiguration.AccountStorageLocation = AccountStorageLocation.KeePassConfig;
             else
@@ -104,8 +104,8 @@ namespace KeeAnywhere.Forms
         {
             switch (m_configService.PluginConfiguration.AccountStorageLocation)
             {
-                case AccountStorageLocation.WindowsCredentialManager:
-                    m_rbStorageLocation_WindowsCredentialManager.Checked = true;
+                case AccountStorageLocation.LocalUserSecureStore:
+                    m_rbStorageLocation_LocalUserSecureStore.Checked = true;
                     break;
                 case AccountStorageLocation.KeePassConfig:
                     m_rbStorageLocation_Disk.Checked = true;
@@ -127,7 +127,7 @@ namespace KeeAnywhere.Forms
             m_lvAccounts.Columns.Add("Type");
 #if DEBUG
             m_lvAccounts.Columns.Add("ID");
-            m_lvAccounts.Columns.Add("Refresh Token");
+            m_lvAccounts.Columns.Add("Secret");
 #endif
 
             UIUtil.ResizeColumns(m_lvAccounts, new int[] {

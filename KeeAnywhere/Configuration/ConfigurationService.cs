@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using CredentialManagement;
 using KeeAnywhere.StorageProviders;
 using KeePass.Plugins;
 using KeePassLib.Utility;
@@ -11,13 +9,10 @@ using Newtonsoft.Json;
 
 namespace KeeAnywhere.Configuration
 {
-    public class ConfigurationService
+    public partial class ConfigurationService
     {
         private const string ConfigurationKey_LastUsedPluginVersion = "KeeAnywhere.LastUsedPluginVersion";
         private const string ConfigurationKey_Plugin = "KeeAnywhere.Plugin";
-        private const string ConfigurationKey_Accounts = "KeeAnywhere.Accounts";
-
-        private const string CredentialsStore_TargetPrefix = "KeeAnywhere";
 
         private readonly IPluginHost _pluginHost;
 
@@ -49,20 +44,62 @@ namespace KeeAnywhere.Configuration
             switch (PluginConfiguration.AccountStorageLocation)
             {
                 case AccountStorageLocation.KeePassConfig:
-                    LoadAccountsFromDisk();
+                    LoadAccountsFromKeePassConfig();
                     break;
 
                 case AccountStorageLocation.WindowsCredentialManager:
                     LoadAccountsFromWindowsCredentialManager();
+                    this.PluginConfiguration.AccountStorageLocation = AccountStorageLocation.LocalUserSecureStore;
+
+                    MessageService.ShowWarning(
+                        "KeeAnywhere Plugin:",
+                        "Account Storage Location 'Windows Credential Manager' is deprecated since plugin version 1.3.0.",
+                        "Changed configuration to use new default 'Local User Secure Store'."
+                        );
+
+                    break;
+
+                case AccountStorageLocation.LocalUserSecureStore:
+                    LoadAccountsFromLocalSecureStore();
                     break;
 
                 default:
                     throw new NotImplementedException(string.Format("AccountStorageLocation {0} not implemented.", PluginConfiguration.AccountStorageLocation));
             }
 
+            if (this.Accounts == null)
+                this.Accounts = new List<AccountConfiguration>();
 
             IsLoaded = true;
         }
+
+        public void Save()
+        {
+            if (!IsLoaded) return;
+
+            SavePluginConfiguration();
+
+            switch (PluginConfiguration.AccountStorageLocation)
+            {
+                case AccountStorageLocation.KeePassConfig:
+                    SaveAccountsToKeePassConfig();
+                    break;
+
+                case AccountStorageLocation.WindowsCredentialManager:
+                    SaveAccountsToWindowsCredentialManager();
+                    break;
+
+                case AccountStorageLocation.LocalUserSecureStore:
+                    SaveAccountsToLocalSecureStore();
+                    break;
+
+                default:
+                    throw new NotImplementedException(string.Format("AccountStorageLocation {0} not implemented.", PluginConfiguration.AccountStorageLocation));
+            }
+
+            SaveLastUsedPluginVersion();
+        }
+
 
         private Version LoadLastUsedPluginVersion()
         {
@@ -79,80 +116,10 @@ namespace KeeAnywhere.Configuration
             }
         }
 
-        private void LoadAccountsFromDisk()
+        private void SaveLastUsedPluginVersion()
         {
-            var configString = _pluginHost.CustomConfig.GetString(ConfigurationKey_Accounts);
-
-            if (!string.IsNullOrEmpty(configString))
-            {
-                try
-                {
-                    if (this.LastUsedPluginVersion == null || this.LastUsedPluginVersion < new Version(1, 3))
-                        configString = MigrateAccountTo130(configString);
-
-                    this.Accounts = JsonConvert.DeserializeObject<IList<AccountConfiguration>>(configString);
-                }
-                catch (JsonSerializationException)
-                {
-                    MessageService.ShowWarning(
-                        "Unable to parse the plugin configuration for the KeeAnywhere plugin. If this happens again, please let me know. Sorry for the inconvinience. Koen Zomers <mail@koenzomers.nl>",
-                        "KeeAnywhere Plugin");
-                }
-            }
-
-            if (Accounts == null)
-            {
-                this.Accounts = new List<AccountConfiguration>();
-            }
-        }
-
-        private string MigratePluginConfigurationTo130(string configString)
-        {
-            var s = configString;
-            s = s.Replace("\"AccountStorageLocation\":0", "\"AccountStorageLocation\":\"KeePassConfig\"");
-            s = s.Replace("\"AccountStorageLocation\":1", "\"AccountStorageLocation\":\"WindowsCredentialManager\"");
-
-            s = MigrateAccountTo130(s); // For Last Used Account
-
-            return s;
-        }
-
-        private string MigrateAccountTo130(string configString)
-        {
-            var s = configString;
-            s = s.Replace("\"Type\":0", "\"Type\":\"Dropbox\"");
-            s = s.Replace("\"Type\":1", "\"Type\":\"DropboxRestricted\"");
-            s = s.Replace("\"Type\":2", "\"Type\":\"GoogleDrive\"");
-            s = s.Replace("\"Type\":3", "\"Type\":\"HubiC\"");
-            s = s.Replace("\"Type\":4", "\"Type\":\"OneDrive\"");
-
-            return s;
-        }
-
-        private void LoadAccountsFromWindowsCredentialManager()
-        {
-            var credentialSet = new CredentialSet();
-            credentialSet.Load();
-            var credentials = credentialSet.FindAll(c => c.Target.StartsWith(CredentialsStore_TargetPrefix));
-
-            StorageType type;
-            var filterQuery = credentials.Where(c => Enum.TryParse(GetCredentialTypeAsString(c), out type));
-            var accountsQuery = filterQuery.Select(c => new AccountConfiguration
-            {
-                Type = (StorageType)Enum.Parse(typeof(StorageType), GetCredentialTypeAsString(c)),
-                Name = c.Target.Substring(c.Target.IndexOf(':') + 1),
-                Id = c.Username,
-                Secret = c.Password,
-                AdditionalSettings = !string.IsNullOrEmpty(c.Description) ? JsonConvert.DeserializeObject<Dictionary<string, string>>(c.Description) : null
-
-            });
-
-            this.Accounts = accountsQuery.ToList();
-        }
-
-        private static string GetCredentialTypeAsString(Credential c)
-        {
-            return c.Target.Substring(c.Target.IndexOf('.') + 1, (c.Target.IndexOf(':') - c.Target.IndexOf('.') - 1));
+            this.LastUsedPluginVersion = this.CurrentPluginVersion;
+            _pluginHost.CustomConfig.SetString(ConfigurationKey_LastUsedPluginVersion, this.LastUsedPluginVersion.ToString());
         }
 
         private void LoadPluginConfiguration()
@@ -164,15 +131,15 @@ namespace KeeAnywhere.Configuration
                 try
                 {
                     if (this.LastUsedPluginVersion == null || this.LastUsedPluginVersion < new Version(1, 3))
-                        configString = MigratePluginConfigurationTo130(configString);
+                        configString = configString.MigratePluginConfigurationTo130();
 
                     this.PluginConfiguration = JsonConvert.DeserializeObject<PluginConfiguration>(configString);
                 }
                 catch (JsonSerializationException)
                 {
                     MessageService.ShowWarning(
-                        "Unable to parse the plugin configuration for the KeeAnywhere plugin. If this happens again, please let me know. Sorry for the inconvinience. Koen Zomers <mail@koenzomers.nl>",
-                        "KeeAnywhere Plugin");
+                        "KeeAnywhere Plugin:",
+                        "Unable to parse the plugin configuration for the KeeAnywhere plugin.");
                 }
             }
 
@@ -180,75 +147,6 @@ namespace KeeAnywhere.Configuration
             {
                 this.PluginConfiguration = new PluginConfiguration();
             }
-        }
-
-        public void Save()
-        {
-            if (!IsLoaded) return;
-
-            SavePluginConfiguration();
-
-            switch (PluginConfiguration.AccountStorageLocation)
-            {
-                case AccountStorageLocation.KeePassConfig:
-                    SaveAccountsToDisk();
-                    break;
-
-                case AccountStorageLocation.WindowsCredentialManager:
-                    SaveAccountsToWindowsCredentialManager();
-                    break;
-
-                default:
-                    throw new NotImplementedException(string.Format("RefreshTokeStorage {0} not implemented.", PluginConfiguration.AccountStorageLocation));
-            }
-
-            SaveLastUsedPluginVersion();
-        }
-
-        private void SaveLastUsedPluginVersion()
-        {
-            this.LastUsedPluginVersion = this.CurrentPluginVersion;
-            _pluginHost.CustomConfig.SetString(ConfigurationKey_LastUsedPluginVersion, this.LastUsedPluginVersion.ToString());
-        }
-
-        private void SaveAccountsToWindowsCredentialManager()
-        {
-            var credentialsQuery =
-                this.Accounts.Select(a => new Credential
-                {
-                    Target = string.Format("{0}.{1}:{2}", CredentialsStore_TargetPrefix, a.Type, a.Name),
-                    Username =  a.Id,
-                    Password = a.Secret,
-                    PersistanceType = PersistanceType.LocalComputer,
-                    Type = CredentialType.Generic,
-                    Description = a.AdditionalSettings != null ? JsonConvert.SerializeObject(a.AdditionalSettings) : null
-                });
-
-            var credentials = credentialsQuery.ToArray();
-
-
-            // Save changed credentials to Credential Store
-            foreach (var credential in credentials)
-            {
-                credential.Save();
-            }
-
-
-            // Remove deleted credentials from Credential Store
-            var credentialSet = new CredentialSet();
-            credentialSet.Load();
-            var credentialsToDelete = credentialSet.FindAll(toDelete => toDelete.Target.StartsWith(CredentialsStore_TargetPrefix) && credentials.All(_ => toDelete.Target != _.Target));
-            foreach (var credential in credentialsToDelete)
-            {
-                credential.Delete();
-            }
-
-        }
-
-        private void SaveAccountsToDisk()
-        {
-            var configString = JsonConvert.SerializeObject(this.Accounts);
-            _pluginHost.CustomConfig.SetString(ConfigurationKey_Accounts, configString);
         }
 
         private void SavePluginConfiguration()
@@ -266,5 +164,6 @@ namespace KeeAnywhere.Configuration
 
             return account;
         }
+
     }
 }

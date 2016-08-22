@@ -11,8 +11,14 @@ namespace KeeAnywhere.Configuration
         KeePassConfig = 0,
 
         /// <summary>
+        /// DEPRECATED since 1.3.0
         /// Saves the accounts encrypted in the Windows Credential Manager
         /// </summary>
         WindowsCredentialManager = 1,
+
+        /// <summary>
+        /// Saves the accounts encrypted for current user on local machine
+        /// </summary>
+        LocalUserSecureStore = 2
     }
 }
