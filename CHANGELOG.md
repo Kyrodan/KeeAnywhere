@@ -8,8 +8,9 @@
 
 ### Fixed
 
-- \#49 After Updating to 1.2.0 account type is wrong, if using KeePass Configuration as Storage Location
 - \#14 Google Drive: Registering new account takes place in default browser
+- \#49 After Updating to 1.2.0 account type is wrong, if using KeePass Configuration as Storage Location
+- \#50 Long Refresh Tokens cause exception when saving in Windows Credential Store
 
 ### Improved
 
