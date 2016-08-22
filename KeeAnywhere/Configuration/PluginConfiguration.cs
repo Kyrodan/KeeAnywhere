@@ -25,7 +25,7 @@ namespace KeeAnywhere.Configuration
         public PluginConfiguration()
         {
             this.IsOfflineCacheEnabled = true;
-            this.AccountStorageLocation = AccountStorageLocation.WindowsCredentialManager;
+            this.AccountStorageLocation = AccountStorageLocation.LocalUserSecureStore;
             this.DonationDialogLastShown = DateTime.MinValue;
         }
     }
