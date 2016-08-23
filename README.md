@@ -25,7 +25,7 @@ Supported providers (in alphabetical order):
 # Prerequisites
 * KeePass 2.31 or newer
 * Windows 7 or newer
-* .Net Framework 4.5
+* .Net Framework 4.5.1 or newer
 
 
 # Known noteworthy issues:
