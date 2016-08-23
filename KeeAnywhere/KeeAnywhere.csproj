@@ -35,6 +35,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AmazonCloudDriveApi, Version=1.2.5.29289, Culture=neutral, PublicKeyToken=04c0977977f105bc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\AmazonCloudDriveApi.dll</HintPath>
+    </Reference>
     <Reference Include="AWSSDK.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.Core.3.1.10.0\lib\net45\AWSSDK.Core.dll</HintPath>
       <Private>True</Private>
@@ -165,6 +169,7 @@
     <Reference Include="System.Threading.Tasks">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Threading.Tasks.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Zlib.Portable">
@@ -236,6 +241,9 @@
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StorageProviders\AmazonDrive\AmazonDriveHelper.cs" />
+    <Compile Include="StorageProviders\AmazonDrive\AmazonDriveStorageConfigurator.cs" />
+    <Compile Include="StorageProviders\AmazonDrive\AmazonDriveStorageProvider.cs" />
     <Compile Include="StorageProviders\AmazonS3\AmazonS3AccountForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -329,6 +337,7 @@
   <ItemGroup>
     <None Include="Resources\OneDrive_16x16.png" />
     <None Include="Resources\Dropbox_16x16.png" />
+    <None Include="Resources\AmazonDrive_16x16.png" />
     <None Include="Resources\Box_16x16.png" />
     <None Include="Resources\AmazonS3_16x16.png" />
     <Content Include="Resources\Folder_16x16.png" />
