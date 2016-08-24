@@ -287,6 +287,10 @@ namespace KeeAnywhere.Forms
 
         private async void OnAccountCheck(object sender, EventArgs e)
         {
+            this.UseWaitCursor = true;
+            m_tcSettings.Enabled = false;
+            m_pnlFormButtons.Enabled = false;
+
             foreach (ListViewItem item in m_lvAccounts.SelectedItems)
             {
                 var account = item.Tag as AccountConfiguration;
@@ -295,8 +299,11 @@ namespace KeeAnywhere.Forms
                 await m_uiService.CheckOrUpdateAccount(account);
             }
 
+            m_tcSettings.Enabled = true;
+            m_pnlFormButtons.Enabled = true;
+            this.UseWaitCursor = false;
         }
 
-       
+
     }
 }

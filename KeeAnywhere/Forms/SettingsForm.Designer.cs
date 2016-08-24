@@ -34,7 +34,6 @@
             this.m_tcSettings = new System.Windows.Forms.TabControl();
             this.m_tabAccounts = new System.Windows.Forms.TabPage();
             this.m_btnAccountCheck = new System.Windows.Forms.Button();
-            this.m_btnAccountAdd = new KeeAnywhere.Forms.DropDownButton();
             this.m_mnuAdd = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_btnAccountRemove = new System.Windows.Forms.Button();
             this.m_lvAccounts = new System.Windows.Forms.ListView();
@@ -61,13 +60,16 @@
             this.m_mnuHelp_ContactAuthor = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuHelp_Sep2 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuHelp_Donate = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_pnlFormButtons = new System.Windows.Forms.TableLayoutPanel();
             this.m_btnHelp = new KeeAnywhere.Forms.DropDownButton();
+            this.m_btnAccountAdd = new KeeAnywhere.Forms.DropDownButton();
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).BeginInit();
             this.m_tcSettings.SuspendLayout();
             this.m_tabAccounts.SuspendLayout();
             this.m_tabGeneral.SuspendLayout();
             this.m_tabAbout.SuspendLayout();
             this.m_mnuHelp.SuspendLayout();
+            this.m_pnlFormButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_bannerImage
@@ -121,17 +123,6 @@
             this.m_btnAccountCheck.Text = "Check";
             this.m_btnAccountCheck.UseVisualStyleBackColor = true;
             this.m_btnAccountCheck.Click += new System.EventHandler(this.OnAccountCheck);
-            // 
-            // m_btnAccountAdd
-            // 
-            this.m_btnAccountAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnAccountAdd.Location = new System.Drawing.Point(490, 38);
-            this.m_btnAccountAdd.Menu = this.m_mnuAdd;
-            this.m_btnAccountAdd.Name = "m_btnAccountAdd";
-            this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
-            this.m_btnAccountAdd.TabIndex = 11;
-            this.m_btnAccountAdd.Text = "Add...";
-            this.m_btnAccountAdd.UseVisualStyleBackColor = true;
             // 
             // m_mnuAdd
             // 
@@ -289,7 +280,7 @@
             // 
             this.m_btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.m_btnOK.Location = new System.Drawing.Point(454, 359);
+            this.m_btnOK.Location = new System.Drawing.Point(445, 3);
             this.m_btnOK.Name = "m_btnOK";
             this.m_btnOK.Size = new System.Drawing.Size(75, 23);
             this.m_btnOK.TabIndex = 6;
@@ -301,7 +292,7 @@
             // 
             this.m_btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.m_btnCancel.Location = new System.Drawing.Point(535, 359);
+            this.m_btnCancel.Location = new System.Drawing.Point(526, 3);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(75, 23);
             this.m_btnCancel.TabIndex = 7;
@@ -383,16 +374,47 @@
             this.m_mnuHelp_Donate.Text = "Donate";
             this.m_mnuHelp_Donate.Click += new System.EventHandler(this.OnDonate);
             // 
+            // m_pnlFormButtons
+            // 
+            this.m_pnlFormButtons.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_pnlFormButtons.ColumnCount = 4;
+            this.m_pnlFormButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+            this.m_pnlFormButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.m_pnlFormButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+            this.m_pnlFormButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+            this.m_pnlFormButtons.Controls.Add(this.m_btnHelp, 0, 0);
+            this.m_pnlFormButtons.Controls.Add(this.m_btnOK, 2, 0);
+            this.m_pnlFormButtons.Controls.Add(this.m_btnCancel, 3, 0);
+            this.m_pnlFormButtons.Location = new System.Drawing.Point(8, 359);
+            this.m_pnlFormButtons.Margin = new System.Windows.Forms.Padding(0);
+            this.m_pnlFormButtons.Name = "m_pnlFormButtons";
+            this.m_pnlFormButtons.RowCount = 1;
+            this.m_pnlFormButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.m_pnlFormButtons.Size = new System.Drawing.Size(604, 29);
+            this.m_pnlFormButtons.TabIndex = 9;
+            // 
             // m_btnHelp
             // 
             this.m_btnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.m_btnHelp.Location = new System.Drawing.Point(12, 358);
+            this.m_btnHelp.Location = new System.Drawing.Point(3, 3);
             this.m_btnHelp.Menu = this.m_mnuHelp;
             this.m_btnHelp.Name = "m_btnHelp";
             this.m_btnHelp.Size = new System.Drawing.Size(75, 23);
             this.m_btnHelp.TabIndex = 8;
             this.m_btnHelp.Text = "Help...";
             this.m_btnHelp.UseVisualStyleBackColor = true;
+            // 
+            // m_btnAccountAdd
+            // 
+            this.m_btnAccountAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnAccountAdd.Location = new System.Drawing.Point(490, 38);
+            this.m_btnAccountAdd.Menu = this.m_mnuAdd;
+            this.m_btnAccountAdd.Name = "m_btnAccountAdd";
+            this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
+            this.m_btnAccountAdd.TabIndex = 11;
+            this.m_btnAccountAdd.Text = "Add...";
+            this.m_btnAccountAdd.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -401,9 +423,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
             this.ClientSize = new System.Drawing.Size(622, 397);
-            this.Controls.Add(this.m_btnHelp);
-            this.Controls.Add(this.m_btnOK);
-            this.Controls.Add(this.m_btnCancel);
+            this.Controls.Add(this.m_pnlFormButtons);
             this.Controls.Add(this.m_tcSettings);
             this.Controls.Add(this.m_bannerImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -423,6 +443,7 @@
             this.m_tabGeneral.PerformLayout();
             this.m_tabAbout.ResumeLayout(false);
             this.m_mnuHelp.ResumeLayout(false);
+            this.m_pnlFormButtons.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -461,5 +482,6 @@
         private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_ContactAuthor;
         private System.Windows.Forms.ToolStripSeparator m_mnuHelp_Sep2;
         private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_Donate;
+        private System.Windows.Forms.TableLayoutPanel m_pnlFormButtons;
     }
 }
