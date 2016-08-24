@@ -96,7 +96,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
                 Id = item.Id,
                 Name = item.Name,
                 LastModifiedDateTime = item.LastModifiedDateTime,
-                ParentReferenceId = item.ParentReference != null ? item.ParentReference.Id : null
+                ParentReferenceId = item.ParentReference != null && !string.IsNullOrEmpty(item.ParentReference.Path) ? item.ParentReference.Id : null
             };
 
             return providerItem;

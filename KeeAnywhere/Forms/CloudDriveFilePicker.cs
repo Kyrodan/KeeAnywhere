@@ -412,7 +412,7 @@ namespace KeeAnywhere.Forms
                 if (parent != null)
                     info.Parent = parent;
                 else
-                    throw new NotImplementedException();
+                    throw new InvalidOperationException("Parent of node not found!");
                 //await m_provider.GetItem(item.ParentReference.Id);
             }
 
