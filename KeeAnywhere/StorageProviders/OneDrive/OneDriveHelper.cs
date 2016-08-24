@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
+using Microsoft.Graph;
 using Microsoft.OneDrive.Sdk;
 using Microsoft.OneDrive.Sdk.Authentication;
 
@@ -22,7 +23,6 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         */
 
         //TODO: Change API keys!!!
-
         internal const string OneDriveClientId = "dummy";
         internal const string OneDriveClientSecret = "dummy";
 
@@ -46,7 +46,8 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
             await authProvider.AuthenticateByRefreshTokenAsync(account.Secret);
 
-            var api = new OneDriveClient(ApiUrl, authProvider);
+            var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true);
+            var api = new OneDriveClient(ApiUrl, authProvider, httpProvider);
             Cache.Add(account.Id, api);
             
             return api;
@@ -60,7 +61,8 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
             await authProvider.AuthenticateByAccountSessionAsync(accountSession);
 
-            var api = new OneDriveClient(ApiUrl, authProvider);
+            var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true);
+            var api = new OneDriveClient(ApiUrl, authProvider, httpProvider);
 
             return api;
         }

@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Box.V2;
 using Box.V2.Auth;
 using Box.V2.Config;
+using Box.V2.Converter;
 using Box.V2.Models;
+using Box.V2.Services;
 using KeeAnywhere.Configuration;
 
 namespace KeeAnywhere.StorageProviders.Box
@@ -47,12 +49,29 @@ namespace KeeAnywhere.StorageProviders.Box
             if (Cache.ContainsKey(account.Id)) return Cache[account.Id];
 
             var session = new OAuthSession(null, account.Secret, 0, "bearer");
-            var client = new BoxClient(Config, session);
+
+            var client = GetClient(session);
             client.Auth.SessionAuthenticated += (sender, args) => account.Secret = args.Session.RefreshToken;
 
             session = await client.Auth.RefreshAccessTokenAsync(account.Secret);
             Cache.Add(account.Id, client);
 
+            return client;
+        }
+
+        public static BoxClient GetClient()
+        {
+            return GetClient((OAuthSession)null);
+        }
+
+        public static BoxClient GetClient(OAuthSession session)
+        {
+            var handler = new BoxHttpRequestHandler();
+            var converter = new BoxJsonConverter();
+            var service = new BoxService(handler);
+            var authRepository = new AuthRepository(Config, service, converter, session);
+
+            var client = new BoxClient(Config, converter, handler, service, authRepository);
             return client;
         }
 

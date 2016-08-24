@@ -55,7 +55,7 @@ namespace KeeAnywhere.StorageProviders.Box
             if (string.IsNullOrEmpty(authCode))
                 return false;
 
-            _api = new BoxClient(BoxHelper.Config);
+            _api = BoxHelper.GetClient();
             _token = await _api.Auth.AuthenticateAsync(authCode);
 
             return _token != null && _token.RefreshToken != null && _token.AccessToken != null;

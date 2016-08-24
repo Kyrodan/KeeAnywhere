@@ -68,7 +68,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             var credentials = new BasicAWSCredentials(this.AccessKey, this.SecretKey);
             try
             {
-                using (var api = new AmazonS3Client(credentials, this.AWSRegion))
+                using (var api = AmazonS3Helper.GetApi(credentials, this.AWSRegion))
                 {
                     var buckets = await api.ListBucketsAsync();
                     m_lblTestResult.Text = "Connection succeeded.";

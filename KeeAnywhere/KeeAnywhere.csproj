@@ -254,14 +254,17 @@
     <Compile Include="StorageProviders\AmazonS3\AmazonS3StorageConfigurator.cs" />
     <Compile Include="StorageProviders\AmazonS3\AmazonS3StorageProvider.cs" />
     <Compile Include="StorageProviders\Box\BoxHelper.cs" />
+    <Compile Include="StorageProviders\Box\BoxHttpRequestHandler.cs" />
     <Compile Include="StorageProviders\Box\BoxStorageConfigurator.cs" />
     <Compile Include="StorageProviders\Box\BoxStorageProvider.cs" />
     <Compile Include="StorageProviders\Dropbox\DropboxHelper.cs" />
     <Compile Include="StorageProviders\Dropbox\DropboxStorageConfigurator.cs" />
     <Compile Include="StorageProviders\Dropbox\DropboxStorageProvider.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveHelper.cs" />
+    <Compile Include="StorageProviders\GoogleDrive\GoogleDriveHttpClientFactory.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveStorageConfigurator.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveStorageProvider.cs" />
+    <Compile Include="StorageProviders\ProxyTools.cs" />
     <Compile Include="StorageProviders\HubiC\HubiCAccount.cs" />
     <Compile Include="StorageProviders\HubiC\HubiCCredentials.cs" />
     <Compile Include="StorageProviders\HubiC\HubiCHelper.cs" />

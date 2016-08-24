@@ -5,6 +5,7 @@ using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
+using Google.Apis.Http;
 using Google.Apis.Services;
 using KeeAnywhere.Configuration;
 
@@ -25,7 +26,6 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         */
 
         //TODO: Change API keys!!!
-
         internal const string GoogleDriveClientId = "dummy";
         internal const string GoogleDriveClientSecret = "dummy";
 
@@ -45,6 +45,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
                     ClientSecret = GoogleDriveClientSecret
                 },
                 Scopes = Scopes,
+                HttpClientFactory = new GoogleDriveHttpClientFactory()
             };
 
             AuthFlow = new GoogleAuthorizationCodeFlow(flowInitializer);
@@ -65,6 +66,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             var driveInitializer = new BaseClientService.Initializer
             {
                 HttpClientInitializer = credentials,
+                HttpClientFactory = new GoogleDriveHttpClientFactory(),
                 ApplicationName = "KeeAnywhere",
             };
 

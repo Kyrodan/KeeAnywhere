@@ -22,7 +22,8 @@ namespace KeeAnywhere.StorageProviders.HubiC
 
         private HttpClient GetClient()
         {
-            var client = new HttpClient();
+            var client = ProxyTools.CreateHttpClient();
+
             client.DefaultRequestHeaders.Add("X-Auth-Token", _credentials.Token);
             client.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
             client.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf-8"));

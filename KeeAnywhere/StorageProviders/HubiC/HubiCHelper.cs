@@ -123,7 +123,7 @@ namespace KeeAnywhere.StorageProviders.HubiC
 
         private static HttpClient GetHttpClient(string accessToken)
         {
-            var httpClient = new HttpClient();
+            var httpClient = ProxyTools.CreateHttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             httpClient.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
             httpClient.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf-8"));
@@ -137,7 +137,7 @@ namespace KeeAnywhere.StorageProviders.HubiC
                 throw new ArgumentNullException("code");
             }
 
-            var httpClient = new HttpClient();
+            var httpClient = ProxyTools.CreateHttpClient();
             try
             {
                 var parameters = new Dictionary<string, string>
@@ -178,7 +178,7 @@ namespace KeeAnywhere.StorageProviders.HubiC
                 throw new ArgumentNullException("refreshToken");
             }
 
-            var httpClient = new HttpClient();
+            var httpClient = ProxyTools.CreateHttpClient();
             try
             {
                 var parameters = new Dictionary<string, string>

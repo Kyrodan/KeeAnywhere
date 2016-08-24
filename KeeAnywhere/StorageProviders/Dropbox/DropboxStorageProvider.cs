@@ -24,7 +24,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             get
             {
                 if (_api == null)
-                    _api = new DropboxClient(account.Secret);
+                    _api = DropboxHelper.GetApi(account.Secret);
 
                 return _api;
             }
