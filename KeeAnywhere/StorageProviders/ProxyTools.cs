@@ -28,13 +28,20 @@ namespace KeeAnywhere.StorageProviders
 
         public static void ApplyProxy(this HttpClientHandler handler)
         {
-            var proxy = GetKeePassWebProxy();
+            var proxy = GetProxy();
             if (proxy == null) return;
-
-            proxy.Credentials = GetKeePassProxyCredentials();
 
             handler.UseProxy = true;
             handler.Proxy = proxy;
+        }
+
+        public static IWebProxy GetProxy()
+        {
+            var proxy = GetKeePassWebProxy();
+            if (proxy == null) return null;
+
+            proxy.Credentials = GetKeePassProxyCredentials();
+            return proxy;
         }
 
         public static IWebProxy GetKeePassWebProxy()

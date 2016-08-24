@@ -30,7 +30,6 @@ Supported providers (in alphabetical order):
 
 # Known noteworthy issues:
 * Registering a Dropbox account on Windows 7 opens the default browser at the end of the registration process. This window/tab could be ignored/closed.
-* Amazon Drive Provider does not support Proxy settings
 
 
 # Building

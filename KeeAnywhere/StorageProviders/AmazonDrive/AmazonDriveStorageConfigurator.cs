@@ -14,7 +14,7 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
 
         public AmazonDriveStorageConfigurator()
         {
-            _api = new ACD.AmazonDrive(AmazonDriveHelper.AmazonDriveClientId, AmazonDriveHelper.AmazonDriveClientSecret);
+            _api = AmazonDriveHelper.GetApi();
             _api.OnTokenUpdate = this;
         }
 

@@ -23,7 +23,7 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
         {
             if (_api == null)
             {
-                _api = new ACD.AmazonDrive(AmazonDriveHelper.AmazonDriveClientId, AmazonDriveHelper.AmazonDriveClientSecret);
+                _api = AmazonDriveHelper.GetApi();
                 var isOk = await _api.AuthenticationByTokens(null, this.account.Secret, DateTime.Now);
 
                 if (!isOk)

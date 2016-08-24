@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using ACD = Azi.Amazon.CloudDrive;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Azi.Amazon.CloudDrive.JsonObjects;
@@ -22,9 +23,18 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
        */
 
         //TODO: Change API keys!!!
-
         internal const string AmazonDriveClientId = "dummy";
         internal const string AmazonDriveClientSecret = "dummy";
+
+        public static ACD.AmazonDrive GetApi()
+        {
+            var api = new ACD.AmazonDrive(AmazonDriveClientId, AmazonDriveClientSecret)
+            {
+                Proxy = ProxyTools.GetProxy()
+            };
+
+            return api;
+        }
 
         public static async Task<AmazonNode> GetNodeByPath(this Azi.Amazon.CloudDrive.IAmazonDrive api, string path)
         {
