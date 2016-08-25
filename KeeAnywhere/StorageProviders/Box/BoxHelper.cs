@@ -32,7 +32,7 @@ namespace KeeAnywhere.StorageProviders.Box
         internal const string BoxClientSecret = "dummy";
 
 
-        internal const string RedirectUri = "http://localhost/oauth";
+        internal const string RedirectUri = "https://localhost/oauth";
         internal const int Limit = 500;
 
         internal static BoxConfig Config;
