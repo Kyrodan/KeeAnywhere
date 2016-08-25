@@ -5,6 +5,7 @@
 - \#11 Access to Box
 - \#16 Proxy support (with auth) feature request
 - \#26 AWS S3 support
+- \#52 HiDrive support
 - Possibility to donate
 
 ### Fixed

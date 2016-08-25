@@ -91,6 +91,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\KeePass.exe</HintPath>
     </Reference>
+    <Reference Include="Kyrodan.HiDrive, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Kyrodan.HiDrive.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -264,6 +268,9 @@
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveHttpClientFactory.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveStorageConfigurator.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveStorageProvider.cs" />
+    <Compile Include="StorageProviders\HiDrive\HiDriveHelper.cs" />
+    <Compile Include="StorageProviders\HiDrive\HiDriveStorageConfigurator.cs" />
+    <Compile Include="StorageProviders\HiDrive\HiDriveStorageProvider.cs" />
     <Compile Include="StorageProviders\ProxyTools.cs" />
     <Compile Include="StorageProviders\HubiC\HubiCAccount.cs" />
     <Compile Include="StorageProviders\HubiC\HubiCCredentials.cs" />
@@ -346,6 +353,7 @@
     <Content Include="Resources\Folder_16x16.png" />
     <None Include="Resources\GoogleDrive_16x16.png" />
     <None Include="Resources\HubiC_16x16.png" />
+    <None Include="Resources\HiDrive_16x16.png" />
     <Content Include="Resources\Icon_KeeAnywhere_16x16.ico" />
     <Content Include="Resources\KeeAnywhere_16x16.png" />
     <Content Include="Resources\KeeAnywhere_48x48.png" />

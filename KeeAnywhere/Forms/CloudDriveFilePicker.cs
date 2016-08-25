@@ -321,7 +321,7 @@ namespace KeeAnywhere.Forms
                             break;
                     }
 
-                    lvi.SubItems.Add(child.LastModifiedDateTime.ToString());
+                    lvi.SubItems.Add(child.LastModifiedDateTime.HasValue ? child.LastModifiedDateTime.Value.LocalDateTime.ToString() : null);
                 }
             }
 

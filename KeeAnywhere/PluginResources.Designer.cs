@@ -123,6 +123,16 @@ namespace KeeAnywhere {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap HiDrive_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("HiDrive_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap HubiC_16x16 {
             get {
                 object obj = ResourceManager.GetObject("HubiC_16x16", resourceCulture);

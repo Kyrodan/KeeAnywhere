@@ -9,6 +9,7 @@ namespace KeeAnywhere.StorageProviders
         Dropbox,
         DropboxRestricted,
         GoogleDrive,
+        HiDrive,
         HubiC,
         OneDrive,
     }

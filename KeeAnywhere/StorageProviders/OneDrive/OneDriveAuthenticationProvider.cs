@@ -74,7 +74,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         internal async Task<AccountSession> ProcessCachedAccountSessionAsync(AccountSession accountSession)
         {
-            using (var httpProvider = new HttpProvider())
+            using (var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true))
             {
                 var processedAccountSession = await this.ProcessCachedAccountSessionAsync(accountSession, httpProvider).ConfigureAwait(false);
                 return processedAccountSession;

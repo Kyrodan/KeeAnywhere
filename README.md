@@ -7,6 +7,7 @@ Supported providers (in alphabetical order):
 * Box
 * Dropbox
 * Google Drive
+* HiDrive
 * hubiC
 * OneDrive
 
