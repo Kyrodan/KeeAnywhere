@@ -17,7 +17,7 @@ namespace KeeAnywhere.Configuration
 
             try
             {
-                if (this.LastUsedPluginVersion == null || this.LastUsedPluginVersion < new Version(1, 3))
+                if (this.LastUsedPluginVersion < new Version(1, 3))
                     configString = configString.MigrateAccountTo130();
 
                 this.Accounts = JsonConvert.DeserializeObject<IList<AccountConfiguration>>(configString);

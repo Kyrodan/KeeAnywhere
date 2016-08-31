@@ -26,6 +26,8 @@ namespace KeeAnywhere.Configuration
 
         public bool IsLoaded { get; private set; }
 
+        public bool IsUpgraded { get; private set; }
+
         public ConfigurationService(IPluginHost pluginHost)
         {
             if (pluginHost == null) throw new ArgumentNullException("pluginHost");
@@ -38,6 +40,7 @@ namespace KeeAnywhere.Configuration
             if (IsLoaded) return;
 
             this.LastUsedPluginVersion = LoadLastUsedPluginVersion();
+            this.IsUpgraded = this.LastUsedPluginVersion < this.CurrentPluginVersion;
 
             LoadPluginConfiguration();
 
@@ -104,7 +107,7 @@ namespace KeeAnywhere.Configuration
         private Version LoadLastUsedPluginVersion()
         {
             var lastUsedPluginVersionString = _pluginHost.CustomConfig.GetString(ConfigurationKey_LastUsedPluginVersion);
-            if (string.IsNullOrEmpty(lastUsedPluginVersionString)) return null;
+            if (string.IsNullOrEmpty(lastUsedPluginVersionString)) return new Version(0, 0, 0, 0);
 
             try
             {
@@ -112,7 +115,7 @@ namespace KeeAnywhere.Configuration
             }
             catch (Exception)
             {
-                return null;
+                return new Version(0, 0, 0, 0);
             }
         }
 
@@ -130,7 +133,7 @@ namespace KeeAnywhere.Configuration
             {
                 try
                 {
-                    if (this.LastUsedPluginVersion == null || this.LastUsedPluginVersion < new Version(1, 3))
+                    if (this.LastUsedPluginVersion < new Version(1, 3))
                         configString = configString.MigratePluginConfigurationTo130();
 
                     this.PluginConfiguration = JsonConvert.DeserializeObject<PluginConfiguration>(configString);

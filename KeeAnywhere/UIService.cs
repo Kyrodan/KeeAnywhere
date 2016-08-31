@@ -14,6 +14,8 @@ namespace KeeAnywhere
         private readonly ConfigurationService _configService;
         private readonly StorageService _storageService;
 
+        private bool _donationDialogShowThisUpgradedSession;
+
         public UIService(ConfigurationService configService, StorageService storageService)
         {
             _configService = configService;
@@ -93,7 +95,7 @@ namespace KeeAnywhere
         public void ShowDonationDialog()
         {
             var lastShown = _configService.PluginConfiguration.DonationDialogLastShown;
-            var isUpgraded = _configService.LastUsedPluginVersion != _configService.CurrentPluginVersion;
+            var isUpgraded = _configService.IsUpgraded && !_donationDialogShowThisUpgradedSession;
 
             if (!isUpgraded && (lastShown == DateTime.MaxValue || lastShown.AddMonths(1) > DateTime.Today))
                 return;
@@ -104,6 +106,8 @@ namespace KeeAnywhere
             _configService.PluginConfiguration.DonationDialogLastShown = dlg.IsDontShowMessageAgain
                 ? DateTime.MaxValue
                 : DateTime.Today;
+
+            _donationDialogShowThisUpgradedSession = true;
         }
     }
 }
