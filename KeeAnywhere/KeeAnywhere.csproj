@@ -92,8 +92,8 @@
       <HintPath>..\lib\KeePass.exe</HintPath>
     </Reference>
     <Reference Include="Kyrodan.HiDrive, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Kyrodan.HiDrive.dll</HintPath>
+      <HintPath>..\packages\Kyrodan.HiDriveSDK.0.1.0\lib\portable45-net45+win8+wpa81\Kyrodan.HiDrive.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
