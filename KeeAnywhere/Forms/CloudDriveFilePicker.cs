@@ -156,7 +156,9 @@ namespace KeeAnywhere.Forms
             {
                 if (descriptor == null || (account.Type != descriptor.Type))
                 {
-                    descriptor = StorageRegistry.Descriptors.Single(_ => _.Type == account.Type);
+                    descriptor = StorageRegistry.Descriptors.SingleOrDefault(_ => _.Type == account.Type);
+                    if (descriptor == null)
+                        continue;
 
                     item = new ImageComboBoxItem()
                     {

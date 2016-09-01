@@ -149,6 +149,9 @@ namespace KeeAnywhere.Forms
 
             foreach (var account in m_configService.Accounts.OrderBy(_ => _.Type).ThenBy(_ => _.Name))
             {
+                if (StorageRegistry.Descriptors.All(_ => _.Type != account.Type)) 
+                    continue;
+                
                 var lvi = new ListViewItem(account.Name);
                 var lviNew = m_lvAccounts.Items.Add(lvi);
 

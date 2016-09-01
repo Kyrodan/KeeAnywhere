@@ -2,7 +2,7 @@
 KeeAnywhere is a KeePass plugin that provides access to cloud storage providers (cloud drives). The main goal is to offer a simple UI while integrating deeply into KeePass. This covers all kind of users: novices, experienced and power users.
 
 Supported providers (in alphabetical order):
-* Amazon Drive
+* ~~Amazon Drive~~ (see reason [here](#known-noteworthy-issues))
 * Amazon AWS S3
 * Box
 * Dropbox
@@ -23,14 +23,16 @@ Supported providers (in alphabetical order):
 * [What's new?](CHANGELOG.md)
 * [Donate](DONATE.md)
 
+
 # Prerequisites
 * KeePass 2.31 or newer
 * Windows 7 or newer
 * .Net Framework 4.5.1 or newer
 
 
-# Known noteworthy issues:
-* Registering a Dropbox account on Windows 7 opens the default browser at the end of the registration process. This window/tab could be ignored/closed.
+# Known noteworthy issues
+* Amazon Drive: The support for Amazon Drive is completely implemented and tested. But I'm not allowed to release this because Amazon denied the App Approval Request.
+* Dropbox: Registering a Dropbox account on Windows 7 opens the default browser at the end of the registration process. This window/tab could be ignored/closed.
 
 
 # Building

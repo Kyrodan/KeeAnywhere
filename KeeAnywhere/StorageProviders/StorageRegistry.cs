@@ -15,7 +15,9 @@ namespace KeeAnywhere.StorageProviders
         public static IEnumerable<StorageDescriptor> Descriptors = new[]
         {
             // Preserve sort order: ascending!
+#if DEBUG
             new StorageDescriptor(StorageType.AmazonDrive, "Amazon Drive", "adrive", account => new AmazonDriveStorageProvider(account), () => new AmazonDriveStorageConfigurator(), PluginResources.AmazonDrive_16x16),
+#endif
             new StorageDescriptor(StorageType.AmazonS3, "Amazon S3", "s3", account => new AmazonS3StorageProvider(account), () => new AmazonS3StorageConfigurator(), PluginResources.AmazonS3_16x16),
             new StorageDescriptor(StorageType.Box, "Box", "box", account => new BoxStorageProvider(account), () => new BoxStorageConfigurator(), PluginResources.Box_16x16),
             new StorageDescriptor(StorageType.Dropbox, "Dropbox", "dropbox", account => new DropboxStorageProvider(account), () => new DropboxStorageConfigurator(false), PluginResources.Dropbox_16x16),
