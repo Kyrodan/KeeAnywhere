@@ -1,4 +1,4 @@
-# KeeAnywhere [![GitHub release](https://img.shields.io/github/release/Kyrodan/KeeAnywhere.svg?maxAge=2592000)](https://github.com/Kyrodan/KeeAnywhere) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Kyrodan/KeeAnywhere/master/LICENSE)
+# KeeAnywhere [![GitHub release](https://img.shields.io/github/release/Kyrodan/KeeAnywhere.svg?maxAge=2592000)](https://github.com/Kyrodan/KeeAnywhere/releases/latest) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Kyrodan/KeeAnywhere/master/LICENSE)
 KeeAnywhere is a KeePass plugin that provides access to cloud storage providers (cloud drives). The main goal is to offer a simple UI while integrating deeply into KeePass. This covers all kind of users: novices, experienced and power users.
 
 Supported providers (in alphabetical order):
