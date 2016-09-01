@@ -1,4 +1,4 @@
-## 1.3.0 (unreleased)
+## 1.3.0 (2016-09-01)
 
 ### New
 - \#10 Access to Amazon Cloud Drive
@@ -19,6 +19,7 @@
 - \#2 Replace currently used OneDrive client with the official one
 - \#51 Improve Authorization Dialog
 - Updated Provider Client Libraries to latest Versions and .Net 4.5.1
+
 
 ## 1.2.0 (2016-07-28)
 
