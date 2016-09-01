@@ -1,5 +1,9 @@
+using System.Collections.Generic;
 using System.Runtime.Serialization;
+using KeeAnywhere.Json;
 using KeeAnywhere.StorageProviders;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace KeeAnywhere.Configuration
 {
@@ -10,13 +14,18 @@ namespace KeeAnywhere.Configuration
         public string Id { get; set; }
 
         [DataMember]
+        [JsonConverter(typeof(StringEnumConverter))]
         public StorageType Type { get; set; }
 
         [DataMember]
         public string Name { get; set; }
 
         [DataMember]
+        [JsonEncrypt]
         public string Secret { get; set; }
+
+        [DataMember]
+        public Dictionary<string, string> AdditionalSettings { get; set; }
 
         public string DisplayName
         {

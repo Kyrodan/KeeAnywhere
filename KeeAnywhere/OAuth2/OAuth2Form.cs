@@ -71,6 +71,9 @@ namespace KeeAnywhere.OAuth2
                 return;
             }
 
+            m_pnlWait.Visible = true;
+            m_browser.Visible = false;
+
             try
             {
                 var isOk = await m_provider.Claim(e.Url, m_browser.DocumentTitle);
@@ -90,7 +93,7 @@ namespace KeeAnywhere.OAuth2
 
         public Exception LastException { get; set; }
 
-        private async void OnNavigating(object sender, WebBrowserNavigatingEventArgs e)
+        private void OnNavigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             Debug.WriteLine("Navigating " + e.Url);
         }

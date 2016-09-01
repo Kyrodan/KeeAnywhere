@@ -42,8 +42,8 @@ namespace KeeAnywhere.Forms
             // General Settings
             m_configService.PluginConfiguration.IsOfflineCacheEnabled = m_cbOfflineCache.Checked;
 
-            if (m_rbStorageLocation_WindowsCredentialManager.Checked)
-                m_configService.PluginConfiguration.AccountStorageLocation = AccountStorageLocation.WindowsCredentialManager;
+            if (m_rbStorageLocation_LocalUserSecureStore.Checked)
+                m_configService.PluginConfiguration.AccountStorageLocation = AccountStorageLocation.LocalUserSecureStore;
             else if (m_rbStorageLocation_Disk.Checked)
                 m_configService.PluginConfiguration.AccountStorageLocation = AccountStorageLocation.KeePassConfig;
             else
@@ -104,8 +104,8 @@ namespace KeeAnywhere.Forms
         {
             switch (m_configService.PluginConfiguration.AccountStorageLocation)
             {
-                case AccountStorageLocation.WindowsCredentialManager:
-                    m_rbStorageLocation_WindowsCredentialManager.Checked = true;
+                case AccountStorageLocation.LocalUserSecureStore:
+                    m_rbStorageLocation_LocalUserSecureStore.Checked = true;
                     break;
                 case AccountStorageLocation.KeePassConfig:
                     m_rbStorageLocation_Disk.Checked = true;
@@ -127,7 +127,7 @@ namespace KeeAnywhere.Forms
             m_lvAccounts.Columns.Add("Type");
 #if DEBUG
             m_lvAccounts.Columns.Add("ID");
-            m_lvAccounts.Columns.Add("Refresh Token");
+            m_lvAccounts.Columns.Add("Secret");
 #endif
 
             UIUtil.ResizeColumns(m_lvAccounts, new int[] {
@@ -149,6 +149,9 @@ namespace KeeAnywhere.Forms
 
             foreach (var account in m_configService.Accounts.OrderBy(_ => _.Type).ThenBy(_ => _.Name))
             {
+                if (StorageRegistry.Descriptors.All(_ => _.Type != account.Type)) 
+                    continue;
+                
                 var lvi = new ListViewItem(account.Name);
                 var lviNew = m_lvAccounts.Items.Add(lvi);
 
@@ -169,12 +172,6 @@ namespace KeeAnywhere.Forms
         {
             m_cbOfflineCache.Checked = m_configService.PluginConfiguration.IsOfflineCacheEnabled;
         }
-
-        private void OnHelpMeChooseAccountStorage(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki/Getting-Started#which-account-storage-location-should-i-choose");
-        }
-
 
         private async void OnAccountAdd(object sender, EventArgs e)
         {
@@ -198,14 +195,44 @@ namespace KeeAnywhere.Forms
             UpdateAccountList();
         }
 
-        private void OnReportBug(object sender, LinkLabelLinkClickedEventArgs e)
+        private void OnWhatsNew(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md");
+        }
+
+        private void OnReportBug(object sender, EventArgs e)
         {
             Process.Start("https://github.com/Kyrodan/KeeAnywhere/issues");
         }
 
-        private void OnContactAuthor(object sender, LinkLabelLinkClickedEventArgs e)
+        private void OnContactAuthor(object sender, EventArgs e)
         {
             Process.Start("https://github.com/Kyrodan");
+        }
+
+        private void OnDonate(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/blob/master/DONATE.md");
+        }
+
+        private void OnHomepage(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere");
+        }
+
+        private void OnDocumentation(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki");
+        }
+
+        private void OnHelpMeChooseAccountStorage(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki/Getting-Started#which-account-storage-location-should-i-choose");
+        }
+
+        private void OnLicense(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE");
         }
 
         private void OnAfterLabelEdit(object sender, LabelEditEventArgs e)
@@ -263,6 +290,10 @@ namespace KeeAnywhere.Forms
 
         private async void OnAccountCheck(object sender, EventArgs e)
         {
+            this.UseWaitCursor = true;
+            m_tcSettings.Enabled = false;
+            m_pnlFormButtons.Enabled = false;
+
             foreach (ListViewItem item in m_lvAccounts.SelectedItems)
             {
                 var account = item.Tag as AccountConfiguration;
@@ -271,6 +302,11 @@ namespace KeeAnywhere.Forms
                 await m_uiService.CheckOrUpdateAccount(account);
             }
 
+            m_tcSettings.Enabled = true;
+            m_pnlFormButtons.Enabled = true;
+            this.UseWaitCursor = false;
         }
+
+
     }
 }

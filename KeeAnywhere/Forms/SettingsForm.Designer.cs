@@ -33,31 +33,43 @@
             this.m_bannerImage = new System.Windows.Forms.PictureBox();
             this.m_tcSettings = new System.Windows.Forms.TabControl();
             this.m_tabAccounts = new System.Windows.Forms.TabPage();
-            this.m_btnAccountAdd = new KeeAnywhere.Forms.DropDownButton();
+            this.m_btnAccountCheck = new System.Windows.Forms.Button();
             this.m_mnuAdd = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_btnAccountRemove = new System.Windows.Forms.Button();
             this.m_lvAccounts = new System.Windows.Forms.ListView();
             this.m_imlProviderIcons = new System.Windows.Forms.ImageList(this.components);
             this.lnklblHelpMeChooseAccountStorage = new System.Windows.Forms.LinkLabel();
             this.m_rbStorageLocation_Disk = new System.Windows.Forms.RadioButton();
-            this.m_rbStorageLocation_WindowsCredentialManager = new System.Windows.Forms.RadioButton();
+            this.m_rbStorageLocation_LocalUserSecureStore = new System.Windows.Forms.RadioButton();
             this.lblAccountStorageLocation = new System.Windows.Forms.Label();
             this.m_tabGeneral = new System.Windows.Forms.TabPage();
             this.m_cbOfflineCache = new System.Windows.Forms.CheckBox();
             this.m_tabAbout = new System.Windows.Forms.TabPage();
-            this.m_lnkContactAuthor = new System.Windows.Forms.LinkLabel();
-            this.m_lnkReportBug = new System.Windows.Forms.LinkLabel();
             this.m_lblAboutVersion = new System.Windows.Forms.Label();
             this.m_lblAboutExplanation = new System.Windows.Forms.Label();
             this.m_lblAboutHeader = new System.Windows.Forms.Label();
             this.m_btnOK = new System.Windows.Forms.Button();
             this.m_btnCancel = new System.Windows.Forms.Button();
-            this.m_btnAccountCheck = new System.Windows.Forms.Button();
+            this.m_mnuHelp = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.m_mnuHelp_Documentation = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuHelp_Homepage = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuHelp_WhatsNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuHelp_License = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuHelp_Sep1 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuHelp_ReportBug = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuHelp_ContactAuthor = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuHelp_Sep2 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuHelp_Donate = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_pnlFormButtons = new System.Windows.Forms.TableLayoutPanel();
+            this.m_btnHelp = new KeeAnywhere.Forms.DropDownButton();
+            this.m_btnAccountAdd = new KeeAnywhere.Forms.DropDownButton();
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).BeginInit();
             this.m_tcSettings.SuspendLayout();
             this.m_tabAccounts.SuspendLayout();
             this.m_tabGeneral.SuspendLayout();
             this.m_tabAbout.SuspendLayout();
+            this.m_mnuHelp.SuspendLayout();
+            this.m_pnlFormButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_bannerImage
@@ -91,7 +103,7 @@
             this.m_tabAccounts.Controls.Add(this.m_lvAccounts);
             this.m_tabAccounts.Controls.Add(this.lnklblHelpMeChooseAccountStorage);
             this.m_tabAccounts.Controls.Add(this.m_rbStorageLocation_Disk);
-            this.m_tabAccounts.Controls.Add(this.m_rbStorageLocation_WindowsCredentialManager);
+            this.m_tabAccounts.Controls.Add(this.m_rbStorageLocation_LocalUserSecureStore);
             this.m_tabAccounts.Controls.Add(this.lblAccountStorageLocation);
             this.m_tabAccounts.Location = new System.Drawing.Point(4, 22);
             this.m_tabAccounts.Name = "m_tabAccounts";
@@ -101,16 +113,16 @@
             this.m_tabAccounts.Text = "Accounts";
             this.m_tabAccounts.UseVisualStyleBackColor = true;
             // 
-            // m_btnAccountAdd
+            // m_btnAccountCheck
             // 
-            this.m_btnAccountAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnAccountAdd.Location = new System.Drawing.Point(490, 38);
-            this.m_btnAccountAdd.Menu = this.m_mnuAdd;
-            this.m_btnAccountAdd.Name = "m_btnAccountAdd";
-            this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
-            this.m_btnAccountAdd.TabIndex = 11;
-            this.m_btnAccountAdd.Text = "Add...";
-            this.m_btnAccountAdd.UseVisualStyleBackColor = true;
+            this.m_btnAccountCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnAccountCheck.Location = new System.Drawing.Point(490, 96);
+            this.m_btnAccountCheck.Name = "m_btnAccountCheck";
+            this.m_btnAccountCheck.Size = new System.Drawing.Size(75, 23);
+            this.m_btnAccountCheck.TabIndex = 12;
+            this.m_btnAccountCheck.Text = "Check";
+            this.m_btnAccountCheck.UseVisualStyleBackColor = true;
+            this.m_btnAccountCheck.Click += new System.EventHandler(this.OnAccountCheck);
             // 
             // m_mnuAdd
             // 
@@ -175,16 +187,16 @@
             this.m_rbStorageLocation_Disk.Text = "KeePass Configuration";
             this.m_rbStorageLocation_Disk.UseVisualStyleBackColor = true;
             // 
-            // m_rbStorageLocation_WindowsCredentialManager
+            // m_rbStorageLocation_LocalUserSecureStore
             // 
-            this.m_rbStorageLocation_WindowsCredentialManager.AutoSize = true;
-            this.m_rbStorageLocation_WindowsCredentialManager.Location = new System.Drawing.Point(100, 7);
-            this.m_rbStorageLocation_WindowsCredentialManager.Name = "m_rbStorageLocation_WindowsCredentialManager";
-            this.m_rbStorageLocation_WindowsCredentialManager.Size = new System.Drawing.Size(164, 17);
-            this.m_rbStorageLocation_WindowsCredentialManager.TabIndex = 1;
-            this.m_rbStorageLocation_WindowsCredentialManager.TabStop = true;
-            this.m_rbStorageLocation_WindowsCredentialManager.Text = "Windows Credential Manager";
-            this.m_rbStorageLocation_WindowsCredentialManager.UseVisualStyleBackColor = true;
+            this.m_rbStorageLocation_LocalUserSecureStore.AutoSize = true;
+            this.m_rbStorageLocation_LocalUserSecureStore.Location = new System.Drawing.Point(100, 7);
+            this.m_rbStorageLocation_LocalUserSecureStore.Name = "m_rbStorageLocation_LocalUserSecureStore";
+            this.m_rbStorageLocation_LocalUserSecureStore.Size = new System.Drawing.Size(141, 17);
+            this.m_rbStorageLocation_LocalUserSecureStore.TabIndex = 1;
+            this.m_rbStorageLocation_LocalUserSecureStore.TabStop = true;
+            this.m_rbStorageLocation_LocalUserSecureStore.Text = "Local User Secure Store";
+            this.m_rbStorageLocation_LocalUserSecureStore.UseVisualStyleBackColor = true;
             // 
             // lblAccountStorageLocation
             // 
@@ -218,8 +230,6 @@
             // 
             // m_tabAbout
             // 
-            this.m_tabAbout.Controls.Add(this.m_lnkContactAuthor);
-            this.m_tabAbout.Controls.Add(this.m_lnkReportBug);
             this.m_tabAbout.Controls.Add(this.m_lblAboutVersion);
             this.m_tabAbout.Controls.Add(this.m_lblAboutExplanation);
             this.m_tabAbout.Controls.Add(this.m_lblAboutHeader);
@@ -229,28 +239,6 @@
             this.m_tabAbout.TabIndex = 2;
             this.m_tabAbout.Text = "About";
             this.m_tabAbout.UseVisualStyleBackColor = true;
-            // 
-            // m_lnkContactAuthor
-            // 
-            this.m_lnkContactAuthor.AutoSize = true;
-            this.m_lnkContactAuthor.Location = new System.Drawing.Point(12, 197);
-            this.m_lnkContactAuthor.Name = "m_lnkContactAuthor";
-            this.m_lnkContactAuthor.Size = new System.Drawing.Size(95, 13);
-            this.m_lnkContactAuthor.TabIndex = 12;
-            this.m_lnkContactAuthor.TabStop = true;
-            this.m_lnkContactAuthor.Text = "Contact the author";
-            this.m_lnkContactAuthor.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnContactAuthor);
-            // 
-            // m_lnkReportBug
-            // 
-            this.m_lnkReportBug.AutoSize = true;
-            this.m_lnkReportBug.Location = new System.Drawing.Point(12, 175);
-            this.m_lnkReportBug.Name = "m_lnkReportBug";
-            this.m_lnkReportBug.Size = new System.Drawing.Size(69, 13);
-            this.m_lnkReportBug.TabIndex = 11;
-            this.m_lnkReportBug.TabStop = true;
-            this.m_lnkReportBug.Text = "Report a bug";
-            this.m_lnkReportBug.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnReportBug);
             // 
             // m_lblAboutVersion
             // 
@@ -271,7 +259,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lblAboutExplanation.Location = new System.Drawing.Point(12, 66);
             this.m_lblAboutExplanation.Name = "m_lblAboutExplanation";
-            this.m_lblAboutExplanation.Size = new System.Drawing.Size(560, 131);
+            this.m_lblAboutExplanation.Size = new System.Drawing.Size(560, 122);
             this.m_lblAboutExplanation.TabIndex = 8;
             this.m_lblAboutExplanation.Text = resources.GetString("m_lblAboutExplanation.Text");
             this.m_lblAboutExplanation.UseMnemonic = false;
@@ -292,7 +280,7 @@
             // 
             this.m_btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.m_btnOK.Location = new System.Drawing.Point(454, 359);
+            this.m_btnOK.Location = new System.Drawing.Point(445, 3);
             this.m_btnOK.Name = "m_btnOK";
             this.m_btnOK.Size = new System.Drawing.Size(75, 23);
             this.m_btnOK.TabIndex = 6;
@@ -304,7 +292,7 @@
             // 
             this.m_btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.m_btnCancel.Location = new System.Drawing.Point(535, 359);
+            this.m_btnCancel.Location = new System.Drawing.Point(526, 3);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(75, 23);
             this.m_btnCancel.TabIndex = 7;
@@ -312,16 +300,121 @@
             this.m_btnCancel.UseVisualStyleBackColor = true;
             this.m_btnCancel.Click += new System.EventHandler(this.OnBtnCancelClick);
             // 
-            // m_btnAccountCheck
+            // m_mnuHelp
             // 
-            this.m_btnAccountCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnAccountCheck.Location = new System.Drawing.Point(490, 96);
-            this.m_btnAccountCheck.Name = "m_btnAccountCheck";
-            this.m_btnAccountCheck.Size = new System.Drawing.Size(75, 23);
-            this.m_btnAccountCheck.TabIndex = 12;
-            this.m_btnAccountCheck.Text = "Check";
-            this.m_btnAccountCheck.UseVisualStyleBackColor = true;
-            this.m_btnAccountCheck.Click += new System.EventHandler(this.OnAccountCheck);
+            this.m_mnuHelp.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuHelp_Documentation,
+            this.m_mnuHelp_Homepage,
+            this.m_mnuHelp_WhatsNew,
+            this.m_mnuHelp_License,
+            this.m_mnuHelp_Sep1,
+            this.m_mnuHelp_ReportBug,
+            this.m_mnuHelp_ContactAuthor,
+            this.m_mnuHelp_Sep2,
+            this.m_mnuHelp_Donate});
+            this.m_mnuHelp.Name = "m_mnuHelp";
+            this.m_mnuHelp.Size = new System.Drawing.Size(248, 170);
+            // 
+            // m_mnuHelp_Documentation
+            // 
+            this.m_mnuHelp_Documentation.Name = "m_mnuHelp_Documentation";
+            this.m_mnuHelp_Documentation.Size = new System.Drawing.Size(247, 22);
+            this.m_mnuHelp_Documentation.Text = "Documentation";
+            this.m_mnuHelp_Documentation.Click += new System.EventHandler(this.OnDocumentation);
+            // 
+            // m_mnuHelp_Homepage
+            // 
+            this.m_mnuHelp_Homepage.Name = "m_mnuHelp_Homepage";
+            this.m_mnuHelp_Homepage.Size = new System.Drawing.Size(247, 22);
+            this.m_mnuHelp_Homepage.Text = "Homepage";
+            this.m_mnuHelp_Homepage.Click += new System.EventHandler(this.OnHomepage);
+            // 
+            // m_mnuHelp_WhatsNew
+            // 
+            this.m_mnuHelp_WhatsNew.Name = "m_mnuHelp_WhatsNew";
+            this.m_mnuHelp_WhatsNew.Size = new System.Drawing.Size(247, 22);
+            this.m_mnuHelp_WhatsNew.Text = "What\'s new";
+            this.m_mnuHelp_WhatsNew.Click += new System.EventHandler(this.OnWhatsNew);
+            // 
+            // m_mnuHelp_License
+            // 
+            this.m_mnuHelp_License.Name = "m_mnuHelp_License";
+            this.m_mnuHelp_License.Size = new System.Drawing.Size(247, 22);
+            this.m_mnuHelp_License.Text = "License";
+            this.m_mnuHelp_License.Click += new System.EventHandler(this.OnLicense);
+            // 
+            // m_mnuHelp_Sep1
+            // 
+            this.m_mnuHelp_Sep1.Name = "m_mnuHelp_Sep1";
+            this.m_mnuHelp_Sep1.Size = new System.Drawing.Size(244, 6);
+            // 
+            // m_mnuHelp_ReportBug
+            // 
+            this.m_mnuHelp_ReportBug.Name = "m_mnuHelp_ReportBug";
+            this.m_mnuHelp_ReportBug.Size = new System.Drawing.Size(247, 22);
+            this.m_mnuHelp_ReportBug.Text = "Report a bug or request a feature";
+            this.m_mnuHelp_ReportBug.Click += new System.EventHandler(this.OnReportBug);
+            // 
+            // m_mnuHelp_ContactAuthor
+            // 
+            this.m_mnuHelp_ContactAuthor.Name = "m_mnuHelp_ContactAuthor";
+            this.m_mnuHelp_ContactAuthor.Size = new System.Drawing.Size(247, 22);
+            this.m_mnuHelp_ContactAuthor.Text = "Contact the Author";
+            this.m_mnuHelp_ContactAuthor.Click += new System.EventHandler(this.OnContactAuthor);
+            // 
+            // m_mnuHelp_Sep2
+            // 
+            this.m_mnuHelp_Sep2.Name = "m_mnuHelp_Sep2";
+            this.m_mnuHelp_Sep2.Size = new System.Drawing.Size(244, 6);
+            // 
+            // m_mnuHelp_Donate
+            // 
+            this.m_mnuHelp_Donate.Name = "m_mnuHelp_Donate";
+            this.m_mnuHelp_Donate.Size = new System.Drawing.Size(247, 22);
+            this.m_mnuHelp_Donate.Text = "Donate";
+            this.m_mnuHelp_Donate.Click += new System.EventHandler(this.OnDonate);
+            // 
+            // m_pnlFormButtons
+            // 
+            this.m_pnlFormButtons.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_pnlFormButtons.ColumnCount = 4;
+            this.m_pnlFormButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+            this.m_pnlFormButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.m_pnlFormButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+            this.m_pnlFormButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+            this.m_pnlFormButtons.Controls.Add(this.m_btnHelp, 0, 0);
+            this.m_pnlFormButtons.Controls.Add(this.m_btnOK, 2, 0);
+            this.m_pnlFormButtons.Controls.Add(this.m_btnCancel, 3, 0);
+            this.m_pnlFormButtons.Location = new System.Drawing.Point(8, 359);
+            this.m_pnlFormButtons.Margin = new System.Windows.Forms.Padding(0);
+            this.m_pnlFormButtons.Name = "m_pnlFormButtons";
+            this.m_pnlFormButtons.RowCount = 1;
+            this.m_pnlFormButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.m_pnlFormButtons.Size = new System.Drawing.Size(604, 29);
+            this.m_pnlFormButtons.TabIndex = 9;
+            // 
+            // m_btnHelp
+            // 
+            this.m_btnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_btnHelp.Location = new System.Drawing.Point(3, 3);
+            this.m_btnHelp.Menu = this.m_mnuHelp;
+            this.m_btnHelp.Name = "m_btnHelp";
+            this.m_btnHelp.Size = new System.Drawing.Size(75, 23);
+            this.m_btnHelp.TabIndex = 8;
+            this.m_btnHelp.Text = "Help...";
+            this.m_btnHelp.UseVisualStyleBackColor = true;
+            // 
+            // m_btnAccountAdd
+            // 
+            this.m_btnAccountAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnAccountAdd.Location = new System.Drawing.Point(490, 38);
+            this.m_btnAccountAdd.Menu = this.m_mnuAdd;
+            this.m_btnAccountAdd.Name = "m_btnAccountAdd";
+            this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
+            this.m_btnAccountAdd.TabIndex = 11;
+            this.m_btnAccountAdd.Text = "Add...";
+            this.m_btnAccountAdd.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -330,8 +423,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
             this.ClientSize = new System.Drawing.Size(622, 397);
-            this.Controls.Add(this.m_btnOK);
-            this.Controls.Add(this.m_btnCancel);
+            this.Controls.Add(this.m_pnlFormButtons);
             this.Controls.Add(this.m_tcSettings);
             this.Controls.Add(this.m_bannerImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -350,7 +442,8 @@
             this.m_tabGeneral.ResumeLayout(false);
             this.m_tabGeneral.PerformLayout();
             this.m_tabAbout.ResumeLayout(false);
-            this.m_tabAbout.PerformLayout();
+            this.m_mnuHelp.ResumeLayout(false);
+            this.m_pnlFormButtons.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -368,17 +461,27 @@
         private System.Windows.Forms.Label m_lblAboutExplanation;
         private System.Windows.Forms.Label m_lblAboutHeader;
         private System.Windows.Forms.RadioButton m_rbStorageLocation_Disk;
-        private System.Windows.Forms.RadioButton m_rbStorageLocation_WindowsCredentialManager;
+        private System.Windows.Forms.RadioButton m_rbStorageLocation_LocalUserSecureStore;
         private System.Windows.Forms.Label lblAccountStorageLocation;
         private System.Windows.Forms.LinkLabel lnklblHelpMeChooseAccountStorage;
         private System.Windows.Forms.ListView m_lvAccounts;
         private System.Windows.Forms.Button m_btnAccountRemove;
         private System.Windows.Forms.Label m_lblAboutVersion;
-        private System.Windows.Forms.LinkLabel m_lnkContactAuthor;
-        private System.Windows.Forms.LinkLabel m_lnkReportBug;
         private System.Windows.Forms.ContextMenuStrip m_mnuAdd;
         private DropDownButton m_btnAccountAdd;
         private System.Windows.Forms.ImageList m_imlProviderIcons;
         private System.Windows.Forms.Button m_btnAccountCheck;
+        private DropDownButton m_btnHelp;
+        private System.Windows.Forms.ContextMenuStrip m_mnuHelp;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_Documentation;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_Homepage;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_WhatsNew;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_License;
+        private System.Windows.Forms.ToolStripSeparator m_mnuHelp_Sep1;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_ReportBug;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_ContactAuthor;
+        private System.Windows.Forms.ToolStripSeparator m_mnuHelp_Sep2;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_Donate;
+        private System.Windows.Forms.TableLayoutPanel m_pnlFormButtons;
     }
 }

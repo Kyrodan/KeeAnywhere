@@ -63,6 +63,36 @@ namespace KeeAnywhere {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AmazonDrive_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("AmazonDrive_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AmazonS3_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("AmazonS3_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Box_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Box_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Dropbox_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Dropbox_16x16", resourceCulture);
@@ -86,6 +116,16 @@ namespace KeeAnywhere {
         internal static System.Drawing.Bitmap GoogleDrive_16x16 {
             get {
                 object obj = ResourceManager.GetObject("GoogleDrive_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HiDrive_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("HiDrive_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

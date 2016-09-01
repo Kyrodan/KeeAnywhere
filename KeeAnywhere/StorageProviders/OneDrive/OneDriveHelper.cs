@@ -1,5 +1,10 @@
-﻿using System.Threading.Tasks;
-using KoenZomers.OneDrive.Api;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using KeeAnywhere.Configuration;
+using Microsoft.Graph;
+using Microsoft.OneDrive.Sdk;
+using Microsoft.OneDrive.Sdk.Authentication;
 
 namespace KeeAnywhere.StorageProviders.OneDrive
 {
@@ -18,100 +23,48 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         */
 
         //TODO: Change API keys!!!
-
         internal const string OneDriveClientId = "dummy";
         internal const string OneDriveClientSecret = "dummy";
 
-        //private readonly Dictionary<string, OneDriveApi> _cache = new Dictionary<string, OneDriveApi>(); 
 
-        public static async Task<OneDriveConsumerApi> GetApi(string refreshToken)
+        //private static readonly string[] Scopes = new[] {"wl.offline_access", "wl.skydrive_update"};
+        public static readonly string[] Scopes = { "offline_access", "onedrive.readwrite" };
+        public static readonly string ApiUrl = "https://api.onedrive.com/v1.0";
+        public static readonly string RedirectionUrl = "https://login.live.com/oauth20_desktop.srf";
+        public static readonly string SignOutUrl = "https://login.live.com/oauth20_logout.srf";
+
+        private static readonly IDictionary<string, IOneDriveClient> Cache = new Dictionary<string, IOneDriveClient>();
+
+
+        public static async Task<IOneDriveClient> GetApi(AccountConfiguration account)
         {
-            var api = new OneDriveConsumerApi(OneDriveClientId, OneDriveClientSecret);
-            await api.AuthenticateUsingRefreshToken(refreshToken);
+            if (Cache.ContainsKey(account.Id)) return Cache[account.Id];
+       
+            var authProvider = new OneDriveAuthenticationProvider(
+                                                    OneDriveClientId,
+                                                    OneDriveClientSecret);
 
+            await authProvider.AuthenticateByRefreshTokenAsync(account.Secret);
+
+            var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true);
+            var api = new OneDriveClient(ApiUrl, authProvider, httpProvider);
+            Cache.Add(account.Id, api);
+            
             return api;
         }
 
-        //public async Task<OneDriveApi> GetApi(AccountConfiguration account)
-        //{
+        public static async Task<IOneDriveClient> GetApi(AccountSession accountSession)
+        {
+            var authProvider = new OneDriveAuthenticationProvider(
+                                                    OneDriveClientId,
+                                                    OneDriveClientSecret);
 
-        //    if (account == null) throw new ArgumentNullException("account");
+            await authProvider.AuthenticateByAccountSessionAsync(accountSession);
 
-        //    var refreshToken = account.Secret;
+            var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true);
+            var api = new OneDriveClient(ApiUrl, authProvider, httpProvider);
 
-        //    if (string.IsNullOrEmpty(refreshToken)) return null;
-
-        //    if (_cache.ContainsKey(refreshToken))
-        //        return _cache[refreshToken];
-
-        //    var api = await OneDriveApi.GetOneDriveApiFromRefreshToken(OneDriveClientId, OneDriveClientSecret, refreshToken);
-
-        //    if (api != null)
-        //        _cache.Add(refreshToken, api);
-
-        //    return api;
-        //}
-
-        //public async Task<OneDriveApi> TryGetApi(AccountConfiguration account)
-        //{
-
-        //    try
-        //    {
-        //        if (account.Secret != null)
-        //        {
-        //            var api = await GetApi(account);
-        //            return api;
-        //        }
-        //    }
-        //    catch (WebException)
-        //    {
-        //    }
-
-        //    while (true)
-        //    {
-        //        try
-        //        {
-        //            var api = GetApi();
-        //            var oneDriveAuthenticateForm = new OneDriveAuthenticationForm(api);
-        //            var result = UIUtil.ShowDialogAndDestroy(oneDriveAuthenticateForm);
-
-        //            if (result != DialogResult.OK)
-        //            {
-        //                return null;
-        //            }
-
-        //            var drive = await api.GetDrive();
-        //            var id = drive.Id;
-        //            //var name = drive.Owner.User.DisplayName;
-        //            var refreshToken = api.AccessToken.Secret;
-
-        //            if (account.Id == id)
-        //            {
-        //                account.Secret = refreshToken;
-        //                return api;
-        //            }
-        //            else
-        //            {
-        //                result =
-        //                    MessageService.Ask(
-        //                        "The authenticated account does not belog to the requested account.\r\nWould you like to retry?",
-        //                        "KeeAnywhere Error", MessageBoxButtons.RetryCancel);
-
-        //                if (result == DialogResult.Cancel)
-        //                    return null;
-        //            }
-        //        }
-        //        catch (WebException)
-        //        {
-        //            var result =
-        //                MessageService.Ask(
-        //                    "Authentication error.\r\nWould you like to retry?",
-        //                    "KeeAnywhere Error", MessageBoxButtons.RetryCancel);
-
-        //            if (result == DialogResult.Cancel)
-        //                return null;
-        //        }
-        //    }
-        //}
+            return api;
+        }
     }
 }

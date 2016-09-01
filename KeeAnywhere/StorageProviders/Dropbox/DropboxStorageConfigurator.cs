@@ -24,8 +24,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
 
             if (!isOk) return null;
 
-            var api = new DropboxClient(_oauthResponse.AccessToken);
-
+            var api = DropboxHelper.GetApi(_oauthResponse.AccessToken);
             var owner = await api.Users.GetCurrentAccountAsync();
 
             var account = new AccountConfiguration()
