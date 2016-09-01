@@ -1,5 +1,5 @@
 @echo off
-set version=1.3.0
+set version=1.4.0-unstable
 set zip="packages\7-Zip.CommandLine.9.20.0\tools\7za.exe"
 set msbuildcmd="C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\VsMSBuildCmd.bat"
 
