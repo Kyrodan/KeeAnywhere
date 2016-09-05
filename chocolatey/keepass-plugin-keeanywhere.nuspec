@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata>
+    <id>keepass-plugin-keeanywhere</id>
+    <title>KeePass Plugin KeeAnywhere</title>
+    <version>1.3.0</version>
+    <authors>Daniel Bölts</authors>
+    <owners>Kyrodan</owners>
+    <summary>Plugin for KeePass 2.x to to add support for cloud storage providers</summary>
+    <description>
+KeeAnywhere is a KeePass plugin that provides access to cloud storage providers (cloud drives). The main goal is to offer a simple UI while integrating deeply into KeePass. This covers all kind of users: novices, experienced and power users.
+
+Supported providers:
+
+* Amazon AWS S3
+* Box
+* Dropbox
+* Google Drive
+* HiDrive
+* hubiC
+* OneDrive
+    </description>
+    <packageSourceUrl>https://github.com/kyrodan/keeanywhere/tree/master/chocolatey</packageSourceUrl>
+    <projectUrl>https://github.com/Kyrodan/KeeAnywhere</projectUrl>
+    <projectSourceUrl>https://github.com/Kyrodan/KeeAnywhere</projectSourceUrl>
+    <bugTrackerUrl>https://github.com/Kyrodan/KeeAnywhere/issues</bugTrackerUrl>
+    <docsUrl>https://github.com/Kyrodan/KeeAnywhere/wiki/</docsUrl>
+    <iconUrl>https://cdn.rawgit.com/Kyrodan/KeeAnywhere/95b05e59b80690037bfb1952715d5104fbf99b71/KeeAnywhere/Resources/KeeAnywhere_48x48.png</iconUrl>
+    <tags>keepass plugin backup sync cloud</tags>
+    <copyright>© 2015-2016 Daniel Bölts</copyright>
+    <licenseUrl>https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>## 1.3.0 (2016-09-01)
+
+### New
+- \#10 Access to Amazon Cloud Drive
+- \#11 Access to Box
+- \#16 Proxy support (with auth) feature request
+- \#26 AWS S3 support
+- \#52 HiDrive support
+- Possibility to donate
+
+### Fixed
+
+- \#14 Google Drive: Registering new account takes place in default browser
+- \#49 After Updating to 1.2.0 account type is wrong, if using KeePass Configuration as Storage Location
+- \#50 Long Refresh Tokens cause exception when saving in Windows Credential Store
+
+### Improved
+
+- \#2 Replace currently used OneDrive client with the official one
+- \#51 Improve Authorization Dialog
+- Updated Provider Client Libraries to latest Versions and .Net 4.5.1
+
+[Full Changelog](https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md)
+    </releaseNotes>
+    <dependencies>
+      <dependency id="keepass" version="[2.31, 3.0)" />
+      <dependency id="dotnet4.5.1" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

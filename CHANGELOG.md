@@ -1,6 +1,7 @@
 ## 1.3.0 (2016-09-01)
 
 ### New
+
 - \#10 Access to Amazon Cloud Drive
 - \#11 Access to Box
 - \#16 Proxy support (with auth) feature request
