@@ -1,12 +1,3 @@
-## 1.4.0 (unreleased)
-
-### New
-
-### Fixed
-
-### Improved
-
-
 ## 1.3.0 (2016-09-01)
 
 ### New
