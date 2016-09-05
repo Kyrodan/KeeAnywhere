@@ -25,6 +25,9 @@ xcopy KeeAnywhere\bin\Release\*.* build\bin
 del build\bin\*.plgx build\bin\*.pdb build\bin\*.xml build\bin\*.config build\bin\KeePass.*
 %zip% a -tzip build\dist\KeeAnywhere-%version%.zip .\build\bin\*
 
+xcopy /s /i chocolatey build\chocolatey
+xcopy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\chocolatey\tools
+choco pack build\chocolatey\keepass-plugin-keeanywhere.nuspec --version %version% --outputdirectory build\dist  
 
 
 :final
