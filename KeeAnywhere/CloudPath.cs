@@ -107,7 +107,7 @@ namespace KeeAnywhere
             if (path != null)
             {
                 int i = path.Length;
-                while (path[--i] != DirectorySeparatorChar) ;
+                while (i > 0 && path[--i] != DirectorySeparatorChar) ;
                 return path.Substring(0, i);
             }
             return null;

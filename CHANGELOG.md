@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- \#58 Amazon S3: Cannot save/write database file to root of bucket
+
 ### Improved
 
 

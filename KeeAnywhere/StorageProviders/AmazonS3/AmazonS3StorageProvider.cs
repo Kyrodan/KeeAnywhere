@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -49,10 +48,14 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
 
                 GetBucketAndKey(path, out bucket, out filename);
 
-                try // Does parent folder exists?
+                try // Does parent folder exists, if not root?
                 {
                     var folderName = CloudPath.GetDirectoryName(filename);
-                    var getResponse = await api.GetObjectMetadataAsync(bucket, folderName + "/");
+
+                    if (!string.IsNullOrEmpty(folderName))
+                    {
+                        await api.GetObjectMetadataAsync(bucket, folderName + "/");
+                    }
                 }
                 catch (AmazonS3Exception ex)
                 {
@@ -106,52 +109,49 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 else
                 {
                     string bucket;
-                    string filename;
-                    GetBucketAndKey(parent.Id, out bucket, out filename);
-                    var filenameLength = string.IsNullOrEmpty(filename) ? 0 : filename.Length;
+                    string prefix;
+                    GetBucketAndKey(parent.Id, out bucket, out prefix);
 
                     var request = new ListObjectsV2Request
                     {
                         BucketName = bucket,
-                        Prefix = filename,
+                        Prefix = prefix,
+                        Delimiter = "/",
                     };
 
                     var items = new List<StorageProviderItem>();
                     ListObjectsV2Response response;
-                    var finished = false;
 
                     do
                     {
                         response = await api.ListObjectsV2Async(request);
+
+                        items.AddRange(response.CommonPrefixes.Select(folderName => new StorageProviderItem
+                        {
+                            Id = bucket + "/" + folderName,
+                            Name = folderName.RemovePrefix(prefix).RemoveTrailingSlash(),
+                            Type = StorageProviderItemType.Folder,
+                            ParentReferenceId = parent.Id,
+                        }));
+
                         foreach (var o in response.S3Objects)
                         {
-                            var normalized = o.Key.Substring(filenameLength);
-                            if (string.IsNullOrEmpty(normalized))
+                            var normalized = o.Key.RemovePrefix(prefix);
+
+                            if (string.IsNullOrEmpty(normalized) || normalized.EndsWith("/")) // Is Parent Folder (Dummy Item)? => ignore
+                            {
                                 continue;
-
-                            if (normalized.EndsWith("/"))
-                            {
-                                normalized = normalized.Remove(normalized.Length - 1);
-                            }
-
-
-                            if (normalized.Contains('/'))
-                            {
-                                finished = true;
-                                break;
                             }
 
                             items.Add(new StorageProviderItem
                             {
                                 Id = bucket + "/" + o.Key,
                                 Name = normalized,
-                                Type = o.Size > 0 ? StorageProviderItemType.File : StorageProviderItemType.Folder,
+                                Type = StorageProviderItemType.File,
                                 ParentReferenceId = parent.Id,
+                                LastModifiedDateTime = o.LastModified
                             });
                         }
-
-                        if (finished)
-                            break;
 
                         request.ContinuationToken = response.NextContinuationToken;
 
@@ -161,6 +161,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 }
             }
         }
+
 
         private static void GetBucketAndKey(string path, out string bucket, out string filename)
         {
@@ -180,5 +181,6 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             char[] invalidChars = { '/', '\\'};
             return filename.All(c => c >= 32 && !invalidChars.Contains(c));
         }
+
     }
 }
