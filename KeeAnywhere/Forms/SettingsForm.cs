@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -19,8 +20,6 @@ namespace KeeAnywhere.Forms
         public SettingsForm()
         {
             InitializeComponent();
-
-            m_tcSettings.TabPages.Remove(m_tabGeneral);
         }
 
         public void InitEx(ConfigurationService configService, UIService uiService)
@@ -40,7 +39,7 @@ namespace KeeAnywhere.Forms
         private void OnBtnOkClick(object sender, EventArgs e)
         {
             // General Settings
-            m_configService.PluginConfiguration.IsOfflineCacheEnabled = m_cbOfflineCache.Checked;
+            m_configService.PluginConfiguration.IsOfflineCacheEnabled = m_chkOfflineCache.Checked;
 
             if (m_rbStorageLocation_LocalUserSecureStore.Checked)
                 m_configService.PluginConfiguration.AccountStorageLocation = AccountStorageLocation.LocalUserSecureStore;
@@ -170,7 +169,8 @@ namespace KeeAnywhere.Forms
 
         private void InitGeneralTab()
         {
-            m_cbOfflineCache.Checked = m_configService.PluginConfiguration.IsOfflineCacheEnabled;
+            m_chkOfflineCache.Checked = m_configService.PluginConfiguration.IsOfflineCacheEnabled;
+            UpdateCacheButtonState();
         }
 
         private async void OnAccountAdd(object sender, EventArgs e)
@@ -307,6 +307,51 @@ namespace KeeAnywhere.Forms
             this.UseWaitCursor = false;
         }
 
+        private void OnClearCache(object sender, EventArgs e)
+        {
+            var isOk = MessageService.AskYesNo("Do you really want to clear Offline Cache Folder?\r\nMaybe your unsynced changes get lost!", "Clear Offline Cache", false);
 
+            if (isOk) 
+                ClearCache();
+        }
+
+        private void ClearCache()
+        {
+            var path = m_configService.PluginConfiguration.OfflineCacheFolder;
+
+            if (!Directory.Exists(path))
+                return;
+
+            Directory.Delete(path, true);
+        }
+
+        private void OnOpenCacheFolder(object sender, EventArgs e)
+        {
+            var path = m_configService.PluginConfiguration.OfflineCacheFolder;
+            if (Directory.Exists(path))
+                Process.Start(path);
+            else
+                MessageService.ShowInfo("Offline Cache Folder does not exist:", path);
+        }
+
+        private void OnOfflineCacheChanged(object sender, EventArgs e)
+        {
+            UpdateCacheButtonState();
+
+            var path = m_configService.PluginConfiguration.OfflineCacheFolder;
+            if (m_chkOfflineCache.Checked || !Directory.Exists(path)) return;
+
+            var isOk = MessageService.AskYesNo("You are disabeling Offline Cache.\r\nDo you want to clear Offline Cache Folder?\r\nMaybe your unsynced changes get lost!", "Clear Offline Cache", false);
+
+            if (isOk)
+                ClearCache();
+        }
+
+        private void UpdateCacheButtonState()
+        {
+            var isEnabled = m_chkOfflineCache.Checked;
+            m_btnOpenCacheFolder.Enabled = isEnabled;
+            m_btnClearCache.Enabled = isEnabled;
+        }
     }
 }

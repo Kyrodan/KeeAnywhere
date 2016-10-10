@@ -239,6 +239,8 @@
       <DependentUpon>OAuth2Form.cs</DependentUpon>
     </Compile>
     <Compile Include="OAuth2\OAuth2Token.cs" />
+    <Compile Include="Offline\CacheManagerService.cs" />
+    <Compile Include="Offline\ICacheSupervisor.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -299,7 +301,7 @@
     <Compile Include="UIService.cs" />
     <Compile Include="WebRequest\KeeAnywhereWebResponse.cs" />
     <Compile Include="WebRequest\KeeAnywhereWebRequest.cs" />
-    <Compile Include="WebRequest\KeeAnywhereWebRequestCreator.cs" />
+    <Compile Include="Offline\CacheProvider.cs" />
     <Compile Include="WebRequest\RequestStream.cs" />
     <Compile Include="WebRequest\WrapperStream.cs" />
   </ItemGroup>
@@ -362,6 +364,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.S3.3.1.9.0\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

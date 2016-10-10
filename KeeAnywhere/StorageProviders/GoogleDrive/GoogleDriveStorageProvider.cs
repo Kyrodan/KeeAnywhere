@@ -42,7 +42,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         }
 
 
-        public async Task<bool> Save(Stream stream, string path)
+        public async Task Save(Stream stream, string path)
         {
             var api = await GetApi();
 
@@ -72,7 +72,8 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
                 progress = await api.Files.Create(file, stream, "application/octet-stream").UploadAsync();
             }
 
-            return progress.Status == UploadStatus.Completed && progress.Exception == null;
+            if (progress.Status != UploadStatus.Completed || progress.Exception != null)
+                throw new InvalidOperationException("Save to Google Drive failed.");
         }
 
         public async Task<StorageProviderItem> GetRootItem()

@@ -8,7 +8,7 @@ namespace KeeAnywhere.StorageProviders
     {
         // File operations
         Task<Stream> Load(string path);
-        Task<bool> Save(Stream stream, string path);
+        Task Save(Stream stream, string path);
 
         // Query operations
         Task<StorageProviderItem> GetRootItem();

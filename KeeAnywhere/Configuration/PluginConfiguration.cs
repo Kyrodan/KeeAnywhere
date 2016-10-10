@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Runtime.Serialization;
+using KeePass.App.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -10,6 +12,14 @@ namespace KeeAnywhere.Configuration
     {
         [DataMember]
         public bool IsOfflineCacheEnabled { get; set; }
+
+        public string OfflineCacheFolder
+        {
+            get
+            {
+                return Path.Combine(AppConfigSerializer.LocalAppDataDirectory, "KeeAnywhereOfflineCache");
+            }
+        }
 
         [DataMember]
         [JsonConverter(typeof(StringEnumConverter))]

@@ -34,7 +34,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         }
 
 
-        public async Task<bool> Save(Stream stream, string path)
+        public async Task Save(Stream stream, string path)
         {
             var api = await OneDriveHelper.GetApi(_account);
 
@@ -47,7 +47,9 @@ namespace KeeAnywhere.StorageProviders.OneDrive
                         .Request()
                         .PutAsync<Item>(stream);
 
-            return uploadedItem != null;
+            if (uploadedItem == null)
+                throw new InvalidOperationException("Save to OneDrive failed.");
+
         }
 
         public async Task<StorageProviderItem> GetRootItem()

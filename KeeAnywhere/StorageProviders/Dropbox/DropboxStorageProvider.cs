@@ -40,13 +40,14 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             return stream;
         }
 
-        public async Task<bool> Save(Stream stream, string path)
+        public async Task Save(Stream stream, string path)
         {
             path = RootPath(path);
 
             var result = await Api.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: stream);
 
-            return result.IsFile;
+            if (!result.IsFile)
+                throw new InvalidOperationException("Save to Dropbox failed.");
         }
 
         public async Task<StorageProviderItem> GetRootItem()

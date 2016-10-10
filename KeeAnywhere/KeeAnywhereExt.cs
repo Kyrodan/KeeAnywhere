@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.Forms;
+using KeeAnywhere.Offline;
 using KeeAnywhere.StorageProviders;
 using KeePass.Plugins;
 using KeePass.UI;
@@ -29,6 +30,7 @@ namespace KeeAnywhere
 
         private ToolStripMenuItem _tsShowSettings;
         private UIService _uiService;
+        private CacheManagerService _cacheManagerService;
 
 
         /// <summary>
@@ -50,7 +52,7 @@ namespace KeeAnywhere
             if (NativeLib.IsUnix()) return false;
 
             _host = pluginHost;
-
+            //_host.MainWindow.FileOpened;
             // Some binding redirection fixes for Google Drive API
             FixGoogleApiDependencyLoading();
 
@@ -61,9 +63,13 @@ namespace KeeAnywhere
             _configService = new ConfigurationService(pluginHost);
             _configService.Load();
 
+            // Initialize CacheManager
+            _cacheManagerService = new CacheManagerService(_configService, _host);
+            _cacheManagerService.RegisterEvents();
+
             // Initialize storage providers
-            _storageService = new StorageService(_configService);
-            _storageService.Register();
+            _storageService = new StorageService(_configService, _cacheManagerService);
+            _storageService.RegisterPrefixes();
 
             // Initialize UIService
             _uiService = new UIService(_configService, _storageService);
@@ -230,6 +236,8 @@ namespace KeeAnywhere
             if (_host == null) return;
 
             _configService.Save();
+            _cacheManagerService.UnRegisterEvents();
+
 
             _host.MainWindow.ToolsMenu.DropDownItems.Remove(_tsShowSettings);
 

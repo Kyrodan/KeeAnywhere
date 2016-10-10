@@ -2,6 +2,8 @@
 
 ### New
 
+- \#5 Cache databases for disconnected (offline) usage
+
 ### Fixed
 
 - \#58 Amazon S3: Cannot save/write database file to root of bucket
