@@ -113,6 +113,9 @@ namespace KeeAnywhere
                 }
             }
 
+            if (_configService.IsUpgraded)
+                _uiService.ShowChangelogDialog(true);
+
             // Indicate that the plugin started successfully
             return true;
         }
@@ -208,7 +211,7 @@ namespace KeeAnywhere
 
             if (result == DialogResult.Yes)
             {
-                OnShowSetting(this, EventArgs.Empty);
+                _uiService.ShowSettingsDialog();
             }
 
             return false;
@@ -264,10 +267,7 @@ namespace KeeAnywhere
 
         private void OnShowSetting(object sender, EventArgs e)
         {
-            _uiService.ShowDonationDialog();
-            var form = new SettingsForm();
-            form.InitEx(_configService, _uiService);
-            UIUtil.ShowDialogAndDestroy(form);
+            _uiService.ShowSettingsDialog();
         }
 
         private static void FixGoogleApiDependencyLoading()

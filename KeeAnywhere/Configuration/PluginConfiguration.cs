@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
 using KeePass.App.Configuration;
@@ -10,6 +11,8 @@ namespace KeeAnywhere.Configuration
     [DataContract]
     public class PluginConfiguration
     {
+        private string _backupToLocalFolder;
+
         [DataMember]
         public bool IsOfflineCacheEnabled { get; set; }
 
@@ -20,6 +23,36 @@ namespace KeeAnywhere.Configuration
                 return Path.Combine(AppConfigSerializer.LocalAppDataDirectory, "KeeAnywhereOfflineCache");
             }
         }
+
+        [DataMember]
+        public bool IsBackupToLocalEnabled { get; set; }
+
+        [DataMember]
+        public bool IsBackupToRemoteEnabled { get; set; }
+
+        [DataMember]
+        public string BackupToLocalFolder
+        {
+            get { return _backupToLocalFolder; }
+            set
+            {
+                _backupToLocalFolder = value;
+                if (this.IsBackupToLocalEnabled && !string.IsNullOrEmpty(_backupToLocalFolder) && !Directory.Exists(_backupToLocalFolder))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(_backupToLocalFolder);
+                    }
+                    catch (Exception)
+                    { }
+                }
+            }
+        }
+
+        [DataMember]
+        [DefaultValue(10)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int BackupCopies { get; set; }
 
         [DataMember]
         [JsonConverter(typeof(StringEnumConverter))]

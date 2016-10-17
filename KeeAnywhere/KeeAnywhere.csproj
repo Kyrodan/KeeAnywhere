@@ -55,6 +55,10 @@
       <HintPath>..\packages\Box.V2.2.11.0\lib\portable-net40+sl50+win+wp80\Box.V2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CommonMark, Version=0.1.0.0, Culture=neutral, PublicKeyToken=001ef8810438905d, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonMark.NET.0.14.0\lib\net45\CommonMark.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="CredentialManagement, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CredentialManagement.1.0.2\lib\net35\CredentialManagement.dll</HintPath>
       <Private>True</Private>
@@ -199,6 +203,12 @@
     <Compile Include="Forms\CloudDriveFilePicker.Designer.cs">
       <DependentUpon>CloudDriveFilePicker.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ChangelogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChangelogForm.Designer.cs">
+      <DependentUpon>ChangelogForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DonationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -310,6 +320,9 @@
       <DependentUpon>CloudDriveFilePicker.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ChangelogForm.resx">
+      <DependentUpon>ChangelogForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DonationForm.resx">
       <DependentUpon>DonationForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -333,6 +346,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\CHANGELOG.md">
+      <Link>CHANGELOG.md</Link>
+    </EmbeddedResource>
     <None Include="app.config">
       <ExcludeFromPlgx />
       <SubType>Designer</SubType>

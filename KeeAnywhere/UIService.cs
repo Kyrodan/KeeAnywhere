@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.Forms;
 using KeeAnywhere.StorageProviders;
@@ -108,6 +109,25 @@ namespace KeeAnywhere
                 : DateTime.Today;
 
             _donationDialogAlreadyShownInThisUpgradedSession = true;
+        }
+
+        public void ShowChangelogDialog(bool isUpgraded)
+        {
+            var dlg = new ChangelogForm();
+            dlg.InitEx(isUpgraded);
+
+            var result = UIUtil.ShowDialogAndDestroy(dlg);
+            if (result == DialogResult.Yes)
+                this.ShowSettingsDialog();
+
+        }
+
+        public void ShowSettingsDialog()
+        {
+            this.ShowDonationDialog();
+            var form = new SettingsForm();
+            form.InitEx(_configService, this);
+            UIUtil.ShowDialogAndDestroy(form);
         }
     }
 }
