@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -39,7 +40,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             }
         }
 
-        public async Task<bool> Save(Stream stream, string path)
+        public async Task Save(Stream stream, string path)
         {
             using (var api = AmazonS3Helper.GetApi(_account))
             {
@@ -59,8 +60,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 }
                 catch (AmazonS3Exception ex)
                 {
-                    if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
-                        return false;
+                    //if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    //    throw new FileNotFoundException("Amazon S3: File not found.", );
 
                     //status wasn't not found, so throw the exception
                     throw;
@@ -75,7 +76,9 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
 
                 var response = await api.PutObjectAsync(request);
 
-                return response != null;
+                if (response == null)
+                    throw new InvalidOperationException("Save to Amazon S3 failed.");
+
             }
         }
 

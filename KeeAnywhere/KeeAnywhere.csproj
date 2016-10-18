@@ -55,6 +55,10 @@
       <HintPath>..\packages\Box.V2.2.11.0\lib\portable-net40+sl50+win+wp80\Box.V2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CommonMark, Version=0.1.0.0, Culture=neutral, PublicKeyToken=001ef8810438905d, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonMark.NET.0.14.0\lib\net45\CommonMark.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="CredentialManagement, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CredentialManagement.1.0.2\lib\net35\CredentialManagement.dll</HintPath>
       <Private>True</Private>
@@ -199,6 +203,12 @@
     <Compile Include="Forms\CloudDriveFilePicker.Designer.cs">
       <DependentUpon>CloudDriveFilePicker.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ChangelogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChangelogForm.Designer.cs">
+      <DependentUpon>ChangelogForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DonationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -239,6 +249,8 @@
       <DependentUpon>OAuth2Form.cs</DependentUpon>
     </Compile>
     <Compile Include="OAuth2\OAuth2Token.cs" />
+    <Compile Include="Offline\CacheManagerService.cs" />
+    <Compile Include="Offline\ICacheSupervisor.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -299,7 +311,7 @@
     <Compile Include="UIService.cs" />
     <Compile Include="WebRequest\KeeAnywhereWebResponse.cs" />
     <Compile Include="WebRequest\KeeAnywhereWebRequest.cs" />
-    <Compile Include="WebRequest\KeeAnywhereWebRequestCreator.cs" />
+    <Compile Include="Offline\CacheProvider.cs" />
     <Compile Include="WebRequest\RequestStream.cs" />
     <Compile Include="WebRequest\WrapperStream.cs" />
   </ItemGroup>
@@ -307,6 +319,9 @@
     <EmbeddedResource Include="Forms\CloudDriveFilePicker.resx">
       <DependentUpon>CloudDriveFilePicker.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ChangelogForm.resx">
+      <DependentUpon>ChangelogForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DonationForm.resx">
       <DependentUpon>DonationForm.cs</DependentUpon>
@@ -331,6 +346,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\CHANGELOG.md">
+      <Link>CHANGELOG.md</Link>
+    </EmbeddedResource>
     <None Include="app.config">
       <ExcludeFromPlgx />
       <SubType>Designer</SubType>
@@ -362,6 +380,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.S3.3.1.9.0\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

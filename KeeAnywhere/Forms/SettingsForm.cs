@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -19,8 +20,6 @@ namespace KeeAnywhere.Forms
         public SettingsForm()
         {
             InitializeComponent();
-
-            m_tcSettings.TabPages.Remove(m_tabGeneral);
         }
 
         public void InitEx(ConfigurationService configService, UIService uiService)
@@ -40,7 +39,13 @@ namespace KeeAnywhere.Forms
         private void OnBtnOkClick(object sender, EventArgs e)
         {
             // General Settings
-            m_configService.PluginConfiguration.IsOfflineCacheEnabled = m_cbOfflineCache.Checked;
+            var cfg = m_configService.PluginConfiguration;
+            cfg.IsOfflineCacheEnabled = m_chkOfflineCache.Checked;
+            cfg.IsBackupToRemoteEnabled = m_chkBackupToRemote.Checked;
+            cfg.IsBackupToLocalEnabled = m_chkBackupToLocal.Checked;
+            cfg.BackupToLocalFolder = m_txtBackupToLocalFolder.Text;
+            cfg.BackupCopies = (int)m_numUpDownBackupCopies.Value;
+
 
             if (m_rbStorageLocation_LocalUserSecureStore.Checked)
                 m_configService.PluginConfiguration.AccountStorageLocation = AccountStorageLocation.LocalUserSecureStore;
@@ -170,7 +175,17 @@ namespace KeeAnywhere.Forms
 
         private void InitGeneralTab()
         {
-            m_cbOfflineCache.Checked = m_configService.PluginConfiguration.IsOfflineCacheEnabled;
+            var cfg = m_configService.PluginConfiguration;
+
+            m_chkOfflineCache.Checked = cfg.IsOfflineCacheEnabled;
+
+            m_chkBackupToLocal.Checked = cfg.IsBackupToLocalEnabled;
+            m_chkBackupToRemote.Checked = cfg.IsBackupToRemoteEnabled;
+            m_txtBackupToLocalFolder.Text = cfg.BackupToLocalFolder;
+            m_numUpDownBackupCopies.Value = cfg.BackupCopies;
+
+            UpdateCacheButtonState();
+            UpdateBackupState();
         }
 
         private async void OnAccountAdd(object sender, EventArgs e)
@@ -197,7 +212,7 @@ namespace KeeAnywhere.Forms
 
         private void OnWhatsNew(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md");
+            m_uiService.ShowChangelogDialog(false);
         }
 
         private void OnReportBug(object sender, EventArgs e)
@@ -307,6 +322,80 @@ namespace KeeAnywhere.Forms
             this.UseWaitCursor = false;
         }
 
+        private void OnClearCache(object sender, EventArgs e)
+        {
+            var isOk = MessageService.AskYesNo("Do you really want to clear Offline Cache Folder?\r\nMaybe your unsynced changes get lost!", "Clear Offline Cache", false);
 
+            if (isOk) 
+                ClearCache();
+        }
+
+        private void ClearCache()
+        {
+            var path = m_configService.PluginConfiguration.OfflineCacheFolder;
+
+            if (!Directory.Exists(path))
+                return;
+
+            Directory.Delete(path, true);
+        }
+
+        private void OnOpenCacheFolder(object sender, EventArgs e)
+        {
+            var path = m_configService.PluginConfiguration.OfflineCacheFolder;
+            if (Directory.Exists(path))
+                Process.Start(path);
+            else
+                MessageService.ShowInfo("Offline Cache Folder does not exist:", path);
+        }
+
+        private void OnOfflineCacheChanged(object sender, EventArgs e)
+        {
+            UpdateCacheButtonState();
+
+            var path = m_configService.PluginConfiguration.OfflineCacheFolder;
+            if (m_chkOfflineCache.Checked || !Directory.Exists(path)) return;
+
+            var isOk = MessageService.AskYesNo("You are disabeling Offline Cache.\r\nDo you want to clear Offline Cache Folder?\r\nMaybe your unsynced changes get lost!", "Clear Offline Cache", false);
+
+            if (isOk)
+                ClearCache();
+        }
+
+        private void UpdateCacheButtonState()
+        {
+            var isEnabled = m_chkOfflineCache.Checked;
+            m_btnOpenCacheFolder.Enabled = isEnabled;
+            m_btnClearCache.Enabled = isEnabled;
+        }
+
+        private void UpdateBackupState()
+        {
+            var isEnabled = m_chkBackupToLocal.Checked;
+            m_lblBackupToLocalFolder.Enabled = isEnabled;
+            m_txtBackupToLocalFolder.Enabled = isEnabled;
+            m_btnBackupToLocalFolder.Enabled = isEnabled;
+
+            m_lblBackupCopies.Enabled = m_chkBackupToLocal.Checked || m_chkBackupToRemote.Checked;
+            m_numUpDownBackupCopies.Enabled = m_chkBackupToLocal.Checked || m_chkBackupToRemote.Checked;
+
+        }
+
+        private void OnBackupChanged(object sender, EventArgs e)
+        {
+            UpdateBackupState();
+        }
+
+        private void OnSelectBackupToLocalFolder(object sender, EventArgs e)
+        {
+            var dlg = m_dlgSelectBackupToLocalFolder;
+            dlg.SelectedPath = m_txtBackupToLocalFolder.Text;
+
+            var result = dlg.ShowDialog(this);
+            if (result == DialogResult.OK)
+            {
+                m_txtBackupToLocalFolder.Text = dlg.SelectedPath;
+            }
+        }
     }
 }

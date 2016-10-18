@@ -77,14 +77,15 @@ namespace KeeAnywhere.WebRequest
                 {
                     using (var stream = this._requestStream.GetReadableStream())
                     {
-                        return await _provider.Save(stream, _itemPath);
+                        await _provider.Save(stream, _itemPath);
                     }
                 });
 
-                if (!isOk.Result)
+                isOk.Wait();
+                if (isOk.IsFaulted)
                 {
                     throw new InvalidOperationException(string.Format("KeeAnywhere: Upload to folder {0} failed",
-                        _itemPath));
+                        _itemPath), isOk.Exception);
                 }
 
                 _response = new KeeAnywhereWebResponse();

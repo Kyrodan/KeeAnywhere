@@ -33,7 +33,7 @@ namespace KeeAnywhere.StorageProviders.HubiC
             return stream;
         }
 
-        public async Task<bool> Save(Stream stream, string path)
+        public async Task Save(Stream stream, string path)
         {
             if (stream == null) throw new ArgumentNullException("stream");
             if (path == null) throw new ArgumentNullException("path");
@@ -50,7 +50,8 @@ namespace KeeAnywhere.StorageProviders.HubiC
 
             var isOk = await client.UploadObject(container, normalizedPath, stream);
 
-            return isOk;
+            if (!isOk)
+                throw new InvalidOperationException("Save to HubiC failed.");
         }
 
         public async Task<StorageProviderItem> GetRootItem()

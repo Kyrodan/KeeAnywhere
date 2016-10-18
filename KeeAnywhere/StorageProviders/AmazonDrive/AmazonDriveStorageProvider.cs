@@ -50,7 +50,7 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
             return stream;
         }
 
-        public async Task<bool> Save(Stream stream, string path)
+        public async Task Save(Stream stream, string path)
         {
             var api = await GetApi();
 
@@ -72,7 +72,8 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
                 node = await api.Files.UploadNew(folder.id, fileName, () => stream);
             }
 
-            return node != null;
+            if (node == null)
+                throw new InvalidOperationException("Save to Amazon Drive failed.");
         }
 
         public async Task<StorageProviderItem> GetRootItem()

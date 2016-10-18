@@ -30,7 +30,7 @@ namespace KeeAnywhere.StorageProviders.HiDrive
             return stream;
         }
 
-        public async Task<bool> Save(Stream stream, string path)
+        public async Task Save(Stream stream, string path)
         {
             var api = await GetApi();
             var pid = await GetHomeId();
@@ -40,7 +40,8 @@ namespace KeeAnywhere.StorageProviders.HiDrive
 
             var item = await api.File.Upload(filename, pathname, pid).ExecuteAsync(stream);
 
-            return item != null;
+            if (item == null)
+                throw new InvalidOperationException("Save to HiDrive failed.");
         }
 
         public async Task<StorageProviderItem> GetRootItem()
