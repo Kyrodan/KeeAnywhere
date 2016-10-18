@@ -82,6 +82,41 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             }
         }
 
+        public async Task Copy(string sourcePath, string destPath)
+        {
+            using (var api = AmazonS3Helper.GetApi(_account))
+            {
+                string sourceBucket;
+                string sourceFilename;
+                string destBucket;
+                string destFilename;
+
+                GetBucketAndKey(sourcePath, out sourceBucket, out sourceFilename);
+                GetBucketAndKey(destPath, out destBucket, out destFilename);
+
+                var response = await api.CopyObjectAsync(sourceBucket, sourceFilename, destBucket, destFilename);
+
+                if (response == null)
+                    throw new InvalidOperationException("Copy for Amazon S3 failed.");
+            }
+        }
+
+        public async Task Delete(string path)
+        {
+            using (var api = AmazonS3Helper.GetApi(_account))
+            {
+                string bucket;
+                string filename;
+
+                GetBucketAndKey(path, out bucket, out filename);
+
+                var response = await api.DeleteObjectAsync(bucket, filename);
+
+                if (response == null)
+                    throw new InvalidOperationException("Delete for Amazon S3 failed.");
+            }
+        }
+
         public async Task<StorageProviderItem> GetRootItem()
         {
             return new StorageProviderItem
@@ -163,6 +198,11 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                     return items.ToArray();
                 }
             }
+        }
+
+        public Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
+        {
+            return this.GetChildrenByParentItem(new StorageProviderItem { Id = path });
         }
 
 

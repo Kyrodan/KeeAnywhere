@@ -152,5 +152,11 @@ namespace KeeAnywhere
 
             return path1 + path2;
         }
+
+        public static string MaskInvalidFileNameChars(string path)
+        {
+            var invalidChars = Path.GetInvalidFileNameChars();
+            return new string(path.Select(c => invalidChars.Contains(c) ? '_' : c).ToArray());
+        }
     }
 }

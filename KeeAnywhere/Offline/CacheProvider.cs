@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,19 +9,17 @@ using KeePassLib.Utility;
 
 namespace KeeAnywhere.Offline
 {
-    public class CacheProvider : IStorageProvider
+    public class CacheProvider : FileOperationsProxyProvider
     {
-        private readonly IStorageProvider _baseProvider;
         private readonly Uri _requestedUri;
         private readonly ICacheSupervisor _cacheSupervisor;
         private string _cachedFilename;
 
         public CacheProvider(IStorageProvider baseProvider, Uri requestedUri, ICacheSupervisor cacheSupervisor)
+            :base(baseProvider)
         {
-            if (baseProvider == null) throw new ArgumentNullException("baseProvider");
             if (requestedUri == null) throw new ArgumentNullException("requestedUri");
             if (cacheSupervisor == null) throw new ArgumentNullException("cacheSupervisor");
-            _baseProvider = baseProvider;
             _requestedUri = requestedUri;
             _cacheSupervisor = cacheSupervisor;
         }
@@ -34,7 +30,7 @@ namespace KeeAnywhere.Offline
             {
                 if (_cachedFilename == null)
                 {
-                    var hashBytes = GetMD5Hash(_requestedUri.ToString());
+                    var hashBytes = GetMd5Hash(_requestedUri.ToString());
                     var hash = MemUtil.ByteArrayToHexString(hashBytes);
                     _cachedFilename = Path.Combine(_cacheSupervisor.CacheFolder, Path.ChangeExtension(hash, "kdbx"));
                 }
@@ -80,7 +76,7 @@ namespace KeeAnywhere.Offline
         }
 
 
-        public async Task<Stream> Load(string path)
+        public override async Task<Stream> Load(string path)
         {
             try
             {
@@ -151,10 +147,10 @@ namespace KeeAnywhere.Offline
             File.WriteAllText(this.BaseHashFilename, localHash);
         }
 
-        private async Task UpdateCacheFromRemote(FileDetails remoteDetails)
+        private async Task UpdateCacheFromRemote(CacheFileInfo remoteInfo)
         {
-            await UpdateCache(remoteDetails.Stream, remoteDetails.Hash);
-            File.WriteAllText(this.BaseHashFilename, remoteDetails.Hash);
+            await UpdateCache(remoteInfo.Stream, remoteInfo.Hash);
+            File.WriteAllText(this.BaseHashFilename, remoteInfo.Hash);
         }
 
         private async Task UpdateCache(Stream stream, string hash)
@@ -168,12 +164,12 @@ namespace KeeAnywhere.Offline
             File.WriteAllText(this.LocalHashFilename, hash);
         }
 
-        private async Task<FileDetails> LoadFromRemote(string path)
+        private async Task<CacheFileInfo> LoadFromRemote(string path)
         {
             Stream dataStream = new MemoryStream();
-            string hash = null;
+            string hash;
 
-            using (var remoteStream = await _baseProvider.Load(path))
+            using (var remoteStream = await this.BaseProvider.Load(path))
             {
                 // Copy remote to temporary stream (because remote stream may not be seekable)
                 var tempStream = new MemoryStream();
@@ -186,7 +182,7 @@ namespace KeeAnywhere.Offline
                 remoteStream.Close();
             }
 
-            return new FileDetails(dataStream, hash);
+            return new CacheFileInfo(dataStream, hash);
         }
 
         private static string HashStream(Stream sourceStream, Stream destStream)
@@ -204,7 +200,7 @@ namespace KeeAnywhere.Offline
             return hash;
         }
 
-        public async Task Save(Stream stream, string path)
+        public override async Task Save(Stream stream, string path)
         {
             var cachedStream = new MemoryStream();
             var hash = HashStream(stream, cachedStream);
@@ -212,7 +208,7 @@ namespace KeeAnywhere.Offline
 
             try // Try to save to remote
             {
-                await _baseProvider.Save(cachedStream, path);
+                await this.BaseProvider.Save(cachedStream, path);
                 File.WriteAllText(this.BaseHashFilename, hash);
             }
             catch (Exception ex)
@@ -221,48 +217,16 @@ namespace KeeAnywhere.Offline
             }
         }
 
-
-        public Task<StorageProviderItem> GetRootItem()
-        {
-            return _baseProvider.GetRootItem();
-        }
-
-        public Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent)
-        {
-            return _baseProvider.GetChildrenByParentItem(parent);
-        }
-
-        public bool IsFilenameValid(string filename)
-        {
-            return _baseProvider.IsFilenameValid(filename);
-        }
-
        
-        private static byte[] GetMD5Hash(string s)
+        private static byte[] GetMd5Hash(string s)
         {
             if (s == null) throw new ArgumentNullException("s");
 
-            //MD5 Hash aus dem String berechnen. Dazu muss der string in ein Byte[]
-            //zerlegt werden. Danach muss das Resultat wieder zurück in ein string.
             var md5 = new MD5CryptoServiceProvider();
             var textToHash = Encoding.Default.GetBytes(s);
             var result = md5.ComputeHash(textToHash);
 
-            //return BitConverter.ToString(result);
-            //return string.Concat(result.Select(_ => _.ToString("X2")));
             return result;
         }
-    }
-
-    public struct FileDetails
-    {
-        public FileDetails(Stream stream, string hash)
-        {
-            Stream = stream;
-            Hash = hash;
-        }
-
-        public string Hash { get; set; }
-        public Stream Stream { get; set; }
     }
 }

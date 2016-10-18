@@ -2,11 +2,10 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using KeeAnywhere.Backup;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.Offline;
 using KeeAnywhere.WebRequest;
-using KeePass.Forms;
-using KeePass.Plugins;
 using KeePassLib.Serialization;
 
 namespace KeeAnywhere.StorageProviders
@@ -80,14 +79,22 @@ namespace KeeAnywhere.StorageProviders
             var providerUri = new StorageUri(uri);
             var provider = this.GetProviderByUri(providerUri);
 
+            IStorageProviderFileOperations basicProvider = provider;
+
+            if (_configService.PluginConfiguration.IsBackupToLocalEnabled ||
+                _configService.PluginConfiguration.IsBackupToRemoteEnabled)
+            {
+                basicProvider = BackupProvider.WrapInBackupProvider(provider, providerUri, _configService);
+            }
+
             if (_configService.PluginConfiguration.IsOfflineCacheEnabled)
             {
-                provider = _cacheManagerService.GetCachedProvider(provider, uri);
+                basicProvider = _cacheManagerService.WrapInCacheProvider(provider, uri);
             }
 
             var itemPath = providerUri.GetPath();
 
-            return new KeeAnywhereWebRequest(provider, itemPath);
+            return new KeeAnywhereWebRequest(basicProvider, itemPath);
         }
 
         public void RegisterPrefixes()

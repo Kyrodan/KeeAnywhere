@@ -91,5 +91,37 @@ namespace KeeAnywhere.StorageProviders.HubiC
 
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<bool> DeleteObject(string container, string path)
+        {
+            if (container == null) throw new ArgumentNullException("container");
+            if (path == null) throw new ArgumentNullException("path");
+
+            var uri = _credentials.Endpoint + "/" + container + "/" + path;
+            var client = GetClient();
+            var response = await client.DeleteAsync(uri);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> CopyObject(string sourceContainer, string sourcePath, string destContainer, string destPath)
+        {
+            if (sourceContainer == null) throw new ArgumentNullException("sourceContainer");
+            if (sourcePath == null) throw new ArgumentNullException("sourcePath");
+            if (destContainer == null) throw new ArgumentNullException("destContainer");
+            if (destPath == null) throw new ArgumentNullException("destPath");
+
+            var uri = _credentials.Endpoint + "/" + destContainer + "/" + destPath;
+            var source = "/" + sourceContainer + "/" + sourcePath;
+            var client = GetClient();
+
+            var request = new HttpRequestMessage(HttpMethod.Put, uri);
+            request.Headers.Add("X-Copy-From", source);
+
+            var response = await client.SendAsync(request);
+
+            return response.IsSuccessStatusCode;
+        }
+
     }
 }

@@ -54,6 +54,33 @@ namespace KeeAnywhere.StorageProviders.HubiC
                 throw new InvalidOperationException("Save to HubiC failed.");
         }
 
+        public async Task Copy(string sourcePath, string destPath)
+        {
+            var container = await GetDefaultContainer();
+
+            var client = await GetClient();
+            var normalizedSourcePath = sourcePath.StartsWith("/") ? sourcePath.Remove(0, 1) : sourcePath;
+            var normalizedDestPath = destPath.StartsWith("/") ? destPath.Remove(0, 1) : destPath;
+
+            var isOk = await client.CopyObject(container, normalizedSourcePath, container, normalizedDestPath);
+
+            if (!isOk)
+                throw new InvalidOperationException("HubiC: Copy failed.");
+        }
+
+        public async Task Delete(string path)
+        {
+            var container = await GetDefaultContainer();
+
+            var client = await GetClient();
+            var normalizedPath = path.StartsWith("/") ? path.Remove(0, 1) : path;
+
+            var isOk = await client.DeleteObject(container, normalizedPath);
+
+            if (!isOk)
+                throw new InvalidOperationException("HubiC: Delete failed.");
+        }
+
         public async Task<StorageProviderItem> GetRootItem()
         {
             var container = await GetDefaultContainer();
@@ -84,6 +111,11 @@ namespace KeeAnywhere.StorageProviders.HubiC
             });
 
             return ret.ToArray();
+        }
+
+        public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
+        {
+            return await GetChildrenByParentItem(new StorageProviderItem {Id = path});
         }
 
         public bool IsFilenameValid(string filename)
