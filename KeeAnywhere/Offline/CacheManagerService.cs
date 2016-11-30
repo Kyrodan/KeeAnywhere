@@ -33,7 +33,8 @@ namespace KeeAnywhere.Offline
             var kp = _host.MainWindow;
             //kp.FileOpened += OnFileOpened;
             //kp.FileClosed += OnFileClosed;
-            kp.FileSaving += OnFileSaving;
+            kp.FileSavingPre += OnFileSaving;
+            //kp.FileSaving += OnFileSaving;
             kp.FileSaved += OnFileSaved;
         }
 
@@ -42,7 +43,8 @@ namespace KeeAnywhere.Offline
             var kp = _host.MainWindow;
             //kp.FileOpened -= OnFileOpened;
             //kp.FileClosed -= OnFileClosed;
-            kp.FileSaving -= OnFileSaving;
+            kp.FileSavingPre -= OnFileSaving;
+            //kp.FileSaving -= OnFileSaving;
             kp.FileSaved -= OnFileSaved;
         }
 
