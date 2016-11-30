@@ -4,6 +4,7 @@
 
 - \#5 Cache databases for disconnected (offline) usage
 - \#61 Simple Automatic Backup (Remote and/or Local)
+- Added experimental Amazon Drive support
 
 ### Fixed
 

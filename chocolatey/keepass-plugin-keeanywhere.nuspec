@@ -12,6 +12,7 @@ KeeAnywhere is a KeePass plugin that provides access to cloud storage providers 
 
 Supported providers:
 
+* Amazon Drive (Experimental)
 * Amazon AWS S3
 * Box
 * Dropbox
