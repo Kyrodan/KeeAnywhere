@@ -11,6 +11,7 @@
 
 ### Improved
 
+-\#62 Allow pasting in the embedded browser
 - Updated Dependencies
 
 ## 1.3.0 (2016-09-01)

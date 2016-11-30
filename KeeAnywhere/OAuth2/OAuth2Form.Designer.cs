@@ -31,8 +31,8 @@
             this.m_browser = new System.Windows.Forms.WebBrowser();
             this.m_bannerImage = new System.Windows.Forms.PictureBox();
             this.m_pnlWait = new System.Windows.Forms.Panel();
-            this.m_pgbWait = new System.Windows.Forms.ProgressBar();
             this.m_lblWait = new System.Windows.Forms.Label();
+            this.m_pgbWait = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).BeginInit();
             this.m_pnlWait.SuspendLayout();
             this.SuspendLayout();
@@ -43,7 +43,6 @@
             this.m_browser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_browser.IsWebBrowserContextMenuEnabled = false;
             this.m_browser.Location = new System.Drawing.Point(0, 66);
             this.m_browser.MinimumSize = new System.Drawing.Size(20, 20);
             this.m_browser.Name = "m_browser";
@@ -80,17 +79,6 @@
             this.m_pnlWait.UseWaitCursor = true;
             this.m_pnlWait.Visible = false;
             // 
-            // m_pgbWait
-            // 
-            this.m_pgbWait.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_pgbWait.Location = new System.Drawing.Point(109, 151);
-            this.m_pgbWait.Name = "m_pgbWait";
-            this.m_pgbWait.Size = new System.Drawing.Size(615, 23);
-            this.m_pgbWait.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-            this.m_pgbWait.TabIndex = 0;
-            this.m_pgbWait.Value = 100;
-            // 
             // m_lblWait
             // 
             this.m_lblWait.AutoSize = true;
@@ -100,6 +88,19 @@
             this.m_lblWait.Size = new System.Drawing.Size(161, 13);
             this.m_lblWait.TabIndex = 1;
             this.m_lblWait.Text = "Processing ... Please Wait!";
+            this.m_lblWait.UseWaitCursor = true;
+            // 
+            // m_pgbWait
+            // 
+            this.m_pgbWait.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_pgbWait.Location = new System.Drawing.Point(109, 151);
+            this.m_pgbWait.Name = "m_pgbWait";
+            this.m_pgbWait.Size = new System.Drawing.Size(615, 23);
+            this.m_pgbWait.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.m_pgbWait.TabIndex = 0;
+            this.m_pgbWait.UseWaitCursor = true;
+            this.m_pgbWait.Value = 100;
             // 
             // OAuth2Form
             // 
