@@ -282,8 +282,9 @@ namespace KeeAnywhere
             var httpver = new Version(1, 5, 0, 0);
 
             var jsonasm = Assembly.Load("Newtonsoft.Json");
-            var jsonver = new Version(7, 0, 0, 0);
+            //var jsonver = new Version(9, 0, 0, 0);
 
+            var odasm = Assembly.Load("Microsoft.Graph.Core");
 
             AppDomain.CurrentDomain.AssemblyResolve += (s, a) =>
             {
@@ -294,6 +295,9 @@ namespace KeeAnywhere
 
                 if (requestedAssembly.Name == "Newtonsoft.Json" && requestedAssembly.Version < jsonasm.GetName().Version)
                     return jsonasm;
+
+                if (requestedAssembly.Name == "Microsoft.Graph.Core" && requestedAssembly.Version < odasm.GetName().Version)
+                    return odasm;
 
                 return null;
             };
