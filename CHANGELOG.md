@@ -1,3 +1,10 @@
+## 1.3.1 (2017-01-02)
+
+### Fixed
+
+- \#67 Dropbox: can't authenticate after introduction of new Login Page
+
+
 ## 1.3.0 (2016-09-01)
 
 ### New
