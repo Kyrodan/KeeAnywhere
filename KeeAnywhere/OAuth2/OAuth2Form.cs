@@ -60,6 +60,7 @@ namespace KeeAnywhere.OAuth2
             if (m_isPreAuthorization)
             {
                 m_isPreAuthorization = false;
+                m_browser.Stop();
                 m_browser.Navigate(m_provider.AuthorizationUrl);
                 return;
             }
