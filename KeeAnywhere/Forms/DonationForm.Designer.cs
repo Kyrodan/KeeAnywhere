@@ -50,6 +50,7 @@
             // m_btnClose
             // 
             this.m_btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.m_btnClose.Location = new System.Drawing.Point(430, 218);
             this.m_btnClose.Name = "m_btnClose";
             this.m_btnClose.Size = new System.Drawing.Size(75, 23);
@@ -118,6 +119,7 @@
             this.Name = "DonationForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Donate to KeeAnywhere";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.Load += new System.EventHandler(this.OnFormLoad);
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).EndInit();
             this.ResumeLayout(false);

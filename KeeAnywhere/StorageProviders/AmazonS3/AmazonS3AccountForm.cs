@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Amazon;
 using Amazon.Runtime;
-using Amazon.S3;
 using KeePass.UI;
-using log4net.Core;
 
 namespace KeeAnywhere.StorageProviders.AmazonS3
 {

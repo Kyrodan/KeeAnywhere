@@ -65,5 +65,11 @@ namespace KeeAnywhere.Forms
 
             m_btnOpenSettings.Visible = _isUpgraded;
         }
+
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            GlobalWindowManager.RemoveWindow(this);
+        }
+
     }
 }

@@ -9,10 +9,12 @@
 ### Fixed
 
 - \#58 Amazon S3: Cannot save/write database file to root of bucket
+- \#63 KeePass tray menu disabled and window restoration fails when account creation is canceled
+- \#68 Ctrl+Alt+A Gives Error cannot access disposed object "DonationForm"
 
 ### Improved
 
--\#62 Allow pasting in the embedded browser
+- \#62 Allow pasting in the embedded browser
 - Updated Dependencies
 
 

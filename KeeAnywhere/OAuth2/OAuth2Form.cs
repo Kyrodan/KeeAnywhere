@@ -37,6 +37,11 @@ namespace KeeAnywhere.OAuth2
             m_browser.Navigate(m_provider.PreAuthorizationUrl ?? m_provider.AuthorizationUrl);
         }
 
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            GlobalWindowManager.RemoveWindow(this);
+        }
+
         private void UpdateBanner()
         {
             if (m_provider == null) return;
