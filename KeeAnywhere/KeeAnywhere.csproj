@@ -351,9 +351,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\CHANGELOG.md">
-      <Link>CHANGELOG.md</Link>
-    </EmbeddedResource>
     <None Include="app.config">
       <ExcludeFromPlgx />
       <SubType>Designer</SubType>

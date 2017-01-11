@@ -6,10 +6,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using KeeAnywhere.StorageProviders;
 using KeePass.UI;
 
 namespace KeeAnywhere.Forms
@@ -49,18 +51,20 @@ namespace KeeAnywhere.Forms
                     "See detailed changes for each version.");
             }
 
-            var outStream = new MemoryStream();
-            var assembly = Assembly.GetExecutingAssembly();
-            using (var inReader = new StreamReader(assembly.GetManifestResourceStream("KeeAnywhere.CHANGELOG.md")))
+            var wc = new WebClient {Proxy = ProxyTools.GetProxy()};
+
+            var version = this.GetVersionTag();
+            var url = string.Format("https://raw.githubusercontent.com/Kyrodan/KeeAnywhere/{0}/CHANGELOG.md", version);
+
+            try
             {
-
-                var outWriter = new StreamWriter(outStream);
-
-                CommonMark.CommonMarkConverter.Convert(inReader, outWriter);
-                outWriter.Flush();
-                outStream.Position = 0;
-
-                m_browser.DocumentStream = outStream;
+                var markdown = wc.DownloadString(url);
+                var html = CommonMark.CommonMarkConverter.Convert(markdown);
+                m_browser.DocumentText = html;
+            }
+            catch
+            {
+                //Ignore
             }
 
             m_btnOpenSettings.Visible = _isUpgraded;
@@ -71,5 +75,27 @@ namespace KeeAnywhere.Forms
             GlobalWindowManager.RemoveWindow(this);
         }
 
+        private string GetVersionTag()
+        {
+            var tag = "master";
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+
+                if (versionAttribute != null)
+                    tag = "v" + versionAttribute.InformationalVersion;
+
+                if (tag.EndsWith("unstable"))
+                    tag = "develop";
+
+            }
+            catch
+            {
+                // ignored
+            }
+
+            return tag;
+        }
     }
 }

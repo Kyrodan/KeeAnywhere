@@ -10,7 +10,7 @@ namespace KeeAnywhere.Offline
             Hash = hash;
         }
 
-        public string Hash { get; set; }
-        public Stream Stream { get; set; }
+        public string Hash;
+        public Stream Stream;
     }
 }
