@@ -394,7 +394,7 @@
   <PropertyGroup>
     <PlgxConfiguration>
       <Prerequisites>
-        <KeePassVersion>2.31</KeePassVersion>
+        <KeePassVersion>2.35</KeePassVersion>
         <OS>Windows</OS>
         <DotNetVersion>4.5.1</DotNetVersion>
       </Prerequisites>

@@ -1,5 +1,7 @@
 ## 1.4.0 (unreleased)
 
+KeePass 2.35 or newer is required now.
+
 ### New
 
 - \#5 Cache databases for disconnected (offline) usage
