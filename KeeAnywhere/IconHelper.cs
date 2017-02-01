@@ -180,6 +180,12 @@ namespace KeeAnywhere
             int cbFileInfo,
             FileInfoFlags uFlags);
 
+        //TODO: Required to introduce DestroyIcon see comments on ExtractIconEx under "Remarks"!
+        // [MSDN - ExtractIconEx]
+        // https://msdn.microsoft.com/de-de/library/windows/desktop/ms648069.aspx
+        // [MSDN - DestroyIcon]
+        // https://msdn.microsoft.com/de-de/library/windows/desktop/ms648069.aspx#Remarks
+        
         #endregion
 
         /// <summary>
