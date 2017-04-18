@@ -18,6 +18,7 @@ KeePass 2.35 or newer is required now.
 
 - \#62 Allow pasting in the embedded browser
 - Updated Dependencies
+- Replaced Micrososft OneDriveSDK with GraphSDK
 
 
 ## 1.3.1 (2017-01-02)

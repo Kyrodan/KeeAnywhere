@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
 using Microsoft.Graph;
-using Microsoft.OneDrive.Sdk;
 
 namespace KeeAnywhere.StorageProviders.OneDrive
 {
@@ -48,7 +47,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
                         .ItemWithPath(escapedpath)
                         .Content
                         .Request()
-                        .PutAsync<Item>(stream);
+                        .PutAsync<DriveItem>(stream);
 
             if (uploadedItem == null)
                 throw new InvalidOperationException("Save to OneDrive failed.");
@@ -67,28 +66,13 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             if (destItem == null)
                 throw new FileNotFoundException("OneDrive: Folder not found.", destFolder);
 
-            //var sourceItem = await api.Drive.Root.ItemWithPath(destFolder).Request().GetAsync();
-
-            try
-            {
-                var request = api
-                    .Drive
-                    .Root
-                    .ItemWithPath(escapedpath)
-                    .Copy(destFilename, new ItemReference {Id = destItem.Id})
-                    .Request(new[] {new HeaderOption("Prefer", "respond-async"), });
-
-                var asyncMonitor = await request.PostAsync();
-
-                //var item = await asyncMonitor.PollForOperationCompletionAsync(null, CancellationToken.None);
-
-                //if (item == null)
-                //    throw new InvalidOperationException("OneDrive: Copy failed.");
-            }
-            catch (Exception ex)
-            {
-                Debug.Write("");
-            }
+            await api
+                .Drive
+                .Root
+                .ItemWithPath(escapedpath)
+                .Copy(destFilename, new ItemReference {Id = destItem.Id})
+                .Request(/*new[] {new HeaderOption("Prefer", "respond-async"), }*/)
+                .PostAsync();
         }
 
         public async Task Delete(string path)
@@ -152,7 +136,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             return filename.All(c => c >= 32 && !invalidChars.Contains(c));
         }
 
-        protected StorageProviderItem CreateStorageProviderItemFromOneDriveItem(Item item)
+        protected StorageProviderItem CreateStorageProviderItemFromOneDriveItem(DriveItem item)
         {
             var providerItem = new StorageProviderItem
             {
