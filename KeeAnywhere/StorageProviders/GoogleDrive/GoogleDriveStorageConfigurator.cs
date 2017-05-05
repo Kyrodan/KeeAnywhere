@@ -1,11 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Auth.OAuth2.Responses;
-using Google.Apis.Drive.v3;
-using Google.Apis.Services;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.OAuth2;
 
@@ -49,12 +47,16 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
         public async Task<bool> Claim(Uri uri, string documentTitle)
         {
-            var parts = documentTitle.Split(' ');
+            var parts = HttpUtility.ParseQueryString(uri.Query);
 
-            if (parts.Length < 1 || parts[0] != "Success")
+            if (parts.Count < 1 || parts.Get("response") == null)
                 return false;
 
-            var code = parts[1].Split('=')[1];
+            var code = parts.Get("response");
+            if (!code.Contains("code"))
+                return false;
+
+            code = code.Split('=')[1];
 
             try
             {
