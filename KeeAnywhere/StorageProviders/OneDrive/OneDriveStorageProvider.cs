@@ -61,7 +61,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             var escapedpath = Uri.EscapeDataString(sourcePath);
 
             var destFolder = Uri.EscapeDataString(CloudPath.GetDirectoryName(destPath));
-            var destFilename = Uri.EscapeDataString(CloudPath.GetFileName(destPath));
+            var destFilename = CloudPath.GetFileName(destPath);
             var destItem = await api.Drive.Root.ItemWithPath(destFolder).Request().GetAsync();
             if (destItem == null)
                 throw new FileNotFoundException("OneDrive: Folder not found.", destFolder);
