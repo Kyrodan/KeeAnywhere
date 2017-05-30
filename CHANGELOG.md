@@ -14,6 +14,7 @@ KeePass 2.35 or newer is required now.
 - \#63 KeePass tray menu disabled and window restoration fails when account creation is canceled
 - \#68 Ctrl+Alt+A Gives Error cannot access disposed object "DonationForm"
 - \#74 Google Drive Authentication failed
+- \#77 OneDrive: Microsoft.Graph.ServiceException
 
 ### Improved
 
