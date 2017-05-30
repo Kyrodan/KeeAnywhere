@@ -279,7 +279,7 @@
     <Compile Include="StorageProviders\Dropbox\DropboxHelper.cs" />
     <Compile Include="StorageProviders\Dropbox\DropboxStorageConfigurator.cs" />
     <Compile Include="StorageProviders\Dropbox\DropboxStorageProvider.cs" />
-    <Compile Include="StorageProviders\FileOperationsProxyProvider.cs" />
+    <Compile Include="StorageProviders\ProxyProvider.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveHelper.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveHttpClientFactory.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveStorageConfigurator.cs" />

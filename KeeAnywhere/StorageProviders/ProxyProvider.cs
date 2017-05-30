@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace KeeAnywhere.StorageProviders
 {
-    public abstract class FileOperationsProxyProvider : IStorageProviderFileOperations
+    public abstract class ProxyProvider : IStorageProvider
     {
         protected IStorageProvider BaseProvider { get; private set; }
 
-        protected FileOperationsProxyProvider(IStorageProvider baseProvider)
+        protected ProxyProvider(IStorageProvider baseProvider)
         {
             if (baseProvider == null) throw new ArgumentNullException("baseProvider");
             BaseProvider = baseProvider;
@@ -37,6 +38,21 @@ namespace KeeAnywhere.StorageProviders
         public virtual bool IsFilenameValid(string filename)
         {
             return BaseProvider.IsFilenameValid(filename);
+        }
+
+        public virtual Task<StorageProviderItem> GetRootItem()
+        {
+            return BaseProvider.GetRootItem();
+        }
+
+        public virtual Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent)
+        {
+            return BaseProvider.GetChildrenByParentItem(parent);
+        }
+
+        public virtual Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
+        {
+            return BaseProvider.GetChildrenByParentPath(path);
         }
     }
 }

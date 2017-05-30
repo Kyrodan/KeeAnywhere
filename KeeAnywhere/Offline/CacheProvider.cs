@@ -9,7 +9,7 @@ using KeePassLib.Utility;
 
 namespace KeeAnywhere.Offline
 {
-    public class CacheProvider : FileOperationsProxyProvider
+    public class CacheProvider : ProxyProvider
     {
         private readonly Uri _requestedUri;
         private readonly ICacheSupervisor _cacheSupervisor;

@@ -8,7 +8,7 @@ using KeeAnywhere.StorageProviders;
 
 namespace KeeAnywhere.Backup
 {
-    public class BackupProvider : FileOperationsProxyProvider
+    public class BackupProvider : ProxyProvider
     {
         private readonly StorageUri _requestedUri;
         private readonly ConfigurationService _configService;
@@ -22,7 +22,7 @@ namespace KeeAnywhere.Backup
             _configService = configService;
         }
 
-        public static IStorageProviderFileOperations WrapInBackupProvider(IStorageProvider provider, StorageUri requestedUri, ConfigurationService configService)
+        public static IStorageProvider WrapInBackupProvider(IStorageProvider provider, StorageUri requestedUri, ConfigurationService configService)
         {
             var backupProvider = new BackupProvider(provider, requestedUri, configService);
 
@@ -31,23 +31,27 @@ namespace KeeAnywhere.Backup
 
         public override async Task Save(Stream stream, string path)
         {
-            if (_configService.PluginConfiguration.IsBackupToRemoteEnabled)
-            {
-                await BackupRemote(path);
-                await RotateRemote(path);
-            }
-
-            var tempStream = new MemoryStream();
-            await stream.CopyToAsync(tempStream);
-            tempStream.Position = 0;
-
-            await this.BaseProvider.Save(tempStream, path);
+            var now = DateTime.Now;
 
             if (_configService.PluginConfiguration.IsBackupToLocalEnabled)
             {
-                BackupLocal(stream, path);
-                RotateLocal(path);
+                if (TryBackupLocal(stream, path, now))
+                {
+                    RotateLocal(path);
+                }
             }
+
+            if (_configService.PluginConfiguration.IsBackupToRemoteEnabled)
+            {
+                if (await TryBackupRemote(path, now))
+                {
+                    await RotateRemote(path);
+                }
+            }
+
+            stream.Position = 0;
+            await this.BaseProvider.Save(stream, path);
+
         }
 
         private async Task RotateRemote(string path)
@@ -69,19 +73,21 @@ namespace KeeAnywhere.Backup
             }
         }
 
-        private async Task BackupRemote(string path)
+        private async Task<bool> TryBackupRemote(string path, DateTime saveDateTime)
         {
-            var backupFilename = GetBackupFilename(CloudPath.GetFileName(path));
+            var backupFilename = GetBackupFilename(CloudPath.GetFileName(path), saveDateTime);
             var backupFolder = CloudPath.GetDirectoryName(path);
             var backupPath = CloudPath.Combine(backupFolder, backupFilename);
 
             try
             {
                 await this.BaseProvider.Copy(path, backupPath);
+                return true;
             }
             catch (Exception)
             {
                 // Try to copy file to backup: it fails if file is saved for the first time
+                return false;
             }
         }
 
@@ -99,24 +105,32 @@ namespace KeeAnywhere.Backup
             }
         }
 
-        private void BackupLocal(Stream stream, string path)
+        private bool TryBackupLocal(Stream stream, string path, DateTime saveDateTime)
         {
-            stream.Position = 0;
-
-            var folder = GetBackupFolder();
-
-            var localFilename = GetLocalFilename(path);
-            var localPath = Path.Combine(folder, localFilename);
-
-            if (File.Exists(localPath))
+            try
             {
-                var backupFilename = GetBackupFilename(GetLocalFilename(path));
-                var backupPath = Path.Combine(folder, backupFilename);
-                File.Move(localPath, backupPath);
-            }
+                stream.Position = 0;
 
-            using (var backupStream = File.OpenWrite(localPath))
-                stream.CopyTo(backupStream);
+                var folder = GetBackupFolder();
+
+                var localFilename = GetLocalFilename(path);
+                var localPath = Path.Combine(folder, localFilename);
+
+                if (File.Exists(localPath))
+                {
+                    var backupFilename = GetBackupFilename(GetLocalFilename(path), saveDateTime);
+                    var backupPath = Path.Combine(folder, backupFilename);
+                    File.Move(localPath, backupPath);
+                }
+
+                using (var backupStream = File.OpenWrite(localPath))
+                    stream.CopyTo(backupStream);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public string GetBackupFolder()
@@ -137,11 +151,11 @@ namespace KeeAnywhere.Backup
             return filename;
         }
 
-        public string GetBackupFilename(string filename)
+        public string GetBackupFilename(string filename, DateTime saveDateTime)
         {
             var baseFilename = Path.GetFileNameWithoutExtension(filename);
 
-            filename = string.Format("{0}_Backup_{1:yyyy-MM-dd-HH-mm-ss}.kdbx", baseFilename, DateTime.Now);
+            filename = string.Format("{0}_Backup_{1:yyyy-MM-dd-HH-mm-ss}.kdbx", baseFilename, saveDateTime);
 
             return filename;
         }

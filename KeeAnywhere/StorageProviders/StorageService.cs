@@ -79,22 +79,23 @@ namespace KeeAnywhere.StorageProviders
             var providerUri = new StorageUri(uri);
             var provider = this.GetProviderByUri(providerUri);
 
-            IStorageProviderFileOperations basicProvider = provider;
+
+            // Pipeline: Backup => Cache => Basic Provider
+
+            if (_configService.PluginConfiguration.IsOfflineCacheEnabled)
+            {
+                provider = _cacheManagerService.WrapInCacheProvider(provider, uri);
+            }
 
             if (_configService.PluginConfiguration.IsBackupToLocalEnabled ||
                 _configService.PluginConfiguration.IsBackupToRemoteEnabled)
             {
-                basicProvider = BackupProvider.WrapInBackupProvider(provider, providerUri, _configService);
-            }
-
-            if (_configService.PluginConfiguration.IsOfflineCacheEnabled)
-            {
-                basicProvider = _cacheManagerService.WrapInCacheProvider(provider, uri);
+                provider = BackupProvider.WrapInBackupProvider(provider, providerUri, _configService);
             }
 
             var itemPath = providerUri.GetPath();
 
-            return new KeeAnywhereWebRequest(basicProvider, itemPath);
+            return new KeeAnywhereWebRequest(provider, itemPath);
         }
 
         public void RegisterPrefixes()

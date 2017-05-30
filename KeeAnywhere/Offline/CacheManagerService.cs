@@ -68,7 +68,7 @@ namespace KeeAnywhere.Offline
             throw new NotImplementedException();
         }
 
-        public IStorageProviderFileOperations WrapInCacheProvider(IStorageProvider provider, Uri uri)
+        public IStorageProvider WrapInCacheProvider(IStorageProvider provider, Uri uri)
         {
             var cachedProvider = new CacheProvider(provider, uri, this);
 
