@@ -31,6 +31,7 @@ namespace KeeAnywhere
         private ToolStripMenuItem _tsShowSettings;
         private UIService _uiService;
         private CacheManagerService _cacheManagerService;
+        private KpResources _kpResources;
 
 
         /// <summary>
@@ -74,6 +75,8 @@ namespace KeeAnywhere
             // Initialize UIService
             _uiService = new UIService(_configService, _storageService);
 
+            // Initialize KeePass-Resource Service
+            _kpResources = new KpResources(_host);
 
             // Add the menu option for configuration under Tools
             var menu = _host.MainWindow.ToolsMenu.DropDownItems;
@@ -168,7 +171,7 @@ namespace KeeAnywhere
             _uiService.ShowDonationDialog();
 
             var form = new CloudDriveFilePicker();
-            form.InitEx(_configService, _storageService, CloudDriveFilePicker.Mode.Save);
+            form.InitEx(_configService, _storageService, _kpResources, CloudDriveFilePicker.Mode.Save);
             var result = UIUtil.ShowDialogAndDestroy(form);
 
             if (result != DialogResult.OK)
@@ -189,7 +192,7 @@ namespace KeeAnywhere
             _uiService.ShowDonationDialog();
 
             var form = new CloudDriveFilePicker();
-            form.InitEx(_configService, _storageService, CloudDriveFilePicker.Mode.Open);
+            form.InitEx(_configService, _storageService, _kpResources, CloudDriveFilePicker.Mode.Open);
             var result = UIUtil.ShowDialogAndDestroy(form);
 
             if (result != DialogResult.OK)

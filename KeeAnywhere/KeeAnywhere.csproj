@@ -237,10 +237,10 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IconHelper.cs" />
     <Compile Include="Json\JsonEncryptAttribute.cs" />
     <Compile Include="Json\ProtectedDataStringPropertyResolver.cs" />
     <Compile Include="KeeAnywhereExt.cs" />
+    <Compile Include="KpResources.cs" />
     <Compile Include="OAuth2\IOAuth2Provider.cs" />
     <Compile Include="OAuth2\OAuth2Flow.cs" />
     <Compile Include="OAuth2\OAuth2Form.cs">

@@ -6,17 +6,19 @@ KeePass 2.35 or newer is required now.
 
 - \#5 Cache databases for disconnected (offline) usage
 - \#61 Simple Automatic Backup (Remote and/or Local)
-- Added experimental Amazon Drive support
+- Activated experimental Amazon Drive support
 
 ### Fixed
 
 - \#58 Amazon S3: Cannot save/write database file to root of bucket
 - \#63 KeePass tray menu disabled and window restoration fails when account creation is canceled
 - \#68 Ctrl+Alt+A Gives Error cannot access disposed object "DonationForm"
+- \#74 Google Drive Authentication failed
 
 ### Improved
 
 - \#62 Allow pasting in the embedded browser
+- \#72 IconHelper leaves unsed API allocated memory - Completely removed IconHelper
 - Updated Dependencies
 - Replaced Micrososft OneDriveSDK with GraphSDK
 
