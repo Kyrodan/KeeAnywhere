@@ -1,8 +1,11 @@
 ## 1.4.0 (unreleased)
 
 This release brings two new features: Offline-Caching and Simple Automatic Backup.
+
 KeePass 2.35 or newer is required now (was 2.31).
+
 Micrososft .Net 4.5.2 is required now (was 4.5.1).
+
 
 ### New
 
