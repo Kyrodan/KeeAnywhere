@@ -1,4 +1,4 @@
-## 1.4.0 (unreleased)
+## 1.4.0 (2017-05-31)
 
 This release brings two new features: Offline-Caching and Simple Automatic Backup.
 
