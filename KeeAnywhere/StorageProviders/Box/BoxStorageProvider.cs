@@ -32,7 +32,7 @@ namespace KeeAnywhere.StorageProviders.Box
             return stream;
         }
 
-        public async Task<bool> Save(Stream stream, string path)
+        public async Task Save(Stream stream, string path)
         {
             var api = await GetApi();
             BoxFile item;
@@ -62,7 +62,51 @@ namespace KeeAnywhere.StorageProviders.Box
 
             }
 
-            return item != null;
+            if (item == null)
+                throw new InvalidOperationException("Save to Box failed.");
+        }
+
+        public async Task Copy(string sourcePath, string destPath)
+        {
+            var api = await GetApi();
+
+            var item = await api.GetFileByPath(sourcePath);
+            if (item == null)
+                throw new FileNotFoundException("Box: File not found.", sourcePath);
+
+            var destFilename = CloudPath.GetFileName(destPath);
+            var destFolder = CloudPath.GetDirectoryName(destPath);
+
+            var destParent = await api.GetFileByPath(destFolder);
+            if (destParent == null)
+                throw new FileNotFoundException("Box: File not found.", destFolder);
+
+            var request = new BoxFileRequest
+            {
+                Id = item.Id,
+                Parent = new BoxFileRequest {Id = destParent.Id},
+                Name = destFilename,
+            };
+
+            var result = await api.FilesManager.CopyAsync(request);
+
+            if (result == null)
+                throw new InvalidOperationException("Box: Copy failed.");
+
+        }
+
+        public async Task Delete(string path)
+        {
+            var api = await GetApi();
+
+            var item = await api.GetFileByPath(path);
+            if (item == null)
+                throw new FileNotFoundException("Box: File not found for delete.", path);
+
+            var isOk = await api.FilesManager.DeleteAsync(item.Id);
+
+            if (!isOk)
+                throw new InvalidOperationException("Box: Delete failed.");
         }
 
 
@@ -92,6 +136,17 @@ namespace KeeAnywhere.StorageProviders.Box
             });
 
             return items.ToArray();
+        }
+
+        public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
+        {
+            var api = await GetApi();
+
+            var parent = await api.GetFileByPath(path);
+            if (parent == null)
+                throw new FileNotFoundException("Box: Path not found.", path);
+
+            return await GetChildrenByParentItem(new StorageProviderItem {Id = parent.Id});
         }
 
         public bool IsFilenameValid(string filename)

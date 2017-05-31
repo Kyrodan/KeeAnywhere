@@ -9,7 +9,7 @@ namespace KeeAnywhere.WebRequest
 {
     public sealed class KeeAnywhereWebRequest : System.Net.WebRequest
     {
-        private readonly IStorageProvider _provider;
+        private readonly IStorageProviderFileOperations _provider;
         private readonly string _itemPath;
 
         private RequestStream _requestStream;
@@ -34,7 +34,7 @@ namespace KeeAnywhere.WebRequest
             set { _headers = value; }
         }
 
-        public KeeAnywhereWebRequest(IStorageProvider provider, string itemPath)
+        public KeeAnywhereWebRequest(IStorageProviderFileOperations provider, string itemPath)
         {
             if (provider == null) throw new ArgumentNullException("provider");
             if (itemPath == null) throw new ArgumentNullException("itemPath");
@@ -73,28 +73,43 @@ namespace KeeAnywhere.WebRequest
             }
             else if (this.Method == WebRequestMethods.Http.Post)
             {
-                var isOk = Task.Run(async () =>
+                var task = Task.Run(async () =>
                 {
                     using (var stream = this._requestStream.GetReadableStream())
                     {
-                        return await _provider.Save(stream, _itemPath);
+                        await _provider.Save(stream, _itemPath);
                     }
                 });
 
-                if (!isOk.Result)
+                task.Wait();
+                if (task.IsFaulted)
                 {
                     throw new InvalidOperationException(string.Format("KeeAnywhere: Upload to folder {0} failed",
-                        _itemPath));
+                        _itemPath), task.Exception);
                 }
 
                 _response = new KeeAnywhereWebResponse();
             }
             else // Get File
             {
-                var stream = Task.Run(async () => await _provider.Load(_itemPath));
+                var task = Task.Run(async () => await _provider.Load(_itemPath));
 
-                var wrappeedStream = new WrapperStream(stream.Result); // Issue #44: Sometimes can't load kdbx file (Dropbox, hubiC)
-                _response = new KeeAnywhereWebResponse(wrappeedStream);
+                // Issue #44: Sometimes can't load kdbx file (Dropbox, hubiC)
+                //var wrappeedStream = new WrapperStream(stream.Result); 
+                task.Wait();
+                var memoryStream = task.Result as MemoryStream;
+
+                if (memoryStream == null)
+                {
+                    using (task.Result)
+                    {
+                        memoryStream = new MemoryStream();
+                        task.Result.CopyTo(memoryStream);
+                        memoryStream.Position = 0;
+                    }
+                }
+
+                _response = new KeeAnywhereWebResponse(memoryStream);
             }
 
             return _response;

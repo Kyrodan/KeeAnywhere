@@ -34,6 +34,7 @@
             this.m_tcSettings = new System.Windows.Forms.TabControl();
             this.m_tabAccounts = new System.Windows.Forms.TabPage();
             this.m_btnAccountCheck = new System.Windows.Forms.Button();
+            this.m_btnAccountAdd = new KeeAnywhere.Forms.DropDownButton();
             this.m_mnuAdd = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_btnAccountRemove = new System.Windows.Forms.Button();
             this.m_lvAccounts = new System.Windows.Forms.ListView();
@@ -43,7 +44,18 @@
             this.m_rbStorageLocation_LocalUserSecureStore = new System.Windows.Forms.RadioButton();
             this.lblAccountStorageLocation = new System.Windows.Forms.Label();
             this.m_tabGeneral = new System.Windows.Forms.TabPage();
-            this.m_cbOfflineCache = new System.Windows.Forms.CheckBox();
+            this.m_gbBackup = new System.Windows.Forms.GroupBox();
+            this.m_btnBackupToLocalFolder = new System.Windows.Forms.Button();
+            this.m_numUpDownBackupCopies = new System.Windows.Forms.NumericUpDown();
+            this.m_lblBackupCopies = new System.Windows.Forms.Label();
+            this.m_txtBackupToLocalFolder = new System.Windows.Forms.TextBox();
+            this.m_lblBackupToLocalFolder = new System.Windows.Forms.Label();
+            this.m_chkBackupToLocal = new System.Windows.Forms.CheckBox();
+            this.m_chkBackupToRemote = new System.Windows.Forms.CheckBox();
+            this.m_gbOfflineCache = new System.Windows.Forms.GroupBox();
+            this.m_btnOpenCacheFolder = new System.Windows.Forms.Button();
+            this.m_btnClearCache = new System.Windows.Forms.Button();
+            this.m_chkOfflineCache = new System.Windows.Forms.CheckBox();
             this.m_tabAbout = new System.Windows.Forms.TabPage();
             this.m_lblAboutVersion = new System.Windows.Forms.Label();
             this.m_lblAboutExplanation = new System.Windows.Forms.Label();
@@ -62,11 +74,14 @@
             this.m_mnuHelp_Donate = new System.Windows.Forms.ToolStripMenuItem();
             this.m_pnlFormButtons = new System.Windows.Forms.TableLayoutPanel();
             this.m_btnHelp = new KeeAnywhere.Forms.DropDownButton();
-            this.m_btnAccountAdd = new KeeAnywhere.Forms.DropDownButton();
+            this.m_dlgSelectBackupToLocalFolder = new System.Windows.Forms.FolderBrowserDialog();
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).BeginInit();
             this.m_tcSettings.SuspendLayout();
             this.m_tabAccounts.SuspendLayout();
             this.m_tabGeneral.SuspendLayout();
+            this.m_gbBackup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_numUpDownBackupCopies)).BeginInit();
+            this.m_gbOfflineCache.SuspendLayout();
             this.m_tabAbout.SuspendLayout();
             this.m_mnuHelp.SuspendLayout();
             this.m_pnlFormButtons.SuspendLayout();
@@ -123,6 +138,17 @@
             this.m_btnAccountCheck.Text = "Check";
             this.m_btnAccountCheck.UseVisualStyleBackColor = true;
             this.m_btnAccountCheck.Click += new System.EventHandler(this.OnAccountCheck);
+            // 
+            // m_btnAccountAdd
+            // 
+            this.m_btnAccountAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnAccountAdd.Location = new System.Drawing.Point(490, 38);
+            this.m_btnAccountAdd.Menu = this.m_mnuAdd;
+            this.m_btnAccountAdd.Name = "m_btnAccountAdd";
+            this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
+            this.m_btnAccountAdd.TabIndex = 11;
+            this.m_btnAccountAdd.Text = "Add...";
+            this.m_btnAccountAdd.UseVisualStyleBackColor = true;
             // 
             // m_mnuAdd
             // 
@@ -209,7 +235,8 @@
             // 
             // m_tabGeneral
             // 
-            this.m_tabGeneral.Controls.Add(this.m_cbOfflineCache);
+            this.m_tabGeneral.Controls.Add(this.m_gbBackup);
+            this.m_tabGeneral.Controls.Add(this.m_gbOfflineCache);
             this.m_tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.m_tabGeneral.Name = "m_tabGeneral";
             this.m_tabGeneral.Padding = new System.Windows.Forms.Padding(3);
@@ -218,15 +245,142 @@
             this.m_tabGeneral.Text = "General";
             this.m_tabGeneral.UseVisualStyleBackColor = true;
             // 
-            // m_cbOfflineCache
+            // m_gbBackup
             // 
-            this.m_cbOfflineCache.AutoSize = true;
-            this.m_cbOfflineCache.Location = new System.Drawing.Point(7, 7);
-            this.m_cbOfflineCache.Name = "m_cbOfflineCache";
-            this.m_cbOfflineCache.Size = new System.Drawing.Size(189, 17);
-            this.m_cbOfflineCache.TabIndex = 0;
-            this.m_cbOfflineCache.Text = "Cache Databases for offline usage";
-            this.m_cbOfflineCache.UseVisualStyleBackColor = true;
+            this.m_gbBackup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_gbBackup.Controls.Add(this.m_btnBackupToLocalFolder);
+            this.m_gbBackup.Controls.Add(this.m_numUpDownBackupCopies);
+            this.m_gbBackup.Controls.Add(this.m_lblBackupCopies);
+            this.m_gbBackup.Controls.Add(this.m_txtBackupToLocalFolder);
+            this.m_gbBackup.Controls.Add(this.m_lblBackupToLocalFolder);
+            this.m_gbBackup.Controls.Add(this.m_chkBackupToLocal);
+            this.m_gbBackup.Controls.Add(this.m_chkBackupToRemote);
+            this.m_gbBackup.Location = new System.Drawing.Point(6, 96);
+            this.m_gbBackup.Name = "m_gbBackup";
+            this.m_gbBackup.Size = new System.Drawing.Size(578, 159);
+            this.m_gbBackup.TabIndex = 2;
+            this.m_gbBackup.TabStop = false;
+            this.m_gbBackup.Text = "Automatic Backup";
+            // 
+            // m_btnBackupToLocalFolder
+            // 
+            this.m_btnBackupToLocalFolder.Location = new System.Drawing.Point(400, 76);
+            this.m_btnBackupToLocalFolder.Name = "m_btnBackupToLocalFolder";
+            this.m_btnBackupToLocalFolder.Size = new System.Drawing.Size(25, 23);
+            this.m_btnBackupToLocalFolder.TabIndex = 6;
+            this.m_btnBackupToLocalFolder.Text = "...";
+            this.m_btnBackupToLocalFolder.UseVisualStyleBackColor = true;
+            this.m_btnBackupToLocalFolder.Click += new System.EventHandler(this.OnSelectBackupToLocalFolder);
+            // 
+            // m_numUpDownBackupCopies
+            // 
+            this.m_numUpDownBackupCopies.Location = new System.Drawing.Point(145, 104);
+            this.m_numUpDownBackupCopies.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.m_numUpDownBackupCopies.Name = "m_numUpDownBackupCopies";
+            this.m_numUpDownBackupCopies.Size = new System.Drawing.Size(48, 20);
+            this.m_numUpDownBackupCopies.TabIndex = 5;
+            this.m_numUpDownBackupCopies.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // m_lblBackupCopies
+            // 
+            this.m_lblBackupCopies.AutoSize = true;
+            this.m_lblBackupCopies.Location = new System.Drawing.Point(6, 106);
+            this.m_lblBackupCopies.Name = "m_lblBackupCopies";
+            this.m_lblBackupCopies.Size = new System.Drawing.Size(133, 13);
+            this.m_lblBackupCopies.TabIndex = 4;
+            this.m_lblBackupCopies.Text = "Number of Copies to keep:";
+            // 
+            // m_txtBackupToLocalFolder
+            // 
+            this.m_txtBackupToLocalFolder.Location = new System.Drawing.Point(145, 78);
+            this.m_txtBackupToLocalFolder.Name = "m_txtBackupToLocalFolder";
+            this.m_txtBackupToLocalFolder.Size = new System.Drawing.Size(249, 20);
+            this.m_txtBackupToLocalFolder.TabIndex = 3;
+            // 
+            // m_lblBackupToLocalFolder
+            // 
+            this.m_lblBackupToLocalFolder.AutoSize = true;
+            this.m_lblBackupToLocalFolder.Location = new System.Drawing.Point(6, 81);
+            this.m_lblBackupToLocalFolder.Name = "m_lblBackupToLocalFolder";
+            this.m_lblBackupToLocalFolder.Size = new System.Drawing.Size(108, 13);
+            this.m_lblBackupToLocalFolder.TabIndex = 2;
+            this.m_lblBackupToLocalFolder.Text = "Local Backup Folder:";
+            // 
+            // m_chkBackupToLocal
+            // 
+            this.m_chkBackupToLocal.AutoSize = true;
+            this.m_chkBackupToLocal.Location = new System.Drawing.Point(9, 51);
+            this.m_chkBackupToLocal.Name = "m_chkBackupToLocal";
+            this.m_chkBackupToLocal.Size = new System.Drawing.Size(104, 17);
+            this.m_chkBackupToLocal.TabIndex = 1;
+            this.m_chkBackupToLocal.Text = "Backup to Local";
+            this.m_chkBackupToLocal.UseVisualStyleBackColor = true;
+            this.m_chkBackupToLocal.CheckedChanged += new System.EventHandler(this.OnBackupChanged);
+            // 
+            // m_chkBackupToRemote
+            // 
+            this.m_chkBackupToRemote.AutoSize = true;
+            this.m_chkBackupToRemote.Location = new System.Drawing.Point(9, 28);
+            this.m_chkBackupToRemote.Name = "m_chkBackupToRemote";
+            this.m_chkBackupToRemote.Size = new System.Drawing.Size(115, 17);
+            this.m_chkBackupToRemote.TabIndex = 0;
+            this.m_chkBackupToRemote.Text = "Backup to Remote";
+            this.m_chkBackupToRemote.UseVisualStyleBackColor = true;
+            this.m_chkBackupToRemote.CheckedChanged += new System.EventHandler(this.OnBackupChanged);
+            // 
+            // m_gbOfflineCache
+            // 
+            this.m_gbOfflineCache.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_gbOfflineCache.Controls.Add(this.m_btnOpenCacheFolder);
+            this.m_gbOfflineCache.Controls.Add(this.m_btnClearCache);
+            this.m_gbOfflineCache.Controls.Add(this.m_chkOfflineCache);
+            this.m_gbOfflineCache.Location = new System.Drawing.Point(6, 6);
+            this.m_gbOfflineCache.Name = "m_gbOfflineCache";
+            this.m_gbOfflineCache.Size = new System.Drawing.Size(578, 84);
+            this.m_gbOfflineCache.TabIndex = 1;
+            this.m_gbOfflineCache.TabStop = false;
+            this.m_gbOfflineCache.Text = "Offline Cache";
+            // 
+            // m_btnOpenCacheFolder
+            // 
+            this.m_btnOpenCacheFolder.Location = new System.Drawing.Point(90, 43);
+            this.m_btnOpenCacheFolder.Name = "m_btnOpenCacheFolder";
+            this.m_btnOpenCacheFolder.Size = new System.Drawing.Size(182, 23);
+            this.m_btnOpenCacheFolder.TabIndex = 2;
+            this.m_btnOpenCacheFolder.Text = "Open Cache Folder in Explorer";
+            this.m_btnOpenCacheFolder.UseVisualStyleBackColor = true;
+            this.m_btnOpenCacheFolder.Click += new System.EventHandler(this.OnOpenCacheFolder);
+            // 
+            // m_btnClearCache
+            // 
+            this.m_btnClearCache.Location = new System.Drawing.Point(9, 43);
+            this.m_btnClearCache.Name = "m_btnClearCache";
+            this.m_btnClearCache.Size = new System.Drawing.Size(75, 23);
+            this.m_btnClearCache.TabIndex = 1;
+            this.m_btnClearCache.Text = "Clear Cache";
+            this.m_btnClearCache.UseVisualStyleBackColor = true;
+            this.m_btnClearCache.Click += new System.EventHandler(this.OnClearCache);
+            // 
+            // m_chkOfflineCache
+            // 
+            this.m_chkOfflineCache.AutoSize = true;
+            this.m_chkOfflineCache.Location = new System.Drawing.Point(9, 20);
+            this.m_chkOfflineCache.Name = "m_chkOfflineCache";
+            this.m_chkOfflineCache.Size = new System.Drawing.Size(189, 17);
+            this.m_chkOfflineCache.TabIndex = 0;
+            this.m_chkOfflineCache.Text = "Cache Databases for offline usage";
+            this.m_chkOfflineCache.UseVisualStyleBackColor = true;
+            this.m_chkOfflineCache.CheckedChanged += new System.EventHandler(this.OnOfflineCacheChanged);
             // 
             // m_tabAbout
             // 
@@ -405,16 +559,9 @@
             this.m_btnHelp.Text = "Help...";
             this.m_btnHelp.UseVisualStyleBackColor = true;
             // 
-            // m_btnAccountAdd
+            // m_dlgSelectBackupToLocalFolder
             // 
-            this.m_btnAccountAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnAccountAdd.Location = new System.Drawing.Point(490, 38);
-            this.m_btnAccountAdd.Menu = this.m_mnuAdd;
-            this.m_btnAccountAdd.Name = "m_btnAccountAdd";
-            this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
-            this.m_btnAccountAdd.TabIndex = 11;
-            this.m_btnAccountAdd.Text = "Add...";
-            this.m_btnAccountAdd.UseVisualStyleBackColor = true;
+            this.m_dlgSelectBackupToLocalFolder.Description = "Pleae select your local folder for backups.";
             // 
             // SettingsForm
             // 
@@ -440,7 +587,11 @@
             this.m_tabAccounts.ResumeLayout(false);
             this.m_tabAccounts.PerformLayout();
             this.m_tabGeneral.ResumeLayout(false);
-            this.m_tabGeneral.PerformLayout();
+            this.m_gbBackup.ResumeLayout(false);
+            this.m_gbBackup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_numUpDownBackupCopies)).EndInit();
+            this.m_gbOfflineCache.ResumeLayout(false);
+            this.m_gbOfflineCache.PerformLayout();
             this.m_tabAbout.ResumeLayout(false);
             this.m_mnuHelp.ResumeLayout(false);
             this.m_pnlFormButtons.ResumeLayout(false);
@@ -457,7 +608,7 @@
         private System.Windows.Forms.TabPage m_tabAbout;
         private System.Windows.Forms.Button m_btnOK;
         private System.Windows.Forms.Button m_btnCancel;
-        private System.Windows.Forms.CheckBox m_cbOfflineCache;
+        private System.Windows.Forms.CheckBox m_chkOfflineCache;
         private System.Windows.Forms.Label m_lblAboutExplanation;
         private System.Windows.Forms.Label m_lblAboutHeader;
         private System.Windows.Forms.RadioButton m_rbStorageLocation_Disk;
@@ -483,5 +634,17 @@
         private System.Windows.Forms.ToolStripSeparator m_mnuHelp_Sep2;
         private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_Donate;
         private System.Windows.Forms.TableLayoutPanel m_pnlFormButtons;
+        private System.Windows.Forms.GroupBox m_gbOfflineCache;
+        private System.Windows.Forms.Button m_btnOpenCacheFolder;
+        private System.Windows.Forms.Button m_btnClearCache;
+        private System.Windows.Forms.GroupBox m_gbBackup;
+        private System.Windows.Forms.NumericUpDown m_numUpDownBackupCopies;
+        private System.Windows.Forms.Label m_lblBackupCopies;
+        private System.Windows.Forms.TextBox m_txtBackupToLocalFolder;
+        private System.Windows.Forms.Label m_lblBackupToLocalFolder;
+        private System.Windows.Forms.CheckBox m_chkBackupToLocal;
+        private System.Windows.Forms.CheckBox m_chkBackupToRemote;
+        private System.Windows.Forms.Button m_btnBackupToLocalFolder;
+        private System.Windows.Forms.FolderBrowserDialog m_dlgSelectBackupToLocalFolder;
     }
 }

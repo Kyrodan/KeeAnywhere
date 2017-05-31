@@ -50,14 +50,16 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
             return stream;
         }
 
-        public async Task<bool> Save(Stream stream, string path)
+        public async Task Save(Stream stream, string path)
         {
             var api = await GetApi();
 
             var node = await api.GetNodeByPath(path);
+            AmazonNode result;
+
             if (node != null)
             {
-                node = await api.Files.Overwrite(node.id, () => stream);
+                result = await api.Files.Overwrite(node.id, () => stream);
             }
             else // not found: creating new
             {
@@ -69,10 +71,39 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
                 if (folder == null)
                     throw new InvalidOperationException(string.Format("Folder does not exist: {0}", folderName));
 
-                node = await api.Files.UploadNew(folder.id, fileName, () => stream);
+                result = await api.Files.UploadNew(folder.id, fileName, () => stream);
             }
 
-            return node != null;
+            if (result == null)
+            {
+                throw new InvalidOperationException("Save to Amazon Drive failed.");
+            }
+        }
+
+        public async Task Copy(string sourcePath, string destPath)
+        {
+            var api = await GetApi();
+            var node = await api.GetNodeByPath(sourcePath);
+
+            var destFilename = CloudPath.GetFileName(destPath);
+            var destFolder = CloudPath.GetDirectoryName(destPath);
+            if (!sourcePath.StartsWith(destFolder))
+                throw new InvalidOperationException("Amazon Drive: Copy failed - Dest must be in the same folder as source.");
+
+            var result = await api.Nodes.Rename(node.id, destFilename);
+            if (result == null)
+                throw new InvalidOperationException("Amazon Drive: Copy failed.");
+        }
+
+        public async Task Delete(string path)
+        {
+            var api = await GetApi();
+            var node = await api.GetNodeByPath(path);
+
+            foreach (var parentId in node.parents)
+            {
+                await api.Nodes.Remove(parentId, node.id);
+            }
         }
 
         public async Task<StorageProviderItem> GetRootItem()
@@ -91,10 +122,15 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
 
             var api = await GetApi();
 
-            var driveItems = await api.Nodes.GetChildren(String.IsNullOrEmpty(parent.Id) ? null : parent.Id);
+            var driveItems = await api.Nodes.GetChildren(string.IsNullOrEmpty(parent.Id) ? null : parent.Id);
             var items = driveItems.Select(_ => CreateStorageProviderItem(parent, _));
 
             return items.ToArray();
+        }
+
+        public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
+        {
+            return await GetChildrenByParentItem(new StorageProviderItem {Id = path});
         }
 
         public bool IsFilenameValid(string filename)

@@ -48,7 +48,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             string code;
             if (authenticationResponseValues != null && authenticationResponseValues.TryGetValue("code", out code))
             {
-                using (var httpProvider = new HttpProvider())
+                using (var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true))
                 {
                     _accountSession =
                         await

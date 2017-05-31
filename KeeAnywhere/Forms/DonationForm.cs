@@ -31,6 +31,11 @@ namespace KeeAnywhere.Forms
             
         }
 
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            GlobalWindowManager.RemoveWindow(this);
+        }
+
         private void OnShowMeHowToDonate(object sender, EventArgs e)
         {
             Process.Start("https://github.com/Kyrodan/KeeAnywhere/blob/master/DONATE.md");

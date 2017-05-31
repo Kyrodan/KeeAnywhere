@@ -107,7 +107,7 @@ namespace KeeAnywhere
             if (path != null)
             {
                 int i = path.Length;
-                while (path[--i] != DirectorySeparatorChar) ;
+                while (i > 0 && path[--i] != DirectorySeparatorChar) ;
                 return path.Substring(0, i);
             }
             return null;
@@ -151,6 +151,12 @@ namespace KeeAnywhere
                 return path1 + DirectorySeparatorChar + path2;
 
             return path1 + path2;
+        }
+
+        public static string MaskInvalidFileNameChars(string path)
+        {
+            var invalidChars = Path.GetInvalidFileNameChars();
+            return new string(path.Select(c => invalidChars.Contains(c) ? '_' : c).ToArray());
         }
     }
 }

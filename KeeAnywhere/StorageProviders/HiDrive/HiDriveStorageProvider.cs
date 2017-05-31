@@ -30,7 +30,7 @@ namespace KeeAnywhere.StorageProviders.HiDrive
             return stream;
         }
 
-        public async Task<bool> Save(Stream stream, string path)
+        public async Task Save(Stream stream, string path)
         {
             var api = await GetApi();
             var pid = await GetHomeId();
@@ -38,9 +38,26 @@ namespace KeeAnywhere.StorageProviders.HiDrive
             var pathname = CloudPath.GetDirectoryName(path);
             var filename = CloudPath.GetFileName(path);
 
-            var item = await api.File.Upload(filename, pathname, pid).ExecuteAsync(stream);
+            var item = await api.File.Upload(filename, pathname, pid, UploadMode.CreateOrUpdate).ExecuteAsync(stream);
 
-            return item != null;
+            if (item == null)
+                throw new InvalidOperationException("HiDrive: Save failed.");
+        }
+
+        public async Task Copy(string sourcePath, string destPath)
+        {
+            var api = await GetApi();
+            var pid = await GetHomeId();
+
+            await api.File.Copy(sourcePath, pid, destPath, pid).ExecuteAsync();
+        }
+
+        public async Task Delete(string path)
+        {
+            var api = await GetApi();
+            var pid = await GetHomeId();
+
+            await api.File.Delete(path, pid).ExecuteAsync();
         }
 
         public async Task<StorageProviderItem> GetRootItem()
@@ -84,6 +101,37 @@ namespace KeeAnywhere.StorageProviders.HiDrive
             });
 
             return items.ToArray();
+        }
+
+        public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
+        {
+            var api = await GetApi();
+            var pid = await GetHomeId();
+
+            var fields = new[]
+            {
+                DirectoryBaseItem.Fields.Members_Path, DirectoryBaseItem.Fields.Members_Name, DirectoryBaseItem.Fields.Members_Id, DirectoryBaseItem.Fields.Members_Type, DirectoryBaseItem.Fields.Members_IsReadable, DirectoryBaseItem.Fields.Members_IsWritable, DirectoryBaseItem.Fields.Members_ModiefiedDateTime
+            };
+
+            var dir = await api
+                .Directory
+                .Get(path, pid, new[] { DirectoryMember.Directory, DirectoryMember.File }, fields)
+                .ExecuteAsync();
+
+            var items = dir.Members.Where(_ => _.IsReadable.Value && _.IsWritable.Value).Select(_ => new StorageProviderItem
+            {
+                Id = _.Id,
+                Name = _.Name,
+                Type =
+                    _.Type == "file"
+                        ? StorageProviderItemType.File
+                        : (_.Type == "dir" ? StorageProviderItemType.Folder : StorageProviderItemType.Unknown),
+                ParentReferenceId = pid,
+                LastModifiedDateTime = _.ModifiedDateTime,
+            });
+
+            return items.ToArray();
+
         }
 
         public bool IsFilenameValid(string filename)

@@ -1,20 +1,27 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using KeeAnywhere.Backup;
 using KeeAnywhere.Configuration;
+using KeeAnywhere.Offline;
 using KeeAnywhere.WebRequest;
 using KeePassLib.Serialization;
 
 namespace KeeAnywhere.StorageProviders
 {
-    public class StorageService
+    public class StorageService: IWebRequestCreate
     {
         private readonly ConfigurationService _configService;
+        private readonly CacheManagerService _cacheManagerService;
 
-        public StorageService(ConfigurationService configService)
+        public StorageService(ConfigurationService configService, CacheManagerService cacheManagerService)
         {
             if (configService == null) throw new ArgumentNullException("configService");
+            if (cacheManagerService == null) throw new ArgumentNullException("cacheManagerService");
+
             _configService = configService;
+            _cacheManagerService = cacheManagerService;
         }
 
         public IStorageProvider GetProviderByUri(StorageUri uri)
@@ -67,14 +74,42 @@ namespace KeeAnywhere.StorageProviders
             return account;
         }
 
+        public System.Net.WebRequest Create(Uri uri)
+        {
+            var providerUri = new StorageUri(uri);
+            var provider = this.GetProviderByUri(providerUri);
 
-        public void Register()
+
+            // Pipeline: Backup => Cache => Basic Provider
+
+            if (_configService.PluginConfiguration.IsOfflineCacheEnabled)
+            {
+                provider = _cacheManagerService.WrapInCacheProvider(provider, uri);
+            }
+
+            if (_configService.PluginConfiguration.IsBackupToLocalEnabled ||
+                _configService.PluginConfiguration.IsBackupToRemoteEnabled)
+            {
+                provider = BackupProvider.WrapInBackupProvider(provider, providerUri, _configService);
+            }
+
+            var itemPath = providerUri.GetPath();
+
+            return new KeeAnywhereWebRequest(provider, itemPath);
+        }
+
+        public void RegisterPrefixes()
         {
             foreach (var descriptor in StorageRegistry.Descriptors)
             {
                 FileTransactionEx.Configure(descriptor.Scheme, false);
-                System.Net.WebRequest.RegisterPrefix(descriptor.Scheme + ":", new KeeAnywhereWebRequestCreator(this));
+                System.Net.WebRequest.RegisterPrefix(descriptor.Scheme + ":", this);
             }
         }
+
+        
+
+       
+
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
 using Microsoft.Graph;
-using Microsoft.OneDrive.Sdk;
 using Microsoft.OneDrive.Sdk.Authentication;
 
 namespace KeeAnywhere.StorageProviders.OneDrive
@@ -33,10 +32,10 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         public static readonly string RedirectionUrl = "https://login.live.com/oauth20_desktop.srf";
         public static readonly string SignOutUrl = "https://login.live.com/oauth20_logout.srf";
 
-        private static readonly IDictionary<string, IOneDriveClient> Cache = new Dictionary<string, IOneDriveClient>();
+        private static readonly IDictionary<string, IGraphServiceClient> Cache = new Dictionary<string, IGraphServiceClient>();
 
 
-        public static async Task<IOneDriveClient> GetApi(AccountConfiguration account)
+        public static async Task<IGraphServiceClient> GetApi(AccountConfiguration account)
         {
             if (Cache.ContainsKey(account.Id)) return Cache[account.Id];
        
@@ -47,13 +46,13 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             await authProvider.AuthenticateByRefreshTokenAsync(account.Secret);
 
             var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true);
-            var api = new OneDriveClient(ApiUrl, authProvider, httpProvider);
+            var api = new GraphServiceClient(ApiUrl, authProvider, httpProvider);
             Cache.Add(account.Id, api);
             
             return api;
         }
 
-        public static async Task<IOneDriveClient> GetApi(AccountSession accountSession)
+        public static async Task<IGraphServiceClient> GetApi(AccountSession accountSession)
         {
             var authProvider = new OneDriveAuthenticationProvider(
                                                     OneDriveClientId,
@@ -62,7 +61,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             await authProvider.AuthenticateByAccountSessionAsync(accountSession);
 
             var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true);
-            var api = new OneDriveClient(ApiUrl, authProvider, httpProvider);
+            var api = new GraphServiceClient(ApiUrl, authProvider, httpProvider);
 
             return api;
         }

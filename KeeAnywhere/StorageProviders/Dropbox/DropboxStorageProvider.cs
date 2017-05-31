@@ -40,13 +40,34 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             return stream;
         }
 
-        public async Task<bool> Save(Stream stream, string path)
+        public async Task Save(Stream stream, string path)
         {
             path = RootPath(path);
 
             var result = await Api.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: stream);
 
-            return result.IsFile;
+            if (!result.IsFile)
+                throw new InvalidOperationException("Save to Dropbox failed.");
+        }
+
+        public async Task Copy(string sourcePath, string destPath)
+        {
+            sourcePath = RootPath(sourcePath);
+            destPath = RootPath(destPath);
+
+            var response = await Api.Files.CopyAsync(sourcePath, destPath);
+
+            if (response == null)
+                throw new InvalidOperationException("Dropbox: Copy failed.");
+        }
+
+        public async Task Delete(string path)
+        {
+            path = RootPath(path);
+            var response = await Api.Files.DeleteAsync(path);
+
+            if (response == null)
+                throw new InvalidOperationException("Dropbox: Delete failed.");
         }
 
         public async Task<StorageProviderItem> GetRootItem()
@@ -67,6 +88,11 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             var items = dbxItems.Entries.Select(_ => CreateStorageProviderItem(parent, _));
 
             return items.ToArray();
+        }
+
+        public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
+        {
+            return await GetChildrenByParentItem(new StorageProviderItem {Id = RootPath(path)});
         }
 
         public bool IsFilenameValid(string filename)

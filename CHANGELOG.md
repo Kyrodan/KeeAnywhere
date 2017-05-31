@@ -1,3 +1,35 @@
+## 1.4.0 (2017-05-31)
+
+This release brings two new features: Offline-Caching and Simple Automatic Backup.
+
+KeePass 2.35 or newer is required now (was 2.31).
+
+Micrososft .Net 4.5.2 is required now (was 4.5.1).
+
+
+### New
+
+- \#5 Cache databases for disconnected (offline) usage
+- \#61 Simple Automatic Backup (Remote and/or Local)
+- Activated experimental Amazon Drive support
+
+### Fixed
+
+- \#58 Amazon S3: Cannot save/write database file to root of bucket
+- \#63 KeePass tray menu disabled and window restoration fails when account creation is canceled
+- \#68 Ctrl+Alt+A Gives Error cannot access disposed object "DonationForm"
+- \#74 Google Drive Authentication failed
+- \#77 OneDrive: Microsoft.Graph.ServiceException
+
+### Improved
+
+- \#62 Allow pasting in the embedded browser
+- \#72 IconHelper leaves unsed API allocated memory - Completely removed IconHelper
+- Updated Dependencies
+- Replaced Micrososft OneDriveSDK with GraphSDK
+- Using .Net 4.5.2 now
+
+
 ## 1.3.1 (2017-01-02)
 
 ### Fixed

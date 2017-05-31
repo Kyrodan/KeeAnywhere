@@ -3,6 +3,7 @@ using System.IO;
 
 namespace KeeAnywhere.WebRequest
 {
+    // DEPRECATED!
     // Resolution for Issue #44: Sometimes can't load kdbx file (Dropbox, hubiC)
     // Flush is called in CryptoStream from KeePass. But System.Net.Http.StreamContent.ReadOnlyStream
     // is read-only and therefore no flush is needed.
