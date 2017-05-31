@@ -1,6 +1,8 @@
 ## 1.4.0 (unreleased)
 
-KeePass 2.35 or newer is required now.
+This release brings two new features: Offline-Caching and Simple Automatic Backup.
+KeePass 2.35 or newer is required now (was 2.31).
+Micrososft .Net 4.5.2 is required now (was 4.5.1).
 
 ### New
 
@@ -22,6 +24,7 @@ KeePass 2.35 or newer is required now.
 - \#72 IconHelper leaves unsed API allocated memory - Completely removed IconHelper
 - Updated Dependencies
 - Replaced Micrososft OneDriveSDK with GraphSDK
+- Using .Net 4.5.2 now
 
 
 ## 1.3.1 (2017-01-02)
