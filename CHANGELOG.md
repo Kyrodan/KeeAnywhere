@@ -1,3 +1,12 @@
+## 1.5.0 (unreleased)
+
+### New
+
+### Fixed
+
+### Improved
+
+
 ## 1.4.0 (2017-05-31)
 
 This release brings two new features: Offline-Caching and Simple Automatic Backup.
