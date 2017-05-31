@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- \#86 Error when opening KeeAnywhere Settings 1.4.0
+
 ### Improved
 
 

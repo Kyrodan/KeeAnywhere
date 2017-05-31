@@ -158,6 +158,9 @@ namespace KeeAnywhere.Configuration
                 this.PluginConfiguration.BackupToLocalFolder = Path.Combine(AppConfigSerializer.LocalAppDataDirectory,
                     "KeeAnywhereBackups");
             }
+
+            if (this.PluginConfiguration.BackupCopies < 1)
+                this.PluginConfiguration.BackupCopies = 10;
         }
 
         private void SavePluginConfiguration()
