@@ -59,15 +59,19 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
                 var folderName = CloudPath.GetDirectoryName(path);
                 var fileName = CloudPath.GetFileName(path);
 
-                var folder = await api.GetFileByPath(folderName);
-                if (folder == null)
-                    throw new InvalidOperationException(string.Format("Folder does not exist: {0}", folderName));
-
                 file = new File()
                 {
-                    Name = fileName,
-                    Parents = new[] {folder.Id},
+                    Name = fileName
                 };
+
+                if (!string.IsNullOrEmpty(folderName))
+                {
+                    var folder = await api.GetFileByPath(folderName);
+                    if (folder == null)
+                        throw new InvalidOperationException(string.Format("Folder does not exist: {0}", folderName));
+
+                    file.Parents = new[] {folder.Id};
+                }
 
                 progress = await api.Files.Create(file, stream, "application/octet-stream").UploadAsync();
             }
