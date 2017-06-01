@@ -5,6 +5,7 @@
 ### Fixed
 
 - \#86 Error when opening KeeAnywhere Settings 1.4.0
+- \#87 Authentication failed with Google Drive
 - \#88 Google Drive: can't open/save database to/from root folder
 
 ### Improved

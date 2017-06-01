@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -45,18 +46,22 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             this.RedirectionUrl = new Uri(GoogleAuthConsts.ApprovalUrl);
         }
 
+        public bool CanClaim(Uri uri, string documentTitle)
+        {
+            if (!uri.ToString().StartsWith(this.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            return GetCodeFromDocumentTitle(documentTitle) != null || GetCodeFromUri(uri) != null;
+        }
+
         public async Task<bool> Claim(Uri uri, string documentTitle)
         {
-            var parts = HttpUtility.ParseQueryString(uri.Query);
+            var code = GetCodeFromDocumentTitle(documentTitle);
+            if (code == null)
+                code = GetCodeFromUri(uri);
 
-            if (parts.Count < 1 || parts.Get("response") == null)
+            if (code == null)
                 return false;
-
-            var code = parts.Get("response");
-            if (!code.Contains("code"))
-                return false;
-
-            code = code.Split('=')[1];
 
             try
             {
@@ -76,5 +81,54 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         public Uri AuthorizationUrl { get; protected set; }
         public Uri RedirectionUrl { get; protected set; }
         public string FriendlyProviderName { get { return "Google Drive"; } }
+
+        private string GetCodeFromDocumentTitle(string documentTitle)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(documentTitle) ||
+                    !documentTitle.StartsWith("Success code="))
+                {
+                    return null;
+                }
+
+                var parts = documentTitle.Split(' ');
+
+                //if (parts.Length < 1 || parts[0] != "Success")
+                //    return null;
+
+                var code = parts[1].Split('=')[1];
+
+                return code;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private string GetCodeFromUri(Uri uri)
+        {
+            try
+            {
+                var parts = HttpUtility.ParseQueryString(uri.Query);
+
+                if (parts.Count < 1 || parts.AllKeys.All(p => p != "response"))
+                    return null;
+
+                var code = parts.Get("response");
+                if (code == null || !code.StartsWith("code="))
+                    return null;
+
+                code = code.Split('=')[1];
+
+                return code;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
 }

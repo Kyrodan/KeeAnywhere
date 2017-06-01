@@ -40,6 +40,11 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             this.AuthorizationUrl = new Uri(url);
         }
 
+        public bool CanClaim(Uri uri, string documentTitle)
+        {
+            return uri.ToString().StartsWith(this.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase);
+        }
+
         public async Task<bool> Claim(Uri uri, string documentTitle)
         {
             var authenticationResponseValues = UrlHelper.GetQueryOptions(uri);

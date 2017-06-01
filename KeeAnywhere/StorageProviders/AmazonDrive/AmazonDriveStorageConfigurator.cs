@@ -48,6 +48,11 @@ namespace KeeAnywhere.StorageProviders.AmazonDrive
             this.AuthorizationUrl = new Uri(loginUri);
         }
 
+        public bool CanClaim(Uri uri, string documentTitle)
+        {
+            return uri.ToString().StartsWith(this.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase);
+        }
+
         public async Task<bool> Claim(Uri uri, string documentTitle)
         {
             var error = HttpUtility.ParseQueryString(uri.Query).Get("error_description");

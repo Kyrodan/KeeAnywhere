@@ -34,6 +34,11 @@ namespace KeeAnywhere.StorageProviders.HubiC
             this.RedirectionUrl = new Uri(HubiCHelper.RedirectUri);
         }
 
+        public bool CanClaim(Uri uri, string documentTitle)
+        {
+            return uri.ToString().StartsWith(this.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase);
+        }
+
         public async Task<bool> Claim(Uri uri, string documentTitle)
         {
             //_token = HubiCHelper.GetAccessTokenFromFragment(uri);
