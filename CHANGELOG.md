@@ -1,14 +1,12 @@
-## 1.4.1 (unreleased)
+## 1.4.1 (2017-06-02)
 
-### New
+This is a bug-fixing release only
 
 ### Fixed
 
 - \#86 Error when opening KeeAnywhere Settings 1.4.0
 - \#87 Authentication failed with Google Drive
 - \#88 Google Drive: can't open/save database to/from root folder
-
-### Improved
 
 
 ## 1.4.0 (2017-05-31)
