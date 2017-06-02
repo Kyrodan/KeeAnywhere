@@ -10,6 +10,7 @@ namespace KeeAnywhere.OAuth2
     {
         private IOAuth2Provider m_provider;
         private bool m_isPreAuthorization;
+        private bool m_isClaimed;
 
         public OAuth2Form()
         {
@@ -70,15 +71,16 @@ namespace KeeAnywhere.OAuth2
                 return;
             }
 
-
-            // we need to ignore all navigation that isn't to the redirect uri.
-            if (!e.Url.ToString().StartsWith(m_provider.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase))
+            // we need to ignore all navigation that is already claimed or could not be claimed (due to missing code).
+            if (m_isClaimed || !m_provider.CanClaim(e.Url, m_browser.DocumentTitle))
             {
                 return;
             }
 
-            m_pnlWait.Visible = true;
+            m_isClaimed = true;
+            m_browser.Stop();
             m_browser.Visible = false;
+            m_pnlWait.Visible = true;
 
             try
             {
@@ -92,7 +94,6 @@ namespace KeeAnywhere.OAuth2
             }
             finally
             {
-                m_browser.Stop();
                 Close();
             }
         }

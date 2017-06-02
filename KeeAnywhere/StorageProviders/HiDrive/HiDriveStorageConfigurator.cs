@@ -47,6 +47,11 @@ namespace KeeAnywhere.StorageProviders.HiDrive
             this.RedirectionUrl = new Uri(HiDriveHelper.RedirectUri);
         }
 
+        public bool CanClaim(Uri uri, string documentTitle)
+        {
+            return uri.ToString().StartsWith(this.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase);
+        }
+
         public async Task<bool> Claim(Uri uri, string documentTitle)
         {
             var code = _authenticator.GetAuthorizationCodeFromResponseUrl(uri);

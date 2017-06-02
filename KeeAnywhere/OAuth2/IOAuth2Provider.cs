@@ -9,6 +9,7 @@ namespace KeeAnywhere.OAuth2
     public interface IOAuth2Provider
     {
         Task Initialize();
+        bool CanClaim(Uri uri, string documentTitle);
         Task<bool> Claim(Uri uri, string documentTitle);
 
         Uri PreAuthorizationUrl { get; }

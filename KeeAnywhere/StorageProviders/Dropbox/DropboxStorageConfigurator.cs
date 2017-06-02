@@ -45,6 +45,11 @@ namespace KeeAnywhere.StorageProviders.Dropbox
                 _isAccessRestricted ? DropboxHelper.DropboxAppFolderOnlyClientId : DropboxHelper.DropboxFullAccessClientId, RedirectionUrl, _state);
         }
 
+        public bool CanClaim(Uri uri, string documentTitle)
+        {
+            return uri.ToString().StartsWith(this.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase);
+        }
+
         public Task<bool> Claim(Uri uri, string documentTitle)
         {
             var cs = new TaskCompletionSource<bool>();

@@ -35,6 +35,11 @@ namespace KeeAnywhere.StorageProviders.Box
             this.AuthorizationUrl = BoxHelper.Config.AuthCodeUri;
         }
 
+        public bool CanClaim(Uri uri, string documentTitle)
+        {
+            return uri.ToString().StartsWith(this.RedirectionUrl.ToString(), StringComparison.OrdinalIgnoreCase);
+        }
+
         public async Task<bool> Claim(Uri uri, string documentTitle)
         {
             IDictionary<string, string> keyDictionary = new Dictionary<string, string>();

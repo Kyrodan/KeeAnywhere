@@ -3,7 +3,7 @@
   <metadata>
     <id>keepass-plugin-keeanywhere</id>
     <title>KeePass Plugin KeeAnywhere</title>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
     <authors>Daniel Bölts</authors>
     <owners>Kyrodan</owners>
     <summary>Plugin for KeePass 2.x to to add support for cloud storage providers</summary>
@@ -31,7 +31,18 @@ Supported providers:
     <copyright>© 2015-2017 Daniel Bölts</copyright>
     <licenseUrl>https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>## 1.4.0 (2017-05-31)
+    <releaseNotes>## 1.4.1 (2017-06-02)
+
+      This is a bug-fixing release only
+
+      ### Fixed
+
+      - \#86 Error when opening KeeAnywhere Settings 1.4.0
+      - \#87 Authentication failed with Google Drive
+      - \#88 Google Drive: can't open/save database to/from root folder
+      
+      
+      ## 1.4.0 (2017-05-31)
 
       This release brings two new features: Offline-Caching and Simple Automatic Backup.
 
