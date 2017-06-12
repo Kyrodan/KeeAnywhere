@@ -242,7 +242,7 @@ namespace KeeAnywhere.Forms
 
         private void OnHelpMeChooseAccountStorage(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki/Getting-Started#which-account-storage-location-should-i-choose");
+            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki/Advanced-Topics#which-account-storage-location-should-i-choose");
         }
 
         private void OnLicense(object sender, EventArgs e)
