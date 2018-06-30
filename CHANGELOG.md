@@ -1,6 +1,13 @@
 ## 1.5.0 (unreleased)
 
+KeePass 2.39.1 or newer is required now (was 2.35).
+
 ### Fixed
+
+
+### Improved
+
+- Updated Dependencies (AWS, Box, Dropbox, Google Drive, OneDrive)
 
 
 ## 1.4.1 (2017-06-02)
