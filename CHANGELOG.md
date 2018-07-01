@@ -4,6 +4,8 @@ KeePass 2.39.1 or newer is required now (was 2.35).
 
 ### Fixed
 
+- \#90 Update OnHelpMeChooseAccountStorage uri
+- \#122 Fixes syntax in donation text
 
 ### Improved
 
