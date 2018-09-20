@@ -1,11 +1,13 @@
 ## 1.5.0 (unreleased)
 
+This is a bug-fixing release only.
 KeePass 2.40 or newer is required now (was 2.35).
 
 ### Fixed
 
 - \#90 Update OnHelpMeChooseAccountStorage uri
 - \#122 Fixes syntax in donation text
+- \#138 Simple Spelling Correction
 - \#141 Incompatible with KeePass 2.40
 
 ### Improved

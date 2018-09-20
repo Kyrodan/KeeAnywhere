@@ -112,8 +112,8 @@ namespace KeeAnywhere.Offline
         public void OpenWithConflict(Uri requestedUri)
         {
             Task.Run(() => MessageService.ShowWarning(
-                "KeeAnywhere Offline Cache:\r\nConflict opening Datbase.",
-                "Both offline cached and online remote database are changed.\r\nMerging both datbases on next save is required.",
+                "KeeAnywhere Offline Cache:\r\nConflict opening Database.",
+                "Both offline cached and online remote database are changed.\r\nMerging both databases on next save is required.",
                 requestedUri.ToString()));
         }
 
