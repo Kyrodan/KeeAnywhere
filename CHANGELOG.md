@@ -1,11 +1,16 @@
 ## 1.5.0 (unreleased)
 
-This is a bug-fixing release only.
+This is mainly a bug-fixing release.
 KeePass 2.40 or newer is required now (was 2.35).
+
+Noteworthy: 
+Default Storage Location for settings is now in User's Roaming AppData and not User's Local AppData.
 
 ### Fixed
 
 - \#90 Update OnHelpMeChooseAccountStorage uri
+- \#103 Caching database makes KeePass non-portable
+- \#113 Adjust account storage location
 - \#122 Fixes syntax in donation text
 - \#138 Simple Spelling Correction
 - \#141 Incompatible with KeePass 2.40

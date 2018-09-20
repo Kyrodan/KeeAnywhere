@@ -30,6 +30,5 @@ namespace KeeAnywhere.Configuration
 
             return s;
         }
-
     }
 }

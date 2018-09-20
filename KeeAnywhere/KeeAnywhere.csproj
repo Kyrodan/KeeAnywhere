@@ -190,6 +190,7 @@
     <Compile Include="CloudPath.cs" />
     <Compile Include="Configuration\AccountConfiguration.cs" />
     <Compile Include="Configuration\AccountIdentifier.cs" />
+    <Compile Include="Configuration\ConfigurationInfo.cs" />
     <Compile Include="Configuration\ConfigurationServiceKeePassConfig.cs" />
     <Compile Include="Configuration\ConfigurationServiceLocalSecureStore.cs" />
     <Compile Include="Configuration\ConfigurationServiceWindowsCredentialManager.cs" />
