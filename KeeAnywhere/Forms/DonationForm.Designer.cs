@@ -42,8 +42,9 @@
             // 
             this.m_bannerImage.Dock = System.Windows.Forms.DockStyle.Top;
             this.m_bannerImage.Location = new System.Drawing.Point(0, 0);
+            this.m_bannerImage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_bannerImage.Name = "m_bannerImage";
-            this.m_bannerImage.Size = new System.Drawing.Size(517, 60);
+            this.m_bannerImage.Size = new System.Drawing.Size(689, 74);
             this.m_bannerImage.TabIndex = 5;
             this.m_bannerImage.TabStop = false;
             // 
@@ -51,9 +52,10 @@
             // 
             this.m_btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.m_btnClose.Location = new System.Drawing.Point(430, 218);
+            this.m_btnClose.Location = new System.Drawing.Point(573, 268);
+            this.m_btnClose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_btnClose.Name = "m_btnClose";
-            this.m_btnClose.Size = new System.Drawing.Size(75, 23);
+            this.m_btnClose.Size = new System.Drawing.Size(100, 28);
             this.m_btnClose.TabIndex = 9;
             this.m_btnClose.Text = "&Close";
             this.m_btnClose.UseVisualStyleBackColor = true;
@@ -61,9 +63,10 @@
             // m_btnDonate
             // 
             this.m_btnDonate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnDonate.Location = new System.Drawing.Point(273, 218);
+            this.m_btnDonate.Location = new System.Drawing.Point(364, 268);
+            this.m_btnDonate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_btnDonate.Name = "m_btnDonate";
-            this.m_btnDonate.Size = new System.Drawing.Size(151, 23);
+            this.m_btnDonate.Size = new System.Drawing.Size(201, 28);
             this.m_btnDonate.TabIndex = 10;
             this.m_btnDonate.Text = "&Show me how to donate";
             this.m_btnDonate.UseVisualStyleBackColor = true;
@@ -73,9 +76,10 @@
             // 
             this.m_chkDontShowAgain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkDontShowAgain.AutoSize = true;
-            this.m_chkDontShowAgain.Location = new System.Drawing.Point(12, 222);
+            this.m_chkDontShowAgain.Location = new System.Drawing.Point(16, 273);
+            this.m_chkDontShowAgain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_chkDontShowAgain.Name = "m_chkDontShowAgain";
-            this.m_chkDontShowAgain.Size = new System.Drawing.Size(172, 17);
+            this.m_chkDontShowAgain.Size = new System.Drawing.Size(225, 21);
             this.m_chkDontShowAgain.TabIndex = 11;
             this.m_chkDontShowAgain.Text = "&Don\'t show this message again";
             this.m_chkDontShowAgain.UseVisualStyleBackColor = true;
@@ -85,9 +89,10 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.Location = new System.Drawing.Point(12, 67);
+            this.label1.Location = new System.Drawing.Point(16, 82);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(493, 139);
+            this.label1.Size = new System.Drawing.Size(657, 171);
             this.label1.TabIndex = 12;
             this.label1.Text = resources.GetString("label1.Text");
             // 
@@ -96,17 +101,18 @@
             this.m_lblDivider.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lblDivider.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_lblDivider.Location = new System.Drawing.Point(0, 209);
+            this.m_lblDivider.Location = new System.Drawing.Point(0, 257);
+            this.m_lblDivider.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblDivider.Name = "m_lblDivider";
-            this.m_lblDivider.Size = new System.Drawing.Size(516, 2);
+            this.m_lblDivider.Size = new System.Drawing.Size(688, 2);
             this.m_lblDivider.TabIndex = 13;
             // 
             // DonationForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnClose;
-            this.ClientSize = new System.Drawing.Size(517, 253);
+            this.ClientSize = new System.Drawing.Size(689, 311);
             this.Controls.Add(this.m_lblDivider);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.m_chkDontShowAgain);
@@ -114,6 +120,7 @@
             this.Controls.Add(this.m_btnClose);
             this.Controls.Add(this.m_bannerImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DonationForm";

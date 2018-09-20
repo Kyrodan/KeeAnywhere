@@ -3,7 +3,7 @@
   <metadata>
     <id>keepass-plugin-keeanywhere</id>
     <title>KeePass Plugin KeeAnywhere</title>
-    <version>1.4.1</version>
+    <version>1.5.0</version>
     <authors>Daniel Bölts</authors>
     <owners>Kyrodan</owners>
     <summary>Plugin for KeePass 2.x to to add support for cloud storage providers</summary>
@@ -31,53 +31,33 @@ Supported providers:
     <copyright>© 2015-2017 Daniel Bölts</copyright>
     <licenseUrl>https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>## 1.4.1 (2017-06-02)
+    <releaseNotes>## 1.5.0 (2018-09-20)
 
-      This is a bug-fixing release only
+      This is mainly a bug-fixing release.
+      KeePass 2.40 or newer is required now (was 2.35).
 
-      ### Fixed
-
-      - \#86 Error when opening KeeAnywhere Settings 1.4.0
-      - \#87 Authentication failed with Google Drive
-      - \#88 Google Drive: can't open/save database to/from root folder
-      
-      
-      ## 1.4.0 (2017-05-31)
-
-      This release brings two new features: Offline-Caching and Simple Automatic Backup.
-
-      KeePass 2.35 or newer is required now (was 2.31).
-
-      Micrososft .Net 4.5.2 is required now (was 4.5.1).
-
-
-      ### New
-
-      - \#5 Cache databases for disconnected (offline) usage
-      - \#61 Simple Automatic Backup (Remote and/or Local)
-      - Activated experimental Amazon Drive support
+      Noteworthy:
+      Default Storage Location for settings is now in User's Roaming AppData instead of User's Local AppData.
 
       ### Fixed
 
-      - \#58 Amazon S3: Cannot save/write database file to root of bucket
-      - \#63 KeePass tray menu disabled and window restoration fails when account creation is canceled
-      - \#68 Ctrl+Alt+A Gives Error cannot access disposed object "DonationForm"
-      - \#74 Google Drive Authentication failed
-      - \#77 OneDrive: Microsoft.Graph.ServiceException
+      - \#90 Update OnHelpMeChooseAccountStorage uri
+      - \#96 default folder did not create automatically
+      - \#103 Caching database makes KeePass non-portable
+      - \#113 Adjust account storage location
+      - \#122 Fixes syntax in donation text
+      - \#138 Simple Spelling Correction
+      - \#141 Incompatible with KeePass 2.40
 
       ### Improved
 
-      - \#62 Allow pasting in the embedded browser
-      - \#72 IconHelper leaves unsed API allocated memory - Completely removed IconHelper
-      - Updated Dependencies
-      - Replaced Micrososft OneDriveSDK with GraphSDK
-      - Using .Net 4.5.2 now
+      - Updated Dependencies (AWS, Box, Dropbox, Google Drive, OneDrive)
 
 
       [Full Changelog](https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md)
     </releaseNotes>
     <dependencies>
-      <dependency id="keepass" version="[2.35, 3.0)" />
+      <dependency id="keepass" version="[2.40, 3.0)" />
       <dependency id="dotnet4.5.2" />
     </dependencies>
   </metadata>

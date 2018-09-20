@@ -1,3 +1,26 @@
+## 1.5.0 (2018-09-20)
+
+This is mainly a bug-fixing release.
+KeePass 2.40 or newer is required now (was 2.35).
+
+Noteworthy: 
+Default Storage Location for settings is now in User's Roaming AppData instead of User's Local AppData.
+
+### Fixed
+
+- \#90 Update OnHelpMeChooseAccountStorage uri
+- \#96 default folder did not create automatically
+- \#103 Caching database makes KeePass non-portable
+- \#113 Adjust account storage location
+- \#122 Fixes syntax in donation text
+- \#138 Simple Spelling Correction
+- \#141 Incompatible with KeePass 2.40
+
+### Improved
+
+- Updated Dependencies (AWS, Box, Dropbox, Google Drive, OneDrive)
+
+
 ## 1.4.1 (2017-06-02)
 
 This is a bug-fixing release only

@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
-using KeePass.App.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -20,7 +19,7 @@ namespace KeeAnywhere.Configuration
         {
             get
             {
-                return Path.Combine(AppConfigSerializer.LocalAppDataDirectory, "KeeAnywhereOfflineCache");
+                return Path.Combine(ConfigurationInfo.SettingsDirectory, "KeeAnywhereOfflineCache");
             }
         }
 
