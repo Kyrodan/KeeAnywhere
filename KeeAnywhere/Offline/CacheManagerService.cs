@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.StorageProviders;
-using KeePass.App.Configuration;
 using KeePass.Forms;
 using KeePass.Plugins;
 using KeePassLib.Delegates;
@@ -30,6 +29,8 @@ namespace KeeAnywhere.Offline
 
         public void RegisterEvents()
         {
+            if (!this.EnsureCacheFolderExists()) { return; }
+
             var kp = _host.MainWindow;
             //kp.FileOpened += OnFileOpened;
             //kp.FileClosed += OnFileClosed;
@@ -46,6 +47,39 @@ namespace KeeAnywhere.Offline
             kp.FileSavingPre -= OnFileSaving;
             //kp.FileSaving -= OnFileSaving;
             kp.FileSaved -= OnFileSaved;
+        }
+
+        protected bool EnsureCacheFolderExists()
+        {
+            var path = this.CacheFolder;
+
+            if (string.IsNullOrEmpty(path))
+            {
+                MessageService.ShowWarning(
+                    "KeeAnywhere Offline Cache:\r\nCache Folder not configured.",
+                    "Continuing without Offline Caching!");
+
+                return false;
+            }
+
+            if (!Directory.Exists(path))
+            {
+                try
+                {
+                    Directory.CreateDirectory(path);
+                }
+                catch (Exception ex)
+                {
+                    MessageService.ShowWarning(
+                        "KeeAnywhere Offline Cache:\r\nCache Folder could not be created:",
+                        path,
+                        "Continuing without Offline Caching!",
+                        ex);
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void OnFileSaved(object sender, FileSavedEventArgs fileSavedEventArgs)
@@ -79,15 +113,7 @@ namespace KeeAnywhere.Offline
         {
             get
             {
-                var path = _configService.PluginConfiguration.OfflineCacheFolder;
-
-                if (string.IsNullOrEmpty(path))
-                    throw new ArgumentNullException("Offline Cache Folder not configured.");
-
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-
-                return path;
+                return _configService.PluginConfiguration.OfflineCacheFolder;
             }
         }
 

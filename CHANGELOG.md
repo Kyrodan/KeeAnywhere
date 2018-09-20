@@ -9,6 +9,7 @@ Default Storage Location for settings is now in User's Roaming AppData and not U
 ### Fixed
 
 - \#90 Update OnHelpMeChooseAccountStorage uri
+- \#96 default folder did not create automatically
 - \#103 Caching database makes KeePass non-portable
 - \#113 Adjust account storage location
 - \#122 Fixes syntax in donation text
