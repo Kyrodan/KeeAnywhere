@@ -33,6 +33,14 @@ namespace KeeAnywhere
         private CacheManagerService _cacheManagerService;
         private KpResources _kpResources;
 
+        /// <summary>
+        /// Constructor; implemented to fix https://github.com/Kyrodan/KeeAnywhere/issues/141
+        /// </summary>
+        public KeeAnywhereExt()
+        {
+            // Some binding redirection fixes for Google Drive API
+            FixDependencyLoading();
+        }
 
         /// <summary>
         ///     Returns the URL where KeePass can check for updates of this plugin
@@ -53,9 +61,6 @@ namespace KeeAnywhere
             if (NativeLib.IsUnix()) return false;
 
             _host = pluginHost;
-            //_host.MainWindow.FileOpened;
-            // Some binding redirection fixes for Google Drive API
-            FixGoogleApiDependencyLoading();
 
             // WebBrowser Feature Control 
             SetBrowserFeatureControl();
@@ -273,7 +278,7 @@ namespace KeeAnywhere
             _uiService.ShowSettingsDialog();
         }
 
-        private static void FixGoogleApiDependencyLoading()
+        private static void FixDependencyLoading()
         {
             // Google.Api relies on System.Net.Http.Primitives version 1.5.0.0
             // In general a binding redirect is added to the App.config file.

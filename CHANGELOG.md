@@ -1,11 +1,12 @@
 ## 1.5.0 (unreleased)
 
-KeePass 2.39.1 or newer is required now (was 2.35).
+KeePass 2.40 or newer is required now (was 2.35).
 
 ### Fixed
 
 - \#90 Update OnHelpMeChooseAccountStorage uri
 - \#122 Fixes syntax in donation text
+- \#141 Incompatible with KeePass 2.40
 
 ### Improved
 
