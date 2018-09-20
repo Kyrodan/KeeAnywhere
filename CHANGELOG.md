@@ -4,7 +4,7 @@ This is mainly a bug-fixing release.
 KeePass 2.40 or newer is required now (was 2.35).
 
 Noteworthy: 
-Default Storage Location for settings is now in User's Roaming AppData and not User's Local AppData.
+Default Storage Location for settings is now in User's Roaming AppData instead of User's Local AppData.
 
 ### Fixed
 
