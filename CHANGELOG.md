@@ -1,3 +1,6 @@
+## 1.6.0 (unreleased)
+
+
 ## 1.5.0 (2018-09-20)
 
 This is mainly a bug-fixing release.
