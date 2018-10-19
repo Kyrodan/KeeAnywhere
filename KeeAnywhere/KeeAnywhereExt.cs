@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
 using KeeAnywhere.Configuration;
@@ -34,12 +35,17 @@ namespace KeeAnywhere
         private KpResources _kpResources;
 
         /// <summary>
-        /// Constructor; implemented to fix https://github.com/Kyrodan/KeeAnywhere/issues/141
+        /// Static Constructor; implemented to fix:
+        /// * https://github.com/Kyrodan/KeeAnywhere/issues/141
+        /// * https://github.com/Kyrodan/KeeAnywhere/issues/152
         /// </summary>
-        public KeeAnywhereExt()
+        static KeeAnywhereExt()
         {
             // Some binding redirection fixes for Google Drive API
             FixDependencyLoading();
+
+            // Enable new TLS-Versions (see #152)
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
         }
 
         /// <summary>

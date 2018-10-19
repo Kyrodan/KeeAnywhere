@@ -16,13 +16,18 @@ namespace KeeAnywhere.Configuration
 
         static ConfigurationInfo()
         {
-            _isPortable = !KeePass.Program.Config.Meta.PreferUserConfiguration;
+            var isGlobalConfig = !KeePass.Program.Config.Meta.PreferUserConfiguration;
+            var asm = Assembly.GetEntryAssembly();
+            var filename = asm.Location;
+            var directory = Path.GetDirectoryName(filename);
+
+            _isPortable = isGlobalConfig 
+                && !directory.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) 
+                && !directory.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
 
             if (_isPortable)
             {
-                var asm = Assembly.GetEntryAssembly();
-                var filename = asm.Location;
-                _settingsDirectory = Path.GetDirectoryName(filename);
+                _settingsDirectory = directory;
             }
             else
             {
