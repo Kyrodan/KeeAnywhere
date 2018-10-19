@@ -1,4 +1,11 @@
-## 1.6.0 (unreleased)
+## 1.5.1 (unreleased)
+
+This is a bug-fixing release only.
+
+### Fixed
+
+- \#148 KeeAnywhere Offline Cache path
+- \#152 Box: Enable TLS 1.1+
 
 
 ## 1.5.0 (2018-09-20)
