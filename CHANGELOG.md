@@ -4,7 +4,8 @@ This is a bug-fixing release only.
 
 ### Fixed
 
-- \#148 KeeAnywhere Offline Cache path
+- \#147 KeeAnywhere-1.5.0 plugin incompatible with Keepass 2.40 (Improved Library Loading)
+- \#148 KeeAnywhere Offline Cache path (Improved determination of portability)
 - \#152 Box: Enable TLS 1.1+
 
 
