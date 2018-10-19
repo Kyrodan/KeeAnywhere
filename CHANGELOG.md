@@ -1,4 +1,4 @@
-## 1.5.1 (unreleased)
+## 1.5.1 (2018-10-19)
 
 This is a bug-fixing release only.
 
