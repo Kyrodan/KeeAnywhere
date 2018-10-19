@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.Runtime;
@@ -38,6 +39,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             var config = new AmazonS3Config
             {
                 RegionEndpoint = region,
+                Timeout = Timeout.InfiniteTimeSpan
             };
 
             ApplyProxy(config);

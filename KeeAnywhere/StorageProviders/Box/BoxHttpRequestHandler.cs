@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using Box.V2;
 using Box.V2.Config;
@@ -106,6 +107,8 @@ namespace KeeAnywhere.StorageProviders.Box
 
             if (request.Timeout.HasValue)
                 client.Timeout = request.Timeout.Value;
+            else 
+                client.Timeout = Timeout.InfiniteTimeSpan;
 
             return client;
         }

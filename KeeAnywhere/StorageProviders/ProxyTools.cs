@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using KeePassLib;
 
@@ -15,7 +16,9 @@ namespace KeeAnywhere.StorageProviders
         public static HttpClient CreateHttpClient()
         {
 
-            return new HttpClient(CreateHttpClientHandler());
+            return new HttpClient(CreateHttpClientHandler()) {
+                Timeout = Timeout.InfiniteTimeSpan
+            };
         }
 
         public static HttpClientHandler CreateHttpClientHandler()

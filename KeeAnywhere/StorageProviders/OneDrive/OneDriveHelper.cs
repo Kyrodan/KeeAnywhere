@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
 using Microsoft.Graph;
@@ -45,7 +46,10 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
             await authProvider.AuthenticateByRefreshTokenAsync(account.Secret);
 
-            var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true);
+            var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true) {
+                OverallTimeout = Timeout.InfiniteTimeSpan
+            };
+
             var api = new GraphServiceClient(ApiUrl, authProvider, httpProvider);
             Cache.Add(account.Id, api);
             
