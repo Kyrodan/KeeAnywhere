@@ -32,7 +32,11 @@ namespace KeeAnywhere.StorageProviders
         public static void ApplyProxy(this HttpClientHandler handler)
         {
             var proxy = GetProxy();
-            if (proxy == null) return;
+            if (proxy == null)
+            {
+                handler.UseProxy = false;
+                return;
+            }
 
             handler.UseProxy = true;
             handler.Proxy = proxy;
