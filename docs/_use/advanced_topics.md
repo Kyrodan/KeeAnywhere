@@ -1,15 +1,6 @@
 ---
 title: Advanced Topics
 ---
-**Content:**
-* [Which Account Storage Location should I choose?](#which-account-storage-location-should-i-choose)
-* [Open Database by URL](#open-database-by-url)
-* [Rename an Account](#rename-an-account)
-* [Using a Proxy](#using-a-proxy)
-* [Synchronization](#synchronization)
-* [Automatic Backup](#automatic-backup)
-* [Offline Caching](#offline-caching)
-
 # Which Account Storage Location should I choose?
 KeeAnywhere has several options where to store account details. These details **do not** contain your password. But it contains an user specific authorization key (secret) that is created when you allow KeeAnywhere to access your cloud storage. 
 

@@ -1,13 +1,18 @@
 --- 
 layout: default 
 ---
-<h1>Content</h1>
-<ul>
-  {% for p in site.use %}
-  <li>
-    <a href="{{p.url}}">{{p.title}}</a>
-  </li>
-  {% endfor %}
-</ul>
 
-{{ content }}
+  <nav class="main-tocpage-toc">
+    <b>Content</b>
+    <ul>
+      {% for p in site.use %}
+      <li>
+        <a href="{{p.url}}">{{p.title}}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+ 
+    {{ content }}
+ 
