@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Donate 
 description: Your contribution to support KeeAnywhere 
 ---

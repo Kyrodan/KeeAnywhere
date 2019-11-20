@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Contribute 
 description: Giving back to the community 
 ---

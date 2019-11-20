@@ -39,8 +39,11 @@
     </div>
 
     <div class="page-banner" role="banner">
-      <h1 class="project-name">{{ page.title | default: site.title | default: site.github.repository_name }}</h1>
-      <h2 class="project-tagline">{{ page.description | default: site.description | default: site.github.project_tagline }}</h2>
+      <h1 class="project-name">{{ page.title }}</h1>
+      {% if page.description %}
+      <h2 class="project-tagline">{{ page.description }}</h2>
+      {% endif %}
+      
       {% if site.github.is_project_page and page.url == '/'%}
       <a href="{{ site.github.latest_release.assets[0].browser_download_url }}" class="btn">Download {{ site.github.latest_release.tag_name }}</a>
       <a href="{{ site.github.issues_url }}" class="btn">Found a bug?</a>
@@ -52,7 +55,6 @@
 
 
   <main id="content" class="main-content" role="main">
-
     {{ content }}
 
     <footer class="site-footer">

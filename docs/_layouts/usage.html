@@ -1,0 +1,13 @@
+--- 
+layout: default 
+---
+<h1>Content</h1>
+<ul>
+  {% for p in site.use %}
+  <li>
+    <a href="{{p.url}}">{{p.title}}</a>
+  </li>
+  {% endfor %}
+</ul>
+
+{{ content }}

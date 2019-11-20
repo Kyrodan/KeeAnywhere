@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Privacy Statement
 description: Your privacy is respected!
 ---

@@ -22,7 +22,29 @@ url: "https://keeanywhere.de" # the base hostname & protocol for your site, e.g.
 #twitter_username: 
 github_username:  kyrodan
 
-show_downloads: false
+collections:
+  use:
+    output: true
+    order:
+      - start
+      - installation.md
+      - first_use.md
+      - advanced_topics.md
+      - troubleshooting.md
+      - url_specification.md
+      - faq.md
+
+defaults:
+  - scope:
+      path: ""
+      type: "use"
+    values:
+      layout: "usage"
+      description: Usage Guide
+  - scope:
+      path: ""
+    values:
+      layout: "default"
 
 # Build settings
 markdown: kramdown

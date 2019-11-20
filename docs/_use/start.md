@@ -1,9 +1,6 @@
 ---
-layout: default
-title: Use KeeAnywhere
-description: Documentation starts here
+title: Start using KeeAnywhere
 ---
-
 KeeAnywhere is a KeePass 2.x plugin (2.35 or newer) that provides access to cloud storage providers (cloud drives). The main goal is to offer a simple UI while integrating deeply into KeePass. This covers all kind of users: novices, experienced and power users.
 
 # Key features
