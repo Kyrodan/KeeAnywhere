@@ -3,8 +3,6 @@ layout: default
 title: Donate 
 description: Your contribution to support KeeAnywhere 
 ---
-[back to Home](/)
-
 If you like KeeAnywhere, why not spend me a beer? Or just drop me line and say "Thank you, I like your work"? 
 This is something you might do if we meet in real life. In anonymous internet where everything is for free,
 it got uncommon to appreciate someones work in such a simple way. 
@@ -36,7 +34,7 @@ You can switch to english language in the upper toolbar. Please fill in my E-Mai
 
 Send me Bitcoins to Address `1G3ybP13mRdJhMX6wySWMH4JYEErNXfwMm`
 
-![Bitcoin QR Code](images/bitcoin-qr.png)
+![Bitcoin QR Code](assets/images/bitcoin-qr.png)
 
 ## Bank Transfer 
 E-Mail me at [daniel@boelts.de](mailto:daniel@boelts.de) for my IBAN and BIC.

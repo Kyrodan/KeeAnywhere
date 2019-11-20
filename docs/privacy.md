@@ -3,8 +3,6 @@ layout: default
 title: Privacy Statement
 description: Your privacy is respected!
 ---
-[back to Home](/)
-
 ## Data Usage, Advertisements, Costs
 KeeAnywhere and me - the author - respects your privacy. I do not collect, store, transmit or use any of your data. KeeAnywhere is free from advertisements. You can use KeeAnywhere free of any costs or license fees.
 

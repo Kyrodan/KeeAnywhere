@@ -1,6 +1,53 @@
 ---
 ---
-$header-bg-color: #103f5f !default;
-$header-bg-color-secondary: #5a94ce !default;
-$section-headings-color: #3788d8 !default;
-@import "{{ site.theme }}";
+
+@import "theme";
+
+// --- --- $header-bg-color: #103f5f !default;
+// $header-bg-color-secondary: #5a94ce !default;
+// $section-headings-color: #3788d8 !default;
+// @import "{{ site.theme }}";
+
+// nav {
+//     ul {
+//         padding: 0;
+//         margin: 0;
+//         white-space: nowrap;
+//         display: inline-block;
+//     }
+
+//     li { display: inline-block; }
+// }
+
+// .page-menu {
+//     float: right;
+
+//     // li {
+
+//     //   a {
+//     //     //@include border-radius(5px);
+//     //     font-weight: 900;
+//     //     font-size: 0.75em;
+//     //     padding: 0.5em 1em;
+//     //     text-shadow: none;
+//     //     text-transform: uppercase;
+//     //     //@include transition(all .25s);
+
+//     //     &:hover {
+//     //       background-color: #252525;
+//     //       //@include box-shadow(inset 0 1px 3px rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.1));
+//     //       text-shadow: 0 1px 3px rgba(0,0,0,.5);
+//     //     }
+//     //   }
+
+//     //   &.current {
+
+//     //     a {
+//     //       background-color: #fc0;
+//     //       color: #222;
+//     //       //@include box-shadow(inset 0 1px 0 rgba(255,255,255,.5), 0 1px 5px rgba(0,0,0,.5));
+//     //       text-shadow: 0 1px 0 rgba(255,255,255,.3);
+//     //     }
+//     //   }
+//     // }
+// }

@@ -26,9 +26,8 @@ show_downloads: false
 
 # Build settings
 markdown: kramdown
-theme: jekyll-theme-cayman
 plugins:
-  - jekyll-feed
+#  - jekyll-feed
   - jekyll-sitemap
 
 # Exclude from processing.
