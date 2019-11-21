@@ -26,3 +26,6 @@ Yes! Starting with version 1.5.0 KeeAnywhere can be used portable. All settings 
 
 # How can I contribute?
 Everyone is invited to [contribute](/contribute) - every help is welcome.
+
+# Under which license is KeeAnywhere licensed?
+The source code is licensed under the [MIT license](https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE). The compiled binaries can be used free of charge without any warranty.

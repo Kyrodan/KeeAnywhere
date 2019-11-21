@@ -16,11 +16,5 @@ Supported providers (in alphabetical order):
 
 ![KeeAnywhere in Action](assets/images/KeeAnywhere_Teaser.png)
 
-# Documentation
-* [What is KeeAnywhere?](https://github.com/Kyrodan/KeeAnywhere/wiki)
-* [Getting Started](https://github.com/Kyrodan/KeeAnywhere/wiki/Getting-Started)
-* [FAQ](https://github.com/Kyrodan/KeeAnywhere/wiki/FAQ)
-* [What's new?](https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md)
-
 # License
 The source code is licensed under the [MIT license](https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE).
