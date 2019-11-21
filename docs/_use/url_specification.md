@@ -1,5 +1,5 @@
 ---
-title: Url Specification
+title: URL Specification
 ---
 KeeAnywhere URL's follow this sepcification:
 
