@@ -15,30 +15,20 @@ Supported providers (in alphabetical order):
 
 
 # Documentation
-* [What is KeeAnywhere?](https://github.com/Kyrodan/KeeAnywhere/wiki)
-* [Download](https://github.com/Kyrodan/KeeAnywhere/releases)
-* [Getting Started](https://github.com/Kyrodan/KeeAnywhere/wiki/Getting-Started)
-* [FAQ](https://github.com/Kyrodan/KeeAnywhere/wiki/FAQ)
-* [Contributing](https://github.com/Kyrodan/KeeAnywhere/wiki/Contributing)
-* [What's new?](CHANGELOG.md)
-* [Donate](DONATE.md)
-
+* [Homepage](httpss://keeanywhere.de)
 
 # Prerequisites
 * KeePass 2.40 or newer
 * Windows 7 or newer
 * .Net Framework 4.5.2 or newer
 
-
 # Known noteworthy issues
 * Amazon Drive: Due to unclear Amazon Policy this Provider may stop working at any time. Please do not rely on this functionality!
 * Dropbox: Registering a Dropbox account on Windows 7 opens the default browser at the end of the registration process. This window/tab could be ignored/closed. See details in [#13](https://github.com/Kyrodan/KeeAnywhere/issues/13)
 * KpScript is not supported, because it does not support plugins. See details in [#66](https://github.com/Kyrodan/KeeAnywhere/issues/66)
 
-
 # Building
 Run *build.cmd* and see output in folder *build*. For further details see [BUILD.md](BUILD.md).
-
 
 # License
 The source code is licensed under the [MIT license](https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE).
