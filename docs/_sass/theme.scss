@@ -208,7 +208,8 @@ a {
 
 .main-tocpage-toc {
   float: right;
-  padding: 0.5rem;
+  padding: 1rem;
+  margin: 0.5rem;
 
   background-color: #fafbfc;
   border: 1px solid #c6cbd1;
@@ -218,6 +219,11 @@ a {
   color: #444d56;
 }
 
+.main-tocpage-toc li.active a {
+  color: $body-text-color;
+  // font-weight: bold;
+  cursor: default;
+}
 
 .main-content {
   word-wrap: break-word;

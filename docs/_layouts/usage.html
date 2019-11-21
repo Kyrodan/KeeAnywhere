@@ -5,9 +5,10 @@ layout: default
   <nav class="main-tocpage-toc">
     <b>Content</b>
     <ul>
-      {% for p in site.use %}
-      <li>
-        <a href="{{p.url}}">{{p.title}}</a>
+      {% for item in site.data.usemenu %}
+      <li class="{% if page.url contains item.url %}active{% endif %}">
+      <!-- <li class="active"> -->
+        <a href="{{item.url}}" >{{item.title}}</a>
       </li>
       {% endfor %}
     </ul>

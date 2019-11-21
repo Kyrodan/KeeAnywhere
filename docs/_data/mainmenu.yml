@@ -1,8 +1,8 @@
-- name: Use
-  link: /use/start
-- name: Contribute
-  link: /contribute
-- name: Donate
-  link: /donate
-- name: Privacy
-  link: /privacy
+- title: Use
+  url: /use/start
+- title: Contribute
+  url: /contribute
+- title: Donate
+  url: /donate
+- title: Privacy
+  url: /privacy

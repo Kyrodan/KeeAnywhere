@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Start using KeeAnywhere
 ---
 The following steps are required to use KeeAnywhere:
