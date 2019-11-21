@@ -221,7 +221,7 @@ a {
 
 .main-tocpage-toc li.active a {
   color: $body-text-color;
-  // font-weight: bold;
+  text-decoration: none;
   cursor: default;
 }
 
