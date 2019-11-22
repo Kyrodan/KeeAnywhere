@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +28,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             };
 
             account.AdditionalSettings = new Dictionary<string, string>() {{"AWSRegion", dlg.AWSRegion.SystemName}};
+            account.AdditionalSettings.Add("UseSessionToken", Convert.ToString(dlg.UseSessionToken));
+            account.AdditionalSettings.Add("SessionToken", dlg.SessionToken);
             return account;
         }
     }
