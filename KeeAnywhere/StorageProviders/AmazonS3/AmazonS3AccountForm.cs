@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -29,6 +29,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 PluginResources.KeeAnywhere_48x48, "Authorize to Amazon S3",
                 "Please enter your Amazon S3 credentials here.");
 
+            this.Size = new System.Drawing.Size(553, 400);
+            
         }
 
         private void OnFormClosed(object sender, FormClosedEventArgs e)
@@ -53,12 +55,24 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 return;
             }
 
+            if (m_chkUseSessionToken.Checked == true && string.IsNullOrEmpty(this.SessionToken))
+            {
+                m_lblTestResult.Text = "Please enter Session Token";
+                return;
+            }
+
             this.Enabled = false;
             m_lblTestResult.Text = "Testing Connection...";
 
             this.TestResult = null;
 
-            var credentials = new BasicAWSCredentials(this.AccessKey, this.SecretKey);
+            AWSCredentials credentials;
+
+            if (m_chkUseSessionToken.Checked == false)
+                credentials = new BasicAWSCredentials(this.AccessKey, this.SecretKey);
+            else
+                credentials = new SessionAWSCredentials(this.AccessKey, this.SecretKey, this.SessionToken);
+            
             try
             {
                 using (var api = AmazonS3Helper.GetApi(credentials, this.AWSRegion))
@@ -90,6 +104,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
 
         public string AccessKey { get { return m_txtAccessKey.Text.Trim(); } }
         public string SecretKey { get { return m_txtSecretKey.Text.Trim(); } }
+        public string SessionToken { get { return m_txtSessionToken.Text.Trim(); } }
+        public bool UseSessionToken { get { return m_chkUseSessionToken.Checked; } }
         public RegionEndpoint AWSRegion { get { return (RegionEndpoint) m_cmbRegion.SelectedItem; } }
 
         protected bool? TestResult { get; set; }
@@ -115,6 +131,22 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
 
             if (this.TestResult != null && this.TestResult.Value)
                 this.DialogResult = DialogResult.OK;
+        }
+        
+        private void M_chkUseSessionToken_CheckedChanged(object sender, EventArgs e)
+        {
+            if (m_chkUseSessionToken.Checked == true)
+            {
+                m_lblSessionToken.Visible = true;
+                m_txtSessionToken.Visible = true;
+                this.Size = new System.Drawing.Size(553, 460);
+            }
+            else
+            {
+                m_lblSessionToken.Visible = false;
+                m_txtSessionToken.Visible = false;
+                this.Size = new System.Drawing.Size(553, 400);
+            }
         }
     }
 }

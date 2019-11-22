@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -17,7 +17,11 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
     {
         public static AmazonS3Client GetApi(AccountConfiguration account)
         {
-            var credentials = new BasicAWSCredentials(account.Id, account.Secret);
+            AWSCredentials credentials;
+            if (account.AdditionalSettings != null && account.AdditionalSettings.ContainsKey("UseSessionToken") && Convert.ToBoolean(account.AdditionalSettings["UseSessionToken"]) == true && account.AdditionalSettings.ContainsKey("SessionToken"))
+                credentials = new SessionAWSCredentials(account.Id, account.Secret, account.AdditionalSettings["SessionToken"]);
+            else
+                credentials = new BasicAWSCredentials(account.Id, account.Secret);  
 
             var region = RegionEndpoint.USWest1;
             if (account.AdditionalSettings != null && account.AdditionalSettings.ContainsKey("AWSRegion"))
