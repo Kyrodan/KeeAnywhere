@@ -22,13 +22,13 @@ Supported providers:
 * OneDrive
     </description>
     <packageSourceUrl>https://github.com/kyrodan/keeanywhere/tree/master/chocolatey</packageSourceUrl>
-    <projectUrl>https://github.com/Kyrodan/KeeAnywhere</projectUrl>
+    <projectUrl>https://keeanywhere.de</projectUrl>
     <projectSourceUrl>https://github.com/Kyrodan/KeeAnywhere</projectSourceUrl>
     <bugTrackerUrl>https://github.com/Kyrodan/KeeAnywhere/issues</bugTrackerUrl>
-    <docsUrl>https://github.com/Kyrodan/KeeAnywhere/wiki/</docsUrl>
+    <docsUrl>https://keeanywhere.de/use/start</docsUrl>
     <iconUrl>https://cdn.rawgit.com/Kyrodan/KeeAnywhere/95b05e59b80690037bfb1952715d5104fbf99b71/KeeAnywhere/Resources/KeeAnywhere_48x48.png</iconUrl>
     <tags>keepass plugin backup sync cloud</tags>
-    <copyright>© 2015-2018 Daniel Bölts</copyright>
+    <copyright>© 2015-2019 Daniel Bölts</copyright>
     <licenseUrl>https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>## 1.5.1 (2018-10-19)
@@ -68,7 +68,7 @@ Default Storage Location for settings is now in User's Roaming AppData instead o
 [Full Changelog](https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md)
     </releaseNotes>
     <dependencies>
-      <dependency id="keepass" version="[2.40, 3.0)" />
+      <dependency id="keepass" version="[2.43, 3.0)" />
       <dependency id="dotnet4.5.2" />
     </dependencies>
   </metadata>
