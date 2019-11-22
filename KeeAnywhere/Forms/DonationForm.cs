@@ -38,7 +38,7 @@ namespace KeeAnywhere.Forms
 
         private void OnShowMeHowToDonate(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Kyrodan/KeeAnywhere/blob/master/DONATE.md");
+            Process.Start("https://keeanywhere.de/donate");
         }
 
         public bool IsDontShowMessageAgain { get

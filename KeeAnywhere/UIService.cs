@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using KeeAnywhere.Configuration;
@@ -111,15 +113,33 @@ namespace KeeAnywhere
             _donationDialogAlreadyShownInThisUpgradedSession = true;
         }
 
-        public void ShowChangelogDialog(bool isUpgraded)
+        public void ShowChangelog()
         {
-            var dlg = new ChangelogForm();
-            dlg.InitEx(isUpgraded);
+            var version = this.GetVersionTag();
+            var url = string.Format("https://github.com/Kyrodan/KeeAnywhere/blob/{0}/CHANGELOG.md", version);
+            Process.Start(url);
+        }
 
-            var result = UIUtil.ShowDialogAndDestroy(dlg);
-            if (result == DialogResult.Yes)
-                this.ShowSettingsDialog();
+        private string GetVersionTag()
+        {
+            var tag = "master";
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var versionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
 
+                if (versionAttribute != null)
+                    tag = "v" + versionAttribute.InformationalVersion;
+
+                if (tag.EndsWith("unstable"))
+                    tag = "master";
+            }
+            catch
+            {
+                // ignored
+            }
+
+            return tag;
         }
 
         public void ShowSettingsDialog()

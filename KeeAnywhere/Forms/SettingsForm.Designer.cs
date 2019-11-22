@@ -75,6 +75,7 @@
             this.m_pnlFormButtons = new System.Windows.Forms.TableLayoutPanel();
             this.m_btnHelp = new KeeAnywhere.Forms.DropDownButton();
             this.m_dlgSelectBackupToLocalFolder = new System.Windows.Forms.FolderBrowserDialog();
+            this.m_mnuHelp_Privacy = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).BeginInit();
             this.m_tcSettings.SuspendLayout();
             this.m_tabAccounts.SuspendLayout();
@@ -172,6 +173,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lvAccounts.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.m_lvAccounts.HideSelection = false;
             this.m_lvAccounts.LabelEdit = true;
             this.m_lvAccounts.Location = new System.Drawing.Point(7, 38);
             this.m_lvAccounts.MultiSelect = false;
@@ -460,6 +462,7 @@
             this.m_mnuHelp_Documentation,
             this.m_mnuHelp_Homepage,
             this.m_mnuHelp_WhatsNew,
+            this.m_mnuHelp_Privacy,
             this.m_mnuHelp_License,
             this.m_mnuHelp_Sep1,
             this.m_mnuHelp_ReportBug,
@@ -467,7 +470,7 @@
             this.m_mnuHelp_Sep2,
             this.m_mnuHelp_Donate});
             this.m_mnuHelp.Name = "m_mnuHelp";
-            this.m_mnuHelp.Size = new System.Drawing.Size(248, 170);
+            this.m_mnuHelp.Size = new System.Drawing.Size(248, 214);
             // 
             // m_mnuHelp_Documentation
             // 
@@ -563,6 +566,13 @@
             // 
             this.m_dlgSelectBackupToLocalFolder.Description = "Pleae select your local folder for backups.";
             // 
+            // m_mnuHelp_Privacy
+            // 
+            this.m_mnuHelp_Privacy.Name = "m_mnuHelp_Privacy";
+            this.m_mnuHelp_Privacy.Size = new System.Drawing.Size(247, 22);
+            this.m_mnuHelp_Privacy.Text = "Privacy Statement";
+            this.m_mnuHelp_Privacy.Click += new System.EventHandler(this.OnPrivacy);
+            // 
             // SettingsForm
             // 
             this.AcceptButton = this.m_btnOK;
@@ -646,5 +656,6 @@
         private System.Windows.Forms.CheckBox m_chkBackupToRemote;
         private System.Windows.Forms.Button m_btnBackupToLocalFolder;
         private System.Windows.Forms.FolderBrowserDialog m_dlgSelectBackupToLocalFolder;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_Privacy;
     }
 }

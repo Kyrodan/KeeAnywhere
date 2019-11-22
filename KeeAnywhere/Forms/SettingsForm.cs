@@ -212,7 +212,7 @@ namespace KeeAnywhere.Forms
 
         private void OnWhatsNew(object sender, EventArgs e)
         {
-            m_uiService.ShowChangelogDialog(false);
+            m_uiService.ShowChangelog();
         }
 
         private void OnReportBug(object sender, EventArgs e)
@@ -227,27 +227,32 @@ namespace KeeAnywhere.Forms
 
         private void OnDonate(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Kyrodan/KeeAnywhere/blob/master/DONATE.md");
+            Process.Start("https://keeanywhere.de/donate");
         }
 
         private void OnHomepage(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Kyrodan/KeeAnywhere");
+            Process.Start("https://keeanywhere.de");
         }
 
         private void OnDocumentation(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki");
+            Process.Start("https://keeanywhere.de/use/start");
         }
 
         private void OnHelpMeChooseAccountStorage(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Kyrodan/KeeAnywhere/wiki/Advanced-Topics#which-account-storage-location-should-i-choose");
+            Process.Start("https://keeanywhere.de/use/advanced_topics#which-account-storage-location-should-i-choose");
         }
 
         private void OnLicense(object sender, EventArgs e)
         {
             Process.Start("https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE");
+        }
+
+        private void OnPrivacy(object sender, EventArgs e)
+        {
+            Process.Start("https://keeanywhere.de/privacy");
         }
 
         private void OnAfterLabelEdit(object sender, LabelEditEventArgs e)
