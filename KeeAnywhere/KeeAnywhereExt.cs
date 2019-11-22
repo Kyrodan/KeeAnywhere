@@ -29,7 +29,6 @@ namespace KeeAnywhere
         private ToolStripMenuItem _tsSaveToCloudDrive;
         private ToolStripMenuItem _tsSaveCopyToCloudDrive;
 
-        private ToolStripMenuItem _tsShowSettings;
         private UIService _uiService;
         private CacheManagerService _cacheManagerService;
         private KpResources _kpResources;
@@ -89,12 +88,6 @@ namespace KeeAnywhere
             // Initialize KeePass-Resource Service
             _kpResources = new KpResources(_host);
 
-            // Add the menu option for configuration under Tools
-            var menu = _host.MainWindow.ToolsMenu.DropDownItems;
-            _tsShowSettings = new ToolStripMenuItem("KeeAnywhere Settings...", PluginResources.KeeAnywhere_16x16);
-            _tsShowSettings.Click += OnShowSetting;
-            menu.Add(_tsShowSettings);
-
             // Add "Open from Cloud Drive..." to File\Open menu.
             var fileMenu = _host.MainWindow.MainMenu.Items["m_menuFile"] as ToolStripMenuItem;
             if (fileMenu != null)
@@ -132,6 +125,20 @@ namespace KeeAnywhere
 
             // Indicate that the plugin started successfully
             return true;
+        }
+
+        public override ToolStripMenuItem GetMenuItem(PluginMenuType t)
+        {
+            if (t == PluginMenuType.Main)
+            {
+                // Add the menu option for configuration under Tools
+                var tsShowSettings = new ToolStripMenuItem("KeeAnywhere Settings...", PluginResources.KeeAnywhere_16x16);
+                tsShowSettings.Click += OnShowSetting;
+
+                return tsShowSettings;
+            }
+
+            return null; // No menu items in other locations
         }
 
         private void SetBrowserFeatureControl()
@@ -255,9 +262,6 @@ namespace KeeAnywhere
             _configService.Save();
             _cacheManagerService.UnRegisterEvents();
 
-
-            _host.MainWindow.ToolsMenu.DropDownItems.Remove(_tsShowSettings);
-
             var fileMenu = _host.MainWindow.MainMenu.Items["m_menuFile"] as ToolStripMenuItem;
             if (fileMenu != null)
             {
@@ -275,7 +279,6 @@ namespace KeeAnywhere
                 }
             }
 
-            _tsShowSettings = null;
             _tsOpenFromCloudDrive = null;
         }
 
