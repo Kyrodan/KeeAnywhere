@@ -68,7 +68,7 @@ namespace KeeAnywhere.Configuration
         {
             this.IsOfflineCacheEnabled = true;
             this.AccountStorageLocation = AccountStorageLocation.LocalUserSecureStore;
-            this.DonationDialogLastShown = DateTime.MinValue;
+            this.DonationDialogLastShown = DateTime.Today;
         }
     }
 }

@@ -15,6 +15,7 @@ KeePass 2.43 or newer is required now (was 2.40).
 
 ### Improved
 
+- \#99 About the beer message
 - \#190 Improve Menu Creation for KeePass >= 2.41
 - Updated Dependencies (KeePass)
 

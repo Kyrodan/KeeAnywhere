@@ -100,7 +100,13 @@ namespace KeeAnywhere
             var lastShown = _configService.PluginConfiguration.DonationDialogLastShown;
             var isUpgraded = _configService.IsUpgraded && !_donationDialogAlreadyShownInThisUpgradedSession;
 
-            if (!isUpgraded && (lastShown == DateTime.MaxValue || lastShown.AddMonths(1) > DateTime.Today))
+            if (isUpgraded)
+            {
+                _configService.PluginConfiguration.DonationDialogLastShown = DateTime.Today;
+                return;
+            }
+
+            if (lastShown > DateTime.Today.AddMonths(-1))
                 return;
 
             var dlg = new DonationForm();
