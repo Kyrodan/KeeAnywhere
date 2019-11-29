@@ -43,20 +43,43 @@ namespace KeeAnywhere.Json
 
             public void SetValue(object target, object value)
             {
-                var encrypted = Convert.FromBase64String((string)value);
-                var buffer = ProtectedData.Unprotect(encrypted, null, DataProtectionScope.CurrentUser);
+                try
+                {
+                    if (value == null)
+                    {
+                        return;
+                    }
+                    var encrypted = Convert.FromBase64String((string)value);
+                    var buffer = ProtectedData.Unprotect(encrypted, null, DataProtectionScope.CurrentUser);
 
-                var decryptedValue = Encoding.UTF8.GetString(buffer);
-                _targetProperty.SetValue(target, decryptedValue);
+                    var decryptedValue = Encoding.UTF8.GetString(buffer);
+                    _targetProperty.SetValue(target, decryptedValue);
+                }
+                catch (Exception ex)
+                {
+                    throw new JsonDecryptException(ex);
+                }
             }
 
             public object GetValue(object target)
             {
-                var value = (string)_targetProperty.GetValue(target);
-                var buffer = Encoding.UTF8.GetBytes(value);
-                var encrypted = ProtectedData.Protect(buffer, null, DataProtectionScope.CurrentUser);
+                try
+                {
+                    var value = (string)_targetProperty.GetValue(target);
+                    if (value == null)
+                    {
+                        return null;
+                    }
 
-                return Convert.ToBase64String(encrypted);
+                    var buffer = Encoding.UTF8.GetBytes(value);
+                    var encrypted = ProtectedData.Protect(buffer, null, DataProtectionScope.CurrentUser);
+
+                    return Convert.ToBase64String(encrypted);
+                }
+                catch (Exception ex)
+                {
+                    throw new JsonEncryptException(ex);
+                }
             }
         }
     }

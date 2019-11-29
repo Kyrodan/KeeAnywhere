@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using KeeAnywhere.Json;
 using KeePass.App.Configuration;
@@ -27,13 +28,37 @@ namespace KeeAnywhere.Configuration
 
             try
             {
+                var isEncryptionError = false;
+
                 var settings = new JsonSerializerSettings
                 {
                     Formatting = Formatting.Indented,
-                    ContractResolver = new ProtectedDataStringPropertyResolver()
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new ProtectedDataStringPropertyResolver(),
+                    Error = (s, args) =>
+                    {
+                        if (args.ErrorContext.Error is JsonDecryptException)
+                        {
+                            isEncryptionError = true;
+                            args.ErrorContext.Handled = true;
+                        }
+                    }
                 };
 
                 this.Accounts = JsonConvert.DeserializeObject<IList<AccountConfiguration>>(configString, settings);
+
+                if (isEncryptionError)
+                {
+                    var openTroubleshooting = MessageService.AskYesNo(
+                        "Unable to parse the plugin's account configuration for the KeeAnywhere plugin from local secure store:\n" +
+                        "Decryption of screts failed.\n\nWould you like to check Troubleshooting Documentation for that?",
+                        "KeeAnywhere Plugin:"
+                    );
+                    if (openTroubleshooting)
+                    {
+                        Process.Start("https://keeanywhere.de/use/troubleshooting#could-not-read-account-configuration");
+                    }
+                }
             }
             catch (JsonSerializationException)
             {
@@ -51,6 +76,7 @@ namespace KeeAnywhere.Configuration
             var settings = new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = new ProtectedDataStringPropertyResolver()
             };
 

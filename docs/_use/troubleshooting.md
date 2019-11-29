@@ -1,6 +1,19 @@
 ---
 title: Troubleshooting
 ---
+# Could not read account configuration
+You use `Local User Secure Store` for your Account Storage Location and the following error appears:
+> Unable to parse the plugin's account configuration for the KeeAnywhere plugin from local secure store:
+> Decryption of screts failed.
+
+This is beacuse the secrets could not be decrypted from the `%APPDATA%\KeePass\KeeAnywhere.Accounts.json` file.
+This mostly happens if you move this file from another Windows User or another machine: in both cases
+the decryption is not possible anymore because it is tightly coupled to you Windows User.
+
+More Details:
+Internally [System.Security.Cryptography.ProtectedData](https://docs.microsoft.com/de-de/dotnet/api/system.security.cryptography.protecteddata?view=netframework-4.7.2) is used which itself uses the Windows Data Protection API (DPAPI).
+
+
 # Proxy settings not working
 For registering an account, KeeAnywhere embeds Internet Explorer in the authorization window. So you have to manage system proxy settings (in Control Panel - Internetoptions), too.
 

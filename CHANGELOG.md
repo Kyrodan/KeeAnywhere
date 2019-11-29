@@ -2,15 +2,20 @@
 
 KeePass 2.43 or newer is required now (was 2.40).
 
-### Fixed
+### New
+
 - \#116 KeeAnywhere not works with Temporary Access and Secret Keys (PR \#182)
+
+### Fixed
+
 - \#123 KeeAnywhere ignore KeePass Proxy configuration (PR \#163)
-- \#189 Adjust links to new Homepage
+- \#169 KeeAnywhere.dll v1.5.1 plugin incompatible with Keepass 2.41
 - \#184 KeeAnywhere 1.5.1 doesn't work with KeePass 2.43
-- \#190 Improve Menu Creation for KeePass >= 2.41
+- \#189 Adjust links to new Homepage
 
 ### Improved
 
+- \#190 Improve Menu Creation for KeePass >= 2.41
 - Updated Dependencies (KeePass)
 
 
