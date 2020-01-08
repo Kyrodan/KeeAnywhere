@@ -195,7 +195,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             this.m_chkUseSessionToken.TabIndex = 14;
             this.m_chkUseSessionToken.Text = "Enable Session Token";
             this.m_chkUseSessionToken.UseVisualStyleBackColor = false;
-            this.m_chkUseSessionToken.CheckedChanged += new System.EventHandler(this.M_chkUseSessionToken_CheckedChanged);
+            this.m_chkUseSessionToken.CheckedChanged += new System.EventHandler(this.OnUseSessionTokenChanged);
             // 
             // AmazonS3AccountForm
             // 

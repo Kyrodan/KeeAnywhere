@@ -28,9 +28,6 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             BannerFactory.CreateBannerEx(this, m_bannerImage,
                 PluginResources.KeeAnywhere_48x48, "Authorize to Amazon S3",
                 "Please enter your Amazon S3 credentials here.");
-
-            this.Size = new System.Drawing.Size(553, 400);
-            
         }
 
         private void OnFormClosed(object sender, FormClosedEventArgs e)
@@ -133,20 +130,10 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 this.DialogResult = DialogResult.OK;
         }
         
-        private void M_chkUseSessionToken_CheckedChanged(object sender, EventArgs e)
+        private void OnUseSessionTokenChanged(object sender, EventArgs e)
         {
-            if (m_chkUseSessionToken.Checked == true)
-            {
-                m_lblSessionToken.Visible = true;
-                m_txtSessionToken.Visible = true;
-                this.Size = new System.Drawing.Size(553, 460);
-            }
-            else
-            {
-                m_lblSessionToken.Visible = false;
-                m_txtSessionToken.Visible = false;
-                this.Size = new System.Drawing.Size(553, 400);
-            }
+            m_lblSessionToken.Visible = m_chkUseSessionToken.Checked;
+            m_txtSessionToken.Visible = m_chkUseSessionToken.Checked;
         }
     }
 }

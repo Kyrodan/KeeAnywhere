@@ -123,11 +123,6 @@ namespace KeeAnywhere
             if (_configService.IsUpgraded)
             {
                 _uiService.ShowChangelog();
-
-                MessageService.ShowInfoEx("KeeAnywhere upgraded", "KeeAnywhere has been upgraded.",
-                    "Please check changelog and adjust your settings if needed.");
-
-                _uiService.ShowSettingsDialog();
             }
 
             // Indicate that the plugin started successfully
