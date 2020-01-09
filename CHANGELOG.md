@@ -1,3 +1,6 @@
+## 1.7.0 (unpublished)
+
+
 ## 1.6.0 (2020-01-08)
 
 KeePass 2.43 or newer is required now (was 2.40).
