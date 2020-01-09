@@ -1,5 +1,9 @@
 ## 1.7.0 (unpublished)
 
+### Fixed
+
+- \#196 HiDrive: Saving to root folder throws exception
+
 
 ## 1.6.0 (2020-01-08)
 

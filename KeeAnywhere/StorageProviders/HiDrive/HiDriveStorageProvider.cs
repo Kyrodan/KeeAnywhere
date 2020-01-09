@@ -38,7 +38,7 @@ namespace KeeAnywhere.StorageProviders.HiDrive
             var pathname = CloudPath.GetDirectoryName(path);
             var filename = CloudPath.GetFileName(path);
 
-            var item = await api.File.Upload(filename, pathname, pid, UploadMode.CreateOrUpdate).ExecuteAsync(stream);
+            var item = await api.File.Upload(filename, String.IsNullOrEmpty(pathname) ? null : pathname, pid, UploadMode.CreateOrUpdate).ExecuteAsync(stream);
 
             if (item == null)
                 throw new InvalidOperationException("HiDrive: Save failed.");
