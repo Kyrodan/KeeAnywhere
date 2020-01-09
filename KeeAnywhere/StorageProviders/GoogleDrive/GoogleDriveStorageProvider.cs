@@ -129,8 +129,8 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             var api = await GetApi();
             var query = api.Files.List();
             query.Q = string.Format("'{0}' in parents and trashed = false", parent.Id);
-            var items = await query.ExecuteAsync();
 
+            var items = await query.ExecuteAsync();
             var newItems = items.Files.Select(_ => new StorageProviderItem()
             {
                 Id = _.Id,
@@ -142,6 +142,24 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
                 LastModifiedDateTime = _.ModifiedTime,
                 ParentReferenceId = parent.Id,
             });
+
+            while (items.NextPageToken != null)
+            {
+                query.PageToken = items.NextPageToken;
+
+                items = await query.ExecuteAsync();
+                newItems.Concat(items.Files.Select(_ => new StorageProviderItem()
+                {
+                    Id = _.Id,
+                    Name = _.Name,
+                    Type =
+                        _.MimeType == "application/vnd.google-apps.folder"
+                            ? StorageProviderItemType.Folder
+                            : StorageProviderItemType.File,
+                    LastModifiedDateTime = _.ModifiedTime,
+                    ParentReferenceId = parent.Id,
+                }));
+            }
 
             return newItems.ToArray();
         }

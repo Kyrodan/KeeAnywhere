@@ -87,6 +87,12 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             var dbxItems = await Api.Files.ListFolderAsync(parent.Id);
             var items = dbxItems.Entries.Select(_ => CreateStorageProviderItem(parent, _));
 
+            while (dbxItems.HasMore)
+            {
+                dbxItems = await Api.Files.ListFolderContinueAsync(dbxItems.Cursor);
+                items.Concat(dbxItems.Entries.Select(_ => CreateStorageProviderItem(parent, _)));
+            } 
+
             return items.ToArray();
         }
 
