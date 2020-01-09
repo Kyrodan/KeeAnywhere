@@ -6,9 +6,8 @@ In folder *build* you now see two subfolders:
 * dist: packages for distribution
 
 # Prepare new release
-This projects follows [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/). 
-The *master* branch contains the latest released version. Each released version is tagged with a version tag: this tag follows [Semantic Versioning](http://semver.org/). Ongoing development takes place in *develop* branch.
-When preparing for a new release the last steps before merging *develop* to *master* is to change the version informations (e.g. 0.1.0-alpha):
+Each released version is tagged with a version tag: this tag follows [Semantic Versioning](http://semver.org/).
+When preparing for a new release the last steps is to change the version informations (e.g. 0.1.0-alpha):
 
 * KeeAnywhere\Properties\AssemblyInfo.cs
 * build.cmd
@@ -16,7 +15,7 @@ When preparing for a new release the last steps before merging *develop* to *mas
 * chocolatey\keepass-plugin-keeanywhere.nuspec
 * version_manifest.txt (change only for production releases)
 
-After merging *develop* to *master* change version in *develop* to **next** unstable version (e. g. 0.2.0-unstable) - just to make clear ths is a development snapshot and generally not released to public.
+After having pushed and tagged the current version, then change version to **next** unstable version (e. g. 0.2.0-unstable) - just to make clear ths is a development snapshot and generally not released to public.
 
 # Version examples
 Versions are always counted upwards. Each version is unique. 
