@@ -30,7 +30,7 @@ The source code is licensed under the [MIT license](https://github.com/Kyrodan/K
 
 # Amazon AWS S3
 
-# How to restrict access (not giving S3FullAccess Policy) with IAM Provider?
+## How to restrict access (not giving S3FullAccess Policy) with IAM Provider?
 Here is a working sample - see details in [#187](https://github.com/Kyrodan/KeeAnywhere/issues/187):
 ```
 { 
