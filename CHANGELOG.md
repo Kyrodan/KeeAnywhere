@@ -5,6 +5,10 @@
 - \#179 \[Dropbox\] \[Google Drive\] Open from Cloud Drive only list partial content
 - \#196 HiDrive: Saving to root folder throws exception
 
+### Improved
+
+- Updated Dependencies (Dropbox)
+
 
 ## 1.6.0 (2020-01-08)
 

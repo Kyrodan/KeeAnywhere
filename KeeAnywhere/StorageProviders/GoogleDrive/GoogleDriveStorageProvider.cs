@@ -148,7 +148,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
                 query.PageToken = items.NextPageToken;
 
                 items = await query.ExecuteAsync();
-                newItems.Concat(items.Files.Select(_ => new StorageProviderItem()
+                newItems = newItems.Concat(items.Files.Select(_ => new StorageProviderItem()
                 {
                     Id = _.Id,
                     Name = _.Name,
