@@ -87,6 +87,18 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Storage.Blob, Version=11.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Storage.Blob.11.1.1\lib\net452\Microsoft.Azure.Storage.Blob.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Storage.Common, Version=11.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Storage.Common.11.1.1\lib\net452\Microsoft.Azure.Storage.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Storage.File, Version=11.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Storage.File.11.1.1\lib\net452\Microsoft.Azure.Storage.File.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Graph, Version=1.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Graph.1.9.0\lib\net45\Microsoft.Graph.dll</HintPath>
@@ -255,6 +267,20 @@
     <Compile Include="StorageProviders\AmazonS3\AmazonS3StorageConfigurator.cs" />
     <Compile Include="StorageProviders\AmazonS3\AmazonS3StorageProvider.cs" />
     <Compile Include="StorageProviders\AmazonS3\AmazonS3StringExtensions.cs" />
+    <Compile Include="StorageProviders\Azure\AzureAccountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StorageProviders\Azure\AzureAccountForm.Designer.cs">
+      <DependentUpon>AzureAccountForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StorageProviders\Azure\AzureBlobStorageProvider.cs" />
+    <Compile Include="StorageProviders\Azure\AzureFileStorageProvider.cs" />
+	<Compile Include="StorageProviders\Azure\AzureResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AzureResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StorageProviders\Azure\AzureStorageConfigurator.cs" />
     <Compile Include="StorageProviders\Box\BoxHelper.cs" />
     <Compile Include="StorageProviders\Box\BoxHttpRequestHandler.cs" />
     <Compile Include="StorageProviders\Box\BoxStorageConfigurator.cs" />
@@ -328,6 +354,13 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StorageProviders\AmazonS3\AmazonS3AccountForm.resx">
       <DependentUpon>AmazonS3AccountForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StorageProviders\Azure\AzureAccountForm.resx">
+      <DependentUpon>AzureAccountForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StorageProviders\Azure\AzureResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AzureResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
