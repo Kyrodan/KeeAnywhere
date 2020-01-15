@@ -275,7 +275,7 @@
     </Compile>
     <Compile Include="StorageProviders\Azure\AzureBlobStorageProvider.cs" />
     <Compile Include="StorageProviders\Azure\AzureFileStorageProvider.cs" />
-	<Compile Include="StorageProviders\Azure\AzureResources.Designer.cs">
+    <Compile Include="StorageProviders\Azure\AzureResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AzureResources.resx</DependentUpon>
@@ -381,6 +381,7 @@
     <None Include="Resources\AmazonDrive_16x16.png" />
     <None Include="Resources\Box_16x16.png" />
     <None Include="Resources\AmazonS3_16x16.png" />
+    <None Include="Resources\Azure_16x16.png" />
     <Content Include="Resources\Folder_16x16.png" />
     <None Include="Resources\GoogleDrive_16x16.png" />
     <None Include="Resources\HubiC_16x16.png" />
