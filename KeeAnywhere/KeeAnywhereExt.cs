@@ -63,12 +63,12 @@ namespace KeeAnywhere
         {
             if (_host != null) Terminate();
             if (pluginHost == null) return false;
-            if (NativeLib.IsUnix()) return false;
+            //if (NativeLib.IsUnix()) return false;
 
             _host = pluginHost;
 
             // WebBrowser Feature Control 
-            SetBrowserFeatureControl();
+            //SetBrowserFeatureControl();
 
             // Load the configuration
             _configService = new ConfigurationService(pluginHost);
