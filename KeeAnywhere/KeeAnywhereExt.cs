@@ -63,12 +63,14 @@ namespace KeeAnywhere
         {
             if (_host != null) Terminate();
             if (pluginHost == null) return false;
-            //if (NativeLib.IsUnix()) return false;
 
             _host = pluginHost;
 
             // WebBrowser Feature Control 
-            //SetBrowserFeatureControl();
+            if (useInternalBrowser())
+            {
+                SetBrowserFeatureControl();
+            }
 
             // Load the configuration
             _configService = new ConfigurationService(pluginHost);
@@ -320,6 +322,11 @@ namespace KeeAnywhere
 
                 return null;
             };
+        }
+
+        public static bool useInternalBrowser()
+        {
+            return !NativeLib.IsUnix();
         }
     }
 }

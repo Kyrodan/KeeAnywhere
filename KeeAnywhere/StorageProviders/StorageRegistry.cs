@@ -12,7 +12,7 @@ namespace KeeAnywhere.StorageProviders
 {
     public static class StorageRegistry
     {
-        public static IEnumerable<StorageDescriptor> Descriptors = new[]
+        public static IEnumerable<StorageDescriptor> Descriptors = KeeAnywhereExt.useInternalBrowser() ? new[]
         {
             // Preserve sort order: ascending!
             new StorageDescriptor(StorageType.AmazonDrive, "Amazon Drive", "adrive", account => new AmazonDriveStorageProvider(account), () => new AmazonDriveStorageConfigurator(), PluginResources.AmazonDrive_16x16),
@@ -24,6 +24,9 @@ namespace KeeAnywhere.StorageProviders
             new StorageDescriptor(StorageType.HiDrive, "HiDrive", "hidrive", account => new HiDriveStorageProvider(account), () => new HiDriveStorageConfigurator(), PluginResources.HiDrive_16x16),
             new StorageDescriptor(StorageType.HubiC, "hubiC", "hubic", account => new HubiCStorageProvider(account), () => new HubiCStorageConfigurator(), PluginResources.HubiC_16x16),
             new StorageDescriptor(StorageType.OneDrive, "OneDrive", "onedrive", account => new OneDriveStorageProvider(account), () => new OneDriveStorageConfigurator(), PluginResources.OneDrive_16x16),
+        } : new[] 
+        {
+            new StorageDescriptor(StorageType.GoogleDrive, "Google Drive", "gdrive", account => new GoogleDriveStorageProvider(account), () => new GoogleDriveStorageConfigurator(), PluginResources.GoogleDrive_16x16) 
         };
     }
 }

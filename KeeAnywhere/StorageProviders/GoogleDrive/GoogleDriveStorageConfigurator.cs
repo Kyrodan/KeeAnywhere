@@ -1,10 +1,14 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Responses;
+using Google.Apis.Drive.v3;
+using Google.Apis.Services;
+using Google.Apis.Util.Store;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.OAuth2;
 
@@ -16,10 +20,33 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
         public async Task<AccountConfiguration> CreateAccount()
         {
-            var isOk = OAuth2Flow.TryAuthenticate(this);
-            if (!isOk) return null;
+            DriveService api;
+            if (KeeAnywhereExt.useInternalBrowser())
+            {
+                var isOk = OAuth2Flow.TryAuthenticate(this);
+                if (!isOk) return null;
 
-            var api = await GoogleDriveHelper.GetClient(_token);
+                api = await GoogleDriveHelper.GetClient(_token);
+            }
+            else
+            {
+                UserCredential credential;
+                ClientSecrets clientSecrets = new ClientSecrets();
+                clientSecrets.ClientId = GoogleDriveHelper.GoogleDriveClientId;
+                clientSecrets.ClientSecret = GoogleDriveHelper.GoogleDriveClientSecret;
+                IDataStore dataStore = new NullDataStore();
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    clientSecrets,
+                    GoogleDriveHelper.Scopes,
+                    "user",
+                    CancellationToken.None,
+                    dataStore).Result;
+                api = new DriveService(new BaseClientService.Initializer()
+                {
+                    HttpClientInitializer = credential
+                });
+                _token = credential.Token;
+            }
 
             var query = api.About.Get();
             query.Fields = "user";
