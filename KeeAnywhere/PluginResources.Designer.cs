@@ -63,16 +63,6 @@ namespace KeeAnywhere {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap AmazonDrive_16x16 {
-            get {
-                object obj = ResourceManager.GetObject("AmazonDrive_16x16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap AmazonS3_16x16 {
             get {
                 object obj = ResourceManager.GetObject("AmazonS3_16x16", resourceCulture);

@@ -38,9 +38,6 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AmazonCloudDriveApi, Version=1.5.5.0, Culture=neutral, PublicKeyToken=b99c166042f92dc4, processorArchitecture=MSIL">
-      <HintPath>..\packages\AmazonCloudDriveApi.1.5.5\lib\net452\AmazonCloudDriveApi.dll</HintPath>
-    </Reference>
     <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.Core.3.5.2.5\lib\net45\AWSSDK.Core.dll</HintPath>
     </Reference>
@@ -285,9 +282,6 @@
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StorageProviders\AmazonDrive\AmazonDriveHelper.cs" />
-    <Compile Include="StorageProviders\AmazonDrive\AmazonDriveStorageConfigurator.cs" />
-    <Compile Include="StorageProviders\AmazonDrive\AmazonDriveStorageProvider.cs" />
     <Compile Include="StorageProviders\AmazonS3\AmazonS3AccountForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -388,7 +382,6 @@
     <None Include="packages.config" />
     <None Include="Resources\OneDrive_16x16.png" />
     <None Include="Resources\Dropbox_16x16.png" />
-    <None Include="Resources\AmazonDrive_16x16.png" />
     <None Include="Resources\Box_16x16.png" />
     <None Include="Resources\AmazonS3_16x16.png" />
     <Content Include="Resources\Folder_16x16.png" />
