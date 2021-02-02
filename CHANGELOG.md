@@ -1,4 +1,8 @@
-## 1.7.0 (unpublished)
+## 2.0.0 (unpublished)
+
+KeePass 2.47 or newer is required now (was 2.43).
+
+Micrososft .Net 4.6.1 is required now (was 4.5.2).
 
 ### Fixed
 
@@ -8,6 +12,8 @@
 ### Improved
 
 - Updated Dependencies (AWS, Box, Dropbox, Google Drive, OneDrive)
+- Using KeePass 2.47 now
+- Using .Net 4.6.1 now
 
 
 ## 1.6.0 (2020-01-08)

@@ -190,5 +190,10 @@ namespace KeeAnywhere.StorageProviders.Box
         {
             return string.Format("\"{0}\"", name);
         }
+
+        public Task<IBoxResponse<T>> ExecuteAsyncWithoutRetry<T>(IBoxRequest request) where T : class
+        {
+            return this.ExecuteAsync<T>(request);
+        }
     }
 }
