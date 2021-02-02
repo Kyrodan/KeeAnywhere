@@ -12,6 +12,7 @@ Amazon Drive support has been dropped.
 - \#212 Can't connect to google drive account
 - \#179 \[Dropbox\] \[Google Drive\] Open from Cloud Drive only list partial content
 - \#196 HiDrive: Saving to root folder throws exception
+- \#89 Reimplement Account Authentication not using internal Web Browser
 
 ### Improved
 
