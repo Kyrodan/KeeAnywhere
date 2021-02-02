@@ -6,6 +6,9 @@ Micrososft .Net 4.6.1 is required now (was 4.5.2).
 
 ### Fixed
 
+- \#241 \[Google Drive\] Cannot Authorize (browser not supported) bug 
+- \#227 "Couldn't sign you in" GDrive error bug 
+- \#212 Can't connect to google drive account
 - \#179 \[Dropbox\] \[Google Drive\] Open from Cloud Drive only list partial content
 - \#196 HiDrive: Saving to root folder throws exception
 
