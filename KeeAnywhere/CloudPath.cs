@@ -47,7 +47,7 @@ namespace KeeAnywhere
 
                 // Note: This list is duplicated in static char[] InvalidPathChars 
                 if (c < 32)
-                    throw new ArgumentException("Invalid chars in path.");
+                    throw new ArgumentException("Invalid char in path '" + path + "' at position " + i.ToString() + ": " + c.ToString() + " (decimal)");
             }
         }
 

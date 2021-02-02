@@ -7,7 +7,7 @@
 
 ### Improved
 
-- Updated Dependencies (AWS, Box, Dropbox, Google Drive)
+- Updated Dependencies (AWS, Box, Dropbox, Google Drive, OneDrive)
 
 
 ## 1.6.0 (2020-01-08)

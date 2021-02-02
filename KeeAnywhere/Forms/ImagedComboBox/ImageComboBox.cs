@@ -296,11 +296,16 @@ namespace KeeAnywhere.Forms.ImagedComboBox
 			}
 			if (e.Index >= 0 && this.Items.Count > 0 && e.Index < this.Items.Count)
 			{
-				Font itemFont =((ImageComboBoxItem) this.Items[e.Index]).Font == null ? this.Font : ((ImageComboBoxItem)this.Items[e.Index]).Font;
-				SizeF TextSize  = e.Graphics .MeasureString (((ImageComboBoxItem)this.Items[e.Index ]).Text,itemFont);
-				e.ItemHeight = (int)TextSize.Height;
-				e.ItemWidth = (int)TextSize.Width;
-			}
+                //Font itemFont =((ImageComboBoxItem) this.Items[e.Index]).Font == null ? this.Font : ((ImageComboBoxItem)this.Items[e.Index]).Font;
+                //            SizeF TextSize  = e.Graphics .MeasureString (((ImageComboBoxItem)this.Items[e.Index ]).Text,itemFont);
+                //e.ItemHeight = (int)TextSize.Height;
+                //e.ItemWidth = (int)TextSize.Width;
+
+                var scaleX = e.Graphics.DpiX / 96.0;
+                var scaleY = e.Graphics.DpiY / 96.0;
+
+                e.ItemHeight = (int)(this.ItemHeight * scaleY);
+            }
 		}
 		/// <summary>
 		/// Because the combobox is ownerdrawn we have draw each item along with the associated image.

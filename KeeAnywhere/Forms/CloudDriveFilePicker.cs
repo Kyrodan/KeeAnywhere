@@ -425,6 +425,9 @@ namespace KeeAnywhere.Forms
             try
             {
                 result = await m_provider.GetChildrenByParentItem(item);
+                // For Debugging Only:
+                // Clipboard.SetText(string.Join("\r\n", result.Select(_ => _.Id).ToArray()));
+
             }
             catch (Exception ex)
             {

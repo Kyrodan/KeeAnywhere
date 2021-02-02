@@ -49,9 +49,10 @@
             // 
             this.m_btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.m_btnOk.Location = new System.Drawing.Point(420, 521);
+            this.m_btnOk.Location = new System.Drawing.Point(560, 641);
+            this.m_btnOk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_btnOk.Name = "m_btnOk";
-            this.m_btnOk.Size = new System.Drawing.Size(75, 23);
+            this.m_btnOk.Size = new System.Drawing.Size(100, 28);
             this.m_btnOk.TabIndex = 8;
             this.m_btnOk.Text = "OK";
             this.m_btnOk.UseVisualStyleBackColor = true;
@@ -61,9 +62,10 @@
             // 
             this.m_btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.m_btnCancel.Location = new System.Drawing.Point(501, 521);
+            this.m_btnCancel.Location = new System.Drawing.Point(668, 641);
+            this.m_btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_btnCancel.Name = "m_btnCancel";
-            this.m_btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.m_btnCancel.Size = new System.Drawing.Size(100, 28);
             this.m_btnCancel.TabIndex = 9;
             this.m_btnCancel.Text = "Cancel";
             this.m_btnCancel.UseVisualStyleBackColor = true;
@@ -71,9 +73,10 @@
             // m_lblAccount
             // 
             this.m_lblAccount.AutoSize = true;
-            this.m_lblAccount.Location = new System.Drawing.Point(12, 69);
+            this.m_lblAccount.Location = new System.Drawing.Point(16, 85);
+            this.m_lblAccount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblAccount.Name = "m_lblAccount";
-            this.m_lblAccount.Size = new System.Drawing.Size(50, 13);
+            this.m_lblAccount.Size = new System.Drawing.Size(63, 17);
             this.m_lblAccount.TabIndex = 10;
             this.m_lblAccount.Text = "Account:";
             // 
@@ -84,10 +87,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lvDetails.FullRowSelect = true;
             this.m_lvDetails.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.m_lvDetails.Location = new System.Drawing.Point(15, 93);
+            this.m_lvDetails.HideSelection = false;
+            this.m_lvDetails.Location = new System.Drawing.Point(20, 114);
+            this.m_lvDetails.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_lvDetails.MultiSelect = false;
             this.m_lvDetails.Name = "m_lvDetails";
-            this.m_lvDetails.Size = new System.Drawing.Size(561, 383);
+            this.m_lvDetails.Size = new System.Drawing.Size(747, 470);
             this.m_lvDetails.SmallImageList = this.m_ilFiletypeIcons;
             this.m_lvDetails.TabIndex = 12;
             this.m_lvDetails.UseCompatibleStateImageBehavior = false;
@@ -105,9 +110,10 @@
             // 
             this.m_lblFilename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_lblFilename.AutoSize = true;
-            this.m_lblFilename.Location = new System.Drawing.Point(12, 485);
+            this.m_lblFilename.Location = new System.Drawing.Point(16, 597);
+            this.m_lblFilename.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblFilename.Name = "m_lblFilename";
-            this.m_lblFilename.Size = new System.Drawing.Size(52, 13);
+            this.m_lblFilename.Size = new System.Drawing.Size(69, 17);
             this.m_lblFilename.TabIndex = 13;
             this.m_lblFilename.Text = "Filename:";
             // 
@@ -115,9 +121,10 @@
             // 
             this.m_txtFilename.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_txtFilename.Location = new System.Drawing.Point(68, 482);
+            this.m_txtFilename.Location = new System.Drawing.Point(91, 593);
+            this.m_txtFilename.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_txtFilename.Name = "m_txtFilename";
-            this.m_txtFilename.Size = new System.Drawing.Size(346, 20);
+            this.m_txtFilename.Size = new System.Drawing.Size(460, 22);
             this.m_txtFilename.TabIndex = 14;
             this.m_txtFilename.TextChanged += new System.EventHandler(this.OnFilenameChanged);
             // 
@@ -126,9 +133,10 @@
             this.m_cbFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_cbFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_cbFilter.FormattingEnabled = true;
-            this.m_cbFilter.Location = new System.Drawing.Point(420, 482);
+            this.m_cbFilter.Location = new System.Drawing.Point(560, 593);
+            this.m_cbFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_cbFilter.Name = "m_cbFilter";
-            this.m_cbFilter.Size = new System.Drawing.Size(156, 21);
+            this.m_cbFilter.Size = new System.Drawing.Size(207, 24);
             this.m_cbFilter.TabIndex = 15;
             this.m_cbFilter.SelectedIndexChanged += new System.EventHandler(this.OnFilterChanged);
             // 
@@ -137,8 +145,9 @@
             this.m_bannerImage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_bannerImage.Location = new System.Drawing.Point(0, 0);
+            this.m_bannerImage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_bannerImage.Name = "m_bannerImage";
-            this.m_bannerImage.Size = new System.Drawing.Size(588, 60);
+            this.m_bannerImage.Size = new System.Drawing.Size(784, 74);
             this.m_bannerImage.TabIndex = 16;
             this.m_bannerImage.TabStop = false;
             // 
@@ -146,19 +155,21 @@
             // 
             this.m_txtUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_txtUrl.Location = new System.Drawing.Point(68, 521);
+            this.m_txtUrl.Location = new System.Drawing.Point(91, 641);
+            this.m_txtUrl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_txtUrl.Name = "m_txtUrl";
             this.m_txtUrl.ReadOnly = true;
-            this.m_txtUrl.Size = new System.Drawing.Size(346, 20);
+            this.m_txtUrl.Size = new System.Drawing.Size(460, 22);
             this.m_txtUrl.TabIndex = 17;
             // 
             // m_lblUrl
             // 
             this.m_lblUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_lblUrl.AutoSize = true;
-            this.m_lblUrl.Location = new System.Drawing.Point(12, 524);
+            this.m_lblUrl.Location = new System.Drawing.Point(16, 645);
+            this.m_lblUrl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblUrl.Name = "m_lblUrl";
-            this.m_lblUrl.Size = new System.Drawing.Size(32, 13);
+            this.m_lblUrl.Size = new System.Drawing.Size(40, 17);
             this.m_lblUrl.TabIndex = 18;
             this.m_lblUrl.Text = "URL:";
             // 
@@ -170,25 +181,26 @@
             // 
             // m_cbAccounts
             // 
-            this.m_cbAccounts.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.m_cbAccounts.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.m_cbAccounts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_cbAccounts.FormattingEnabled = true;
             this.m_cbAccounts.ImageList = this.m_ilProviderIcons;
             this.m_cbAccounts.Indent = 20;
             this.m_cbAccounts.ItemHeight = 16;
-            this.m_cbAccounts.Location = new System.Drawing.Point(68, 66);
+            this.m_cbAccounts.Location = new System.Drawing.Point(91, 81);
+            this.m_cbAccounts.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_cbAccounts.Name = "m_cbAccounts";
-            this.m_cbAccounts.Size = new System.Drawing.Size(261, 22);
+            this.m_cbAccounts.Size = new System.Drawing.Size(347, 22);
             this.m_cbAccounts.TabIndex = 19;
             this.m_cbAccounts.SelectedValueChanged += new System.EventHandler(this.OnAccountChanged);
             // 
             // CloudDriveFilePicker
             // 
             this.AcceptButton = this.m_btnOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
-            this.ClientSize = new System.Drawing.Size(588, 556);
+            this.ClientSize = new System.Drawing.Size(784, 684);
             this.Controls.Add(this.m_cbAccounts);
             this.Controls.Add(this.m_lblUrl);
             this.Controls.Add(this.m_txtUrl);
@@ -200,6 +212,7 @@
             this.Controls.Add(this.m_btnOk);
             this.Controls.Add(this.m_btnCancel);
             this.Controls.Add(this.m_bannerImage);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "CloudDriveFilePicker";
