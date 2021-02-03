@@ -4,11 +4,14 @@ using System;
 using System.Threading.Tasks;
 //using System.Web;
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2.Flows;
+using Google.Apis.Auth.OAuth2.Responses;
 //using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
-//using IdentityModel.OidcClient;
+using IdentityModel;
+using IdentityModel.OidcClient;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.OAuth2;
 
@@ -32,66 +35,92 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
                 f.InitEx(this.FriendlyProviderName);
                 f.Show();
 
-                var clientSecrets = new ClientSecrets
+                //var clientSecrets = new ClientSecrets
+                //{
+                //    ClientId = GoogleDriveHelper.GoogleDriveClientId,
+                //    ClientSecret = GoogleDriveHelper.GoogleDriveClientSecret
+                //};
+
+                //var dataStore = new NullDataStore();
+
+                //var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                //    clientSecrets,
+                //    GoogleDriveHelper.Scopes,
+                //    "user",
+                //    f.CancellationToken,
+                //    dataStore);
+
+
+
+                //var api = new DriveService(new BaseClientService.Initializer()
+                //{
+                //    HttpClientInitializer = credential
+                //});
+
+
+
+                var browser = new SystemBrowser();
+
+                //OidcConstants.StandardScopes.OpenId
+                //OidcConstants.StandardScopes.Profile
+
+                var options = new OidcClientOptions
                 {
+                    Authority = "https://accounts.google.com/.well-known/openid-configuration",
                     ClientId = GoogleDriveHelper.GoogleDriveClientId,
-                    ClientSecret = GoogleDriveHelper.GoogleDriveClientSecret
+                    ClientSecret = GoogleDriveHelper.GoogleDriveClientSecret,
+//                    RedirectUri = GoogleAuthConsts.ApprovalUrl,
+                    RedirectUri = browser.RedirectUri,
+                    Scope = "openid profile " + String.Join(" ", GoogleDriveHelper.Scopes),
+                    Browser = browser,
+                    Flow = OidcClientOptions.AuthenticationFlow.AuthorizationCode,
+                    ResponseMode = OidcClientOptions.AuthorizeResponseMode.Redirect
                 };
 
-                var dataStore = new NullDataStore();
-
-                var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    clientSecrets,
-                    GoogleDriveHelper.Scopes,
-                    "user",
-                    f.CancellationToken,
-                    dataStore);
+                options.Policy.Discovery.ValidateEndpoints = false;
 
 
+                var client = new OidcClient(options);
+                var credential = await client.LoginAsync(null, f.CancellationToken);
 
-                var api = new DriveService(new BaseClientService.Initializer()
-                {
-                    HttpClientInitializer = credential
-                });
+                //JwtClaimTypes;
 
-                f.Close();
-
+                var userId = credential.User.FindFirst(JwtClaimTypes.Subject).Value;
+                var userName = credential.User.FindFirst(JwtClaimTypes.Name).Value;
+                var refreshToken = credential.RefreshToken;
 
 
-                //this.Initialize();
-                //var options = new OidcClientOptions
+                //var token = new TokenResponse()
                 //{
-                //    Authority = this.AuthorizationUrl.ToString(),
-                //    ClientId = GoogleDriveHelper.GoogleDriveClientId,
-                //    ClientSecret = GoogleDriveHelper.GoogleDriveClientSecret,
-                //    RedirectUri = this.RedirectionUrl.ToString(),
-                //    Scope = String.Join(" ", GoogleDriveHelper.Scopes),
-                //    Browser = new SystemBrowser()
+                //    RefreshToken = credential.RefreshToken
                 //};
 
-                //var client = new OidcClient(options);
-                //var result = await client.LoginAsync();
-                //_token = new TokenResponse()
-                //{
-                //    RefreshToken = result.RefreshToken
-                //};
+                //var api = await GoogleDriveHelper.GetClient(token);
 
-                //var api = await GoogleDriveHelper.GetClient(_token);
-
-
-
-
-                var query = api.About.Get();
-                query.Fields = "user";
-                var about = await query.ExecuteAsync();
 
                 var account = new AccountConfiguration()
                 {
                     Type = StorageType.GoogleDrive,
-                    Id = about.User.PermissionId,
-                    Name = about.User.DisplayName,
-                    Secret = credential.Token.RefreshToken
+                    Id = userId,
+                    Name = userName,
+                    Secret = refreshToken
                 };
+
+
+                f.Close();
+
+                //var query = api.About.Get();
+                //query.Fields = "user";
+                //var about = await query.ExecuteAsync();
+
+                //var account = new AccountConfiguration()
+                //{
+                //    Type = StorageType.GoogleDrive,
+                //    Id = about.User.PermissionId,
+                //    Name = about.User.DisplayName,
+                //    //Secret = credential.Token.RefreshToken
+                //    Secret = token.RefreshToken
+                //};
 
 
                 return account;

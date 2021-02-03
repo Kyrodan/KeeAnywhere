@@ -55,11 +55,11 @@
             this.m_pnlWait.Controls.Add(this.m_btnCancel);
             this.m_pnlWait.Controls.Add(this.m_lblWait);
             this.m_pnlWait.Controls.Add(this.m_pgbWait);
+            this.m_pnlWait.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.m_pnlWait.Location = new System.Drawing.Point(0, 66);
             this.m_pnlWait.Name = "m_pnlWait";
             this.m_pnlWait.Size = new System.Drawing.Size(514, 95);
             this.m_pnlWait.TabIndex = 18;
-            this.m_pnlWait.UseWaitCursor = true;
             // 
             // m_btnCancel
             // 
@@ -70,7 +70,6 @@
             this.m_btnCancel.TabIndex = 2;
             this.m_btnCancel.Text = "&Cancel";
             this.m_btnCancel.UseVisualStyleBackColor = true;
-            this.m_btnCancel.UseWaitCursor = true;
             this.m_btnCancel.Click += new System.EventHandler(this.OnCancel);
             // 
             // m_lblWait
@@ -83,7 +82,6 @@
             this.m_lblWait.TabIndex = 1;
             this.m_lblWait.Text = "See your Browser for further instructions ... this window will close automaticall" +
     "y.";
-            this.m_lblWait.UseWaitCursor = true;
             // 
             // m_pgbWait
             // 
@@ -94,10 +92,9 @@
             this.m_pgbWait.Size = new System.Drawing.Size(490, 23);
             this.m_pgbWait.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.m_pgbWait.TabIndex = 0;
-            this.m_pgbWait.UseWaitCursor = true;
             this.m_pgbWait.Value = 100;
             // 
-            // ProcessingForm
+            // OAuth2WaitForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -108,7 +105,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "ProcessingForm";
+            this.Name = "OAuth2WaitForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ProcessingForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
