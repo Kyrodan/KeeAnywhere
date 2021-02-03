@@ -1,6 +1,6 @@
 ﻿namespace KeeAnywhere.OAuth2
 {
-    partial class OAuth2WaitForm
+    partial class OidcWaitForm
     {
         /// <summary>
         /// Required designer variable.

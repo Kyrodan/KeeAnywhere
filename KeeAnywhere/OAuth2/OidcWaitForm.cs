@@ -1,28 +1,34 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using KeeAnywhere.StorageProviders;
 using KeePass.UI;
 
 namespace KeeAnywhere.OAuth2
 {
-    public partial class OAuth2WaitForm : Form
+    public partial class OidcWaitForm : Form
     {
         private string m_providername;
         private CancellationTokenSource m_tokenSource;
 
-        public OAuth2WaitForm()
+        public OidcWaitForm()
         {
             InitializeComponent();
 
             this.m_tokenSource = new CancellationTokenSource();
         }
 
-        public async void InitEx(string providername)
+        public async void InitEx(StorageType type)
         {
-            if (String.IsNullOrEmpty(providername)) throw new ArgumentNullException("providername");
-            m_providername = providername;
+            if (type == null) throw new ArgumentNullException("type");
+
+            var descriptor = StorageRegistry.Descriptors.FirstOrDefault(d => d.Type == type);
+            if (descriptor == null) throw new ArgumentException("type not valid");
+
+            m_providername = descriptor.FriendlyName;
         }
 
         private void OnLoad(object sender, EventArgs e)
