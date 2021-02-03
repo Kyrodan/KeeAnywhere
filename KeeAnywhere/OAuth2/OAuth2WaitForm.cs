@@ -10,8 +10,6 @@ namespace KeeAnywhere.OAuth2
     public partial class OAuth2WaitForm : Form
     {
         private string m_providername;
-        private bool m_isPreAuthorization;
-        private bool m_isClaimed;
         private CancellationTokenSource m_tokenSource;
 
         public OAuth2WaitForm()
