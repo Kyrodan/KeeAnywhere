@@ -2,8 +2,8 @@
 using IdentityModel.OidcClient;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.StorageProviders;
+using KeePassLib.Utility;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,9 +52,19 @@ namespace KeeAnywhere.OAuth2
                 Scope = scopes,
                 Browser = browser,
                 Flow = OidcClientOptions.AuthenticationFlow.AuthorizationCode,
-                ResponseMode = OidcClientOptions.AuthorizeResponseMode.Redirect
+                ResponseMode = OidcClientOptions.AuthorizeResponseMode.FormPost
             };
 
+            //var serilog = new LoggerConfiguration()
+            //    .MinimumLevel.Verbose()
+            //    .Enrich.FromLogContext()
+            //    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message}{NewLine}{Exception}{NewLine}")
+            //    .CreateLogger();
+
+            //options.LoggerFactory.AddSerilog(serilog);
+
+            //options.Policy.RequireAuthorizationCodeHash = false;
+            //options.Policy.RequireIdentityTokenSignature = false;
             options.Policy.Discovery.ValidateEndpoints = false;
 
 
@@ -73,9 +83,9 @@ namespace KeeAnywhere.OAuth2
 
             f.Close();
 
-            if (credential == null)
+            if (credential == null || credential.IsError)
             {
-                // TODO: MessageBox?
+                MessageService.ShowWarning("Authorization failed:", credential.Error);
                 return null;
             }
 

@@ -1,5 +1,6 @@
 ﻿using IdentityModel.OidcClient.Browser;
 using System;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -22,7 +23,7 @@ namespace KeeAnywhere.OAuth2
 
             if (!port.HasValue)
             {
-                Port = GetRandomUnusedPort();
+                Port = GetUnusedPort();
             }
             else
             {
@@ -30,13 +31,34 @@ namespace KeeAnywhere.OAuth2
             }
         }
 
-        private int GetRandomUnusedPort()
+        public static int GetUnusedPort()
         {
-            var listener = new TcpListener(IPAddress.Loopback, 0);
-            listener.Start();
-            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
-            listener.Stop();
-            return port;
+            //var listener = new TcpListener(IPAddress.Loopback, 0);
+            //listener.Start();
+            //var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            //listener.Stop();
+            //return port;
+
+            var startingPort = 50001;
+            var maxCount = 5;
+
+            for (var i = 0; i < maxCount; i++)
+            {
+                try
+                {
+                    var listener = new TcpListener(IPAddress.Loopback, startingPort);
+                    listener.Start();
+                    var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+                    listener.Stop();
+                    return port;
+                }
+                catch
+                {
+                    startingPort++;
+                }
+            }
+
+            throw new Exception("No unused prot found.");
         }
 
         public string RedirectUri
@@ -78,9 +100,18 @@ namespace KeeAnywhere.OAuth2
                 {
                     var context = await listener.GetContextAsync();
 
-                    await SendResponse(context.Response);
+                    string result;
 
-                    var result = context.Request.Url.Query;
+                    if (options.ResponseMode == IdentityModel.OidcClient.OidcClientOptions.AuthorizeResponseMode.Redirect)
+                    {
+                        result = context.Request.Url.Query;
+                    }
+                    else
+                    {
+                        result = ProcessFormPost(context.Request);
+                    }
+
+                    await SendResponse(context.Response);
 
 
                     if (String.IsNullOrWhiteSpace(result))
@@ -99,8 +130,39 @@ namespace KeeAnywhere.OAuth2
                     return new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = ex.Message };
                 }
             }
+        }
 
+        public async Task<NameValueCollection> GetQueryStringAsync(string startUrl, CancellationToken cancellationToken)
+        {
+            using (var listener = new HttpListener())
+            {
+                try
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
 
+                    listener.Prefixes.Add(RedirectUri);
+                    listener.Start();
+
+                    OpenBrowser(startUrl);
+
+                    //try
+                    //{
+                    var context = await listener.GetContextAsync();
+
+                    var result = context.Request.QueryString;
+
+                    await SendResponse(context.Response);
+
+                    return result;
+                }
+                catch (TaskCanceledException ex)
+                {
+                    return null;
+                }
+                //catch (Exception ex)
+                //{
+                //    return null;
+            }
         }
 
         private static async Task SendResponse(HttpListenerResponse response)
@@ -110,6 +172,22 @@ namespace KeeAnywhere.OAuth2
             var responseOutput = response.OutputStream;
             await responseOutput.WriteAsync(buffer, 0, buffer.Length);
             responseOutput.Close();
+        }
+
+        private static string ProcessFormPost(HttpListenerRequest request)
+        {
+            if (!request.HasEntityBody)
+            {
+                return null;
+            }
+
+            using (var body = request.InputStream)
+            {
+                using (var reader = new StreamReader(body, request.ContentEncoding))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
         }
 
         public static void OpenBrowser(string url)
