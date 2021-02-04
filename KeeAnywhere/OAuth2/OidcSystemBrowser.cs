@@ -14,7 +14,8 @@ namespace KeeAnywhere.OAuth2
 {
     public class OidcSystemBrowser : IBrowser
     {
-        public int Port { get; }
+        public int Port { get { return _port; } }
+        private readonly int _port;
         private readonly string _path;
 
         public OidcSystemBrowser(int? port = null, string path = null)
@@ -23,11 +24,11 @@ namespace KeeAnywhere.OAuth2
 
             if (!port.HasValue)
             {
-                Port = GetUnusedPort();
+                _port = GetUnusedPort();
             }
             else
             {
-                Port = port.Value;
+                _port = port.Value;
             }
         }
 
@@ -65,7 +66,7 @@ namespace KeeAnywhere.OAuth2
         {
             get
             {
-                return $"http://127.0.0.1:{Port}/{_path}";
+                return "http://127.0.0.1:" + Port + "/" + _path;
             }
         }
 
@@ -202,7 +203,7 @@ namespace KeeAnywhere.OAuth2
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     url = url.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                    Process.Start(new ProcessStartInfo("cmd", "/c start " + url) { CreateNoWindow = true });
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
