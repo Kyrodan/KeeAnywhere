@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using db = Dropbox.Api;
 using KeeAnywhere.Configuration;
-using System.Net;
 using KeeAnywhere.OAuth2;
 
 namespace KeeAnywhere.StorageProviders.Dropbox
@@ -34,23 +33,16 @@ namespace KeeAnywhere.StorageProviders.Dropbox
                 "files.content.read"
             };
 
-            var browser = new OidcSystemBrowser();
+            var browser = new OidcSystemBrowser(50001, 50005);
 
             var redirectUri = browser.RedirectUri;
             var state = Guid.NewGuid().ToString("N");
             var codeVerifier = db.DropboxOAuth2Helper.GeneratePKCECodeVerifier();
             var codeChallenge = db.DropboxOAuth2Helper.GeneratePKCECodeChallenge(codeVerifier);
-            var uri = db.DropboxOAuth2Helper.GetAuthorizeUri(db.OAuthResponseType.Code, clientId, redirectUri, state,false, false,null,false, db.TokenAccessType.Offline, scopes,db.IncludeGrantedScopes.None, codeChallenge);
+            var uri = db.DropboxOAuth2Helper.GetAuthorizeUri(db.OAuthResponseType.Code, clientId, redirectUri, state, false, false, null, false, db.TokenAccessType.Offline, scopes, db.IncludeGrantedScopes.None, codeChallenge);
 
             var query = await browser.GetQueryStringAsync(uri.ToString(), f.CancellationToken);
 
-            //System.Diagnostics.Process.Start(uri.ToString());
-
-            //var http = new HttpListener();
-            //http.Prefixes.Add(redirectUri);
-            //http.Start();
-
-            //var context = await http.GetContextAsync();
 
             var resultState = query["state"];
 
@@ -60,8 +52,6 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             }
 
             var code = query["code"];
-
-            // Send Response and Close server;
 
             var response = await db.DropboxOAuth2Helper.ProcessCodeFlowAsync(code, clientId, null, redirectUri, null, codeVerifier);
 
@@ -73,7 +63,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
                 Id = owner.AccountId,
                 Name = owner.Name.DisplayName,
                 Type = _isAccessRestricted ? StorageType.DropboxRestricted : StorageType.Dropbox,
-                Secret = response.AccessToken,
+                Secret = response.RefreshToken,
             };
 
             f.Close();

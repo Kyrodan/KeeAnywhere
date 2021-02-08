@@ -24,7 +24,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             get
             {
                 if (_api == null)
-                    _api = DropboxHelper.GetApi(account.Secret);
+                    _api = DropboxHelper.GetApi(account.Type == StorageType.DropboxRestricted, account.Secret);
 
                 return _api;
             }
@@ -73,11 +73,11 @@ namespace KeeAnywhere.StorageProviders.Dropbox
         public async Task<StorageProviderItem> GetRootItem()
         {
             return new StorageProviderItem
-                {
-                    Id = string.Empty,
-                    Name = "Root",
-                    Type = StorageProviderItemType.Folder
-                };
+            {
+                Id = string.Empty,
+                Name = "Root",
+                Type = StorageProviderItemType.Folder
+            };
         }
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent)
@@ -98,7 +98,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
         {
-            return await GetChildrenByParentItem(new StorageProviderItem {Id = RootPath(path)});
+            return await GetChildrenByParentItem(new StorageProviderItem { Id = RootPath(path) });
         }
 
         public bool IsFilenameValid(string filename)
@@ -130,13 +130,13 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             if (item.IsFile)
             {
                 result.Type = StorageProviderItemType.File;
-//                result.Id = item.AsFile.Id; // Path.Combine(parent.Id, item.PathLower)
+                //                result.Id = item.AsFile.Id; // Path.Combine(parent.Id, item.PathLower)
                 result.LastModifiedDateTime = item.AsFile.ServerModified;
             }
             else if (item.IsFolder)
             {
                 result.Type = StorageProviderItemType.Folder;
-//                result.Id = item.AsFolder.Id; // Path.Combine(parent.Id, item.PathLower);
+                //                result.Id = item.AsFolder.Id; // Path.Combine(parent.Id, item.PathLower);
             }
             else
             {

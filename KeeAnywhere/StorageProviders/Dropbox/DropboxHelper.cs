@@ -25,16 +25,30 @@ namespace KeeAnywhere.StorageProviders.Dropbox
         internal const string DropboxAppFolderOnlyClientId = "dummy";
         internal const string DropboxAppFolderOnlyClientSecret = "dummy";
 
-        public static DropboxClient GetApi(string accessToken)
+        public static DropboxClient GetApi(bool isRestricted, string refreshToken)
         {
-            var config = new DropboxClientConfig
-            {
-                HttpClient = ProxyTools.CreateHttpClient()
-            };
+            var appKey = isRestricted ? DropboxAppFolderOnlyClientId : DropboxFullAccessClientId;
+            var appSecret = isRestricted ? DropboxAppFolderOnlyClientSecret : DropboxFullAccessClientSecret;
 
-            var api = new DropboxClient(accessToken, config);
+            var api = new DropboxClient(refreshToken, appKey, appSecret, GetConfig());
 
             return api;
         }
+
+        public static DropboxClient GetApi(string accessToken)
+        {
+            var api = new DropboxClient(accessToken, GetConfig());
+
+            return api;
+        }
+
+        private static DropboxClientConfig GetConfig()
+        {
+            return new DropboxClientConfig
+            {
+                HttpClient = ProxyTools.CreateHttpClient()
+            };
+        }
+
     }
 }
