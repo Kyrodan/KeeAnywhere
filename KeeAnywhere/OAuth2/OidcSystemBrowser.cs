@@ -1,11 +1,9 @@
 ﻿using IdentityModel.OidcClient.Browser;
-using KeePassLib.Utility;
 using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,70 +12,35 @@ namespace KeeAnywhere.OAuth2
 {
     public class OidcSystemBrowser : IBrowser
     {
-        //public int Port { get { return _port; } }
-        //private readonly int _port;
-
         private readonly string _redirectUri;
         private readonly HttpListener _listener;
 
-        public OidcSystemBrowser(int minPort = 49215, int maxPort = 65535)
+        public OidcSystemBrowser(int minPort = 0, int maxPort = 0)
         {
             if (!CreateListener(minPort, maxPort, out _redirectUri, out _listener))
             {
                 throw new Exception("No unused port found!");
             }
-
-            //_path = path;
-
-            //if (!port.HasValue)
-            //{
-            //    _port = GetUnusedPort();
-            //}
-            //else
-            //{
-            //    _port = port.Value;
-            //}
         }
 
-        //public static int GetUnusedPort()
-        //{
-        //    //var listener = new TcpListener(IPAddress.Loopback, 0);
-        //    //listener.Start();
-        //    //var port = ((IPEndPoint)listener.LocalEndpoint).Port;
-        //    //listener.Stop();
-        //    //return port;
-
-        //    var startingPort = 50001;
-        //    var maxCount = 5;
-
-        //    for (var i = 0; i < maxCount; i++)
-        //    {
-        //        try
-        //        {
-        //            var listener = new TcpListener(IPAddress.Loopback, startingPort);
-        //            listener.Start();
-        //            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
-        //            listener.Stop();
-        //            return port;
-        //        }
-        //        catch
-        //        {
-        //            startingPort++;
-        //        }
-        //    }
-
-        //    throw new Exception("No unused port found.");
-        //}
-
-        private bool CreateListener(int minPort, int maxPort, out string redirectUri, out HttpListener listener)
+        private static bool CreateListener(int minPort, int maxPort, out string redirectUri, out HttpListener listener)
         {
             // IANA suggested range for dynamic or private ports
             //const int MinPort = 49215;
             //const int MaxPort = 65535;
+            if (minPort == 0)
+            {
+                minPort = 49215;
+            }
+
+            if (maxPort == 0)
+            {
+                maxPort = 65535;
+            }
 
             for (var port = minPort; port < maxPort; port++)
             {
-                redirectUri = "http://127.0.0.1:" + port + "/";
+                redirectUri = CreateRedirectUri(port);
                 listener = new HttpListener();
                 listener.Prefixes.Add(redirectUri);
                 try
@@ -98,11 +61,15 @@ namespace KeeAnywhere.OAuth2
             return false;
         }
 
+        private static string CreateRedirectUri(int port)
+        {
+            return "http://127.0.0.1:" + port + "/";
+        }
+
         public string RedirectUri
         {
             get
             {
-                //return "http://127.0.0.1:" + Port + "/" + _path;
                 return _redirectUri;
             }
         }
@@ -127,27 +94,8 @@ namespace KeeAnywhere.OAuth2
 
         public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken)
         {
-            //using (var listener = new HttpListener())
             using (var listener = _listener)
             {
-                //listener.Prefixes.Add(RedirectUri);
-                //try
-                //{
-                //    listener.Start();
-                //} catch
-                //{
-                //    var command = "Get-Process -Id (Get-NetTCPConnection -LocalPort " + Port + ").OwningProcess";
-
-                //    MessageService.ShowFatal("Error starting Local Authentication Receiver", 
-                //        RedirectUri, 
-                //        "Do not close this Dialog now!",
-                //        "Start PowerShell Console and report the output of the following command:",
-                //        command,
-                //        "This message is in your clipboard now and can be pasted in e.g. notepad."
-                //        );
-                //    throw;
-                //}
-
                 OpenBrowser(options.StartUrl);
 
                 try
@@ -188,20 +136,15 @@ namespace KeeAnywhere.OAuth2
 
         public async Task<NameValueCollection> GetQueryStringAsync(string startUrl, CancellationToken cancellationToken)
         {
-            //using (var listener = new HttpListener())
             using (var listener = _listener)
             {
                 try
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    //listener.Prefixes.Add(RedirectUri);
-                    //listener.Start();
 
                     OpenBrowser(startUrl);
 
-                    //try
-                    //{
                     var context = await listener.GetContextAsync();
 
                     var result = context.Request.QueryString;
@@ -210,13 +153,10 @@ namespace KeeAnywhere.OAuth2
 
                     return result;
                 }
-                catch (TaskCanceledException ex)
+                catch (TaskCanceledException)
                 {
                     return null;
                 }
-                //catch (Exception ex)
-                //{
-                //    return null;
             }
         }
 

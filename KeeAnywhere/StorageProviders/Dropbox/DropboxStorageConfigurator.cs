@@ -15,6 +15,25 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             this._isAccessRestricted = isAccessRestricted;
         }
 
+        //public async Task<AccountConfiguration> CreateAccount()
+        //{
+        //    var type = _isAccessRestricted ? StorageType.DropboxRestricted : StorageType.Dropbox;
+        //    var clientId = _isAccessRestricted ? DropboxHelper.DropboxAppFolderOnlyClientId : DropboxHelper.DropboxFullAccessClientId;
+        //    var clientSecret = _isAccessRestricted ? DropboxHelper.DropboxAppFolderOnlyClientSecret : DropboxHelper.DropboxFullAccessClientSecret;
+        //    string[] scopes =
+        //    {
+        //        "account_info.read",
+        //        "files.metadata.write",
+        //        "files.metadata.read",
+        //        "files.content.write",
+        //        "files.content.read"
+        //    };
+
+        //    var flow = new OidcFlow(type, clientId, clientSecret, scopes, 50001, 50005);
+        //    return await flow.AuthorizeOauth2Async("https://www.dropbox.com/oauth2/authorize", "https://api.dropboxapi.com/oauth2/token");
+
+        //}
+
         public async Task<AccountConfiguration> CreateAccount()
         {
             var f = new OidcWaitForm();
@@ -36,6 +55,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             var browser = new OidcSystemBrowser(50001, 50005);
 
             var redirectUri = browser.RedirectUri;
+
             var state = Guid.NewGuid().ToString("N");
             var codeVerifier = db.DropboxOAuth2Helper.GeneratePKCECodeVerifier();
             var codeChallenge = db.DropboxOAuth2Helper.GeneratePKCECodeChallenge(codeVerifier);
@@ -54,7 +74,6 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             var code = query["code"];
 
             var response = await db.DropboxOAuth2Helper.ProcessCodeFlowAsync(code, clientId, null, redirectUri, null, codeVerifier);
-
             var api = DropboxHelper.GetApi(response.AccessToken);
             var owner = await api.Users.GetCurrentAccountAsync();
 

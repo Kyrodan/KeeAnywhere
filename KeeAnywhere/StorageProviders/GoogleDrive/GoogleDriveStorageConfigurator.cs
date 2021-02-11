@@ -9,8 +9,8 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
     {
         public async Task<AccountConfiguration> CreateAccount()
         {
-            var flow = new OidcFlow(StorageType.GoogleDrive, "https://accounts.google.com", GoogleDriveHelper.Scopes, GoogleDriveHelper.GoogleDriveClientId, GoogleDriveHelper.GoogleDriveClientSecret);
-            return await flow.AuthorizeAsync();
+            var flow = new OidcFlow(StorageType.GoogleDrive, GoogleDriveHelper.GoogleDriveClientId, GoogleDriveHelper.GoogleDriveClientSecret, GoogleDriveHelper.Scopes);
+            return await flow.AuthorizeOidAsync("https://accounts.google.com");
         }
     }
 }
