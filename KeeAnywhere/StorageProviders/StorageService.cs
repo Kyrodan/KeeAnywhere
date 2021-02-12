@@ -106,10 +106,5 @@ namespace KeeAnywhere.StorageProviders
                 System.Net.WebRequest.RegisterPrefix(descriptor.Scheme + ":", this);
             }
         }
-
-        
-
-       
-
     }
 }

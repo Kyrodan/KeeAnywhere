@@ -16,6 +16,41 @@ namespace KeeAnywhere.StorageProviders.HiDrive
             _authenticator = HiDriveHelper.GetAuthenticator();
         }
 
+
+        public async Task<AccountConfiguration> CreateAccount_Oidc()
+        {
+            var f = new OidcWaitForm();
+            f.InitEx(StorageType.HiDrive);
+            f.Show();
+
+
+            var browser = new OidcSystemBrowser(50001, 50020);
+
+            var redirectUri = browser.RedirectUri;
+
+            var uri = _authenticator.GetAuthorizationCodeRequestUrl(new AuthorizationScope(AuthorizationRole.User, AuthorizationPermission.ReadWrite), redirectUri);
+            var query = await browser.GetQueryStringAsync(uri.ToString(), f.CancellationToken);
+
+            var code = query["code"];
+            var token = await _authenticator.AuthenticateByAuthorizationCodeAsync(code);
+
+            var client = HiDriveHelper.GetClient(_authenticator);
+            var user = await client.User.Me.Get().ExecuteAsync();
+
+            var account = new AccountConfiguration()
+            {
+                Type = StorageType.HiDrive,
+                Id = user.Account,
+                Name = user.Alias,
+                Secret = _authenticator.Token.RefreshToken,
+            };
+
+
+            f.Close();
+
+            return account;
+        }
+
         public async Task<AccountConfiguration> CreateAccount()
         {
             var isOk = OAuth2Flow.TryAuthenticate(this);
