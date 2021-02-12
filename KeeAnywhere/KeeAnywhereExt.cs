@@ -273,9 +273,11 @@ namespace KeeAnywhere
             AppDomain.CurrentDomain.AssemblyResolve += (s, a) =>
             {
                 var requestedAssembly = new AssemblyName(a.Name);
-                var asm = asms[requestedAssembly.Name];
+                var name = requestedAssembly.Name;
 
-                return asm;
+                if (asms.ContainsKey(name)) return asms[name];
+
+                return null;
             };
         }
     }
