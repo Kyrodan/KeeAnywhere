@@ -2,6 +2,7 @@
 using IdentityModel.Client;
 using IdentityModel.OidcClient;
 using IdentityModel.OidcClient.Browser;
+using IdentityModel.OidcClient.Results;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.StorageProviders;
 using KeePassLib.Utility;
@@ -18,58 +19,48 @@ namespace KeeAnywhere.OAuth2
     public class OidcFlow
     {
         private StorageType m_type;
+        private string m_authority;
         private string[] m_scopes;
         private string m_clientId;
         private string m_clientSecret;
-        private int m_startPort;
-        private int m_endPort;
 
-        public OidcFlow(StorageType type, string clientId, string clientSecret, string[] scopes, int startPort = 0, int endPort = 0)
+        public int StartPort { get; set; }
+        public int EndPort { get; set; }
+
+        public Action<LoginRequest> PrepareLoginRequest { get; set; }
+
+        public OidcFlow(StorageType type, string authority, string clientId, string clientSecret, string[] scopes)
         {
             this.m_type = type;
+            this.m_authority = authority;
             this.m_scopes = scopes;
             this.m_clientId = clientId;
             this.m_clientSecret = clientSecret;
-            this.m_startPort = startPort;
-            this.m_endPort = endPort;
         }
 
-        async public Task<AccountConfiguration> AuthorizeOidAsync(string authority)
+        async public Task<AccountConfiguration> AuthorizeAsync()
         {
             var f = CreateWaitForm();
             f.Show();
 
+            var options = CreateBaseOptions();
+
             var browser = CreateBrowser();
-
-            var allScopes = new[]            {
-                OidcConstants.StandardScopes.OpenId,
-                OidcConstants.StandardScopes.Profile
-            }.Concat(this.m_scopes);
-
-            var scopes = String.Join(" ", allScopes);
-
-            var options = new OidcClientOptions
-            {
-                Authority = authority, ///.well-known/openid-configuration
-                ClientId = this.m_clientId,
-                ClientSecret = this.m_clientSecret,
-                RedirectUri = browser.RedirectUri,
-                Scope = scopes,
-                Browser = browser,
-                Flow = OidcClientOptions.AuthenticationFlow.AuthorizationCode,
-                ResponseMode = OidcClientOptions.AuthorizeResponseMode.FormPost
-            };
-
-            //options.Policy.RequireAuthorizationCodeHash = false;
-            //options.Policy.RequireIdentityTokenSignature = false;
-            options.Policy.Discovery.ValidateEndpoints = false;
+            options.RedirectUri = browser.RedirectUri;
+            options.Browser = browser;
 
             var client = new OidcClient(options);
 
             LoginResult credential = null;
             try
             {
-                credential = await client.LoginAsync(null, f.CancellationToken);
+                var request = new LoginRequest();
+                if (PrepareLoginRequest != null)
+                {
+                    PrepareLoginRequest(request);
+                }
+
+                credential = await client.LoginAsync(request, f.CancellationToken);
             }
             catch (OperationCanceledException)
             {
@@ -99,9 +90,36 @@ namespace KeeAnywhere.OAuth2
             return account;
         }
 
+        public async Task<RefreshTokenResult> RefreshTokenAsync(string refreshToken)
+        {
+            var client = new OidcClient(CreateBaseOptions());
+
+            return await client.RefreshTokenAsync(refreshToken);
+        }
+
+        private OidcClientOptions CreateBaseOptions()
+        {
+            var scopes = string.Join(" ", m_scopes);
+
+            var options = new OidcClientOptions
+            {
+                Authority = m_authority, ///.well-known/openid-configuration
+                ClientId = m_clientId,
+                ClientSecret = m_clientSecret,
+                Scope = scopes,
+                Flow = OidcClientOptions.AuthenticationFlow.AuthorizationCode,
+                ResponseMode = OidcClientOptions.AuthorizeResponseMode.FormPost,
+            };
+
+            options.Policy.Discovery.ValidateEndpoints = false;
+            options.Policy.Discovery.ValidateIssuerName = false;
+
+            return options;
+        }
+
         private OidcSystemBrowser CreateBrowser()
         {
-            return new OidcSystemBrowser(m_startPort, m_endPort);
+            return new OidcSystemBrowser(StartPort, EndPort);
         }
 
         private OidcWaitForm CreateWaitForm()
@@ -112,93 +130,93 @@ namespace KeeAnywhere.OAuth2
             return f;
         }
 
-        async public Task<AccountConfiguration> AuthorizeOauth2Async(string authorizeEndpoint, string tokenEndpoint)
-        {
-            var f = CreateWaitForm();
-            f.Show();
+        //async public Task<AccountConfiguration> AuthorizeOauth2Async(string authorizeEndpoint, string tokenEndpoint)
+        //{
+        //    var f = CreateWaitForm();
+        //    f.Show();
 
-            var browser = CreateBrowser();
+        //    var browser = CreateBrowser();
 
-            var pkce = CreatePkceData();
+        //    var pkce = CreatePkceData();
 
-            var state = new AuthorizeState()
-            {
-                RedirectUri = browser.RedirectUri,
-                State = CryptoRandom.CreateUniqueId(16), //Guid.NewGuid().ToString("N"),
-                CodeVerifier = pkce.CodeVerifier
-            };
+        //    var state = new AuthorizeState()
+        //    {
+        //        RedirectUri = browser.RedirectUri,
+        //        State = CryptoRandom.CreateUniqueId(16), //Guid.NewGuid().ToString("N"),
+        //        CodeVerifier = pkce.CodeVerifier
+        //    };
 
-            var scopes = String.Join(" ", m_scopes);
+        //    var scopes = String.Join(" ", m_scopes);
 
-            //var startUrl = getStartUrl(browser.RedirectUri);
-            state.StartUrl = new RequestUrl(authorizeEndpoint).CreateAuthorizeUrl(m_clientId, OidcConstants.ResponseTypes.Code, scopes, state.RedirectUri, state.State, null, null, null, null, null, pkce.CodeChallenge, OidcConstants.CodeChallengeMethods.Sha256);
+        //    //var startUrl = getStartUrl(browser.RedirectUri);
+        //    state.StartUrl = new RequestUrl(authorizeEndpoint).CreateAuthorizeUrl(m_clientId, OidcConstants.ResponseTypes.Code, scopes, state.RedirectUri, state.State, null, null, null, null, null, pkce.CodeChallenge, OidcConstants.CodeChallengeMethods.Sha256);
 
-            var options = new BrowserOptions(state.StartUrl, state.RedirectUri)
-            {
-                Timeout = TimeSpan.FromSeconds(300),
-                DisplayMode = DisplayMode.Visible,
-                ResponseMode = OidcClientOptions.AuthorizeResponseMode.Redirect
-            };
+        //    var options = new BrowserOptions(state.StartUrl, state.RedirectUri)
+        //    {
+        //        Timeout = TimeSpan.FromSeconds(300),
+        //        DisplayMode = DisplayMode.Visible,
+        //        ResponseMode = OidcClientOptions.AuthorizeResponseMode.Redirect
+        //    };
 
-            var browserResult = await browser.InvokeAsync(options, f.CancellationToken);
-            if (browserResult.ResultType != BrowserResultType.Success)
-            {
-                return null;
-            }
+        //    var browserResult = await browser.InvokeAsync(options, f.CancellationToken);
+        //    if (browserResult.ResultType != BrowserResultType.Success)
+        //    {
+        //        return null;
+        //    }
 
-            //var result = await ProcessOAuth2ResponseAsync(tokenEndpoint, browserResult.Response, state, f.CancellationToken);
-            var authorizeResponse = new AuthorizeResponse(browserResult.Response);
-            if (authorizeResponse.IsError)
-            {
-                //return new LoginResult(authorizeResponse.ErrorDescription);
-                return null;
-            }
+        //    //var result = await ProcessOAuth2ResponseAsync(tokenEndpoint, browserResult.Response, state, f.CancellationToken);
+        //    var authorizeResponse = new AuthorizeResponse(browserResult.Response);
+        //    if (authorizeResponse.IsError)
+        //    {
+        //        //return new LoginResult(authorizeResponse.ErrorDescription);
+        //        return null;
+        //    }
 
-            if (string.IsNullOrEmpty(authorizeResponse.Code))
-            {
-                //return new LoginResult("Missing authorization code.");
-                return null;
-            }
+        //    if (string.IsNullOrEmpty(authorizeResponse.Code))
+        //    {
+        //        //return new LoginResult("Missing authorization code.");
+        //        return null;
+        //    }
 
-            if (string.IsNullOrEmpty(authorizeResponse.State))
-            {
-                //return new LoginResult("Missing state.");
-                return null;
-            }
+        //    if (string.IsNullOrEmpty(authorizeResponse.State))
+        //    {
+        //        //return new LoginResult("Missing state.");
+        //        return null;
+        //    }
 
-            if (!string.Equals(state.State, authorizeResponse.State, StringComparison.Ordinal))
-            {
-                //return new LoginResult("Invalid state.");
-                return null;
-            }
+        //    if (!string.Equals(state.State, authorizeResponse.State, StringComparison.Ordinal))
+        //    {
+        //        //return new LoginResult("Invalid state.");
+        //        return null;
+        //    }
 
-            var tokenResponse = await RedeemOauth2CodeAsync(tokenEndpoint, authorizeResponse.Code, state, f.CancellationToken);
-            if (tokenResponse.IsError)
-            {
-                //return new LoginResult(tokenResponse.ErrorDescription);
-                return null;
-            }
-
-
-            //if (tokenResponse.)
-            //var tokenResponseValidationResult = await ValidateTokenResponseAsync(tokenResponse, state, requireIdentityToken: false, cancellationToken: cancellationToken);
-            //if (tokenResponseValidationResult.IsError)
-            //{
-            //    return new LoginResult(tokenResponseValidationResult.ErrorDescription);
-            //}
+        //    var tokenResponse = await RedeemOauth2CodeAsync(tokenEndpoint, authorizeResponse.Code, state, f.CancellationToken);
+        //    if (tokenResponse.IsError)
+        //    {
+        //        //return new LoginResult(tokenResponse.ErrorDescription);
+        //        return null;
+        //    }
 
 
-            //, Func<string, Task<AccountConfiguration>> performSecondHalfAsync
-            //var account = await performSecondHalfAsync(result.Response);
+        //    //if (tokenResponse.)
+        //    //var tokenResponseValidationResult = await ValidateTokenResponseAsync(tokenResponse, state, requireIdentityToken: false, cancellationToken: cancellationToken);
+        //    //if (tokenResponseValidationResult.IsError)
+        //    //{
+        //    //    return new LoginResult(tokenResponseValidationResult.ErrorDescription);
+        //    //}
 
-            f.Close();
 
-            var account = new AccountConfiguration()
-            {
-                Secret = tokenResponse.RefreshToken
-            };
-            return account;
-        }
+        //    //, Func<string, Task<AccountConfiguration>> performSecondHalfAsync
+        //    //var account = await performSecondHalfAsync(result.Response);
+
+        //    f.Close();
+
+        //    var account = new AccountConfiguration()
+        //    {
+        //        Secret = tokenResponse.RefreshToken
+        //    };
+        //    return account;
+        //}
 
         //private async Task<LoginResult> ProcessOAuth2ResponseAsync(string tokenEndpoint, string response, AuthorizeState state, CancellationToken cancellationToken)
         //{
@@ -245,28 +263,28 @@ namespace KeeAnywhere.OAuth2
         //    };
         //}
 
-        private async Task<TokenResponse> RedeemOauth2CodeAsync(string tokenEndpoint, string code, AuthorizeState state, CancellationToken cancellationToken)
-        {
+        //private async Task<TokenResponse> RedeemOauth2CodeAsync(string tokenEndpoint, string code, AuthorizeState state, CancellationToken cancellationToken)
+        //{
 
-            //var client = _options.CreateClient();
-            var client = new HttpClient();
-            var tokenResult = await client.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
-            {
-                Address = tokenEndpoint,
+        //    //var client = _options.CreateClient();
+        //    var client = new HttpClient();
+        //    var tokenResult = await client.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
+        //    {
+        //        Address = tokenEndpoint,
 
-                ClientId = m_clientId,
-                ClientSecret = m_clientSecret,
-                //ClientAssertion = _options.ClientAssertion,
-                //ClientCredentialStyle = _options.TokenClientCredentialStyle,
+        //        ClientId = m_clientId,
+        //        ClientSecret = m_clientSecret,
+        //        //ClientAssertion = _options.ClientAssertion,
+        //        //ClientCredentialStyle = _options.TokenClientCredentialStyle,
 
-                Code = code,
-                RedirectUri = state.RedirectUri,
-                CodeVerifier = state.CodeVerifier,
-                //Parameters = backChannelParameters.Extra ?? new Parameters()
-            }, cancellationToken).ConfigureAwait(false);
+        //        Code = code,
+        //        RedirectUri = state.RedirectUri,
+        //        CodeVerifier = state.CodeVerifier,
+        //        //Parameters = backChannelParameters.Extra ?? new Parameters()
+        //    }, cancellationToken).ConfigureAwait(false);
 
-            return tokenResult;
-        }
+        //    return tokenResult;
+        //}
 
         //internal async Task<TokenResponseValidationResult> ValidateTokenResponseAsync(TokenResponse response, AuthorizeState state, bool requireIdentityToken, CancellationToken cancellationToken = default)
         //{
@@ -352,26 +370,26 @@ namespace KeeAnywhere.OAuth2
         //    return new TokenResponseValidationResult((IdentityTokenValidationResult)null);
         //}
 
-        private Pkce CreatePkceData()
-        {
-            var pkce = new Pkce
-            {
-                CodeVerifier = CryptoRandom.CreateUniqueId()
-            };
+        //private Pkce CreatePkceData()
+        //{
+        //    var pkce = new Pkce
+        //    {
+        //        CodeVerifier = CryptoRandom.CreateUniqueId()
+        //    };
 
-            using (var sha256 = SHA256.Create())
-            {
-                var challengeBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(pkce.CodeVerifier));
-                pkce.CodeChallenge = Base64Url.Encode(challengeBytes);
-            }
+        //    using (var sha256 = SHA256.Create())
+        //    {
+        //        var challengeBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(pkce.CodeVerifier));
+        //        pkce.CodeChallenge = Base64Url.Encode(challengeBytes);
+        //    }
 
-            return pkce;
-        }
+        //    return pkce;
+        //}
 
-        private class Pkce
-        {
-            public string CodeVerifier { get; set; }
-            public string CodeChallenge { get; set; }
-        }
+        //private class Pkce
+        //{
+        //    public string CodeVerifier { get; set; }
+        //    public string CodeChallenge { get; set; }
+        //}
     }
 }

@@ -6,9 +6,10 @@ using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
-using Google.Apis.Http;
 using Google.Apis.Services;
+using IdentityModel;
 using KeeAnywhere.Configuration;
+using KeeAnywhere.OAuth2;
 
 namespace KeeAnywhere.StorageProviders.GoogleDrive
 {
@@ -30,10 +31,13 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         internal const string GoogleDriveClientId = "dummy";
         internal const string GoogleDriveClientSecret = "dummy";
 
+        internal const string Authority = "https://accounts.google.com";
 
-        internal const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob:auto";
-        internal const string LogoutUri = "https://accounts.google.com/Logout?continue={0}";
-        internal static string[] Scopes = { DriveService.Scope.Drive };
+        internal static string[] Scopes = {
+            OidcConstants.StandardScopes.OpenId,
+            OidcConstants.StandardScopes.Profile,
+            DriveService.Scope.Drive };
+
         internal static IAuthorizationCodeFlow AuthFlow;
 
         static GoogleDriveHelper()
@@ -52,9 +56,14 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             AuthFlow = new GoogleAuthorizationCodeFlow(flowInitializer);
         }
 
+        public static OidcFlow CreateOidcFlow()
+        {
+            return new OidcFlow(StorageType.GoogleDrive, Authority, GoogleDriveClientId, GoogleDriveClientSecret, Scopes);
+        }
+
         public static async Task<DriveService> GetClient(AccountConfiguration account)
         {
-            return await GetClient(new TokenResponse { RefreshToken = account.Secret } );
+            return await GetClient(new TokenResponse { RefreshToken = account.Secret });
         }
 
         public static async Task<DriveService> GetClient(TokenResponse token)
