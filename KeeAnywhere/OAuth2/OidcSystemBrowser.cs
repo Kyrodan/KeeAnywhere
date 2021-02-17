@@ -1,8 +1,10 @@
 ﻿using IdentityModel.OidcClient.Browser;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -15,30 +17,25 @@ namespace KeeAnywhere.OAuth2
         private readonly string _redirectUri;
         private readonly HttpListener _listener;
 
-        public OidcSystemBrowser(int minPort = 0, int maxPort = 0)
+        public OidcSystemBrowser(IEnumerable<int> ports = null)
         {
-            if (!CreateListener(minPort, maxPort, out _redirectUri, out _listener))
+            if (!CreateListener(out _redirectUri, out _listener, ports))
             {
                 throw new Exception("No unused port found!");
             }
         }
 
-        private static bool CreateListener(int minPort, int maxPort, out string redirectUri, out HttpListener listener)
+        private static bool CreateListener(out string redirectUri, out HttpListener listener, IEnumerable<int> ports = null)
         {
-            // IANA suggested range for dynamic or private ports
-            //const int MinPort = 49215;
-            //const int MaxPort = 65535;
-            if (minPort == 0)
+            if (ports == null)
             {
-                minPort = 49215;
+                // IANA suggested range for dynamic or private ports
+                //const int MinPort = 49215;
+                //const int MaxPort = 65535;
+                ports = Enumerable.Range(49215, 65535);
             }
 
-            if (maxPort == 0)
-            {
-                maxPort = 65535;
-            }
-
-            for (var port = minPort; port < maxPort; port++)
+            foreach (var port in ports)
             {
                 redirectUri = CreateRedirectUri(port);
                 listener = new HttpListener();

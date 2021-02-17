@@ -7,6 +7,7 @@ using KeeAnywhere.Configuration;
 using KeeAnywhere.StorageProviders;
 using KeePassLib.Utility;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -24,8 +25,7 @@ namespace KeeAnywhere.OAuth2
         private string m_clientId;
         private string m_clientSecret;
 
-        public int StartPort { get; set; }
-        public int EndPort { get; set; }
+        public IEnumerable<int> Ports { get; set; }
 
         public Action<LoginRequest> PrepareLoginRequest { get; set; }
 
@@ -119,7 +119,7 @@ namespace KeeAnywhere.OAuth2
 
         private OidcSystemBrowser CreateBrowser()
         {
-            return new OidcSystemBrowser(StartPort, EndPort);
+            return new OidcSystemBrowser(Ports);
         }
 
         private OidcWaitForm CreateWaitForm()

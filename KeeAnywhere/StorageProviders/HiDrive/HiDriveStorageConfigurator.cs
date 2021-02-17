@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.OAuth2;
@@ -16,7 +17,6 @@ namespace KeeAnywhere.StorageProviders.HiDrive
             _authenticator = HiDriveHelper.GetAuthenticator();
         }
 
-
         public async Task<AccountConfiguration> CreateAccount_Oidc()
         {
             var f = new OidcWaitForm();
@@ -24,7 +24,7 @@ namespace KeeAnywhere.StorageProviders.HiDrive
             f.Show();
 
 
-            var browser = new OidcSystemBrowser(50001, 50020);
+            var browser = new OidcSystemBrowser(Enumerable.Range(50001, 50020));
 
             var redirectUri = browser.RedirectUri;
 
