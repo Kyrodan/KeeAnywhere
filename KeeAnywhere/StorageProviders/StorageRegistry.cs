@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using KeeAnywhere.StorageProviders.AmazonS3;
+using KeeAnywhere.StorageProviders.Azure;
 using KeeAnywhere.StorageProviders.Box;
 using KeeAnywhere.StorageProviders.Dropbox;
 using KeeAnywhere.StorageProviders.GoogleDrive;
@@ -20,6 +21,8 @@ namespace KeeAnywhere.StorageProviders
             var isUnix = NativeLib.IsUnix();
 
             d.Add(new StorageDescriptor(StorageType.AmazonS3, "Amazon S3", "s3", account => new AmazonS3StorageProvider(account), () => new AmazonS3StorageConfigurator(), PluginResources.AmazonS3_16x16));
+            d.Add(new StorageDescriptor(StorageType.AzureBlob, "Azure Blob Storage", "azureblob", account => new AzureBlobStorageProvider(account), () => new AzureStorageConfigurator(StorageType.AzureBlob), PluginResources.Azure_16x16));
+            d.Add(new StorageDescriptor(StorageType.AzureFile, "Azure File Storage", "azurefile", account => new AzureFileStorageProvider(account), () => new AzureStorageConfigurator(StorageType.AzureFile), PluginResources.Azure_16x16));
             if (!isUnix) d.Add(new StorageDescriptor(StorageType.Box, "Box", "box", account => new BoxStorageProvider(account), () => new BoxStorageConfigurator(), PluginResources.Box_16x16));
             d.Add(new StorageDescriptor(StorageType.Dropbox, "Dropbox", "dropbox", account => new DropboxStorageProvider(account), () => new DropboxStorageConfigurator(false), PluginResources.Dropbox_16x16));
             d.Add(new StorageDescriptor(StorageType.DropboxRestricted, "Dropbox-Restricted", "dropbox-r", account => new DropboxStorageProvider(account), () => new DropboxStorageConfigurator(true), PluginResources.Dropbox_16x16));

@@ -73,6 +73,16 @@ namespace KeeAnywhere {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Azure_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Azure_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Box_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Box_16x16", resourceCulture);
