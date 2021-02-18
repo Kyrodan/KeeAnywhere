@@ -260,9 +260,9 @@ namespace KeeAnywhere
             var names = new[] {
                 "System.Net.Http.Primitives",
                 "Newtonsoft.Json",
-                "Microsoft.Graph.Core",
-                "System.Text.Encodings.Web",
-                "System.Runtime.CompilerServices.Unsafe"
+                "Microsoft.Graph.Core"
+            //    "System.Text.Encodings.Web",
+            //    "System.Runtime.CompilerServices.Unsafe"
             };
 
             var asms = new Dictionary<string, Assembly>();
