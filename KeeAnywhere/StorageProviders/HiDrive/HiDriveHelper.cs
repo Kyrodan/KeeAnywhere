@@ -10,7 +10,7 @@ namespace KeeAnywhere.StorageProviders.HiDrive
         /*
             The consumer key and the secret key included here are dummy keys.
             You should go to https://dev.strato.com/hidrive/get_key to create your own application
-            and get your own keys.
+            and get your own keys. Use "Native" for "Project App Type"!
 
             This is done to prevent bots from scraping the keys from the source code posted on the web.
 
@@ -22,8 +22,6 @@ namespace KeeAnywhere.StorageProviders.HiDrive
         //TODO: Change API keys!!!
         internal const string HiDriveClientId = "dummy";
         internal const string HiDriveClientSecret = "dummy";
-
-        public const string RedirectUri = "http://localhost";
 
         public static IHiDriveAuthenticator GetAuthenticator()
         {
