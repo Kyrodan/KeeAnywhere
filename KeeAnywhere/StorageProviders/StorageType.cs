@@ -4,6 +4,8 @@ namespace KeeAnywhere.StorageProviders
     {
         // Preserve sort order: ascending!
         AmazonS3,
+        AzureBlob,
+        AzureFile,
         Box,
         Dropbox,
         DropboxRestricted,

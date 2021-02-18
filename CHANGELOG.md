@@ -3,6 +3,7 @@
 KeePass 2.47 or newer is required now (was 2.43).
 Micrososft .Net 4.6.1 is required now (was 4.5.2).
 Amazon Drive support has been dropped.
+New Provider: Azure Blob and File storage - thanks to J. Peitsch (@spacedee)
 
 ### Fixed
 
@@ -10,6 +11,7 @@ Amazon Drive support has been dropped.
 - \#241 \[Google Drive\] Cannot Authorize (browser not supported) bug 
 - \#227 "Couldn't sign you in" GDrive error bug 
 - \#212 Can't connect to google drive account
+- \#203 Adding Azure blob and file storage
 - \#179 \[Dropbox\] \[Google Drive\] Open from Cloud Drive only list partial content
 - \#196 HiDrive: Saving to root folder throws exception
 - \#89 Reimplement Account Authentication not using internal Web Browser
