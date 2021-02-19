@@ -201,7 +201,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_cmbEndpointUrl.FormattingEnabled = true;
             this.m_cmbEndpointUrl.Items.AddRange(new object[] {
-            "https://s3.yourregion.backblazeb2.com"
+            "https://s3.yourregion.backblazeb2.com",
             "https://s3-de-central.profitbricks.com",
             "https://s3.hidrive.strato.com",
             "https://s3.us-east-1.wasabisys.com",
@@ -209,7 +209,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             "https://s3.us-central-1.wasabisys.com",
             "https://s3.us-west-1.wasabisys.com",
             "https://s3.eu-central-1.wasabisys.com",
-            "https://s3.ap-northeast-1.wasabisys.com",
+            "https://s3.ap-northeast-1.wasabisys.com"
             });
             this.m_cmbEndpointUrl.Location = new System.Drawing.Point(158, 45);
             this.m_cmbEndpointUrl.Name = "m_cmbEndpointUrl";
