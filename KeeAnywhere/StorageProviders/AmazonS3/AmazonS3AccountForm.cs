@@ -28,6 +28,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             BannerFactory.CreateBannerEx(this, m_bannerImage,
                 PluginResources.KeeAnywhere_48x48, "Authorize to Amazon S3",
                 "Please enter your Amazon S3 credentials here.");
+
+            m_rbTypeAmazon.Checked = true;
         }
 
         private void OnFormClosed(object sender, FormClosedEventArgs e)
@@ -58,6 +60,12 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 return;
             }
 
+            if (!IsAmazon && string.IsNullOrEmpty(EndpointUrl))
+            {
+                m_lblTestResult.Text = "Please enter Endpoint URL";
+                return;
+            }
+
             this.Enabled = false;
             m_lblTestResult.Text = "Testing Connection...";
 
@@ -72,7 +80,9 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             
             try
             {
-                using (var api = AmazonS3Helper.GetApi(credentials, this.AWSRegion))
+                var config = this.IsAmazon ? AmazonS3Helper.GetConfig(this.AWSRegion) : AmazonS3Helper.GetConfig(this.EndpointUrl);
+
+                using (var api = AmazonS3Helper.GetApi(credentials, config))
                 {
                     var buckets = await api.ListBucketsAsync();
                     m_lblTestResult.Text = "Connection succeeded.";
@@ -81,7 +91,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             }
             catch (Exception ex)
             {
-                m_lblTestResult.Text = "Connection failed!";
+                m_lblTestResult.Text = "Connection failed: " + ex.Message;
                 this.TestResult = false;
             }
             finally
@@ -104,6 +114,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
         public string SessionToken { get { return m_txtSessionToken.Text.Trim(); } }
         public bool UseSessionToken { get { return m_chkUseSessionToken.Checked; } }
         public RegionEndpoint AWSRegion { get { return (RegionEndpoint) m_cmbRegion.SelectedItem; } }
+        public string EndpointUrl { get { return m_cmbEndpointUrl.Text.Trim(); } }
+        public bool IsAmazon { get { return m_rbTypeAmazon.Checked; } } 
 
         protected bool? TestResult { get; set; }
 
@@ -132,8 +144,15 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
         
         private void OnUseSessionTokenChanged(object sender, EventArgs e)
         {
-            m_lblSessionToken.Visible = m_chkUseSessionToken.Checked;
-            m_txtSessionToken.Visible = m_chkUseSessionToken.Checked;
+            m_txtSessionToken.Enabled = m_chkUseSessionToken.Checked;
+            ClearTestResult();
+        }
+
+        private void OnTypeChanged(object sender, EventArgs e)
+        {
+            m_cmbRegion.Enabled = m_rbTypeAmazon.Checked;
+            m_cmbEndpointUrl.Enabled = m_rbTypeOther.Checked;
+            ClearTestResult();
         }
     }
 }

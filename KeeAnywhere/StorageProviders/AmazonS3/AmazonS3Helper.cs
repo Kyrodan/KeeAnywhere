@@ -17,27 +17,54 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
     {
         public static AmazonS3Client GetApi(AccountConfiguration account)
         {
-            AWSCredentials credentials;
-            if (account.AdditionalSettings != null && account.AdditionalSettings.ContainsKey("UseSessionToken") && Convert.ToBoolean(account.AdditionalSettings["UseSessionToken"]) == true && account.AdditionalSettings.ContainsKey("SessionToken"))
-                credentials = new SessionAWSCredentials(account.Id, account.Secret, account.AdditionalSettings["SessionToken"]);
-            else
-                credentials = new BasicAWSCredentials(account.Id, account.Secret);  
-
-            var region = RegionEndpoint.USWest1;
-            if (account.AdditionalSettings != null && account.AdditionalSettings.ContainsKey("AWSRegion"))
+            if (account.AdditionalSettings == null)
             {
-                var regionName = account.AdditionalSettings["AWSRegion"];
-                region = RegionEndpoint.GetBySystemName(regionName);
+                throw new Exception("'account' has no 'AdditionalSetting'.");
             }
 
-            var api = GetApi(credentials, region);
+            AWSCredentials credentials;
+            if (account.AdditionalSettings.ContainsKey("UseSessionToken") && Convert.ToBoolean(account.AdditionalSettings["UseSessionToken"]) == true && account.AdditionalSettings.ContainsKey("SessionToken"))
+                credentials = new SessionAWSCredentials(account.Id, account.Secret, account.AdditionalSettings["SessionToken"]);
+            else
+                credentials = new BasicAWSCredentials(account.Id, account.Secret);
 
-            return api;
+            AmazonS3Config config;
+
+            if (account.AdditionalSettings.ContainsKey("EndpointURL")) {
+                config = GetConfig(account.AdditionalSettings["EndpointURL"]);
+            } else
+            {
+                var region = RegionEndpoint.USWest1;
+
+                if (account.AdditionalSettings.ContainsKey("AWSRegion"))
+                {
+                    var regionName = account.AdditionalSettings["AWSRegion"];
+                    region = RegionEndpoint.GetBySystemName(regionName);
+                }
+
+                config = GetConfig(region);
+            }
+
+            return GetApi(credentials, config);
         }
 
-        public static AmazonS3Client GetApi(AWSCredentials credentials, RegionEndpoint region)
+        public static AmazonS3Config GetConfig(string endpointURL)
         {
-            if (credentials == null) throw new ArgumentNullException("credentials");
+            if (string.IsNullOrEmpty(endpointURL)) throw new ArgumentNullException("endpointURL");
+
+            var config = new AmazonS3Config
+            {
+                RegionEndpoint = RegionEndpoint.USEast1, // Required???
+                ServiceURL = endpointURL,
+                ForcePathStyle = true,
+                Timeout = Timeout.InfiniteTimeSpan
+            };
+
+            return config;
+        }
+
+        public static AmazonS3Config GetConfig(RegionEndpoint region)
+        {
             if (region == null) throw new ArgumentNullException("region");
 
             var config = new AmazonS3Config
@@ -45,6 +72,14 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 RegionEndpoint = region,
                 Timeout = Timeout.InfiniteTimeSpan
             };
+
+            return config;
+        }
+
+        public static AmazonS3Client GetApi(AWSCredentials credentials, AmazonS3Config config)
+        {
+            if (credentials == null) throw new ArgumentNullException("credentials");
+            if (config == null) throw new ArgumentNullException("config");
 
             ApplyProxy(config);
 

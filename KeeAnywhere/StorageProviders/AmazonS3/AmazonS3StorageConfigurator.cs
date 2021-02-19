@@ -27,7 +27,15 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 Secret = dlg.SecretKey,
             };
 
-            account.AdditionalSettings = new Dictionary<string, string>() {{"AWSRegion", dlg.AWSRegion.SystemName}};
+            account.AdditionalSettings = new Dictionary<string, string>();
+            if (dlg.IsAmazon)
+            {
+                account.AdditionalSettings.Add("AWSRegion", dlg.AWSRegion.SystemName);
+            } else
+            {
+                account.AdditionalSettings.Add("EndpointURL", dlg.EndpointUrl);
+            }
+
             account.AdditionalSettings.Add("UseSessionToken", Convert.ToString(dlg.UseSessionToken));
             account.AdditionalSettings.Add("SessionToken", dlg.SessionToken);
             return account;
