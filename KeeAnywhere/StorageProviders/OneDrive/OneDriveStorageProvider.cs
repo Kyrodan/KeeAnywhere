@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
 using Microsoft.Graph;
@@ -13,21 +11,18 @@ namespace KeeAnywhere.StorageProviders.OneDrive
     public class OneDriveStorageProvider : IStorageProvider
     {
         private readonly AccountConfiguration _account;
+        private readonly IGraphServiceClient _api;
 
         public OneDriveStorageProvider(AccountConfiguration account)
         {
             if (account == null) throw new ArgumentNullException("account");
             _account = account;
+            _api = OneDriveHelper.GetApi(account);
         }
 
         public async Task<Stream> Load(string path)
         {
-            var api = await OneDriveHelper.GetApi(_account);
-
-            var escapedpath = Uri.EscapeDataString(path);
-            var stream = await api.Drive
-                                    .Root
-                                    .ItemWithPath(escapedpath)
+            var stream = await (await _api.DriveItemFromPathAsync(path))
                                     .Content
                                     .Request()
                                     .GetAsync();
@@ -38,13 +33,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task Save(Stream stream, string path)
         {
-            var api = await OneDriveHelper.GetApi(_account);
-
-            var escapedpath = Uri.EscapeDataString(path);
-
-            var uploadedItem = await api.Drive
-                        .Root
-                        .ItemWithPath(escapedpath)
+            var uploadedItem = await (await _api.DriveItemFromPathAsync(path))
                         .Content
                         .Request()
                         .PutAsync<DriveItem>(stream);
@@ -56,20 +45,12 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task Copy(string sourcePath, string destPath)
         {
-            var api = await OneDriveHelper.GetApi(_account);
-
-            var escapedpath = Uri.EscapeDataString(sourcePath);
-
-            var destFolder = Uri.EscapeDataString(CloudPath.GetDirectoryName(destPath));
             var destFilename = CloudPath.GetFileName(destPath);
-            var destItem = await api.Drive.Root.ItemWithPath(destFolder).Request().GetAsync();
+            var destItem = await (await _api.DriveItemFromPathAsync(destPath)).Request().GetAsync();
             if (destItem == null)
-                throw new FileNotFoundException("OneDrive: Folder not found.", destFolder);
+                throw new FileNotFoundException("OneDrive: Folder not found.", destPath);
 
-            await api
-                .Drive
-                .Root
-                .ItemWithPath(escapedpath)
+            await (await _api.DriveItemFromPathAsync(sourcePath))
                 .Copy(destFilename, new ItemReference {Id = destItem.Id})
                 .Request(/*new[] {new HeaderOption("Prefer", "respond-async"), }*/)
                 .PostAsync();
@@ -77,28 +58,24 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task Delete(string path)
         {
-            var api = await OneDriveHelper.GetApi(_account);
-
-            var escapedpath = Uri.EscapeDataString(path);
-            await api
-                    .Drive
-                    .Root
-                    .ItemWithPath(escapedpath)
-                    .Request()
-                    .DeleteAsync();
-
+            await (await _api.DriveItemFromPathAsync(path)).Request().DeleteAsync();
         }
 
         public async Task<StorageProviderItem> GetRootItem()
         {
-            var api = await OneDriveHelper.GetApi(_account);
-            var odItem = await api.Drive.Root.Request().GetAsync();
+            var odItem = await _api.Drive.Root.Request().GetAsync();
 
             if (odItem == null)
                 return null;
 
-            var item = CreateStorageProviderItemFromOneDriveItem(odItem);
-
+            var item = new StorageProviderItem
+            {
+                Type = StorageProviderItemType.Folder,
+                Id = MakeStorageProviderItemId(odItem),
+                Name = odItem.Name,
+                LastModifiedDateTime = odItem.LastModifiedDateTime,
+                ParentReferenceId = null
+            };
             return item;
         }
 
@@ -106,9 +83,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             if (parent == null) throw new ArgumentNullException("parent");
 
-            var api = await OneDriveHelper.GetApi(_account);
-
-            var odChildren = await api.Drive.Items[parent.Id].Children.Request().GetAsync();
+            var odChildren = await _api.DriveItemFromStorageProviderItemId(parent.Id).Children.Request().GetAsync();
 
             var children =
                 odChildren.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
@@ -118,10 +93,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
         {
-            var api = await OneDriveHelper.GetApi(_account);
-
-            var odChildren = await api.Drive.Root.ItemWithPath(path).Children.Request().GetAsync();
-
+            var odChildren = await (await _api.DriveItemFromPathAsync(path)).Children.Request().GetAsync();
             var children =
                 odChildren.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
 
@@ -136,21 +108,84 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             return filename.All(c => c >= 32 && !invalidChars.Contains(c));
         }
 
-        protected StorageProviderItem CreateStorageProviderItemFromOneDriveItem(DriveItem item)
+        protected static StorageProviderItem CreateStorageProviderItemFromOneDriveItem(DriveItem item)
         {
             var providerItem = new StorageProviderItem
             {
-                Type = 
-                    item.IsFolder()
-                        ? StorageProviderItemType.Folder
-                        : (item.IsFile() ? StorageProviderItemType.File : StorageProviderItemType.Unknown),
-                Id = item.Id,
+                Type = DetermineStorageProviderItemType(item),
+                Id = MakeStorageProviderItemId(item),
                 Name = item.Name,
                 LastModifiedDateTime = item.LastModifiedDateTime,
-                ParentReferenceId = item.ParentReference != null && !string.IsNullOrEmpty(item.ParentReference.Path) ? item.ParentReference.Id : null
+                ParentReferenceId = MakeStorageProviderItemParentId(item)
             };
 
             return providerItem;
         }
+
+        public static StorageProviderItemType DetermineStorageProviderItemType(DriveItem item)
+        {
+            if (item.RemoteItem == null)
+            {
+                if (item.Folder != null) return StorageProviderItemType.Folder;
+                if (item.File != null) return StorageProviderItemType.File;
+            }
+            else
+            {
+                if (item.RemoteItem.Folder != null) return StorageProviderItemType.Folder;
+                if (item.RemoteItem.File != null) return StorageProviderItemType.File;
+            }
+            return StorageProviderItemType.Unknown;
+        }
+
+        private static string MakeStorageProviderItemId(DriveItem item)
+        {
+            if (item == null) throw new ArgumentNullException("item");
+
+            // If a user "adds" a folder was shared with them to their
+            // OneDrive, they effectively get a symbolic link in their
+            // default root folder which we will see as an item with
+            // a non-null RemoteItem. To access its contents, we need
+            // to use its real drive identifier, and the item identifier
+            // for that context, both of which we get via RemoteItem.
+            // We store these in the item's ID, instead of information
+            // about the symbolic link itself, so that when we're 
+            // given its StorageProviderItem later, we can retrieve
+            // the folder content without doing another lookup.
+            //
+            // This works because, as of this writing, the only
+            // IStorageProvider method that takes a StorageProviderItem
+            // as an argument is the one requesting its children. If
+            // that changes, then we will need to store information about
+            // both the symbolic link and the remote item.
+            if (item.RemoteItem == null)
+                return MakeStorageProviderItemId(item.ParentReference.DriveId, item.Id);
+            return MakeStorageProviderItemId(item.RemoteItem.ParentReference.DriveId, item.RemoteItem.Id);
+        }
+
+        private static string MakeStorageProviderItemParentId(DriveItem item)
+        {
+            if (item == null) throw new ArgumentNullException("item");
+            // If RemoteItem is not null, this is a top-level access point to 
+            // a shared item. The parent ID in this case should refer back to 
+            // something in the user's own file space (currently, always the 
+            // default drive root), so we ignore the parent information in 
+            // RemoteItem.
+            //
+            // If this item is remote, its parent's id will be an id in the
+            // remote drive. See also comments in MakeStorageProviderItemId.
+            return MakeStorageProviderItemId(item.ParentReference.DriveId, item.ParentReference.Id);
+        }
+
+        public static string MakeStorageProviderItemId(string drive, string item)
+        {
+            // Since "remote" items are on a drive other than the default, we
+            // construct item identifiers that include both the drive 
+            // identifier and the actual item identifier, making the drive 
+            // selection explicit.
+            if (string.IsNullOrEmpty(drive)) throw new ArgumentOutOfRangeException("drive");
+            if (string.IsNullOrEmpty(item)) throw new ArgumentOutOfRangeException("item");
+            return drive + "/" + item;
+        }
+
     }
 }

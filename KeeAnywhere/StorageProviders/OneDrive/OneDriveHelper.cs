@@ -45,7 +45,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             };
         }
 
-        public static async Task<IGraphServiceClient> GetApi(AccountConfiguration account)
+        public static IGraphServiceClient GetApi(AccountConfiguration account)
         {
             if (Cache.ContainsKey(account.Id)) return Cache[account.Id];
 
