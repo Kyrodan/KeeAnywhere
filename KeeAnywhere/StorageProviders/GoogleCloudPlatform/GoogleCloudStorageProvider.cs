@@ -1,0 +1,182 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using KeeAnywhere.Configuration;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Storage.V1;
+using Google.Apis.Storage.v1.Data;
+
+namespace KeeAnywhere.StorageProviders.GoogleCloudPlatform
+{
+    public class GoogleCloudStorageProvider : IStorageProvider
+    {
+        private readonly AccountConfiguration _account;
+
+        public GoogleCloudStorageProvider(AccountConfiguration account)
+        {
+            _account = account;
+        }
+
+        private StorageClient GetClient(AccountConfiguration account)
+        {
+            var credentials = GoogleCredential.FromJson(account.Secret);
+            var client = StorageClient.Create(credentials);
+            return client;
+        }
+        private static void GetBucketAndFilename(string path, out string bucket, out string filename)
+        {
+            bucket = path;
+            filename = null;
+
+            if (!path.Contains('/')) return;
+
+            bucket = path.Substring(0, path.IndexOf('/'));
+            filename = path.Substring(path.IndexOf('/') + 1);
+        }
+
+        public async Task<Stream> Load(string path)
+        {
+            string bucket, fileName;
+            GetBucketAndFilename(path, out bucket, out fileName);
+
+            using (var client = GetClient(_account))
+            {
+                using (Stream stream = new MemoryStream())
+                {
+                    await client.DownloadObjectAsync(bucket, fileName, stream);
+                    return stream;
+                }
+            }
+        }
+
+        public async Task Save(Stream stream, string path)
+        {
+            string bucket, fileName;
+            GetBucketAndFilename(path, out bucket, out fileName);
+
+            using (var client = GetClient(_account))
+            {
+                await client.UploadObjectAsync(bucket, fileName, "application/octet-stream", stream);
+            }
+        }
+
+        public async Task Copy(string sourcePath, string destPath)
+        {
+            string srcBucket, srcFileName;
+            string dstBucket, dstFileName;
+            GetBucketAndFilename(sourcePath, out srcBucket, out srcFileName);
+            GetBucketAndFilename(destPath, out dstBucket, out dstFileName);
+
+            using (var client = GetClient(_account))
+            {
+                await client.CopyObjectAsync(srcBucket, srcFileName, dstBucket, dstFileName);
+            }
+        }
+
+        public async Task Delete(string path)
+        {
+            string bucket, fileName;
+            GetBucketAndFilename(path, out bucket, out fileName);
+
+            using (var client = GetClient(_account))
+            {
+                await client.DeleteObjectAsync(bucket, fileName);
+            }
+        }
+
+        public async Task<StorageProviderItem> GetRootItem()
+        {
+            return new StorageProviderItem
+            {
+                Id = "/",
+                Type = StorageProviderItemType.Folder
+            };
+        }
+
+        public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent)
+        {
+            using (var client = GetClient(_account))
+            {
+                // We're at the root: list all buckets as folders.
+                if (parent.Id == "/")
+                {
+                    var responseEnumerable = client.ListBucketsAsync(_account.AdditionalSettings["ProjectId"]);
+                    var responseEnumerator = responseEnumerable.GetAsyncEnumerator();
+
+                    var result = new List<StorageProviderItem>();
+
+                    try
+                    {
+                        while (await responseEnumerator.MoveNextAsync())
+                        {
+                            var item = responseEnumerator.Current;
+                            result.Add(new StorageProviderItem
+                            {
+                                Id = item.Name,
+                                Name = item.Name,
+                                Type = StorageProviderItemType.Folder,
+                                ParentReferenceId = parent.Id
+                            });
+                        }
+                    }
+                    finally
+                    {
+                        responseEnumerator.DisposeAsync();
+                    }
+
+                    return result;
+                }
+                else
+                {
+                    string bucket, fileName;
+                    GetBucketAndFilename(parent.Id, out bucket, out fileName);
+
+                    var responseEnumerable = client.ListObjectsAsync(bucket, fileName);
+                    var responseEnumerator = responseEnumerable.GetAsyncEnumerator();
+
+                    var result = new List<StorageProviderItem>();
+
+                    try
+                    {
+                        while (await responseEnumerator.MoveNextAsync())
+                        {
+                            var item = responseEnumerator.Current;
+                            result.Add(new StorageProviderItem
+                            {
+                                Id = bucket + "/" + fileName + "/" + item.Name,
+                                Name = item.Name,
+                                Type = StorageProviderItemType.File,
+                                ParentReferenceId = parent.Id,
+                                LastModifiedDateTime = item.Updated
+                            });
+                        }
+                    }
+                    finally
+                    {
+                        responseEnumerator.DisposeAsync();
+                    }
+
+                    return result;
+                }
+            }
+        }
+
+        public Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
+        {
+            return this.GetChildrenByParentItem(new StorageProviderItem { Id = path });
+        }
+
+        public bool IsFilenameValid(string filename)
+        {
+            if (string.IsNullOrEmpty(filename) || filename.Length > 1024) return false;
+            if (filename.Equals('.') || filename.Equals("..")) return false;
+            if (filename.StartsWith(".well-known/acme-challenge/") || filename.Last() == '/') return false;
+
+            char[] invalidChars = { '\n', '\r', '\\' };
+            return filename.All(c => c >= 32 && !invalidChars.Contains(c));
+        }
+    }
+}
