@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
-using Google.Apis.Storage.v1.Data;
 
 namespace KeeAnywhere.StorageProviders.GoogleCloudPlatform
 {

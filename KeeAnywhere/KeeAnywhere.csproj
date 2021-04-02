@@ -390,7 +390,6 @@
       <DependentUpon>GoogleCloudStorageAccountForm.cs</DependentUpon>
     </Compile>
     <Compile Include="StorageProviders\GoogleCloudPlatform\GoogleCloudStorageConfigurator.cs" />
-    <Compile Include="StorageProviders\GoogleCloudPlatform\GoogleCloudStorageHelper.cs" />
     <Compile Include="StorageProviders\GoogleCloudPlatform\GoogleCloudStorageProvider.cs" />
     <Compile Include="StorageProviders\ProxyProvider.cs" />
     <Compile Include="StorageProviders\GoogleDrive\GoogleDriveHelper.cs" />
