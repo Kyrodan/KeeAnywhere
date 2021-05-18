@@ -1,4 +1,4 @@
-## 2.0.0 (unpublished)
+## 2.0.0 (2021-05-18)
 
 KeePass 2.48.1 or newer is required now (was 2.43).
 Micrososft .Net 4.6.1 is required now (was 4.5.2).
@@ -26,7 +26,7 @@ Amazon S3: S3-Compatible providers can be used now (e. g. Wasabi, HiDrive S3, Io
 ### Improved
 
 - Updated Dependencies (AWS, Box, Dropbox, Google Drive, OneDrive)
-- Using KeePass 2.47 now
+- Using KeePass 2.48.1 now
 - Using .Net 4.6.1 now
 
 

@@ -3,7 +3,7 @@
   <metadata>
     <id>keepass-plugin-keeanywhere</id>
     <title>KeePass Plugin KeeAnywhere</title>
-    <version>1.6.0</version>
+    <version>2.0.0</version>
     <authors>Daniel Bölts</authors>
     <owners>Kyrodan</owners>
     <summary>Plugin for KeePass 2.x to to add support for cloud storage providers</summary>
@@ -28,36 +28,46 @@ Supported providers:
     <docsUrl>https://keeanywhere.de/use/start</docsUrl>
     <iconUrl>https://cdn.rawgit.com/Kyrodan/KeeAnywhere/95b05e59b80690037bfb1952715d5104fbf99b71/KeeAnywhere/Resources/KeeAnywhere_48x48.png</iconUrl>
     <tags>keepass plugin backup sync cloud</tags>
-    <copyright>© 2015-2020 Daniel Bölts</copyright>
+    <copyright>© 2015-2021 Daniel Bölts</copyright>
     <licenseUrl>https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>## 1.6.0 (2020-01-08)
+    <releaseNotes>## 2.0.0 (2021-05-18)
 
-KeePass 2.43 or newer is required now (was 2.40).
+KeePass 2.48.1 or newer is required now (was 2.43).
+Micrososft .Net 4.6.1 is required now (was 4.5.2).
+Amazon Drive support has been dropped.
+New Provider: Azure Blob and File storage - thanks to J. Peitsch (@spacedee)
+Amazon S3: S3-Compatible providers can be used now (e. g. Wasabi, HiDrive S3, Ionos S3, Backblaze B2, MinIO)
 
 ### New
 
-- \#116 KeeAnywhere not works with Temporary Access and Secret Keys (PR \#182)
+- \#244 Feature Request: nonAWS S3
+- \#203 Adding Azure blob and file storage
+- \#154 New Provider: BackBlaze B2
+- \#130 Add Support to Provider Wasabi (would be included as S3 Compatible)
 
 ### Fixed
 
-- \#123 KeeAnywhere ignore KeePass Proxy configuration (PR \#163)
-- \#169 KeeAnywhere.dll v1.5.1 plugin incompatible with Keepass 2.41
-- \#184 KeeAnywhere 1.5.1 doesn't work with KeePass 2.43
-- \#189 Adjust links to new Homepage
+- \#246 Remove Amazon Drive support
+- \#241 \[Google Drive\] Cannot Authorize (browser not supported) bug
+- \#227 "Couldn't sign you in" GDrive error bug
+- \#212 Can't connect to google drive account
+- \#179 \[Dropbox\] \[Google Drive\] Open from Cloud Drive only list partial content
+- \#196 HiDrive: Saving to root folder throws exception
+- \#89 Reimplement Account Authentication not using internal Web Browser
 
 ### Improved
 
-- \#99 About the beer message
-- \#190 Improve Menu Creation for KeePass >= 2.41
-- Updated Dependencies (KeePass)
+- Updated Dependencies (AWS, Box, Dropbox, Google Drive, OneDrive)
+- Using KeePass 2.48.1 now
+- Using .Net 4.6.1 now
 
 
-[Full Changelog](https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md)
+      [Full Changelog](https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md)
     </releaseNotes>
     <dependencies>
-      <dependency id="keepass" version="[2.43, 3.0)" />
-      <dependency id="dotnet4.5.2" />
+      <dependency id="keepass" version="[2.48.1, 3.0)" />
+      <dependency id="dotnet4.6.1" />
     </dependencies>
   </metadata>
   <files>
