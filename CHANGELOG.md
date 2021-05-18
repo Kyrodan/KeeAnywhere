@@ -1,6 +1,6 @@
 ## 2.0.0 (unpublished)
 
-KeePass 2.47 or newer is required now (was 2.43).
+KeePass 2.48.1 or newer is required now (was 2.43).
 Micrososft .Net 4.6.1 is required now (was 4.5.2).
 Amazon Drive support has been dropped.
 New Provider: Azure Blob and File storage - thanks to J. Peitsch (@spacedee)
