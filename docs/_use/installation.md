@@ -3,9 +3,9 @@ title: Installation
 ---
 # Prerequisites
 Please install the following prerequisites first:
-* KeePass 2.40 or newer
+* KeePass 2.48.1 or newer
 * Windows 7 or newer
-* .Net Framework 4.5.2 or newer
+* .Net Framework 4.6.1 or newer
 
 # Installation
 Please choose between manual installation and an automatic installation.

@@ -6,7 +6,8 @@ KeeAnywhere URL's follow this sepcification:
 `{provider}:///{accountname}/{path_to_database}` 
 
 Valid values for `{provider}` are:
-* adrive
+* azureblob
+* azurefile
 * s3
 * box
 * dropbox

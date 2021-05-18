@@ -15,7 +15,7 @@ Internally [System.Security.Cryptography.ProtectedData](https://docs.microsoft.c
 
 
 # Proxy settings not working
-For registering an account, KeeAnywhere embeds Internet Explorer in the authorization window. So you have to manage system proxy settings (in Control Panel - Internetoptions), too.
+For registering an account, KeeAnywhere uses system's default browserfor authorization. So you have to manage it's proxy settings, too.
 
 After successfully registering an account, this setting is no longer needed, as KeeAnywhere then uses it's own proxy settings (from KeePass).
 
