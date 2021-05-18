@@ -1,3 +1,10 @@
+## 2.0.1 (2021-05-18)
+
+### Fixed
+
+- \#280 Exception: Proxy Authentication required
+
+
 ## 2.0.0 (2021-05-18)
 
 KeePass 2.48.1 or newer is required now (was 2.43).
