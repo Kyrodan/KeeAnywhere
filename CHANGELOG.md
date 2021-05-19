@@ -1,7 +1,8 @@
-## 2.0.1 (2021-05-18)
+## 2.0.1 (unreleased)
 
 ### Fixed
 
+- \#281 OneDrive cannot be accessed anymore
 - \#280 Exception: Proxy Authentication required
 
 

@@ -110,7 +110,8 @@ namespace KeeAnywhere.OAuth2
                 Flow = OidcClientOptions.AuthenticationFlow.AuthorizationCode,
                 ResponseMode = OidcClientOptions.AuthorizeResponseMode.FormPost,
                 RefreshTokenInnerHttpHandler = ProxyTools.CreateHttpClientHandler(),
-                BackchannelHandler = ProxyTools.CreateHttpClientHandler()
+                BackchannelHandler = ProxyTools.CreateHttpClientHandler(),
+                LoadProfile = false
             };
 
             options.Policy.Discovery.ValidateEndpoints = false;
