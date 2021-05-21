@@ -3,7 +3,7 @@
   <metadata>
     <id>keepass-plugin-keeanywhere</id>
     <title>KeePass Plugin KeeAnywhere</title>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <authors>Daniel Bölts</authors>
     <owners>Kyrodan</owners>
     <summary>Plugin for KeePass 2.x to to add support for cloud storage providers</summary>
@@ -31,10 +31,11 @@ Supported providers:
     <copyright>© 2015-2021 Daniel Bölts</copyright>
     <licenseUrl>https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>## 2.0.1 (2021-05-18)
+    <releaseNotes>## 2.0.2 (2021-05-21)
 
 ### Fixed
 
+- \#281 OneDrive cannot be accessed anymore
 - \#280 Exception: Proxy Authentication required
 
 

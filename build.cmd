@@ -1,5 +1,5 @@
 @echo off
-set version=2.0.1
+set version=2.0.2
 set zip="packages\7-Zip.CommandLine.9.20.0\tools\7za.exe"
 set msbuildcmd="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\VsMSBuildCmd.bat"
 
