@@ -32,7 +32,7 @@ namespace KeeAnywhere.OAuth2
                 // IANA suggested range for dynamic or private ports
                 //const int MinPort = 49215;
                 //const int MaxPort = 65535;
-                ports = Enumerable.Range(49215, 65535);
+                ports = Enumerable.Range(49215, 16321);
             }
 
             foreach (var port in ports)

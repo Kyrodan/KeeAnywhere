@@ -3,7 +3,7 @@
   <metadata>
     <id>keepass-plugin-keeanywhere</id>
     <title>KeePass Plugin KeeAnywhere</title>
-    <version>2.0.2</version>
+    <version>2.0.3</version>
     <authors>Daniel Bölts</authors>
     <owners>Kyrodan</owners>
     <summary>Plugin for KeePass 2.x to to add support for cloud storage providers</summary>
@@ -31,7 +31,14 @@ Supported providers:
     <copyright>© 2015-2021 Daniel Bölts</copyright>
     <licenseUrl>https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>## 2.0.2 (2021-05-21)
+    <releaseNotes>## 2.0.3 (2021-05-21)
+
+### Fixed
+
+- \#283 Port range for redirect URI calculated wrong
+
+
+## 2.0.2 (2021-05-21)
 
 ### Fixed
 

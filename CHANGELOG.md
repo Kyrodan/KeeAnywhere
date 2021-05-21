@@ -1,3 +1,10 @@
+## 2.0.3 (2021-05-21)
+
+### Fixed
+
+- \#283 Port range for redirect URI calculated wrong
+
+
 ## 2.0.2 (2021-05-21)
 
 ### Fixed
