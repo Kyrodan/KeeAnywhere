@@ -2,7 +2,7 @@
 title: KeeAnywhere
 description: A cloud storage provider plugin for KeePass Password Safe
 ---
-# Noteworthy for updates from 1.x:
+# Noteworthy for updates from 1.x to 2.x:
 * Authorization now takes place in your system's default browser. After logging in and accepting the terms of your account, it redirects to "localhost" (with changing ports). It then states, that you can close this window (= tab) now.
 * OneDrive-Accounts have to be deleted and recreated. Sync all offline-files *before* deleting your account!
 * Dropbox-Accounts have to be re-authenticated

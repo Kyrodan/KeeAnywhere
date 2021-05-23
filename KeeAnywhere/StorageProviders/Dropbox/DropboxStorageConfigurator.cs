@@ -53,9 +53,9 @@ namespace KeeAnywhere.StorageProviders.Dropbox
                 "files.content.read"
             };
 
-            var ports = Enumerable.Range(49306, 49315)
-                .Concat(Enumerable.Range(49996, 50005))
-                .Concat(Enumerable.Range(63900, 63910));
+            var ports = Enumerable.Range(49306, 10)
+                .Concat(Enumerable.Range(49996, 10))
+                .Concat(Enumerable.Range(63900, 10));
 
             var browser = new OidcSystemBrowser(ports);
 
