@@ -129,10 +129,16 @@ namespace KeeAnywhere.StorageProviders.GoogleCloudPlatform
                 }
                 else
                 {
-                    string bucket, fileName;
-                    GetBucketAndFilename(parent.Id, out bucket, out fileName);
+                    string bucket, currentPath;
+                    GetBucketAndFilename(parent.Id, out bucket, out currentPath);
 
-                    var responseEnumerable = client.ListObjectsAsync(bucket, fileName);
+                    var options = new ListObjectsOptions
+                    {
+                        Delimiter = "/", // Limit only to current 'directory'...
+                        IncludeTrailingDelimiter = true // ...but display child directories as items
+                    };
+
+                    var responseEnumerable = client.ListObjectsAsync(bucket, currentPath, options);
                     var responseEnumerator = responseEnumerable.GetAsyncEnumerator();
 
                     var result = new List<StorageProviderItem>();
@@ -142,11 +148,21 @@ namespace KeeAnywhere.StorageProviders.GoogleCloudPlatform
                         while (await responseEnumerator.MoveNextAsync())
                         {
                             var item = responseEnumerator.Current;
+                            var isFolder = item.Name.EndsWith("/");
+                            var normalizedName = item.Name.TrimEnd(new[] { '/' }); // Remove prefix and trailing slash (if this is a folder)
+
+                            if (currentPath != null)
+                            {
+                                if (item.Name == currentPath) continue; // GCS seems to also include the current 'directory' in the response, so we skip it)
+
+                                normalizedName = normalizedName.Replace(currentPath, "");
+                            }
+
                             result.Add(new StorageProviderItem
                             {
-                                Id = bucket + "/" + fileName + "/" + item.Name,
-                                Name = item.Name,
-                                Type = StorageProviderItemType.File,
+                                Id = bucket + "/" + item.Name, // The file name already includes the entire path
+                                Name = normalizedName,
+                                Type = isFolder ? StorageProviderItemType.Folder : StorageProviderItemType.File,
                                 ParentReferenceId = parent.Id,
                                 LastModifiedDateTime = item.Updated
                             });
