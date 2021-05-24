@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -134,6 +134,7 @@ namespace KeeAnywhere.StorageProviders.GoogleCloudPlatform
 
                     var options = new ListObjectsOptions
                     {
+                        Fields = "items(name,updated),nextPageToken", // Make this a partial response to only fetch the data we need
                         Delimiter = "/", // Limit only to current 'directory'...
                         IncludeTrailingDelimiter = true // ...but display child directories as items
                     };
