@@ -4,6 +4,7 @@ using KeeAnywhere.StorageProviders.AmazonS3;
 using KeeAnywhere.StorageProviders.Azure;
 using KeeAnywhere.StorageProviders.Box;
 using KeeAnywhere.StorageProviders.Dropbox;
+using KeeAnywhere.StorageProviders.GoogleCloudPlatform;
 using KeeAnywhere.StorageProviders.GoogleDrive;
 using KeeAnywhere.StorageProviders.HiDrive;
 using KeeAnywhere.StorageProviders.HubiC;
@@ -26,6 +27,7 @@ namespace KeeAnywhere.StorageProviders
             if (!isUnix) d.Add(new StorageDescriptor(StorageType.Box, "Box", "box", account => new BoxStorageProvider(account), () => new BoxStorageConfigurator(), PluginResources.Box_16x16));
             d.Add(new StorageDescriptor(StorageType.Dropbox, "Dropbox", "dropbox", account => new DropboxStorageProvider(account), () => new DropboxStorageConfigurator(false), PluginResources.Dropbox_16x16));
             d.Add(new StorageDescriptor(StorageType.DropboxRestricted, "Dropbox-Restricted", "dropbox-r", account => new DropboxStorageProvider(account), () => new DropboxStorageConfigurator(true), PluginResources.Dropbox_16x16));
+            d.Add(new StorageDescriptor(StorageType.GoogleCloudStorage, "Google Cloud Storage", "gs", account => new GoogleCloudStorageProvider(account), () => new GoogleCloudStorageConfigurator(), PluginResources.GoogleCloudStorage_16x16));
             d.Add(new StorageDescriptor(StorageType.GoogleDrive, "Google Drive", "gdrive", account => new GoogleDriveStorageProvider(account), () => new GoogleDriveStorageConfigurator(), PluginResources.GoogleDrive_16x16));
             d.Add(new StorageDescriptor(StorageType.HiDrive, "HiDrive", "hidrive", account => new HiDriveStorageProvider(account), () => new HiDriveStorageConfigurator(), PluginResources.HiDrive_16x16));
             if (!isUnix) d.Add(new StorageDescriptor(StorageType.HubiC, "hubiC", "hubic", account => new HubiCStorageProvider(account), () => new HubiCStorageConfigurator(), PluginResources.HubiC_16x16));
