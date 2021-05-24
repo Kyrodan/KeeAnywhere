@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,11 +42,11 @@ namespace KeeAnywhere.StorageProviders.GoogleCloudPlatform
 
             using (var client = GetClient(_account))
             {
-                using (Stream stream = new MemoryStream())
-                {
-                    await client.DownloadObjectAsync(bucket, fileName, stream);
-                    return stream;
-                }
+                var stream = new MemoryStream();
+                await client.DownloadObjectAsync(bucket, fileName, stream);
+                stream.Seek(0, SeekOrigin.Begin); // Rewind stream to the start so reading starts from there
+
+                return stream;
             }
         }
 
