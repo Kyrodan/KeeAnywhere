@@ -53,9 +53,9 @@ namespace KeeAnywhere.StorageProviders.Dropbox
                 "files.content.read"
             };
 
-            var ports = Enumerable.Range(49306, 49315)
-                .Concat(Enumerable.Range(49996, 50005))
-                .Concat(Enumerable.Range(63900, 63910));
+            var ports = Enumerable.Range(49306, 10)
+                .Concat(Enumerable.Range(49996, 10))
+                .Concat(Enumerable.Range(63900, 10));
 
             var browser = new OidcSystemBrowser(ports);
 
@@ -78,7 +78,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
 
             var code = query["code"];
 
-            var response = await db.DropboxOAuth2Helper.ProcessCodeFlowAsync(code, clientId, null, redirectUri, null, codeVerifier);
+            var response = await db.DropboxOAuth2Helper.ProcessCodeFlowAsync(code, clientId, null, redirectUri, ProxyTools.CreateHttpClient(), codeVerifier);
             var api = DropboxHelper.GetApi(response.AccessToken);
             var owner = await api.Users.GetCurrentAccountAsync();
 

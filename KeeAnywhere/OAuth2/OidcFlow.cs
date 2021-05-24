@@ -109,6 +109,9 @@ namespace KeeAnywhere.OAuth2
                 Scope = scopes,
                 Flow = OidcClientOptions.AuthenticationFlow.AuthorizationCode,
                 ResponseMode = OidcClientOptions.AuthorizeResponseMode.FormPost,
+                RefreshTokenInnerHttpHandler = ProxyTools.CreateHttpClientHandler(),
+                BackchannelHandler = ProxyTools.CreateHttpClientHandler(),
+                LoadProfile = false
             };
 
             options.Policy.Discovery.ValidateEndpoints = false;
