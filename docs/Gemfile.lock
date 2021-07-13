@@ -4,7 +4,7 @@ GEM
     activesupport (3.2.22.5)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
-    addressable (2.7.0)
+    addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     coffee-script (2.4.1)
       coffee-script-source
@@ -256,7 +256,6 @@ GEM
     unf_ext (0.0.7.7)
     unf_ext (0.0.7.7-x64-mingw32)
     unicode-display_width (1.7.0)
-    wdm (0.1.1)
 
 PLATFORMS
   ruby
@@ -268,7 +267,6 @@ DEPENDENCIES
   jekyll-feed (~> 0.6)
   minima (~> 2.0)
   tzinfo-data
-  wdm (~> 0.1.0)
 
 BUNDLED WITH
    2.1.4
