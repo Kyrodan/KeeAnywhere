@@ -60,7 +60,7 @@ namespace KeeAnywhere.OAuth2
 
         private static string CreateRedirectUri(int port)
         {
-            return "http://127.0.0.1:" + port + "/";
+            return "http://localhost:" + port + "/";
         }
 
         public string RedirectUri
