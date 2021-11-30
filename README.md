@@ -26,5 +26,18 @@ Supported providers (in alphabetical order):
 # Building
 Run *build.cmd* and see output in folder *build*. For further details see [BUILD.md](BUILD.md).
 
+# Installation via Chocolatey 📦 
+Or you can [use Chocolatey to install](https://community.chocolatey.org/packages/keepass-plugin-keeanywhere#install) it in a more automated manner:
+
+```
+choco install keepass-plugin-keeanywhere
+```
+
+To [upgrade KeePass Plugin KeeAnywhere](https://community.chocolatey.org/packages/keepass-plugin-keeanywhere#upgrade) to the [latest release version](https://community.chocolatey.org/packages/keepass-plugin-keeanywhere#versionhistory) for enjoying the newest features, run the following command from the command line or from PowerShell:
+
+```
+choco upgrade keepass-plugin-keeanywhere
+```
+
 # License
 The source code is licensed under the [MIT license](https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE).
