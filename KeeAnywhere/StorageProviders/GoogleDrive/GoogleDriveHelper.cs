@@ -102,6 +102,16 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
                 file = result.Files.FirstOrDefault();
                 if (file == null) return null;
+                if (file.MimeType == "application/vnd.google-apps.shortcut")
+                {
+                    if (file.ShortcutDetails == null)
+                    {
+                        var fileQuery = api.Files.Get(file.Id);
+                        fileQuery.Fields = "*";
+                        file = await fileQuery.ExecuteAsync();
+                    }
+                    file = await api.Files.Get(file.ShortcutDetails.TargetId).ExecuteAsync();
+                }
             }
 
             return file;
