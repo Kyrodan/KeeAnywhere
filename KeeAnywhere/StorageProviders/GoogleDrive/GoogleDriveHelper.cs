@@ -88,6 +88,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
         public static async Task<File> GetFileByPath(this DriveService api, string path)
         {
+            if (path == "" ) return await api.Files.Get("root").ExecuteAsync();
             var parts = path.Split('/');
             File file = null;
 
