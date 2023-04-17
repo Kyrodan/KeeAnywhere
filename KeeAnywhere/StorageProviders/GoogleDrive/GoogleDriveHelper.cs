@@ -86,13 +86,14 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             return client;
         }
 
-        public static async Task<File> GetFileByPath(this DriveService api, string path)
+        public static async Task<File> GetFileByPath(this DriveService api, string path, bool resolveFinalShortcut)
         {
             var parts = path.Split('/');
             File file = null;
-
-            foreach (var part in parts)
+			var partsLength = parts.Count();
+			for (int i = 0; i < partsLength; i++)
             {
+				var part = parts[i];
                 var query = api.Files.List();
                 query.Q = string.Format("name = '{0}' and '{1}' in parents and trashed = false", part,
                 //query.Q = string.Format("title = '{0}'", part,
@@ -102,16 +103,19 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
                 file = result.Files.FirstOrDefault();
                 if (file == null) return null;
-                if (file.MimeType == "application/vnd.google-apps.shortcut")
-                {
-                    if (file.ShortcutDetails == null)
-                    {
-                        var fileQuery = api.Files.Get(file.Id);
-                        fileQuery.Fields = "*";
-                        file = await fileQuery.ExecuteAsync();
-                    }
-                    file = await api.Files.Get(file.ShortcutDetails.TargetId).ExecuteAsync();
-                }
+				if (resolveFinalShortcut || i != partsLength-1)
+				{
+					if (file.MimeType == "application/vnd.google-apps.shortcut")
+					{
+						if (file.ShortcutDetails == null)
+						{
+							var fileQuery = api.Files.Get(file.Id);
+							fileQuery.Fields = "*";
+							file = await fileQuery.ExecuteAsync();
+						}
+						file = await api.Files.Get(file.ShortcutDetails.TargetId).ExecuteAsync();
+					}
+				}
             }
 
             return file;

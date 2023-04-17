@@ -26,7 +26,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         {
             var api = await GetApi();
 
-            var file = await api.GetFileByPath(path);
+            var file = await api.GetFileByPath(path, true);
             if (file == null)
                 return null;
 
@@ -48,7 +48,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
             IUploadProgress progress;
 
-            var file = await api.GetFileByPath(path);
+            var file = await api.GetFileByPath(path, true);
             if (file != null)
             {
                 progress = await api.Files.Update(null, file.Id, stream, "application/octet-stream").UploadAsync();
@@ -66,7 +66,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
                 if (!string.IsNullOrEmpty(folderName))
                 {
-                    var folder = await api.GetFileByPath(folderName);
+                    var folder = await api.GetFileByPath(folderName, true);
                     if (folder == null)
                         throw new InvalidOperationException(string.Format("Folder does not exist: {0}", folderName));
 
@@ -84,12 +84,12 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         {
             var api = await GetApi();
 
-            var sourceFile = await api.GetFileByPath(sourcePath);
+            var sourceFile = await api.GetFileByPath(sourcePath, true);
             if (sourceFile == null)
                 throw new FileNotFoundException("Google Drive: File not found.", sourcePath);
 
             var destFolder = CloudPath.GetDirectoryName(destPath);
-            var parentFolder = await api.GetFileByPath(destFolder);
+            var parentFolder = await api.GetFileByPath(destFolder, true);
             if (parentFolder == null)
                 throw new FileNotFoundException("Google Drive: File not found.", destFolder);
 
@@ -107,7 +107,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         {
             var api = await GetApi();
 
-            var file = await api.GetFileByPath(path);
+            var file = await api.GetFileByPath(path, false);
             if (file == null)
                 throw new FileNotFoundException("Goolge Drive: File not found.", path);
 
@@ -178,7 +178,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
         {
             var api = await GetApi();
-            var item = await api.GetFileByPath(path);
+            var item = await api.GetFileByPath(path, true);
             if (item == null)
                 throw new FileNotFoundException("Goolge Drive: File not found.", path);
 
