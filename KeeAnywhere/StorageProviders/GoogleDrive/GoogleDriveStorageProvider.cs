@@ -92,7 +92,8 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             var destFolder = CloudPath.GetDirectoryName(destPath);
             var destFile = new File
             {
-                Name = destFilename
+                Name = destFilename,
+                Parents = new[] { "root" }
             };
 
             if (!string.IsNullOrEmpty(destFolder))
