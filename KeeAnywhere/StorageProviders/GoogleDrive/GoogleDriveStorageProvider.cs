@@ -129,50 +129,30 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             var api = await GetApi();
             var query = api.Files.List();
             query.Q = string.Format("'{0}' in parents and trashed = false", parent.Id);
-            query.Fields = "*";
+            query.Fields = "files(id, name, mimeType, modifiedTime, shortcutDetails, parents)";
 
             var items = await query.ExecuteAsync();
-            var newItems = items.Files.Select(_ => new StorageProviderItem()
-            {
-                Id =
-                    _.MimeType == "application/vnd.google-apps.shortcut"
-                        ?
-                            _.ShortcutDetails != null
-                            ? _.ShortcutDetails.TargetId
-                            : "1"
-                        : _.Id,
-                Name = _.Name,
-                Type =
-                    _.MimeType == "application/vnd.google-apps.shortcut"
-                        ? _.ShortcutDetails.TargetMimeType == "application/vnd.google-apps.folder"
-                            ? StorageProviderItemType.Folder
-                            : StorageProviderItemType.File
-                        : _.MimeType == "application/vnd.google-apps.folder"
-                            ? StorageProviderItemType.Folder
-                            : StorageProviderItemType.File,
-                LastModifiedDateTime = _.ModifiedTime,
-                ParentReferenceId = parent.Id,
-            });
+            var newItems = items.Files.Select(async _ => 
+			{
+				var result = await MakeStorageProviderItem(_, api);
+				result.ParentReferenceId = parent.Id;
+				return result;
+			});
+
 
             while (items.NextPageToken != null)
             {
                 query.PageToken = items.NextPageToken;
 
                 items = await query.ExecuteAsync();
-                newItems = newItems.Concat(items.Files.Select(_ => new StorageProviderItem()
-                {
-                    Id = _.Id,
-                    Name = _.Name,
-                    Type =
-                        _.MimeType == "application/vnd.google-apps.folder"
-                            ? StorageProviderItemType.Folder
-                            : StorageProviderItemType.File,
-                    LastModifiedDateTime = _.ModifiedTime,
-                    ParentReferenceId = parent.Id,
-                }));
+                newItems = newItems.Concat(items.Files.Select(async _ => 
+				{
+					var result = await MakeStorageProviderItem(_, api);
+					result.ParentReferenceId = parent.Id; return result;
+				}));
             }
 
-            return newItems.ToArray();
+            return await Task.WhenAll(newItems.ToArray());
         }
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
@@ -199,6 +179,42 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
                 _api = await GoogleDriveHelper.GetClient(_account);
 
             return _api;
+        }
+
+        protected async Task<StorageProviderItem> MakeStorageProviderItem(File _, DriveService api)
+        {
+            var isShortcut = false;
+            if (_.MimeType == "application/vnd.google-apps.shortcut")
+            {
+                isShortcut = true;
+                if (_.ShortcutDetails==null)
+                {
+                    var fileQuery = api.Files.Get(_.Id);
+                    fileQuery.Fields = "shortcutDetails";
+
+                    _ = await fileQuery.ExecuteAsync();
+                }
+            }
+            var result = new StorageProviderItem()
+            {
+                Id =
+                    isShortcut
+                        ? _.ShortcutDetails.TargetId
+                        : _.Id,
+                Name = _.Name,
+                Type =
+                    isShortcut
+                        ? _.ShortcutDetails.TargetMimeType == "application/vnd.google-apps.folder"
+                            ? StorageProviderItemType.Folder
+                            : StorageProviderItemType.File
+                        : _.MimeType == "application/vnd.google-apps.folder"
+                            ? StorageProviderItemType.Folder
+                            : StorageProviderItemType.File,
+                LastModifiedDateTime = _.ModifiedTime,
+                ParentReferenceId = _.Parents.FirstOrDefault(),
+            };
+
+            return result;
         }
     }
 }

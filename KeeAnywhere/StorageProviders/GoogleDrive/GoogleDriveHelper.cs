@@ -110,7 +110,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 						if (file.ShortcutDetails == null)
 						{
 							var fileQuery = api.Files.Get(file.Id);
-							fileQuery.Fields = "*";
+							fileQuery.Fields = "shortcutDetails";
 							file = await fileQuery.ExecuteAsync();
 						}
 						file = await api.Files.Get(file.ShortcutDetails.TargetId).ExecuteAsync();
