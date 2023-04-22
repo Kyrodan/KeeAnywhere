@@ -129,7 +129,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             var api = await GetApi();
             var query = api.Files.List();
             query.Q = string.Format("'{0}' in parents and trashed = false", parent.Id);
-            query.Fields = "files(id, name, mimeType, modifiedTime, shortcutDetails, parents)";
+            query.Fields = "nextPageToken, files(id, name, mimeType, shortcutDetails, modifiedTime, parents)"; //The shortcutDetails field isn't returned in queries by default. Unless we request it, it's always null. The downside is, now we have to spell out every field we *do* want. Forgetting something we need will mean it's always set to null in the returned query, File object, etc. and things will break. This already happened once when I forgot I needed to explicitly request nextPageToken.
 
             var items = await query.ExecuteAsync();
             var newItems = items.Files.Select(async _ => 
@@ -160,7 +160,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             var api = await GetApi();
             var item = await api.GetFileByPath(path, true);
             if (item == null)
-                throw new FileNotFoundException("Goolge Drive: File not found.", path);
+                throw new FileNotFoundException("Google Drive: File not found.", path);
 
             return await GetChildrenByParentItem(new StorageProviderItem {Id = item.Id});
         }
