@@ -38,38 +38,74 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             OidcConstants.StandardScopes.Profile,
             DriveService.Scope.Drive };
 
-        internal static IAuthorizationCodeFlow AuthFlow;
+        internal static string[] ScopesRestricted = {
+            OidcConstants.StandardScopes.OpenId,
+            OidcConstants.StandardScopes.Profile,
+            DriveService.Scope.DriveFile };
 
-        static GoogleDriveHelper()
-        {
-            var flowInitializer = new GoogleAuthorizationCodeFlow.Initializer
+        private static IAuthorizationCodeFlow _authFlow;
+        internal static IAuthorizationCodeFlow AuthFlow {  get
             {
-                ClientSecrets = new ClientSecrets
+                if (_authFlow == null)
                 {
-                    ClientId = GoogleDriveClientId,
-                    ClientSecret = GoogleDriveClientSecret
-                },
-                Scopes = Scopes,
-                HttpClientFactory = new GoogleDriveHttpClientFactory()
-            };
+                    var flowInitializer = new GoogleAuthorizationCodeFlow.Initializer
+                    {
+                        ClientSecrets = new ClientSecrets
+                        {
+                            ClientId = GoogleDriveClientId,
+                            ClientSecret = GoogleDriveClientSecret
+                        },
+                        Scopes = Scopes,
+                        HttpClientFactory = new GoogleDriveHttpClientFactory()
+                    };
 
-            AuthFlow = new GoogleAuthorizationCodeFlow(flowInitializer);
+                    _authFlow = new GoogleAuthorizationCodeFlow(flowInitializer);
+                }
+                return _authFlow;
+            } 
+        }
+        
+        private static IAuthorizationCodeFlow _authFlowRestricted;
+        internal static IAuthorizationCodeFlow AuthFlowRestricted
+        {
+            get
+            {
+                if (_authFlowRestricted == null)
+                {
+                    var flowInitializer = new GoogleAuthorizationCodeFlow.Initializer
+                    {
+                        ClientSecrets = new ClientSecrets
+                        {
+                            ClientId = GoogleDriveClientId,
+                            ClientSecret = GoogleDriveClientSecret
+                        },
+                        Scopes = Scopes,
+                        HttpClientFactory = new GoogleDriveHttpClientFactory()
+                    };
+
+                    _authFlowRestricted = new GoogleAuthorizationCodeFlow(flowInitializer);
+                }
+                return _authFlowRestricted;
+            }
         }
 
-        public static OidcFlow CreateOidcFlow()
+        public static OidcFlow CreateOidcFlow(bool isAccessRestricted)
         {
-            return new OidcFlow(StorageType.GoogleDrive, Authority, GoogleDriveClientId, GoogleDriveClientSecret, Scopes);
+            if (isAccessRestricted)
+                return new OidcFlow(StorageType.GoogleDriveRestricted, Authority, GoogleDriveClientId, GoogleDriveClientSecret, ScopesRestricted);
+            else
+                return new OidcFlow(StorageType.GoogleDrive, Authority, GoogleDriveClientId, GoogleDriveClientSecret, Scopes);
         }
 
         public static async Task<DriveService> GetClient(AccountConfiguration account)
         {
-            return await GetClient(new TokenResponse { RefreshToken = account.Secret });
+            return await GetClient(new TokenResponse { RefreshToken = account.Secret }, account.Type == StorageType.GoogleDriveRestricted);
         }
 
-        public static async Task<DriveService> GetClient(TokenResponse token)
+        public static async Task<DriveService> GetClient(TokenResponse token, bool isAccessRestricted)
         {
             var credentials = new UserCredential(
-               AuthFlow,
+               isAccessRestricted ? AuthFlowRestricted : AuthFlow,
                null,
                token);
 

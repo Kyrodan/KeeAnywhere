@@ -6,9 +6,16 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 {
     public class GoogleDriveStorageConfigurator : IStorageConfigurator
     {
+        private readonly bool _isAccessRestricted;
+
+        public GoogleDriveStorageConfigurator(bool isAccessRestricted)
+        {
+            this._isAccessRestricted = isAccessRestricted;
+        }
+
         public async Task<AccountConfiguration> CreateAccount()
         {
-            var flow = GoogleDriveHelper.CreateOidcFlow();
+            var flow = GoogleDriveHelper.CreateOidcFlow(_isAccessRestricted);
             return await flow.AuthorizeAsync();
         }
     }
