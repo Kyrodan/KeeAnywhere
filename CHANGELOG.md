@@ -5,6 +5,7 @@
 - \#269 New storage provider: Google Cloud Storage  
 - \#377 Gdrive shortcuts 
 - \#398 Limit access to KeeAnywhere files only and not the whole drive (like Dropbox-restricted)
+- \#261 Added support for OneDrive shared folders
 
 ### Fixed
 
