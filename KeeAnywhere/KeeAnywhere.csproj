@@ -402,14 +402,6 @@
     <Compile Include="StorageProviders\IStorageProviderFileOperations.cs" />
     <Compile Include="StorageProviders\IStorageProviderQueryOperations.cs" />
     <Compile Include="StorageProviders\ProxyTools.cs" />
-    <Compile Include="StorageProviders\HubiC\HubiCAccount.cs" />
-    <Compile Include="StorageProviders\HubiC\HubiCCredentials.cs" />
-    <Compile Include="StorageProviders\HubiC\HubiCHelper.cs" />
-    <Compile Include="StorageProviders\HubiC\HubiCStorageConfigurator.cs" />
-    <Compile Include="StorageProviders\HubiC\HubiCStorageProvider.cs" />
-    <Compile Include="StorageProviders\HubiC\SwiftContainer.cs" />
-    <Compile Include="StorageProviders\HubiC\SwiftClient.cs" />
-    <Compile Include="StorageProviders\HubiC\SwiftObject.cs" />
     <Compile Include="StorageProviders\IStorageConfigurator.cs" />
     <Compile Include="StorageProviders\IStorageProvider.cs" />
     <Compile Include="StorageProviders\OneDrive\OneDriveAuthenticationProvider.cs" />

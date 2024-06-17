@@ -7,7 +7,6 @@ using KeeAnywhere.StorageProviders.Dropbox;
 using KeeAnywhere.StorageProviders.GoogleCloudPlatform;
 using KeeAnywhere.StorageProviders.GoogleDrive;
 using KeeAnywhere.StorageProviders.HiDrive;
-using KeeAnywhere.StorageProviders.HubiC;
 using KeeAnywhere.StorageProviders.OneDrive;
 using KeePassLib.Native;
 
@@ -30,7 +29,6 @@ namespace KeeAnywhere.StorageProviders
             d.Add(new StorageDescriptor(StorageType.GoogleCloudStorage, "Google Cloud Storage", "gs", account => new GoogleCloudStorageProvider(account), () => new GoogleCloudStorageConfigurator(), PluginResources.GoogleCloudStorage_16x16));
             d.Add(new StorageDescriptor(StorageType.GoogleDrive, "Google Drive", "gdrive", account => new GoogleDriveStorageProvider(account), () => new GoogleDriveStorageConfigurator(), PluginResources.GoogleDrive_16x16));
             d.Add(new StorageDescriptor(StorageType.HiDrive, "HiDrive", "hidrive", account => new HiDriveStorageProvider(account), () => new HiDriveStorageConfigurator(), PluginResources.HiDrive_16x16));
-            if (!isUnix) d.Add(new StorageDescriptor(StorageType.HubiC, "hubiC", "hubic", account => new HubiCStorageProvider(account), () => new HubiCStorageConfigurator(), PluginResources.HubiC_16x16));
             d.Add(new StorageDescriptor(StorageType.OneDrive, "OneDrive", "onedrive", account => new OneDriveStorageProvider(account), () => new OneDriveStorageConfigurator(), PluginResources.OneDrive_16x16));
 
             Descriptors = d.ToArray();
