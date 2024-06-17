@@ -88,17 +88,25 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             if (sourceFile == null)
                 throw new FileNotFoundException("Google Drive: File not found.", sourcePath);
 
+            var destFilename = CloudPath.GetFileName(destPath);
             var destFolder = CloudPath.GetDirectoryName(destPath);
             var parentFolder = await api.GetFileByPath(destFolder, true);
             if (parentFolder == null)
                 throw new FileNotFoundException("Google Drive: File not found.", destFolder);
-
-            var destFilename = CloudPath.GetFileName(destPath);
             var destFile = new File
             {
                 Name = destFilename,
-                Parents = new[] {parentFolder.Id}
+                Parents = new[] { "root" }
             };
+
+            if (!string.IsNullOrEmpty(destFolder))
+            {
+                var parentFolder = await api.GetFileByPath(destFolder);
+                if (parentFolder == null)
+                    throw new FileNotFoundException("Google Drive: File not found.", destFolder);
+
+                destFile.Parents = new[] { parentFolder.Id };
+            }
 
             var result = await api.Files.Copy(destFile, sourceFile.Id).ExecuteAsync();
         }
@@ -157,6 +165,9 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
         {
+            if (string.IsNullOrEmpty(path))
+                return await GetChildrenByParentItem(await GetRootItem());
+
             var api = await GetApi();
             var item = await api.GetFileByPath(path, true);
             if (item == null)
