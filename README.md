@@ -7,8 +7,8 @@ Supported providers (in alphabetical order):
 * Box
 * Dropbox
 * Google Drive
+* Google Cloud Storage
 * HiDrive
-* hubiC
 * OneDrive
 
 ![KeeAnywhere in Action](docs/assets/images/KeeAnywhere_Teaser.png)

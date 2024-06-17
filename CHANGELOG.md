@@ -1,4 +1,4 @@
-## 2.1.0 (unreleased)
+## 2.1.0 (2024-06-17)
 
 ### New
 
@@ -6,6 +6,7 @@
 - \#377 Gdrive shortcuts 
 - \#398 Limit access to KeeAnywhere files only and not the whole drive (like Dropbox-restricted)
 - \#261 Added support for OneDrive shared folders
+- \#369 Remove support for hubiC
 
 ### Fixed
 
@@ -13,7 +14,6 @@
 
 ### Improved
 
-- XXX Updated Dependencies (AWS, Box, Dropbox, Google Drive, OneDrive)
 - Using KeePass 2.57.0 now
 
 

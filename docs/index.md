@@ -18,8 +18,8 @@ KeeAnywhere is a [KeePass Password Safe](http://keepass.info) plugin that provid
 * Box
 * Dropbox
 * Google Drive
+* Google Cloud Storage
 * HiDrive 
-* hubiC 
 * OneDrive  
 
 # Key features

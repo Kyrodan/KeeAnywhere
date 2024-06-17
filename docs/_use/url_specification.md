@@ -13,8 +13,9 @@ Valid values for `{provider}` are:
 * dropbox
 * dropbox-r
 * gdrive
+* gdrive-r
+* gs
 * hidrive
-* hubic
 * onedrive
 
 The `{accountname}` is the name of the account you can see in KeeAnywhere Settings` account list.
