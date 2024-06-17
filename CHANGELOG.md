@@ -1,3 +1,20 @@
+## 2.1.0 (unreleased)
+
+### New
+
+- \#269 New storage provider: Google Cloud Storage  
+- \#377 Gdrive shortcuts 
+
+### Fixed
+
+- \#327 Remote backup doesn't work on google drive in the root path
+
+### Improved
+
+- XXX Updated Dependencies (AWS, Box, Dropbox, Google Drive, OneDrive)
+- Using KeePass 2.57.0 now
+
+
 ## 2.0.3 (2021-05-21)
 
 ### Fixed
