@@ -90,9 +90,6 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
             var destFilename = CloudPath.GetFileName(destPath);
             var destFolder = CloudPath.GetDirectoryName(destPath);
-            var parentFolder = await api.GetFileByPath(destFolder, true);
-            if (parentFolder == null)
-                throw new FileNotFoundException("Google Drive: File not found.", destFolder);
             var destFile = new File
             {
                 Name = destFilename,
@@ -101,7 +98,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
             if (!string.IsNullOrEmpty(destFolder))
             {
-                var parentFolder = await api.GetFileByPath(destFolder);
+                var parentFolder = await api.GetFileByPath(destFolder, true);
                 if (parentFolder == null)
                     throw new FileNotFoundException("Google Drive: File not found.", destFolder);
 
