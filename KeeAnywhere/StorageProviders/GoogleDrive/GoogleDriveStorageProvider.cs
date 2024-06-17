@@ -26,7 +26,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         {
             var api = await GetApi();
 
-            var file = await api.GetFileByPath(path);
+            var file = await api.GetFileByPath(path, true);
             if (file == null)
                 return null;
 
@@ -48,7 +48,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
             IUploadProgress progress;
 
-            var file = await api.GetFileByPath(path);
+            var file = await api.GetFileByPath(path, true);
             if (file != null)
             {
                 progress = await api.Files.Update(null, file.Id, stream, "application/octet-stream").UploadAsync();
@@ -66,7 +66,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
                 if (!string.IsNullOrEmpty(folderName))
                 {
-                    var folder = await api.GetFileByPath(folderName);
+                    var folder = await api.GetFileByPath(folderName, true);
                     if (folder == null)
                         throw new InvalidOperationException(string.Format("Folder does not exist: {0}", folderName));
 
@@ -84,12 +84,12 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         {
             var api = await GetApi();
 
-            var sourceFile = await api.GetFileByPath(sourcePath);
+            var sourceFile = await api.GetFileByPath(sourcePath, true);
             if (sourceFile == null)
                 throw new FileNotFoundException("Google Drive: File not found.", sourcePath);
 
             var destFolder = CloudPath.GetDirectoryName(destPath);
-            var parentFolder = await api.GetFileByPath(destFolder);
+            var parentFolder = await api.GetFileByPath(destFolder, true);
             if (parentFolder == null)
                 throw new FileNotFoundException("Google Drive: File not found.", destFolder);
 
@@ -107,7 +107,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
         {
             var api = await GetApi();
 
-            var file = await api.GetFileByPath(path);
+            var file = await api.GetFileByPath(path, false);
             if (file == null)
                 throw new FileNotFoundException("Goolge Drive: File not found.", path);
 
@@ -129,47 +129,38 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             var api = await GetApi();
             var query = api.Files.List();
             query.Q = string.Format("'{0}' in parents and trashed = false", parent.Id);
+            query.Fields = "nextPageToken, files(id, name, mimeType, shortcutDetails, modifiedTime, parents)"; //The shortcutDetails field isn't returned in queries by default. Unless we request it, it's always null. The downside is, now we have to spell out every field we *do* want. Forgetting something we need will mean it's always set to null in the returned query, File object, etc. and things will break. This already happened once when I forgot I needed to explicitly request nextPageToken.
 
             var items = await query.ExecuteAsync();
-            var newItems = items.Files.Select(_ => new StorageProviderItem()
-            {
-                Id = _.Id,
-                Name = _.Name,
-                Type =
-                    _.MimeType == "application/vnd.google-apps.folder"
-                        ? StorageProviderItemType.Folder
-                        : StorageProviderItemType.File,
-                LastModifiedDateTime = _.ModifiedTime,
-                ParentReferenceId = parent.Id,
-            });
+            var newItems = items.Files.Select(async _ => 
+			{
+				var result = await MakeStorageProviderItem(_, api);
+				result.ParentReferenceId = parent.Id;
+				return result;
+			});
+
 
             while (items.NextPageToken != null)
             {
                 query.PageToken = items.NextPageToken;
 
                 items = await query.ExecuteAsync();
-                newItems = newItems.Concat(items.Files.Select(_ => new StorageProviderItem()
-                {
-                    Id = _.Id,
-                    Name = _.Name,
-                    Type =
-                        _.MimeType == "application/vnd.google-apps.folder"
-                            ? StorageProviderItemType.Folder
-                            : StorageProviderItemType.File,
-                    LastModifiedDateTime = _.ModifiedTime,
-                    ParentReferenceId = parent.Id,
-                }));
+                newItems = newItems.Concat(items.Files.Select(async _ => 
+				{
+					var result = await MakeStorageProviderItem(_, api);
+					result.ParentReferenceId = parent.Id; return result;
+				}));
             }
 
-            return newItems.ToArray();
+            return await Task.WhenAll(newItems.ToArray());
         }
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
         {
             var api = await GetApi();
-            var item = await api.GetFileByPath(path);
+            var item = await api.GetFileByPath(path, true);
             if (item == null)
-                throw new FileNotFoundException("Goolge Drive: File not found.", path);
+                throw new FileNotFoundException("Google Drive: File not found.", path);
 
             return await GetChildrenByParentItem(new StorageProviderItem {Id = item.Id});
         }
@@ -188,6 +179,42 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
                 _api = await GoogleDriveHelper.GetClient(_account);
 
             return _api;
+        }
+
+        protected async Task<StorageProviderItem> MakeStorageProviderItem(File _, DriveService api)
+        {
+            var isShortcut = false;
+            if (_.MimeType == "application/vnd.google-apps.shortcut")
+            {
+                isShortcut = true;
+                if (_.ShortcutDetails==null)
+                {
+                    var fileQuery = api.Files.Get(_.Id);
+                    fileQuery.Fields = "shortcutDetails";
+
+                    _ = await fileQuery.ExecuteAsync();
+                }
+            }
+            var result = new StorageProviderItem()
+            {
+                Id =
+                    isShortcut
+                        ? _.ShortcutDetails.TargetId
+                        : _.Id,
+                Name = _.Name,
+                Type =
+                    isShortcut
+                        ? _.ShortcutDetails.TargetMimeType == "application/vnd.google-apps.folder"
+                            ? StorageProviderItemType.Folder
+                            : StorageProviderItemType.File
+                        : _.MimeType == "application/vnd.google-apps.folder"
+                            ? StorageProviderItemType.Folder
+                            : StorageProviderItemType.File,
+                LastModifiedDateTime = _.ModifiedTime,
+                ParentReferenceId = _.Parents.FirstOrDefault(),
+            };
+
+            return result;
         }
     }
 }
