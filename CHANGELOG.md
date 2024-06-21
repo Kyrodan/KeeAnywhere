@@ -1,5 +1,9 @@
 ## 2.2.0 (unrelease)
 
+### New
+
+- \#409 Remove old Auth2-Flow (integrated browser)
+
 ### Improved
 
 - Updated Dependencies (AWS, Box, Dropbox, Google Drive, Google Storage, OneDrive)
