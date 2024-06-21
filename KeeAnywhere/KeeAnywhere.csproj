@@ -410,21 +410,12 @@
     <Compile Include="Json\ProtectedDataStringPropertyResolver.cs" />
     <Compile Include="KeeAnywhereExt.cs" />
     <Compile Include="KpResources.cs" />
-    <Compile Include="OAuth2\IOAuth2Provider.cs" />
-    <Compile Include="OAuth2\OAuth2Flow.cs" />
     <Compile Include="OAuth2\OidcWaitForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="OAuth2\OidcWaitForm.Designer.cs">
       <DependentUpon>OidcWaitForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="OAuth2\OAuth2Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OAuth2\OAuth2Form.Designer.cs">
-      <DependentUpon>OAuth2Form.cs</DependentUpon>
-    </Compile>
-    <Compile Include="OAuth2\OAuth2Token.cs" />
     <Compile Include="OAuth2\OidcFlow.cs" />
     <Compile Include="OAuth2\OidcSystemBrowser.cs" />
     <Compile Include="Offline\CacheManagerService.cs" />
@@ -525,9 +516,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OAuth2\OidcWaitForm.resx">
       <DependentUpon>OidcWaitForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OAuth2\OAuth2Form.resx">
-      <DependentUpon>OAuth2Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

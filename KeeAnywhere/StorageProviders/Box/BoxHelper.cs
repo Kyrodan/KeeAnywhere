@@ -31,8 +31,6 @@ namespace KeeAnywhere.StorageProviders.Box
         internal const string BoxClientId = "dummy";
         internal const string BoxClientSecret = "dummy";
 
-
-        internal const string RedirectUri = "https://localhost/oauth";
         internal const int Limit = 500;
 
         internal static BoxConfig Config;
@@ -41,7 +39,7 @@ namespace KeeAnywhere.StorageProviders.Box
 
         static BoxHelper()
         {
-            Config = new BoxConfig(BoxClientId, BoxClientSecret, new Uri(RedirectUri));
+            Config = new BoxConfig(BoxClientId, BoxClientSecret, null);
         }
 
         public static async Task<BoxClient> GetClient(AccountConfiguration account)
