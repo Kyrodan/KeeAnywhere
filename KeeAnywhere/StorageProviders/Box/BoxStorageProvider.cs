@@ -27,7 +27,7 @@ namespace KeeAnywhere.StorageProviders.Box
             if (item == null)
                 return null;
 
-            var stream = await api.FilesManager.DownloadStreamAsync(item.Id);
+            var stream = await api.FilesManager.DownloadAsync(item.Id);
 
             return stream;
         }

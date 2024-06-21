@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using IdentityModel;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.OAuth2;
@@ -35,7 +37,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             "Files.ReadWrite"
         };
 
-        private static readonly IDictionary<string, IGraphServiceClient> Cache = new Dictionary<string, IGraphServiceClient>();
+        private static readonly IDictionary<string, GraphServiceClient> Cache = new Dictionary<string, GraphServiceClient>();
 
         public static OidcFlow CreateOidcFlow()
         {
@@ -45,18 +47,25 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             };
         }
 
-        public static IGraphServiceClient GetApi(AccountConfiguration account)
+        public static GraphServiceClient GetApi(AccountConfiguration account)
         {
             if (Cache.ContainsKey(account.Id)) return Cache[account.Id];
 
             var authProvider = new OneDriveAuthenticationProvider(CreateOidcFlow(), account.Secret);
 
-            var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true)
-            {
-                OverallTimeout = Timeout.InfiniteTimeSpan
-            };
+            //var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true)
+            //{
+            //    OverallTimeout = Timeout.InfiniteTimeSpan
+            //};
 
-            var api = new GraphServiceClient(authProvider, httpProvider);
+            //var api = new GraphServiceClient(authProvider, httpProvider);
+            //var api = new GraphServiceClient(ProxyTools.CreateHttpClient(), authProvider);
+            //var api = new GraphServiceClient(authProvider);
+
+            var handlers = GraphClientFactory.CreateDefaultHandlers();
+            var httpClient = GraphClientFactory.Create(handlers, "v1.0", "Global", ProxyTools.GetProxy());
+            var api = new GraphServiceClient(httpClient, authProvider);
+
             Cache.Add(account.Id, api);
 
             return api;

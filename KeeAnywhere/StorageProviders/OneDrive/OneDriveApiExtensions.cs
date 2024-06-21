@@ -1,4 +1,5 @@
 using Microsoft.Graph;
+using Microsoft.Graph.Drives.Item.Items.Item;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         /// by the OneDrive storage provider.
         /// </param>
         /// <returns></returns>
-        public static IDriveItemRequestBuilder DriveItemFromStorageProviderItemId(this IGraphServiceClient api, string itemId)
+        public static DriveItemItemRequestBuilder DriveItemFromStorageProviderItemId(this GraphServiceClient api, string itemId)
         {
             // ID must include a drive id prefix. 
             // See also OneDriveStorageProvider.MakeStorageProviderItemId.
@@ -43,7 +44,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         /// An extra Web request has to be made to determine if the top 
         /// folder is remote or local. That's why this method is async.
         /// </remarks>
-        public async static Task<IDriveItemRequestBuilder> DriveItemFromPathAsync(this IGraphServiceClient api, string path)
+        public async static Task<DriveItemItemRequestBuilder> DriveItemFromPathAsync(this GraphServiceClient api, string path)
         {
             // The top folder could be a shared folder, in which case it's 
             // on a different drive than the default. The path will use the
@@ -51,10 +52,14 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             // from its actual (remote) name.
             if (string.IsNullOrEmpty(path)) throw new ArgumentOutOfRangeException("path");
             var parts = path.Split('/');
-            if (parts.Length == 1)
-                return api.Drive.Root.ItemWithPath(parts[0]);
+            var rootItem = await api.Me.Drive.GetAsync();
 
-            var topFolder = await api.Drive.Root.ItemWithPath(Uri.EscapeDataString(parts[0])).Request().GetAsync();
+            if (parts.Length == 1)
+            {
+                return api.Drives[rootItem.Id].Root.ItemWithPath(parts[0]);
+            }
+
+            var topFolder = await api.Drives[rootItem.Id].Root.ItemWithPath(Uri.EscapeDataString(parts[0])).GetAsync();
             var driveId = topFolder.RemoteItem == null ? topFolder.ParentReference.DriveId : topFolder.RemoteItem.ParentReference.DriveId;
             var topFolderId = topFolder.RemoteItem == null ? topFolder.Id : topFolder.RemoteItem.Id;
             // The top folder's apparent name can be different from its 

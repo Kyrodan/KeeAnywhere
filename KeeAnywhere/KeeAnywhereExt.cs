@@ -263,7 +263,15 @@ namespace KeeAnywhere
                 "Microsoft.Graph.Core",
                 "Google.Apis",
                 "Google.Apis.Auth",
-                "Google.Apis.Core"
+                "Google.Apis.Core",
+                "Microsoft.Kiota.Abstractions",
+                "Microsoft.Bcl.AsyncInterfaces",
+                "System.Diagnostics.DiagnosticSource",
+                "System.Text.Json",
+                "System.Text.Encodings.Web",
+                "System.Runtime.CompilerServices.Unsafe",
+                "Microsoft.Extensions.Logging.Abstractions",
+                "System.Net.Http.WinHttpHandler"
             //    "System.Text.Encodings.Web",
             //    "System.Runtime.CompilerServices.Unsafe"
             };

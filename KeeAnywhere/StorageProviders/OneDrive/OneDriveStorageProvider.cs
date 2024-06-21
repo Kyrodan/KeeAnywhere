@@ -5,13 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using KeeAnywhere.Configuration;
 using Microsoft.Graph;
+using Microsoft.Graph.Drives.Item.Items.Item.Copy;
+using Microsoft.Graph.Models;
 
 namespace KeeAnywhere.StorageProviders.OneDrive
 {
     public class OneDriveStorageProvider : IStorageProvider
     {
         private readonly AccountConfiguration _account;
-        private readonly IGraphServiceClient _api;
+        private readonly GraphServiceClient _api;
 
         public OneDriveStorageProvider(AccountConfiguration account)
         {
@@ -24,7 +26,6 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             var stream = await (await _api.DriveItemFromPathAsync(path))
                                     .Content
-                                    .Request()
                                     .GetAsync();
 
             return stream;
@@ -35,8 +36,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             var uploadedItem = await (await _api.DriveItemFromPathAsync(path))
                         .Content
-                        .Request()
-                        .PutAsync<DriveItem>(stream);
+                        .PutAsync(stream);
 
             if (uploadedItem == null)
                 throw new InvalidOperationException("Save to OneDrive failed.");
@@ -46,24 +46,29 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         public async Task Copy(string sourcePath, string destPath)
         {
             var destFilename = CloudPath.GetFileName(destPath);
-            var destItem = await (await _api.DriveItemFromPathAsync(destPath)).Request().GetAsync();
+            var destItem = await (await _api.DriveItemFromPathAsync(destPath)).GetAsync();
             if (destItem == null)
                 throw new FileNotFoundException("OneDrive: Folder not found.", destPath);
 
+            var body = new CopyPostRequestBody
+            {
+                Name = destFilename,
+                ParentReference = new ItemReference { Id = destItem.Id }
+            };
+            
             await (await _api.DriveItemFromPathAsync(sourcePath))
-                .Copy(destFilename, new ItemReference {Id = destItem.Id})
-                .Request(/*new[] {new HeaderOption("Prefer", "respond-async"), }*/)
-                .PostAsync();
+                .Copy.PostAsync(body);
         }
 
         public async Task Delete(string path)
         {
-            await (await _api.DriveItemFromPathAsync(path)).Request().DeleteAsync();
+            await (await _api.DriveItemFromPathAsync(path)).DeleteAsync();
         }
 
         public async Task<StorageProviderItem> GetRootItem()
         {
-            var odItem = await _api.Drive.Root.Request().GetAsync();
+            var rootItem = await _api.Me.Drive.GetAsync();
+            var odItem = await _api.Drives[rootItem.Id].Root.GetAsync();
 
             if (odItem == null)
                 return null;
@@ -83,19 +88,19 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             if (parent == null) throw new ArgumentNullException("parent");
 
-            var odChildren = await _api.DriveItemFromStorageProviderItemId(parent.Id).Children.Request().GetAsync();
+            var odChildren = await _api.DriveItemFromStorageProviderItemId(parent.Id).Children.GetAsync();
 
             var children =
-                odChildren.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
+                odChildren.Value.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
 
             return children;
         }
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
         {
-            var odChildren = await (await _api.DriveItemFromPathAsync(path)).Children.Request().GetAsync();
+            var odChildren = await (await _api.DriveItemFromPathAsync(path)).Children.GetAsync();
             var children =
-                odChildren.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
+                odChildren.Value.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
 
             return children;
         }

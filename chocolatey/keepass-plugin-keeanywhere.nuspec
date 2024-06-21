@@ -54,7 +54,7 @@ Supported providers:
     </releaseNotes>
     <dependencies>
       <dependency id="keepass" version="[2.57.0, 3.0)" />
-      <dependency id="dotnet4.6.1" version="4.6.01055.20170308" />
+      <dependency id="netfx-4.8" version="4.8.0.0" />
     </dependencies>
   </metadata>
   <files>
