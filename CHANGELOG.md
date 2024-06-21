@@ -1,3 +1,10 @@
+## 2.2.0 (unrelease)
+
+### Improved
+
+- Updated Dependencies (AWS, Box, Dropbox, Google Drive, Google Storage, OneDrive)
+- Using .Net 4.8 now
+
 ## 2.1.0 (2024-06-17)
 
 ### New

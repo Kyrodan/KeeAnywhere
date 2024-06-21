@@ -107,8 +107,8 @@ namespace KeeAnywhere.OAuth2
                 ClientId = m_clientId,
                 ClientSecret = m_clientSecret,
                 Scope = scopes,
-                Flow = OidcClientOptions.AuthenticationFlow.AuthorizationCode,
-                ResponseMode = OidcClientOptions.AuthorizeResponseMode.FormPost,
+                //Flow = OidcClientOptions.AuthenticationFlow.AuthorizationCode,
+                //ResponseMode = OidcClientOptions.AuthorizeResponseMode.FormPost,
                 RefreshTokenInnerHttpHandler = ProxyTools.CreateHttpClientHandler(),
                 BackchannelHandler = ProxyTools.CreateHttpClientHandler(),
                 LoadProfile = false

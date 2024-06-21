@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel.OidcClient.Results;
 using KeeAnywhere.OAuth2;
 using Microsoft.Graph;
+using Microsoft.Kiota.Abstractions;
+using Microsoft.Kiota.Abstractions.Authentication;
 
 namespace KeeAnywhere.StorageProviders.OneDrive
 {
@@ -20,7 +24,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             _refreshToken = refreshToken;
         }
 
-        public async Task AuthenticateRequestAsync(HttpRequestMessage request)
+        public async Task AuthenticateRequestAsync(RequestInformation request, Dictionary<string, object> additionalAuthenticationContext = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var token = _token;
 
@@ -31,12 +35,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
                 if (token.IsError)
                 {
                     _token = null;
-                    throw new ServiceException(
-                        new Error
-                        {
-                            //Code = GraphErrorCode.AuthenticationFailure,
-                            Message = _token.Error
-                        });
+                    throw new ServiceException(_token.Error);
                 }
 
                 _token = token;
@@ -45,7 +44,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             var accessToken = token.AccessToken;
             if (!string.IsNullOrEmpty(accessToken))
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue(CoreConstants.Headers.Bearer, accessToken);
+                request.Headers.Add("Authorization", new AuthenticationHeaderValue(CoreConstants.Headers.Bearer, accessToken).ToString());
             }
         }
     }

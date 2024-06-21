@@ -101,14 +101,14 @@ namespace KeeAnywhere.OAuth2
 
                     string result;
 
-                    if (options.ResponseMode == IdentityModel.OidcClient.OidcClientOptions.AuthorizeResponseMode.Redirect)
-                    {
+                    //if (options.ResponseMode == IdentityModel.OidcClient.OidcClientOptions.AuthorizeResponseMode.Redirect)
+                    //{
                         result = context.Request.Url.Query;
-                    }
-                    else
-                    {
-                        result = ProcessFormPost(context.Request);
-                    }
+                    //}
+                    //else
+                    //{
+                    //    result = ProcessFormPost(context.Request);
+                    //}
 
                     await SendResponse(context.Response);
 

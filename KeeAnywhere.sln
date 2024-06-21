@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeeAnywhere", "KeeAnywhere\KeeAnywhere.csproj", "{8E40EDF5-06B8-4059-8B19-CB90D937FEBB}"
 EndProject
@@ -25,6 +25,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{4CC0AA8D-734
 		version_manifest.txt = version_manifest.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chocolatey", "Chocolatey", "{93E4E5BD-9206-4479-AC34-BEDDD9D37DC9}"
+	ProjectSection(SolutionItems) = preProject
+		chocolatey\keepass-plugin-keeanywhere.nuspec = chocolatey\keepass-plugin-keeanywhere.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,5 +43,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79A52A20-6395-4845-937E-CCFD13C162E0}
 	EndGlobalSection
 EndGlobal
