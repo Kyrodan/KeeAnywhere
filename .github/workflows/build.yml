@@ -24,8 +24,8 @@ jobs:
     - name: Setup 7zip
       run: choco install 7zip.portable
       
-    - name: Navigate to Workspace
-      run: cd $GITHUB_WORKSPACE
+#    - name: Navigate to Workspace
+#      run: cd $GITHUB_WORKSPACE
 
     - name: Create Build Directory
       run: |
@@ -36,11 +36,6 @@ jobs:
     - name: Restore Packages
       run: nuget restore 
 
-#    - uses: kzrnm/get-net-sdk-project-versions-action@v2
-#      id: get-version
-#      with:
-#        proj-path: KeeAnywhere\KeeAnywhere.csproj         
-      
     - name: Build Solution
       run: msbuild KeeAnywhere.sln /p:Configuration=Release /t:Clean,Build /fl /flp:logfile=build\build.log
 
@@ -48,8 +43,8 @@ jobs:
       run: copy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\dist\KeeAnywhere-${{ env.version }}.plgx
 
     - name: ZIP artifacts to dist
-      working-directory: KeeAnywhere\bin\Release
-      run: 7za a -tzip ..\..\..\build\dist\KeeAnywhere-${{ env.version }}.zip * -r -x!*.plgx -x!*.pdb -x!*.xml -x!*.config -x!KeePass.*
+      working-directory: .\KeeAnywhere\bin\Release
+      run: 7za a -tzip ..\..\..\build\dist\KeeAnywhere-${{ env.version }}.zip *.* -r -x!*.plgx -x!*.pdb -x!*.xml -x!*.config -x!KeePass.*
 
     - name: Package Chocolatey
       run: |
