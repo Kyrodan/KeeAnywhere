@@ -20,6 +20,9 @@ jobs:
 
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2
+
+    - name: Setup 7zip
+      run: choco install 7zip.portable
       
     - name: Navigate to Workspace
       run: cd $GITHUB_WORKSPACE
@@ -27,7 +30,7 @@ jobs:
     - name: Create Build Directory
       run: |
         mkdir build
-        mkdir build\bin
+        # mkdir build\bin
         mkdir build\dist
       
     - name: Restore Packages
@@ -45,12 +48,8 @@ jobs:
       run: copy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\dist\KeeAnywhere-${{ env.version }}.plgx
 
     - name: ZIP artifacts to dist
-      run: |
-        xcopy KeeAnywhere\bin\Release\*.* build\bin
-        del build\bin\*.plgx build\bin\*.pdb build\bin\*.xml build\bin\*.config build\bin\KeePass.*
-        ${{ env.zip }} a -tzip build\dist\KeeAnywhere-${{ env.version }}.zip .\build\bin\*
-      env:
-        zip: packages\7-Zip.CommandLine.18.1.0\tools\7za.exe
+      working-directory: KeeAnywhere\bin\Release
+      run: 7za a -tzip ..\..\..\build\dist\KeeAnywhere-${{ env.version }}.zip *.* -r -x!*.plgx -x!*.pdb -x!*.xml -x!*.config -x!KeePass.*
 
     - name: Package Chocolatey
       run: |
