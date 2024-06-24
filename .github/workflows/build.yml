@@ -33,30 +33,30 @@ jobs:
     - name: Restore Packages
       run: nuget restore 
 
-    - uses: kzrnm/get-net-sdk-project-versions-action@v2
-      id: get-version
-      with:
-        proj-path: KeeAnywhere\KeeAnywhere.csproj         
+#    - uses: kzrnm/get-net-sdk-project-versions-action@v2
+#      id: get-version
+#      with:
+#        proj-path: KeeAnywhere\KeeAnywhere.csproj         
       
     - name: Build Solution
       run: msbuild KeeAnywhere.sln /p:Configuration=Release /t:Clean,Build /fl /flp:logfile=build\build.log
 
     - name: Copy PLGX to dist
-      run: copy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\dist\KeeAnywhere-${{ steps.get_version.outputs.version }}.plgx
+      run: copy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\dist\KeeAnywhere-${{ env.version }}.plgx
 
     - name: ZIP artifacts to dist
       run: |
         xcopy KeeAnywhere\bin\Release\*.* build\bin
         del build\bin\*.plgx build\bin\*.pdb build\bin\*.xml build\bin\*.config build\bin\KeePass.*
-        ${{ env.zip }} a -tzip build\dist\KeeAnywhere-${{ steps.get_version.outputs.version }}.zip .\build\bin\*
+        ${{ env.zip }} a -tzip build\dist\KeeAnywhere-${{ env.version }}.zip .\build\bin\*
       env:
-        zip: packages\7-Zip.CommandLine.9.20.0\tools\7za.exe
+        zip: packages\7-Zip.CommandLine.18.1.0\tools\7za.exe
 
     - name: Package Chocolatey
       run: |
         xcopy /s /i chocolatey build\chocolatey
         xcopy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\chocolatey\tools
-        choco pack build\chocolatey\keepass-plugin-keeanywhere.nuspec --version ${{ steps.get_version.outputs.version }} --outputdirectory build\dist  
+        choco pack build\chocolatey\keepass-plugin-keeanywhere.nuspec --version ${{ env.version }} --outputdirectory build\dist  
         
     - name: Upload artifact
       uses: actions/upload-artifact@v3
