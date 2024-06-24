@@ -36,7 +36,7 @@ jobs:
     - uses: kzrnm/get-net-sdk-project-versions-action@v2
       id: get-version
       with:
-        proj-path: KeeAnywhere.csproj         
+        proj-path: KeeAnywhere\KeeAnywhere.csproj         
       
     - name: Build Solution
       run: msbuild KeeAnywhere.sln /p:Configuration=Release /t:Clean,Build /fl /flp:logfile=build\build.log
