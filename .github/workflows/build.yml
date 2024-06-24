@@ -43,8 +43,8 @@ jobs:
       run: copy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\dist\KeeAnywhere-${{ env.version }}.plgx
 
     - name: ZIP artifacts to dist
-      working-directory: .\KeeAnywhere\bin\Release
-      run: 7za a -tzip ..\..\..\build\dist\KeeAnywhere-${{ env.version }}.zip *.* -r -x!*.plgx -x!*.pdb -x!*.xml -x!*.config -x!KeePass.*
+      working-directory: KeeAnywhere\bin\Release
+      run: 7za a -tzip ..\..\..\build\dist\KeeAnywhere-${{ env.version }}.zip -x!*.plgx -x!*.pdb -x!*.xml -x!*.config -x!KeePass.*
 
     - name: Package Chocolatey
       run: |
