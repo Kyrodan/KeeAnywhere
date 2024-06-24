@@ -43,6 +43,7 @@ jobs:
 #      working-directory: KeeAnywhere\bin\Release
       run: |
         cd KeeAnywhere\bin\Release
+        dir
         7za a -tzip ..\..\..\build\dist\KeeAnywhere-${{ env.version }}.zip -x!*.plgx -x!*.pdb -x!*.xml -x!*.config -x!KeePass.*
         cd ..\..\..
 
