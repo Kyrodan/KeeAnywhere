@@ -2,12 +2,17 @@
 
 ### New
 
-- \#409 Remove old Auth2-Flow (integrated browser)
+- \#409 Remove old Auth2-Flow (integrated browser) - was only used fpr Box.com
+
+### Fixed
+
+- \#301, \#347, \#365 [Windows <10 only?] System.Exception: No unused port found! - Thanks to @Jackabomb
 
 ### Improved
 
 - Updated Dependencies (AWS, Box, Dropbox, Google Drive, Google Storage, OneDrive)
 - Using .Net 4.8 now
+
 
 ## 2.1.0 (2024-06-17)
 
