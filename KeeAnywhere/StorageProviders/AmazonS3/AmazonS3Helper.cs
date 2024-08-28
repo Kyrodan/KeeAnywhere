@@ -54,7 +54,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
 
             var config = new AmazonS3Config
             {
-                RegionEndpoint = RegionEndpoint.USEast1, // Required???
+                //RegionEndpoint = RegionEndpoint.USEast1, // Required???
                 ServiceURL = endpointURL,
                 ForcePathStyle = true,
                 Timeout = Timeout.InfiniteTimeSpan

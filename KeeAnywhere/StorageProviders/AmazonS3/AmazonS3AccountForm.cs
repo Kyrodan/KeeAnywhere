@@ -112,6 +112,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
         public string AccessKey { get { return m_txtAccessKey.Text.Trim(); } }
         public string SecretKey { get { return m_txtSecretKey.Text.Trim(); } }
         public string SessionToken { get { return m_txtSessionToken.Text.Trim(); } }
+        public string AuthRegion { get { return m_authRegion.Text.Trim();  } }
         public bool UseSessionToken { get { return m_chkUseSessionToken.Checked; } }
         public RegionEndpoint AWSRegion { get { return (RegionEndpoint) m_cmbRegion.SelectedItem; } }
         public string EndpointUrl { get { return m_cmbEndpointUrl.Text.Trim(); } }
@@ -152,6 +153,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
         {
             m_cmbRegion.Enabled = m_rbTypeAmazon.Checked;
             m_cmbEndpointUrl.Enabled = m_rbTypeOther.Checked;
+            m_authRegion.Enabled = m_rbTypeOther.Checked;
+            m_lblAuthRegion.Enabled = m_rbTypeOther.Checked;
             ClearTestResult();
         }
     }

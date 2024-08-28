@@ -34,6 +34,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             } else
             {
                 account.AdditionalSettings.Add("EndpointURL", dlg.EndpointUrl);
+                account.AdditionalSettings.Add("AuthRegion", dlg.AuthRegion);
             }
 
             account.AdditionalSettings.Add("UseSessionToken", Convert.ToString(dlg.UseSessionToken));
