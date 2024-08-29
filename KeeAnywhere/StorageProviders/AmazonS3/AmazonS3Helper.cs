@@ -31,7 +31,10 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             AmazonS3Config config;
 
             if (account.AdditionalSettings.ContainsKey("EndpointURL")) {
-                config = GetConfig(account.AdditionalSettings["EndpointURL"]);
+                config = GetConfig(
+                    account.AdditionalSettings["EndpointURL"],
+                    authRegion: account.AdditionalSettings["OverridedAuthRegion"]
+                );
             } else
             {
                 var region = RegionEndpoint.USWest1;
@@ -48,16 +51,16 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             return GetApi(credentials, config);
         }
 
-        public static AmazonS3Config GetConfig(string endpointURL)
+        public static AmazonS3Config GetConfig(string endpointURL, string authRegion = "")
         {
             if (string.IsNullOrEmpty(endpointURL)) throw new ArgumentNullException("endpointURL");
 
             var config = new AmazonS3Config
             {
-                //RegionEndpoint = RegionEndpoint.USEast1, // Required???
                 ServiceURL = endpointURL,
                 ForcePathStyle = true,
-                Timeout = Timeout.InfiniteTimeSpan
+                Timeout = Timeout.InfiniteTimeSpan,
+                AuthenticationRegion = String.IsNullOrWhiteSpace(authRegion) ? "" : authRegion
             };
 
             return config;

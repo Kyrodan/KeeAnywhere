@@ -42,11 +42,11 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             this.m_chkUseSessionToken = new System.Windows.Forms.CheckBox();
             this.m_grpEndpoint = new System.Windows.Forms.GroupBox();
             this.m_authRegion = new System.Windows.Forms.TextBox();
+            this.m_lblAuthRegion = new System.Windows.Forms.Label();
             this.m_cmbEndpointUrl = new System.Windows.Forms.ComboBox();
             this.m_rbTypeOther = new System.Windows.Forms.RadioButton();
             this.m_rbTypeAmazon = new System.Windows.Forms.RadioButton();
             this.m_grpCredentials = new System.Windows.Forms.GroupBox();
-            this.m_lblAuthRegion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.m_bannerImage)).BeginInit();
             this.m_grpEndpoint.SuspendLayout();
             this.m_grpCredentials.SuspendLayout();
@@ -185,8 +185,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             // 
             this.m_grpEndpoint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_grpEndpoint.Controls.Add(this.m_lblAuthRegion);
             this.m_grpEndpoint.Controls.Add(this.m_authRegion);
+            this.m_grpEndpoint.Controls.Add(this.m_lblAuthRegion);
             this.m_grpEndpoint.Controls.Add(this.m_cmbEndpointUrl);
             this.m_grpEndpoint.Controls.Add(this.m_rbTypeOther);
             this.m_grpEndpoint.Controls.Add(this.m_rbTypeAmazon);
@@ -194,7 +194,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             this.m_grpEndpoint.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_grpEndpoint.Location = new System.Drawing.Point(12, 172);
             this.m_grpEndpoint.Name = "m_grpEndpoint";
-            this.m_grpEndpoint.Size = new System.Drawing.Size(429, 107);
+            this.m_grpEndpoint.Size = new System.Drawing.Size(429, 124);
             this.m_grpEndpoint.TabIndex = 18;
             this.m_grpEndpoint.TabStop = false;
             this.m_grpEndpoint.Text = "Endpoint";
@@ -208,6 +208,17 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             this.m_authRegion.Name = "m_authRegion";
             this.m_authRegion.Size = new System.Drawing.Size(265, 20);
             this.m_authRegion.TabIndex = 15;
+            this.m_authRegion.TextChanged += new System.EventHandler(this.OnTextChanged);
+            // 
+            // m_lblAuthRegion
+            // 
+            this.m_lblAuthRegion.AutoSize = true;
+            this.m_lblAuthRegion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_lblAuthRegion.Location = new System.Drawing.Point(23, 75);
+            this.m_lblAuthRegion.Name = "m_lblAuthRegion";
+            this.m_lblAuthRegion.Size = new System.Drawing.Size(129, 26);
+            this.m_lblAuthRegion.TabIndex = 15;
+            this.m_lblAuthRegion.Text = "Override Auth Region\r\n(optional)";
             // 
             // m_cmbEndpointUrl
             // 
@@ -273,16 +284,6 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             this.m_grpCredentials.TabIndex = 19;
             this.m_grpCredentials.TabStop = false;
             this.m_grpCredentials.Text = "Credentials";
-            // 
-            // m_lblAuthRegion
-            // 
-            this.m_lblAuthRegion.AutoSize = true;
-            this.m_lblAuthRegion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_lblAuthRegion.Location = new System.Drawing.Point(75, 75);
-            this.m_lblAuthRegion.Name = "m_lblAuthRegion";
-            this.m_lblAuthRegion.Size = new System.Drawing.Size(77, 13);
-            this.m_lblAuthRegion.TabIndex = 15;
-            this.m_lblAuthRegion.Text = "Auth Region";
             // 
             // AmazonS3AccountForm
             // 
