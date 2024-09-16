@@ -1,5 +1,3 @@
-VERSION=2.1.0
-MONO_LIB_PATH=/usr/lib/mono/4.8-api
 NETSTANDARD_PATH=$MONO_LIB_PATH/Facades/netstandard.dll
 SYSTEM_THREADING_TASKS_PATH=$MONO_LIB_PATH/Facades/System.Threading.Tasks.dll
 
@@ -40,13 +38,13 @@ build() {
 
 copy_plgx() {
   echo "Copy plgx"
-  # cp KeeAnywhere/bin/Release/KeeAnywhere.plgx build/dist/KeeAnywhere-$VERSION.plgx
+  cp KeeAnywhere/bin/Release/KeeAnywhere.plgx build/dist/KeeAnywhere-linux-$VERSION.plgx
 }
 
 package_zip() {
   echo "Packaging zip"
   cd KeeAnywhere/bin/Release
-  7za a -tzip ../../../build/dist/KeeAnywhere-$VERSION.zip -x!*.plgx -x!*.pdb -x!*.xml -x!*.config -x!KeePass.*
+  7zz a -tzip ../../../build/dist/KeeAnywhere-linux-$VERSION.zip -x!*.plgx -x!*.pdb -x!*.xml -x!*.config -x!KeePass.*
   cd ../../..
 }
 
