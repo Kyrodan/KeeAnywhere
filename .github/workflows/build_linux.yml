@@ -1,4 +1,4 @@
-name: KeeAnywhere Build
+name: Linux build
 
 on:
 #  push:
@@ -18,45 +18,3 @@ jobs:
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
-
-#    - name: Setup NuGet
-#      uses: NuGet/setup-nuget@v2
-
-#    - name: Setup 7zip
-#      run: choco install 7zip.portable
-      
-#    - name: Create Build Directory
-#      run: |
-#        mkdir build
-#        # mkdir build\bin
-#        mkdir build\dist
-      
-#    - name: Restore Packages
-#      run: nuget restore 
-
-#    - name: Build Solution
-#      run: msbuild KeeAnywhere.sln /p:Configuration=Release /t:Clean,Build /fl /flp:logfile=build\build.log
-
-#    - name: Copy PLGX to dist
-#      run: copy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\dist\KeeAnywhere-${{ env.version }}.plgx
-
-#    - name: ZIP artifacts to dist
-#      working-directory: KeeAnywhere\bin\Release
-#      run: |
-        cd KeeAnywhere\bin\Release
-        dir
-        7za a -tzip ..\..\..\build\dist\KeeAnywhere-${{ env.version }}.zip -x!*.plgx -x!*.pdb -x!*.xml -x!*.config -x!KeePass.*
-        cd ..\..\..
-
-#    - name: Package Chocolatey
-#      run: |
-        xcopy /s /i chocolatey build\chocolatey
-        xcopy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\chocolatey\tools
-        choco pack build\chocolatey\keepass-plugin-keeanywhere.nuspec --version ${{ env.version }} --outputdirectory build\dist  
-        
-#    - name: Upload artifact
-#      uses: actions/upload-artifact@v4
-#      with:
-#        name: KeeAnywhere-${{ env.version }}
-#        path: "./build/dist"        
-  
