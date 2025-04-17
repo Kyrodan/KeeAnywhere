@@ -35,7 +35,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
                 if (token.IsError)
                 {
                     _token = null;
-                    throw new ServiceException(_token.Error);
+                    throw new ServiceException(token.Error);
                 }
 
                 _token = token;
