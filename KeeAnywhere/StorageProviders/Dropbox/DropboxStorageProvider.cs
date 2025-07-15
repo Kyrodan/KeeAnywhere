@@ -111,8 +111,14 @@ namespace KeeAnywhere.StorageProviders.Dropbox
 
         private static string RootPath(string path)
         {
-            if (path[0] != CloudPath.DirectorySeparatorChar)
+            if (string.IsNullOrEmpty(path))
+            {
+                path = "";
+            }
+            else if (path[0] != CloudPath.DirectorySeparatorChar)
+            {
                 path = CloudPath.DirectorySeparatorChar + path;
+            }
 
             return path;
         }
