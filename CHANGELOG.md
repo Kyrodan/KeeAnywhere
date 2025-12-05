@@ -2,7 +2,7 @@
 
 ### New
 
-- \#409 Remove old Auth2-Flow (integrated browser) - was only used fpr Box.com
+- \#409 Remove old Auth2-Flow (integrated browser) - was only used for Box.com
 
 ### Fixed
 
