@@ -41,6 +41,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             this.m_txtSessionToken = new System.Windows.Forms.TextBox();
             this.m_chkUseSessionToken = new System.Windows.Forms.CheckBox();
             this.m_grpEndpoint = new System.Windows.Forms.GroupBox();
+            this.m_authRegion = new System.Windows.Forms.TextBox();
+            this.m_lblAuthRegion = new System.Windows.Forms.Label();
             this.m_cmbEndpointUrl = new System.Windows.Forms.ComboBox();
             this.m_rbTypeOther = new System.Windows.Forms.RadioButton();
             this.m_rbTypeAmazon = new System.Windows.Forms.RadioButton();
@@ -62,7 +64,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             // m_btnOK
             // 
             this.m_btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnOK.Location = new System.Drawing.Point(285, 301);
+            this.m_btnOK.Location = new System.Drawing.Point(285, 349);
             this.m_btnOK.Name = "m_btnOK";
             this.m_btnOK.Size = new System.Drawing.Size(75, 23);
             this.m_btnOK.TabIndex = 7;
@@ -74,7 +76,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             // 
             this.m_btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.m_btnCancel.Location = new System.Drawing.Point(366, 301);
+            this.m_btnCancel.Location = new System.Drawing.Point(366, 349);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(75, 23);
             this.m_btnCancel.TabIndex = 8;
@@ -136,7 +138,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             // m_btnTest
             // 
             this.m_btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.m_btnTest.Location = new System.Drawing.Point(12, 301);
+            this.m_btnTest.Location = new System.Drawing.Point(12, 349);
             this.m_btnTest.Name = "m_btnTest";
             this.m_btnTest.Size = new System.Drawing.Size(75, 23);
             this.m_btnTest.TabIndex = 6;
@@ -148,7 +150,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             // 
             this.m_lblTestResult.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_lblTestResult.Location = new System.Drawing.Point(12, 251);
+            this.m_lblTestResult.Location = new System.Drawing.Point(12, 299);
             this.m_lblTestResult.Name = "m_lblTestResult";
             this.m_lblTestResult.Size = new System.Drawing.Size(429, 45);
             this.m_lblTestResult.TabIndex = 9;
@@ -183,6 +185,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             // 
             this.m_grpEndpoint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_grpEndpoint.Controls.Add(this.m_authRegion);
+            this.m_grpEndpoint.Controls.Add(this.m_lblAuthRegion);
             this.m_grpEndpoint.Controls.Add(this.m_cmbEndpointUrl);
             this.m_grpEndpoint.Controls.Add(this.m_rbTypeOther);
             this.m_grpEndpoint.Controls.Add(this.m_rbTypeAmazon);
@@ -190,10 +194,31 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             this.m_grpEndpoint.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_grpEndpoint.Location = new System.Drawing.Point(12, 172);
             this.m_grpEndpoint.Name = "m_grpEndpoint";
-            this.m_grpEndpoint.Size = new System.Drawing.Size(429, 76);
+            this.m_grpEndpoint.Size = new System.Drawing.Size(429, 124);
             this.m_grpEndpoint.TabIndex = 18;
             this.m_grpEndpoint.TabStop = false;
             this.m_grpEndpoint.Text = "Endpoint";
+            // 
+            // m_authRegion
+            // 
+            this.m_authRegion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_authRegion.Enabled = false;
+            this.m_authRegion.Location = new System.Drawing.Point(158, 72);
+            this.m_authRegion.Name = "m_authRegion";
+            this.m_authRegion.Size = new System.Drawing.Size(265, 20);
+            this.m_authRegion.TabIndex = 15;
+            this.m_authRegion.TextChanged += new System.EventHandler(this.OnTextChanged);
+            // 
+            // m_lblAuthRegion
+            // 
+            this.m_lblAuthRegion.AutoSize = true;
+            this.m_lblAuthRegion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_lblAuthRegion.Location = new System.Drawing.Point(23, 75);
+            this.m_lblAuthRegion.Name = "m_lblAuthRegion";
+            this.m_lblAuthRegion.Size = new System.Drawing.Size(129, 26);
+            this.m_lblAuthRegion.TabIndex = 15;
+            this.m_lblAuthRegion.Text = "Override Auth Region\r\n(optional)";
             // 
             // m_cmbEndpointUrl
             // 
@@ -209,8 +234,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             "https://s3.us-central-1.wasabisys.com",
             "https://s3.us-west-1.wasabisys.com",
             "https://s3.eu-central-1.wasabisys.com",
-            "https://s3.ap-northeast-1.wasabisys.com"
-            });
+            "https://s3.ap-northeast-1.wasabisys.com"});
             this.m_cmbEndpointUrl.Location = new System.Drawing.Point(158, 45);
             this.m_cmbEndpointUrl.Name = "m_cmbEndpointUrl";
             this.m_cmbEndpointUrl.Size = new System.Drawing.Size(265, 21);
@@ -267,7 +291,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
-            this.ClientSize = new System.Drawing.Size(453, 336);
+            this.ClientSize = new System.Drawing.Size(453, 384);
             this.Controls.Add(this.m_grpCredentials);
             this.Controls.Add(this.m_grpEndpoint);
             this.Controls.Add(this.m_lblTestResult);
@@ -312,5 +336,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
         private System.Windows.Forms.RadioButton m_rbTypeAmazon;
         private System.Windows.Forms.ComboBox m_cmbEndpointUrl;
         private System.Windows.Forms.GroupBox m_grpCredentials;
+        private System.Windows.Forms.TextBox m_authRegion;
+        private System.Windows.Forms.Label m_lblAuthRegion;
     }
 }
