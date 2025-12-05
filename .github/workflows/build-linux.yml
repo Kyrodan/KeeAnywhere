@@ -1,0 +1,39 @@
+name: Linux build
+
+on:
+#  push:
+#    branches: master
+  workflow_dispatch:
+
+env:
+  VERSION: 2.1.0
+  MONO_LIB_PATH: /usr/lib/mono/4.8-api
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install mono
+      run: |
+        sudo apt install ca-certificates gnupg
+        sudo gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+        echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+        sudo apt update
+        sudo apt install -y nuget mono-devel 7zip
+
+    - name: Run build
+      env:
+        SUPER_SECRET: ${{ secrets.SuperSecret }}
+        GOOGLEDRIVECLIENTID: ${{ secrets.GOOGLEDRIVECLIENTID }}
+        GOOGLEDRIVECLIENTSECRET: ${{ secrets.GOOGLEDRIVECLIENTSECRET }}
+      run: ./build.sh
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: KeeAnywhere-linux-${{ env.VERSION }}
+        path: ./build/dist
