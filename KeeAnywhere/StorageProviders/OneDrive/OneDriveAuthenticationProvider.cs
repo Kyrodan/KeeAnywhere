@@ -28,14 +28,15 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             var token = _token;
 
-            if (token == null || _token.IsError || _token.AccessTokenExpiration <= DateTime.Now)
+            if (token == null || token.IsError || token.AccessTokenExpiration <= DateTime.UtcNow)
             {
                 token = await _flow.RefreshTokenAsync(_refreshToken);
 
                 if (token.IsError)
                 {
                     _token = null;
-                    throw new ServiceException(token.Error);
+                    var detail = string.IsNullOrEmpty(token.ErrorDescription) ? token.Error : token.Error + ": " + token.ErrorDescription;
+                    throw new ServiceException(detail);
                 }
 
                 _token = token;

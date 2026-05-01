@@ -104,22 +104,25 @@ namespace KeeAnywhere.OAuth2
                     var context = await listener.GetContextAsync();
 
                     string result;
-
-                    //if (options.ResponseMode == IdentityModel.OidcClient.OidcClientOptions.AuthorizeResponseMode.Redirect)
-                    //{
+                    if (context.Request.HttpMethod == "POST" && context.Request.HasEntityBody)
+                    {
+                        result = ProcessFormPost(context.Request);
+                    }
+                    else
+                    {
                         result = context.Request.Url.Query;
-                    //}
-                    //else
-                    //{
-                    //    result = ProcessFormPost(context.Request);
-                    //}
+                    }
 
                     await SendResponse(context.Response);
 
 
                     if (String.IsNullOrWhiteSpace(result))
                     {
-                        return new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = "Empty response." };
+                        return new BrowserResult
+                        {
+                            ResultType = BrowserResultType.UnknownError,
+                            Error = "Empty response. " + context.Request.HttpMethod + " " + context.Request.Url
+                        };
                     }
 
                     return new BrowserResult { Response = result, ResultType = BrowserResultType.Success };

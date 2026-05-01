@@ -29,43 +29,45 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         }
 
         /// <summary>
-        /// Configures a Graph API request for a OneDrive drive based on a 
-        /// path from a user's default drive. Accommodates top-level folders 
-        /// which are links to remote, shared items. 
+        /// Resolves a path under the user's default drive (or a remote
+        /// shared mount) to an Items[id] request builder.
         /// </summary>
-        /// <param name="api">A Graph API request builder.</param>
-        /// <param name="path">
-        /// A URI path relative to the user's default drive.
-        /// </param>
-        /// <returns>
-        /// A task that yields a drive item request builder.
-        /// </returns>
         /// <remarks>
-        /// An extra Web request has to be made to determine if the top 
-        /// folder is remote or local. That's why this method is async.
+        /// Personal OneDrive does not reliably honor path-based item URLs
+        /// for content operations: the /:/path:/ form 404s on download, and
+        /// the itemWithPath(path='...') function form URL-encodes '/' as
+        /// %2F which Graph treats as a literal name. We walk the path one
+        /// segment at a time via Children listings so callers always get a
+        /// /drives/{drive}/items/{id} URL.
         /// </remarks>
         public async static Task<DriveItemItemRequestBuilder> DriveItemFromPathAsync(this GraphServiceClient api, string path)
         {
-            // The top folder could be a shared folder, in which case it's 
-            // on a different drive than the default. The path will use the
-            // name of the link in the user's root, which may be different
-            // from its actual (remote) name.
             if (string.IsNullOrEmpty(path)) throw new ArgumentOutOfRangeException("path");
             var parts = path.Split('/');
-            var rootItem = await api.Me.Drive.GetAsync();
+            var drive = await api.Me.Drive.GetAsync();
 
-            if (parts.Length == 1)
+            var driveId = drive.Id;
+            var currentId = (await api.Drives[driveId].Root.GetAsync()).Id;
+
+            foreach (var segment in parts)
             {
-                return api.Drives[rootItem.Id].Root.ItemWithPath(parts[0]);
+                var children = await api.Drives[driveId].Items[currentId].Children.GetAsync();
+                var match = children.Value.FirstOrDefault(c => c.Name == segment);
+                if (match == null)
+                    throw new System.IO.FileNotFoundException("OneDrive: '" + segment + "' not found under '" + path + "'");
+
+                if (match.RemoteItem != null)
+                {
+                    driveId = match.RemoteItem.ParentReference.DriveId;
+                    currentId = match.RemoteItem.Id;
+                }
+                else
+                {
+                    currentId = match.Id;
+                }
             }
 
-            var topFolder = await api.Drives[rootItem.Id].Root.ItemWithPath(Uri.EscapeDataString(parts[0])).GetAsync();
-            var driveId = topFolder.RemoteItem == null ? topFolder.ParentReference.DriveId : topFolder.RemoteItem.ParentReference.DriveId;
-            var topFolderId = topFolder.RemoteItem == null ? topFolder.Id : topFolder.RemoteItem.Id;
-            // The top folder's apparent name can be different from its 
-            // actual name, so don't use the name as part of the path at all.
-            // We have the id, so navigate from there instead.
-            return api.Drives[driveId].Items[topFolderId].ItemWithPath(Uri.EscapeDataString(string.Join("/",parts.Skip(1))));
+            return api.Drives[driveId].Items[currentId];
         }
 
     }
