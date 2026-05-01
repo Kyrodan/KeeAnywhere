@@ -70,5 +70,10 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
             return api;
         }
+
+        public static void InvalidateCache(string accountId)
+        {
+            Cache.Remove(accountId);
+        }
     }
 }
