@@ -1,5 +1,6 @@
 using Microsoft.Graph;
 using Microsoft.Graph.Drives.Item.Items.Item;
+using Microsoft.Graph.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,8 +52,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
             foreach (var segment in parts)
             {
-                var children = await api.Drives[driveId].Items[currentId].Children.GetAsync();
-                var match = children.Value.FirstOrDefault(c => c.Name == segment);
+                var match = await FindChildAsync(api, driveId, currentId, segment);
                 if (match == null)
                     throw new System.IO.FileNotFoundException("OneDrive: '" + segment + "' not found under '" + path + "'");
 
@@ -68,6 +68,23 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             }
 
             return api.Drives[driveId].Items[currentId];
+        }
+
+        // Microsoft Graph paginates Children at 200 items per page by default.
+        // Walk pages until we find the named child or exhaust the listing.
+        private static async Task<DriveItem> FindChildAsync(GraphServiceClient api, string driveId, string parentId, string name)
+        {
+            var page = await api.Drives[driveId].Items[parentId].Children.GetAsync();
+            while (page != null)
+            {
+                var match = page.Value.FirstOrDefault(c => c.Name == name);
+                if (match != null) return match;
+                if (string.IsNullOrEmpty(page.OdataNextLink)) return null;
+                page = await api.Drives[driveId].Items[parentId].Children
+                    .WithUrl(page.OdataNextLink)
+                    .GetAsync();
+            }
+            return null;
         }
 
     }
