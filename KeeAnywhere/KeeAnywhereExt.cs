@@ -72,6 +72,9 @@ namespace KeeAnywhere
             _configService = new ConfigurationService(pluginHost);
             _configService.Load();
 
+            // Persist OneDrive refresh-token rotations as they happen.
+            StorageProviders.OneDrive.OneDriveHelper.OnAccountChanged = _ => _configService.Save();
+
             // Initialize CacheManager
             _cacheManagerService = new CacheManagerService(_configService, _host);
             _cacheManagerService.RegisterEvents();

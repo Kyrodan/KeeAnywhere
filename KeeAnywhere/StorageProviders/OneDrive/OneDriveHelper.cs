@@ -39,6 +39,10 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         private static readonly IDictionary<string, GraphServiceClient> Cache = new Dictionary<string, GraphServiceClient>();
 
+        // Invoked by OneDriveAuthenticationProvider after a refresh-token
+        // rotation. Wired by KeeAnywhereExt to ConfigurationService.Save().
+        public static Action<AccountConfiguration> OnAccountChanged;
+
         public static OidcFlow CreateOidcFlow()
         {
             return new OidcFlow(StorageType.OneDrive, Authority, OneDriveClientId, null, Scopes)
@@ -51,7 +55,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             if (Cache.ContainsKey(account.Id)) return Cache[account.Id];
 
-            var authProvider = new OneDriveAuthenticationProvider(CreateOidcFlow(), account.Secret);
+            var authProvider = new OneDriveAuthenticationProvider(CreateOidcFlow(), account, OnAccountChanged);
 
             //var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true)
             //{
@@ -69,6 +73,11 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             Cache.Add(account.Id, api);
 
             return api;
+        }
+
+        public static void InvalidateCache(string accountId)
+        {
+            Cache.Remove(accountId);
         }
     }
 }

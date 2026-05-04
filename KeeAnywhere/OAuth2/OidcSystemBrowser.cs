@@ -104,15 +104,14 @@ namespace KeeAnywhere.OAuth2
                     var context = await listener.GetContextAsync();
 
                     string result;
-
-                    //if (options.ResponseMode == IdentityModel.OidcClient.OidcClientOptions.AuthorizeResponseMode.Redirect)
-                    //{
+                    if (context.Request.HttpMethod == "POST" && context.Request.HasEntityBody)
+                    {
+                        result = ProcessFormPost(context.Request);
+                    }
+                    else
+                    {
                         result = context.Request.Url.Query;
-                    //}
-                    //else
-                    //{
-                    //    result = ProcessFormPost(context.Request);
-                    //}
+                    }
 
                     await SendResponse(context.Response);
 

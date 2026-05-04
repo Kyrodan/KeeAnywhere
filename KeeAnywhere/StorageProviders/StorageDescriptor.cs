@@ -6,7 +6,7 @@ namespace KeeAnywhere.StorageProviders
 {
     public class StorageDescriptor
     {
-        public StorageDescriptor(StorageType type, string friendlyName, string scheme, Func<AccountConfiguration, IStorageProvider> providerFactory, Func<IStorageConfigurator> configuratorFactory, Image smallImage)
+        public StorageDescriptor(StorageType type, string friendlyName, string scheme, Func<AccountConfiguration, IStorageProvider> providerFactory, Func<IStorageConfigurator> configuratorFactory, Image smallImage, Action<string> invalidateCacheAction = null)
         {
             Type = type;
             FriendlyName = friendlyName;
@@ -14,6 +14,7 @@ namespace KeeAnywhere.StorageProviders
             ProviderFactory = providerFactory;
             ConfiguratorFactory = configuratorFactory;
             SmallImage = smallImage;
+            InvalidateCacheAction = invalidateCacheAction;
         }
 
         public StorageType Type { get; private set; }
@@ -22,5 +23,6 @@ namespace KeeAnywhere.StorageProviders
         public Func<AccountConfiguration, IStorageProvider> ProviderFactory { get; private set; }
         public Func<IStorageConfigurator> ConfiguratorFactory { get; private set; }
         public Image SmallImage { get; private set; }
+        public Action<string> InvalidateCacheAction { get; private set; }
     }
 }

@@ -57,6 +57,11 @@ namespace KeeAnywhere.StorageProviders.Box
             return client;
         }
 
+        public static void InvalidateCache(string accountId)
+        {
+            Cache.Remove(accountId);
+        }
+
         public static BoxClient GetClient()
         {
             return GetClient((OAuthSession)null);
