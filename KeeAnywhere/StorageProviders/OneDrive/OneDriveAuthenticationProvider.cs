@@ -18,6 +18,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         private readonly OidcFlow _flow;
         private readonly AccountConfiguration _account;
         private readonly Action<AccountConfiguration> _onAccountChanged;
+        // Serializes concurrent Graph requests so the refresh + rotation-persist runs once.
         private readonly SemaphoreSlim _refreshLock = new SemaphoreSlim(1, 1);
         private RefreshTokenResult _token;
 
