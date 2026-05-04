@@ -118,11 +118,7 @@ namespace KeeAnywhere.OAuth2
 
                     if (String.IsNullOrWhiteSpace(result))
                     {
-                        return new BrowserResult
-                        {
-                            ResultType = BrowserResultType.UnknownError,
-                            Error = "Empty response. " + context.Request.HttpMethod + " " + context.Request.Url
-                        };
+                        return new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = "Empty response." };
                     }
 
                     return new BrowserResult { Response = result, ResultType = BrowserResultType.Success };

@@ -23,8 +23,6 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public OneDriveAuthenticationProvider(OidcFlow flow, AccountConfiguration account, Action<AccountConfiguration> onAccountChanged)
         {
-            if (flow == null) throw new ArgumentNullException("flow");
-            if (account == null) throw new ArgumentNullException("account");
             _flow = flow;
             _account = account;
             _onAccountChanged = onAccountChanged;
@@ -48,9 +46,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
                         throw new ServiceException(detail);
                     }
 
-                    // Microsoft rotates the refresh token on every refresh.
-                    // Persist the new one or the stored secret drifts and
-                    // eventually gets rejected as invalid_grant.
+                    // Microsoft rotates the refresh token on every refresh; persist it or the stored secret eventually drifts to invalid_grant.
                     if (!string.IsNullOrEmpty(token.RefreshToken) && token.RefreshToken != _account.Secret)
                     {
                         _account.Secret = token.RefreshToken;

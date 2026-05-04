@@ -7,7 +7,6 @@ using KeeAnywhere.Configuration;
 using Microsoft.Graph;
 using Microsoft.Graph.Drives.Item.Items.Item.Copy;
 using Microsoft.Graph.Models;
-using Microsoft.Graph.Models.ODataErrors;
 
 namespace KeeAnywhere.StorageProviders.OneDrive
 {
@@ -25,20 +24,11 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task<Stream> Load(string path)
         {
-            try
-            {
-                return await (await _api.DriveItemFromPathAsync(path)).Content.GetAsync();
-            }
-            catch (ODataError ex)
-            {
-                // Microsoft.Graph 5.x ODataError has an empty Message;
-                // surface the real status and OData code/message so KeePass
-                // doesn't fall back to "An unknown error occurred."
-                var code = ex.Error != null ? ex.Error.Code : "(no code)";
-                var msg = ex.Error != null ? ex.Error.Message : "(no message)";
-                throw new InvalidOperationException(
-                    "OneDrive Load HTTP " + ex.ResponseStatusCode + " (" + code + "): " + msg + " [" + path + "]", ex);
-            }
+            var stream = await (await _api.DriveItemFromPathAsync(path))
+                                    .Content
+                                    .GetAsync();
+
+            return stream;
         }
 
 
