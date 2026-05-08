@@ -175,8 +175,9 @@
     <Reference Include="Microsoft.IdentityModel.Tokens, Version=7.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Tokens.7.6.1\lib\net472\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Kiota.Abstractions, Version=1.9.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Kiota.Abstractions.1.9.6\lib\netstandard2.0\Microsoft.Kiota.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Kiota.Abstractions, Version=1.22.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.Kiota.Abstractions.1.22.0\lib\netstandard2.0\Microsoft.Kiota.Abstractions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Kiota.Authentication.Azure, Version=1.1.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Kiota.Authentication.Azure.1.1.7\lib\netstandard2.0\Microsoft.Kiota.Authentication.Azure.dll</HintPath>
@@ -242,8 +243,9 @@
     <Reference Include="PlgxTool, Version=0.1.2.41667, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PlgxTool.1.0.3\lib\net40\PlgxTool.exe</HintPath>
     </Reference>
-    <Reference Include="Std.UriTemplate, Version=1.0.1.0, Culture=neutral, PublicKeyToken=c118b0afb4598f9a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Std.UriTemplate.1.0.1\lib\netstandard2.0\Std.UriTemplate.dll</HintPath>
+    <Reference Include="Std.UriTemplate, Version=2.0.8.0, Culture=neutral, PublicKeyToken=c118b0afb4598f9a">
+      <HintPath>..\packages\Std.UriTemplate.2.0.8\lib\netstandard2.0\Std.UriTemplate.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
