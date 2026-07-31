@@ -188,3 +188,6 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 .vs/
+
+# Private API Keys
+KeeAnywhere/ApiKeys.cs
