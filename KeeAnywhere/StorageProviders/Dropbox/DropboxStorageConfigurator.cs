@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using db = Dropbox.Api;
 using KeeAnywhere.Configuration;
@@ -78,7 +78,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
 
             var code = query["code"];
 
-            var response = await db.DropboxOAuth2Helper.ProcessCodeFlowAsync(code, clientId, null, redirectUri, ProxyTools.CreateHttpClient(), codeVerifier);
+            var response = await db.DropboxOAuth2Helper.ProcessCodeFlowAsync(code, clientId, clientSecret, redirectUri, ProxyTools.CreateHttpClient(), codeVerifier);
             var api = DropboxHelper.GetApi(response.AccessToken);
             var owner = await api.Users.GetCurrentAccountAsync();
 
