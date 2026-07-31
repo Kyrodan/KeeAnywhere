@@ -66,7 +66,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             var codeChallenge = db.DropboxOAuth2Helper.GeneratePKCECodeChallenge(codeVerifier);
             var uri = db.DropboxOAuth2Helper.GetAuthorizeUri(db.OAuthResponseType.Code, clientId, redirectUri, state, false, false, null, false, db.TokenAccessType.Offline, scopes, db.IncludeGrantedScopes.None, codeChallenge);
 
-            var query = await browser.GetQueryStringAsync(uri.ToString(), f.CancellationToken);
+            var query = await browser.GetQueryStringAsync(uri.AbsoluteUri, f.CancellationToken);
 
 
             var resultState = query["state"];
@@ -78,7 +78,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
 
             var code = query["code"];
 
-            var response = await db.DropboxOAuth2Helper.ProcessCodeFlowAsync(code, clientId, clientSecret, redirectUri, ProxyTools.CreateHttpClient(), codeVerifier);
+            var response = await db.DropboxOAuth2Helper.ProcessCodeFlowAsync(code, clientId, null, redirectUri, ProxyTools.CreateHttpClient(), codeVerifier);
             var api = DropboxHelper.GetApi(response.AccessToken);
             var owner = await api.Users.GetCurrentAccountAsync();
 
