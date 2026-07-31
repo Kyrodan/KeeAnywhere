@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <metadata>
     <id>keepass-plugin-keeanywhere</id>
     <title>KeePass Plugin KeeAnywhere</title>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
     <authors>Daniel Bölts</authors>
     <owners>Kyrodan</owners>
     <summary>Plugin for KeePass 2.x to to add support for cloud storage providers</summary>
@@ -31,23 +31,20 @@ Supported providers:
     <copyright>© 2015-2021 Daniel Bölts</copyright>
     <licenseUrl>https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>## 2.1.0 (2024-06-17)
+    <releaseNotes>## 2.2.0 (2026-07-31)
 
 ### New
 
-- \#269 New storage provider: Google Cloud Storage  
-- \#377 Gdrive shortcuts 
-- \#398 Limit access to KeeAnywhere files only and not the whole drive (like Dropbox-restricted)
-- \#261 Added support for OneDrive shared folders
-- \#369 Remove support for hubiC
+- #409 Remove old Auth2-Flow (integrated browser) - was only used fpr Box.com
 
 ### Fixed
 
-- \#327 Remote backup doesn't work on google drive in the root path
+- #301, #347, #365 [Windows <10 only?] System.Exception: No unused port found! - Thanks to @Jackabomb
 
 ### Improved
 
-- Using KeePass 2.57.0 now
+- Updated Dependencies (AWS, Box, Dropbox, Google Drive, Google Storage, OneDrive)
+- Using .Net 4.8 now
 
 
       [Full Changelog](https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md)

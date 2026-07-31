@@ -1,4 +1,4 @@
-﻿using IdentityModel.OidcClient.Browser;
+using IdentityModel.OidcClient.Browser;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -151,6 +151,7 @@ namespace KeeAnywhere.OAuth2
                     var result = context.Request.QueryString;
 
                     await SendResponse(context.Response);
+                    await Task.Delay(500);
 
                     return result;
                 }
