@@ -563,10 +563,6 @@
     <Content Include="Resources\KeeAnywhere_16x16.png" />
     <Content Include="Resources\KeeAnywhere_48x48.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\AWSSDK.S3.3.7.309.5\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
-    <Analyzer Include="..\packages\AWSSDK.S3.3.7.309.5\analyzers\dotnet\cs\SharedAnalysisCode.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
