@@ -168,6 +168,9 @@ namespace KeeAnywhere.OAuth2
             var responseOutput = response.OutputStream;
             await responseOutput.WriteAsync(buffer, 0, buffer.Length);
             responseOutput.Close();
+            // Close the response explicitly, so it is completely sent to the browser
+            // before the listener gets disposed.
+            response.Close();
         }
 
         private static string ProcessFormPost(HttpListenerRequest request)

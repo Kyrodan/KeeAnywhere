@@ -25,7 +25,7 @@ namespace KeeAnywhere.StorageProviders.Box
             var config = new BoxConfig(clientId, clientSecret, new Uri(redirectUri));
 
             var uri = config.AuthCodeUri;
-            var query = await browser.GetQueryStringAsync(uri.ToString(), f.CancellationToken);
+            var query = await browser.GetQueryStringAsync(uri.AbsoluteUri, f.CancellationToken);
 
             var code = query["code"];
 

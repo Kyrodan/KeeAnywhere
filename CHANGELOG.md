@@ -11,6 +11,7 @@
 - \#451, \#464 NULL reference when connecting to OneDrive - Thanks to @D3-LucaPiombino
 - \#459 "Index was outside the bounds of array" error in Dropbox - Thanks to @CarrieForle
 - \#497 OneDrive: file path got lost when loading, saving, copying or listing files - Thanks to @Kelltomal
+- \#491 Dropbox, Box: authorization URL was passed unescaped to the browser; browser sometimes showed a connection error after successful login - Thanks to @HarryHuy
 
 ### Improved
 
