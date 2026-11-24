@@ -7,6 +7,8 @@
 
 ### Fixed
 
+- \#496 Plugin could not be loaded in KeePass 2.62 - Thanks to @GeheimagentNr1
+- Chocolatey: detection of a portable KeePass installation (replaced deprecated Get-BinRoot)
 - \#301, \#347, \#365 [Windows <10 only?] System.Exception: No unused port found! - Thanks to @Jackabomb
 - \#451, \#464 NULL reference when connecting to OneDrive - Thanks to @D3-LucaPiombino
 - \#459 "Index was outside the bounds of array" error in Dropbox - Thanks to @CarrieForle
@@ -25,6 +27,9 @@
 - Removed unused dependency log4net (was affected by [GHSA-4f7c-pmjv-c25w](https://github.com/advisories/GHSA-4f7c-pmjv-c25w), replaces \#482)
 - \#486 Updated Google Cloud Storage dependencies to consistent versions (fixes assembly version mismatch) - Thanks to @Fulgan
 - Build: OAuth API keys moved to *ApiKeys.cs*, which is not under version control (created from *ApiKeys.Template.cs* with dummy values on first build, see BUILD.md) - inspired by \#491, thanks to @HarryHuy
+- Build: GitHub Actions workflow for building releases
+- Build: test-plgx.ps1 for testing the PLGX with a test copy of KeePass (see BUILD.md) - based on \#486, thanks to @Fulgan
+- Build: NuGet packages are restored via MSBuild, nuget.exe removed from repository
 
 
 ## 2.1.0 (2024-06-17)
