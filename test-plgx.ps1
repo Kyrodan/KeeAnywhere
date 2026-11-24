@@ -3,17 +3,24 @@
     Builds KeeAnywhere.plgx, deploys it to a portable KeePass and checks whether KeePass compiles it.
 
 .DESCRIPTION
-    By default the KeePass in lib\ is used - the same version KeeAnywhere is built against.
-    It is run in portable mode (lib\KeePass.config.xml), so the configuration of your
-    productive KeePass installation is not touched.
+    By default a test copy of the KeePass in lib\ (the version KeeAnywhere is built against)
+    is used in temp\test-plgx\ (ignored by git). lib\ itself is only read, never written.
 
-    Note: KeeAnywhere accounts are stored per Windows user (Credential Manager or local
-    secure store), not per KeePass installation - so test and productive use share them.
+    On every run the KeePass files (KeePass.exe, KeePass.XmlSerializers.dll, KeePass.exe.config)
+    are synchronized from lib\ if missing or changed. Everything KeePass and KeeAnywhere create
+    there is kept between runs for repeatable tests: KeePass.config.xml (portable mode, so your
+    productive KeePass configuration is not touched), KeeAnywhere accounts/offline cache (if stored
+    in the KeePass folder) and test databases (e.g. in temp\test-plgx\Databases\).
+
+    Note: KeeAnywhere accounts stored in the Windows Credential Manager and the KeePass
+    PluginCache (%LOCALAPPDATA%\KeePass\PluginCache) are per Windows user - shared with your
+    productive KeePass.
 
     Based on test-plgx.ps1 from PR #486 by Stephane (@Fulgan).
 
 .PARAMETER KeePassDir
-    Folder of a portable KeePass (containing KeePass.exe). Default: lib\ of this repository.
+    Use this portable KeePass (containing KeePass.exe) instead of the test copy in temp\test-plgx\.
+    Nothing is synchronized from lib\ then.
     Download: https://keepass.info/download.html (Portable ZIP)
 
 .PARAMETER Configuration
@@ -22,21 +29,49 @@
 .PARAMETER Cleanup
     Wipe %LOCALAPPDATA%\KeePass\PluginCache and previously deployed KeeAnywhere files first.
     A stale cache entry can mask a real compile failure.
+
+.PARAMETER Reset
+    Delete temp\test-plgx\ completely before the run (fresh KeePass configuration, no accounts,
+    no offline cache, no test databases). Ignored together with -KeePassDir.
 #>
 [CmdletBinding()]
 param(
     [string]$KeePassDir,
     [ValidateSet("Release", "Debug")]
     [string]$Configuration = "Release",
-    [switch]$Cleanup
+    [switch]$Cleanup,
+    [switch]$Reset
 )
 
 $ErrorActionPreference = "Stop"
 $repoRoot = $PSScriptRoot
 Set-Location $repoRoot
 
-# 1. Locate KeePass (default: lib\ of this repository).
-if (-not $KeePassDir) { $KeePassDir = Join-Path $repoRoot "lib" }
+# 1. Locate KeePass (default: test copy of lib\ in temp\test-plgx\).
+if (-not $KeePassDir) {
+    $KeePassDir = Join-Path $repoRoot "temp\test-plgx"
+    $libDir = Join-Path $repoRoot "lib"
+
+    if ($Reset -and (Test-Path $KeePassDir)) {
+        Write-Host "Reset: deleting $KeePassDir" -ForegroundColor Yellow
+        Remove-Item $KeePassDir -Recurse -Force
+    }
+    if (-not (Test-Path $KeePassDir)) { New-Item -ItemType Directory -Path $KeePassDir | Out-Null }
+
+    # Synchronize KeePass files from lib\ (only if missing or changed).
+    foreach ($name in @("KeePass.exe", "KeePass.XmlSerializers.dll", "KeePass.exe.config")) {
+        $src = Join-Path $libDir $name
+        $dst = Join-Path $KeePassDir $name
+        if (-not (Test-Path $src)) { throw "$src not found." }
+        if (-not (Test-Path $dst) -or (Get-FileHash $src).Hash -ne (Get-FileHash $dst).Hash) {
+            Copy-Item $src $dst -Force
+            Write-Host "Copied $name from lib\" -ForegroundColor Yellow
+        }
+    }
+
+    $dbDir = Join-Path $KeePassDir "Databases"
+    if (-not (Test-Path $dbDir)) { New-Item -ItemType Directory -Path $dbDir | Out-Null }
+}
 if (-not (Test-Path (Join-Path $KeePassDir "KeePass.exe"))) {
     throw "KeePass.exe not found in '$KeePassDir'."
 }

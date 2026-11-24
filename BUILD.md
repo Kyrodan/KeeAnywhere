@@ -20,12 +20,18 @@ KeePass does not evaluate binding redirects of plugins. At runtime, version mism
 *KeeAnywhere\app.config* is excluded from the PLGX and only keeps the build free of MSB3247/MSB3277 warnings. After updating NuGet packages, check the build for these warnings and add the redirects MSBuild suggests (only for strong-named assemblies, always pointing to the shipped version).
 
 # Test
-Run *test-plgx.ps1 [-KeePassDir <path to portable KeePass>] [-Cleanup]*.
+Run *test-plgx.ps1 [-Cleanup] [-Reset] [-KeePassDir <path to portable KeePass>]*.
 It builds the PLGX, deploys it to KeePass, starts KeePass with *--debug* and reports whether KeePass could compile the plugin.
 All KeePass instances must be closed before.
 
-By default the KeePass in *lib* is used (the version KeeAnywhere is built against). It runs in portable mode via *lib\KeePass.config.xml* (created if missing), so the configuration of your productive KeePass installation is not touched. *lib\Plugins* and *lib\KeePass.config.xml* are ignored by git.
-Note: KeeAnywhere accounts are stored per Windows user, so test and productive use share them.
+By default a test copy of the KeePass in *lib* (the version KeeAnywhere is built against) is used in *temp\test-plgx* (ignored by git, *lib* is never written):
+
+* KeePass.exe, KeePass.XmlSerializers.dll and KeePass.exe.config are copied from *lib* if missing or changed.
+* Everything else is kept between runs for repeatable tests: *KeePass.config.xml* (portable mode - your productive KeePass configuration is not touched), KeeAnywhere accounts and offline cache stored in the KeePass folder, and test databases (put them into *temp\test-plgx\Databases*).
+* *-Reset* deletes *temp\test-plgx* first for a completely fresh test environment.
+* *-Cleanup* wipes the KeePass PluginCache, so KeePass compiles the PLGX again.
+
+Note: KeeAnywhere accounts in the Windows Credential Manager and the KeePass PluginCache (*%LOCALAPPDATA%\KeePass\PluginCache*) are per Windows user, so test and productive use share them.
 
 # Prepare new release
 Each released version is tagged with a version tag: this tag follows [Semantic Versioning](http://semver.org/).
