@@ -1,0 +1,2 @@
+{% assign current = page.url | remove: '.html' %}{% for item in site.data.mainmenu %}{% assign section = item.url | split: '/' | slice: 1 | first %}{% assign prefix = '/' | append: section | append: '/' %}{% assign active = false %}{% if current == item.url %}{% assign active = true %}{% endif %}{% if current contains prefix %}{% assign active = true %}{% endif %}<a class="nav-item{% if active %} active{% endif %}" href="{{ item.url | relative_url }}"{% if active %} aria-current="page"{% endif %}>{{ item.title }}</a>
+{% endfor %}

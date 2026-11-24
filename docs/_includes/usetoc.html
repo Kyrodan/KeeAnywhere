@@ -1,0 +1,3 @@
+{% assign current = page.url | remove: '.html' %}<ul class="toc-list">
+{% for item in site.data.usemenu %}  <li><a class="{% if current contains item.url %}active{% endif %}" href="{{ item.url | relative_url }}"{% if current contains item.url %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+{% endfor %}</ul>

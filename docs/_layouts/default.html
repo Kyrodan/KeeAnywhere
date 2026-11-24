@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: " en-US " }}">
+<html lang="{{ site.lang | default: 'en-US' }}">
 
 <head>
-
   {% if site.google_analytics %}
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
   <script>
@@ -10,64 +9,73 @@
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', '{{ site.google_analytics }}');
-  </script> {% endif %}
-  <meta charset="UTF-8"> {% seo %}
+  </script>
+  {% endif %}
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#157878">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  {% seo %}
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#103f5f">
+  <link rel="icon" type="image/png" href="{{ '/assets/images/KeeAnywhere_48x48.png' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
 </head>
 
 <body>
-  <!--
-    <a id="skip-to-content" href="#content">Skip to the content.</a>
-    -->
-  <header>
-    <div class="page-header">
-      <div class="page-header-content">
-        <div class="page-header-logo">
-          <img src="/assets/images/KeeAnywhere_48x48.png" height="32px" />
-          <a href="/">{{ site.title }}</a>
-        </div>
+  <a class="skip-link" href="#content">Skip to content</a>
 
-        <nav class="page-header-nav">
-          {% for item in site.data.mainmenu %}
-            <a class="page-header-nav-item" href="{{ item.url }}">{{ item.title }}</a>
-          {% endfor %}
+  <header class="site-header">
+    <div class="container site-header-inner">
+      <a class="brand" href="{{ '/' | relative_url }}">
+        <img src="{{ '/assets/images/KeeAnywhere_48x48.png' | relative_url }}" width="32" height="32" alt="">
+        <span>{{ site.title }}</span>
+      </a>
+
+      <nav class="nav-desktop" aria-label="Main">
+        {% include mainmenu.html %}
+      </nav>
+
+      <details class="nav-mobile">
+        <summary>Menu</summary>
+        <nav aria-label="Main">
+          {% include mainmenu.html %}
         </nav>
-      </div>
-    </div>
-
-    <div class="page-banner" role="banner">
-      <h1 class="project-name">{{ page.title }}</h1>
-      {% if page.description %}
-      <h2 class="project-tagline">{{ page.description }}</h2>
-      {% endif %}
-      
-      {% if site.github.is_project_page and page.url == '/'%}
-      <a href="{{ site.github.latest_release.assets[0].browser_download_url }}" class="btn">Download {{ site.github.latest_release.tag_name }}</a>
-      <a href="{{ site.github.issues_url }}" class="btn">Found a bug?</a>
-      <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
-      {% endif %}
+      </details>
     </div>
   </header>
 
+  <div class="page-banner{% if page.url == '/' %} page-banner-home{% endif %}">
+    <div class="container">
+      <h1 class="project-name">{{ page.title }}</h1>
+      {% if page.description %}
+      <p class="project-tagline">{{ page.description }}</p>
+      {% endif %}
 
+      {% if site.github.is_project_page and page.url == '/' %}
+      {% assign plgx = site.github.latest_release.assets | where_exp: "asset", "asset.name contains '.plgx'" | first %}
+      <div class="banner-buttons">
+        <a href="{{ plgx.browser_download_url | default: site.github.releases_url }}" class="btn btn-primary">Download {{ site.github.latest_release.tag_name }}</a>
+        <a href="{{ site.github.issues_url }}" class="btn">Found a bug?</a>
+        <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
 
-  <main id="content" class="main-content" role="main">
+  <main id="content" class="container main-content">
     {{ content }}
+  </main>
 
-    <footer class="site-footer">
+  <footer class="site-footer">
+    <div class="container">
       {% if site.github.is_project_page %}
       <span class="site-footer-owner">
         <a href="{{ site.github.repository_url }}">{{ site.github.repository_name }}</a> is maintained by
-        <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>.</span>
+        <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>.
+      </span>
       {% endif %}
-
       <span class="site-footer-credits">This is a private non-commercial web site. It is provided for information purposes only.</span>
-
-    </footer>
-  </main>
+    </div>
+  </footer>
 </body>
 
 </html>

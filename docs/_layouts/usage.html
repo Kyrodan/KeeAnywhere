@@ -1,19 +1,20 @@
---- 
-layout: default 
 ---
+layout: default
+---
+<div class="docs">
+  <aside class="docs-sidebar" aria-label="Usage guide">
+    <nav class="toc">
+      <div class="toc-title">Contents</div>
+      {% include usetoc.html %}
+    </nav>
+  </aside>
 
-  <nav class="main-tocpage-toc">
-    <b>Content</b>
-    <ul>
-      {% for item in site.data.usemenu %}
-      <li class="{% if page.url contains item.url %}active{% endif %}">
-      <!-- <li class="active"> -->
-        <a href="{{item.url}}" >{{item.title}}</a>
-      </li>
-      {% endfor %}
-    </ul>
-  </nav>
+  <div class="docs-content">
+    <details class="toc-mobile">
+      <summary>Contents</summary>
+      {% include usetoc.html %}
+    </details>
 
- 
     {{ content }}
- 
+  </div>
+</div>
