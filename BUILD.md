@@ -15,6 +15,10 @@ On the first build it is created automatically from *KeeAnywhere\ApiKeys.Templat
 * Never put real keys into *ApiKeys.Template.cs* or the *...Helper.cs* files.
 * When adding a key, add it to both *ApiKeys.Template.cs* (dummy value) and your local *ApiKeys.cs*.
 
+# Binding redirects
+KeePass does not evaluate binding redirects of plugins. At runtime, version mismatches between the bundled dependencies are resolved by the AssemblyResolve handler in *KeeAnywhereExt.cs* (the DLL shipped with the plugin wins).
+*KeeAnywhere\app.config* is excluded from the PLGX and only keeps the build free of MSB3247/MSB3277 warnings. After updating NuGet packages, check the build for these warnings and add the redirects MSBuild suggests (only for strong-named assemblies, always pointing to the shipped version).
+
 # Test
 Run *test-plgx.ps1 [-KeePassDir <path to portable KeePass>] [-Cleanup]*.
 It builds the PLGX, deploys it to KeePass, starts KeePass with *--debug* and reports whether KeePass could compile the plugin.
@@ -40,7 +44,7 @@ When preparing for a new release the last steps is to change the version informa
 
 If the required KeePass version changes, update it consistently in:
 
-* lib\KeePass.exe and lib\KeePass.XmlSerializers.dll
+* lib\KeePass.exe, lib\KeePass.XmlSerializers.dll and lib\KeePass.exe.config (all from the KeePass portable ZIP)
 * KeeAnywhere\KeeAnywhere.csproj
   * Reference KeePass (Version)
   * PlgxConfiguration: KeePassVersion

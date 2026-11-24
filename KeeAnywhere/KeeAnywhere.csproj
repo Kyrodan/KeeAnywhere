@@ -550,10 +550,10 @@
       <ExcludeFromPlgx />
       <SubType>Designer</SubType>
     </None>
-    <None Include="KeePass.exe.config">
+    <None Include="..\lib\KeePass.exe.config">
+      <Link>KeePass.exe.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromPlgx />
-      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
