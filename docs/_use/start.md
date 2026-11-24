@@ -10,4 +10,4 @@ If you have questions or problems:
 * [FAQ](faq)
 * [Troubleshooting](troubleshooting)
 * [Known Issues](known_issues)
-* [URL Sepcification](url_specification)
+* [URL Specification](url_specification)

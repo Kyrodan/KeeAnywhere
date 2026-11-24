@@ -4,10 +4,10 @@ title: Frequently Asked Questions
 # KeeAnywhere General
 
 ## What is KeeAnywhere **not**?
-KeeAnywhere is **not** another synchronization plugin. KeePass itself provides many ways of synchronization so this topic is out of scope. In my opinion the user does not want synchronization in first place: the user wants simple access to his databases in the cloud. Advanced users may request disconnected (offline) access to his databases (with later syncing to the cloud) or have demand for a database backup strategy: these are topics I keep in mind and resepct in ongoing development. The vision is to create THE ULTIMATE CLOUD PLUGIN for KeePass.
+KeeAnywhere is **not** another synchronization plugin. KeePass itself provides many ways of synchronization so this topic is out of scope. In my opinion the user does not want synchronization in first place: the user wants simple access to his databases in the cloud. Advanced users may request disconnected (offline) access to his databases (with later syncing to the cloud) or have demand for a database backup strategy: these are topics I keep in mind and respect in ongoing development. The vision is to create THE ULTIMATE CLOUD PLUGIN for KeePass.
 
 ## Why another plugin?
-Many so called "sync-plugins" encapsulate the access to cloud drives under the hood: you have to keep a local copy your database and configure a synchronization relationship. While this is at first glance a simple solution it lacks advanced features (especially beacuse of the missing possibility to access a database via a URL). Additionally most of these plugins provide a user interface for picking a database from the cloud drive. So the simple approach leads to the need to read documentation at first.
+Many so called "sync-plugins" encapsulate the access to cloud drives under the hood: you have to keep a local copy your database and configure a synchronization relationship. While this is at first glance a simple solution it lacks advanced features (especially because of the missing possibility to access a database via a URL). Additionally most of these plugins provide a user interface for picking a database from the cloud drive. So the simple approach leads to the need to read documentation at first.
 
 On the other side there is KeeCloud which offers URL-Style database paths. While also missing a database picker user interface this plugin integrates well in KeePass' core functions. But to configure this plugin a technical knowledge is assumed. Therefore this plugin is hardly usable for not so experienced users and lacks full multi-account support.
 
@@ -16,10 +16,10 @@ Modern cloud drives are more than just a simple file storage. Many of them provi
 
 Additionally most of the cloud provider's native clients do not support multiple accounts.
 
-## Does KeeAnywhere works with portable KeePass (without installation)
+## Does KeeAnywhere work with portable KeePass (without installation)?
 Yes! Starting with version 1.5.0 KeeAnywhere can be used portable. All settings are stored beside KeePass.exe.
 
-## Can you implement private cloud provider (OwnCloud, Nextcloud, etc.)
+## Can you implement private cloud providers (OwnCloud, Nextcloud, etc.)?
 No, I won't. Most of these providers support native WebDav which is also natively supported by KeePass. Okay, I know, the file picker is missing then ;-)
 
 ## How can I contribute?
@@ -54,12 +54,26 @@ Here is a working sample - see details in [#187](https://github.com/Kyrodan/KeeA
 }
 ```
 
+# Google Drive
+
+## What is the difference between `Google Drive` and `Google Drive (restricted)`?
+`Google Drive` has full access to your complete Google Drive.
+`Google Drive (restricted)` can only access files that were created (or opened) with KeeAnywhere. Files you uploaded with the browser or another app are **not visible** in KeeAnywhere - this is by design of Google's restricted access mode (`drive.file` scope), not a bug.
+
+To use an existing database with `Google Drive (restricted)`:
+1. Open your database from a local copy (e.g. download it from Google Drive first).
+2. Use `File - Save As - Save to Cloud Drive...` and select your `Google Drive (restricted)` account.
+3. From now on open this new file with `File - Open - Open from Cloud Drive...`.
+
+## Google shows "This app is blocked" when adding an account
+Google currently blocks the full access mode (`Google Drive`) for KeeAnywhere for many users. Please use `Google Drive (restricted)` instead - see the question above how to use an existing database with it.
+
 # Dropbox
 
-## What is the difference between `Dropbox` and `Dropbox-Restricted`
+## What is the difference between `Dropbox` and `Dropbox-Restricted`?
 From KeeAnywhere's perspective Dropbox can be accessed in two modes: `Full Access` and `App`.
 `Full Access` means, that KeeAnywhere can read and write to your complete Dropbox (even other Appfolders).
-`App` means, that KeeAnywhere can only read and write from and to it's own Appfolder within your Dropbox. With this option the access is restricted to it's own data only and does not affect other data stored in your Dropbox.
+`App` means, that KeeAnywhere can only read and write from and to its own Appfolder within your Dropbox. With this option the access is restricted to its own data only and does not affect other data stored in your Dropbox.
 
-*Remarks:* If you use another client (e.g. KeePass2Android on your smartphone) that also uses the restricted `App` mode, KeeAnywhere cannot read it's data in restricted mode - you have to use an (unrestricted) Dropbox account in at least one of these Apps.
+*Remarks:* If you use another client (e.g. KeePass2Android on your smartphone) that also uses the restricted `App` mode, KeeAnywhere cannot read its data in restricted mode - you have to use an (unrestricted) Dropbox account in at least one of these Apps.
 

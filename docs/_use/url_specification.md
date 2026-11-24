@@ -1,7 +1,7 @@
 ---
 title: URL Specification
 ---
-KeeAnywhere URL's follow this sepcification:
+KeeAnywhere URL's follow this specification:
 
 `{provider}:///{accountname}/{path_to_database}` 
 
@@ -18,7 +18,7 @@ Valid values for `{provider}` are:
 * hidrive
 * onedrive
 
-The `{accountname}` is the name of the account you can see in KeeAnywhere Settings` account list.
+The `{accountname}` is the name of the account you can see in `KeeAnywhere Settings` account list.
 
 The `{path_to_database}` specifies the relative path to your database within your account. It follows regular path syntax.
 

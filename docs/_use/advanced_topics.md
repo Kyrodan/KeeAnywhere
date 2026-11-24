@@ -12,7 +12,7 @@ Options:
 # Open Database by URL
 All accessible databases can be opened by its special URL. This URL can be determined e.g. via `Open from Cloud Drive...` dialog. It can be used widely in KeePass for e.g. Synchronisation, Triggers, Open URL, etc. You do not need to provide Username and Password if possible - just leave these fields blank.
 
-Details of this URL-Schema can be found [here](https://github.com/Kyrodan/KeeAnywhere/wiki/URL-Specification).
+Details of this URL scheme can be found in the [URL Specification](url_specification).
 
 # Rename an Account
 Steps to rename an account:
@@ -30,14 +30,14 @@ Steps to rename an account:
 6. Press <Enter> to save changes; Press <Esc> to cancel changes.
 
 # Using a Proxy
-KeeAnywhere supports KeePass's Proxy settings. Go to `Tools - Options...`, select `Advanced` tab und click on `Proxy...` in the lower right corner. Here you can set your proxy settings which are also used by KeeAnywhere.
+KeeAnywhere supports KeePass's Proxy settings. Go to `Tools - Options...`, select `Advanced` tab and click on `Proxy...` in the lower right corner. Here you can set your proxy settings which are also used by KeeAnywhere.
 
 # Synchronization
-If you like to synchonize two databases in different locations, you can synchronize these two databases. This works with KeePass built-in functions and is described in details [here](http://keepass.info/help/v2/sync.html)
+If you like to synchronize two databases in different locations, you can synchronize these two databases. This works with KeePass built-in functions and is described in details [here](https://keepass.info/help/v2/sync.html)
 
 # Automatic Backup
 KeeAnywhere offers a simple automatic backup. Activate this feature in KeeAnywhere settings.
-You decide, whether you want a backup in your cloude drive (online) and/or locally stored on your database (offline).
+You decide, whether you want a backup in your cloud drive (online) and/or locally stored on your database (offline).
 Backups automatically get rotated (with the given number of copies to keep). Online backups are generated via cloud storage API's, so the database is not downloaded and re-uploaded again (with another filename).
 
 The name of your backup files are auto-generated and cannot be changed: they are derived from your database filename ({yourdatabasename}_Backup_{timestamp}.kdbx).

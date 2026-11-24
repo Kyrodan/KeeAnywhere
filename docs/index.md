@@ -3,7 +3,7 @@ title: KeeAnywhere
 description: A cloud storage provider plugin for KeePass Password Safe
 ---
 
-KeeAnywhere is a [KeePass Password Safe](http://keepass.info) plugin that provides access to cloud storage providers (cloud drives). The main goal is to offer a simple UI while integrating deeply into KeePass. This covers all kind of users: novices, experienced and power users.
+KeeAnywhere is a [KeePass Password Safe](https://keepass.info) plugin that provides access to cloud storage providers (cloud drives). The main goal is to offer a simple UI while integrating deeply into KeePass. This covers all kind of users: novices, experienced and power users.
 
 ![KeeAnywhere in Action](assets/images/KeeAnywhere_Teaser.png)
 
@@ -24,7 +24,7 @@ KeeAnywhere is a [KeePass Password Safe](http://keepass.info) plugin that provid
 * Easy and intuitive configuration
 * Access to cloud stored databases via URL ("Open from URL"/"Save to URL")
 * Full support of recent files list
-* Deep integration into KeePass' core functions (synchroniziation, triggers, scripting, etc.)
+* Deep integration into KeePass' core functions (synchronization, triggers, scripting, etc.)
 * No need for technical configuration entries in a database
 * No need to have cloud storage provider's native client be installed
 * Proxy support

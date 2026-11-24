@@ -24,7 +24,7 @@ In US$:
 
 ## Amazon Gift Card 
 
-Please send Gift Cards only for [Amazon Germany](http://amazon.de) - I don't buy from other Amazon locations.
+Please send Gift Cards only for [Amazon Germany](https://amazon.de) - I don't buy from other Amazon locations.
 Gift Cards can be found [here](https://www.amazon.de/Amazon-Gutschein-per-E-Mail-Amazon/dp/B0054PDOV8/ref=sr_1_1?s=gift-cards&ie=UTF8&qid=1471852645&sr=1-1).
 You can switch to english language in the upper toolbar. Please fill in my E-Mail-Address `daniel@boelts.de` in field "An" (= "To").
 
