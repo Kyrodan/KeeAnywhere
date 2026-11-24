@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -283,6 +284,11 @@ namespace KeeAnywhere
                 asms.Add(name, Assembly.Load(name));
             }
 
+            // KeePass ignores binding redirects for plugins, so any other version mismatch between
+            // the bundled dependencies is resolved here: the copy shipped with the plugin wins.
+            // Note: KeePass compiles the PLGX with C# 5, so no newer language features here.
+            var pluginDir = Path.GetDirectoryName(typeof(KeeAnywhereExt).Assembly.Location);
+
             AppDomain.CurrentDomain.AssemblyResolve += (s, a) =>
             {
                 var requestedAssembly = new AssemblyName(a.Name);
@@ -290,7 +296,25 @@ namespace KeeAnywhere
 
                 if (asms.ContainsKey(name)) return asms[name];
 
-                return null;
+                foreach (var loaded in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    if (string.Equals(loaded.GetName().Name, name, StringComparison.OrdinalIgnoreCase))
+                        return loaded;
+                }
+
+                if (string.IsNullOrEmpty(pluginDir)) return null;
+
+                var path = Path.Combine(pluginDir, name + ".dll");
+                if (!File.Exists(path)) return null;
+
+                try
+                {
+                    return Assembly.LoadFrom(path);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             };
         }
     }
