@@ -565,7 +565,6 @@
     <None Include="Resources\Azure_16x16.png" />
     <Content Include="Resources\Folder_16x16.png" />
     <None Include="Resources\GoogleDrive_16x16.png" />
-    <None Include="Resources\HubiC_16x16.png" />
     <None Include="Resources\HiDrive_16x16.png" />
     <Content Include="Resources\GoogleCloudStorage_16x16.png" />
     <Content Include="Resources\Icon_KeeAnywhere_16x16.ico" />
