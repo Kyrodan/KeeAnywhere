@@ -3,7 +3,7 @@
   <metadata>
     <id>keepass-plugin-keeanywhere</id>
     <title>KeePass Plugin KeeAnywhere</title>
-    <version>2.1.0</version>
+    <version>2.2.0-unstable</version>
     <authors>Daniel Bölts</authors>
     <owners>Kyrodan</owners>
     <summary>Plugin for KeePass 2.x to to add support for cloud storage providers</summary>
@@ -53,7 +53,7 @@ Supported providers:
       [Full Changelog](https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md)
     </releaseNotes>
     <dependencies>
-      <dependency id="keepass" version="[2.57.0, 3.0)" />
+      <dependency id="keepass" version="[2.62.0, 3.0)" />
       <dependency id="netfx-4.8" version="4.8.0.0" />
     </dependencies>
   </metadata>

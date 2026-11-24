@@ -44,7 +44,8 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         /// An extra Web request has to be made to determine if the top 
         /// folder is remote or local. That's why this method is async.
         /// </remarks>
-        public async static Task<DriveItemItemRequestBuilder> DriveItemFromPathAsync(this GraphServiceClient api, string path)
+        // The base builder drops the file path when accessing Content, Children or Copy.
+        public async static Task<CustomDriveItemItemRequestBuilder> DriveItemFromPathAsync(this GraphServiceClient api, string path)
         {
             // The top folder could be a shared folder, in which case it's 
             // on a different drive than the default. The path will use the

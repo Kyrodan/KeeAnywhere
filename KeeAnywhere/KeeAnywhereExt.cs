@@ -287,35 +287,62 @@ namespace KeeAnywhere
             // KeePass ignores binding redirects for plugins, so any other version mismatch between
             // the bundled dependencies is resolved here: the copy shipped with the plugin wins.
             // Note: KeePass compiles the PLGX with C# 5, so no newer language features here.
-            var pluginDir = Path.GetDirectoryName(typeof(KeeAnywhereExt).Assembly.Location);
+            var pluginDir = GetPluginDirectory();
 
             AppDomain.CurrentDomain.AssemblyResolve += (s, a) =>
             {
                 var requestedAssembly = new AssemblyName(a.Name);
                 var name = requestedAssembly.Name;
 
-                if (asms.ContainsKey(name)) return asms[name];
+                Assembly known;
+                if (asms.TryGetValue(name, out known)) return known;
 
+                // Satellite assemblies are culture specific - leave them to the default probing.
+                if (name.EndsWith(".resources", StringComparison.OrdinalIgnoreCase)) return null;
+
+                // 1. The copy shipped with the plugin wins.
+                if (!string.IsNullOrEmpty(pluginDir))
+                {
+                    var path = Path.Combine(pluginDir, name + ".dll");
+                    if (File.Exists(path))
+                    {
+                        try
+                        {
+                            return Assembly.LoadFrom(path);
+                        }
+                        catch (Exception)
+                        {
+                            // fall through to already loaded assemblies
+                        }
+                    }
+                }
+
+                // 2. Otherwise reuse an already loaded assembly, but only if it is
+                //    at least the requested version (same semantics as a binding redirect).
                 foreach (var loaded in AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    if (string.Equals(loaded.GetName().Name, name, StringComparison.OrdinalIgnoreCase))
+                    var loadedName = loaded.GetName();
+                    if (!string.Equals(loadedName.Name, name, StringComparison.OrdinalIgnoreCase)) continue;
+
+                    if (requestedAssembly.Version == null || loadedName.Version >= requestedAssembly.Version)
                         return loaded;
                 }
 
-                if (string.IsNullOrEmpty(pluginDir)) return null;
-
-                var path = Path.Combine(pluginDir, name + ".dll");
-                if (!File.Exists(path)) return null;
-
-                try
-                {
-                    return Assembly.LoadFrom(path);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
+                return null;
             };
+        }
+
+        private static string GetPluginDirectory()
+        {
+            try
+            {
+                var location = typeof(KeeAnywhereExt).Assembly.Location;
+                return string.IsNullOrEmpty(location) ? null : Path.GetDirectoryName(location);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

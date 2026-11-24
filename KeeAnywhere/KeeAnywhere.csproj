@@ -94,7 +94,7 @@
     <Reference Include="IdentityModel.OidcClient, Version=6.0.0.0, Culture=neutral, PublicKeyToken=5580d04c1b6c37c1, processorArchitecture=MSIL">
       <HintPath>..\packages\IdentityModel.OidcClient.6.0.0\lib\netstandard2.0\IdentityModel.OidcClient.dll</HintPath>
     </Reference>
-    <Reference Include="KeePass, Version=2.57.0.21656, Culture=neutral, PublicKeyToken=fed2ed7716aecf5c, processorArchitecture=MSIL">
+    <Reference Include="KeePass, Version=2.62.0.0, Culture=neutral, PublicKeyToken=fed2ed7716aecf5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\KeePass.exe</HintPath>
     </Reference>
@@ -576,7 +576,7 @@
   <PropertyGroup>
     <PlgxConfiguration>
       <Prerequisites>
-        <KeePassVersion>2.57</KeePassVersion>
+        <KeePassVersion>2.62</KeePassVersion>
         <!--<OS>Windows</OS>-->
         <DotNetVersion>4.8.0</DotNetVersion>
       </Prerequisites>

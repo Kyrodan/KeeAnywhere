@@ -10,11 +10,13 @@
 - \#301, \#347, \#365 [Windows <10 only?] System.Exception: No unused port found! - Thanks to @Jackabomb
 - \#451, \#464 NULL reference when connecting to OneDrive - Thanks to @D3-LucaPiombino
 - \#459 "Index was outside the bounds of array" error in Dropbox - Thanks to @CarrieForle
+- \#497 OneDrive: file path got lost when loading, saving, copying or listing files - Thanks to @Kelltomal
 
 ### Improved
 
 - Updated Dependencies (AWS, Box, Dropbox, Google Drive, Google Storage, OneDrive)
 - Using .Net 4.8 now
+- Using KeePass 2.62 now (minimum required version)
 
 
 ## 2.1.0 (2024-06-17)
