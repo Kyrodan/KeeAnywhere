@@ -29,8 +29,40 @@
   --container: 64rem;
 }
 
+/*
+ * Dark mode: automatically (system setting) unless the user forced light mode,
+ * or forced via theme toggle (data-theme on <html>, stored in localStorage).
+ * Keep both dark blocks in sync.
+ */
+:root {
+  color-scheme: light dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1720;
+  --bg-soft: #16212c;
+  --text: #d5dde4;
+  --text-muted: #9aa8b3;
+  --heading: #8cc2f0;
+  --link: #8cc2f0;
+  --link-hover: #b9dafa;
+  --border: #2a3a48;
+  --header-bg: #0b2a40;
+  --header-text: #c5d3df;
+  --header-text-active: #ffffff;
+  --banner-from: #2f5f8f;
+  --banner-to: #0b2a40;
+  --code-bg: #16212c;
+  --code-text: #d5dde4;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #0f1720;
     --bg-soft: #16212c;
     --text: #d5dde4;
@@ -140,6 +172,55 @@ img {
 .brand:hover {
   color: var(--header-text-active);
   text-decoration: none;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Theme toggle: auto -> light -> dark (icon set by data-mode) */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  font: inherit;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--header-text-active);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.theme-toggle[hidden] {
+  display: none;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--header-text-active);
+  outline-offset: 2px;
+}
+
+.theme-toggle::before {
+  content: "\25D0";
+}
+
+.theme-toggle[data-mode="light"]::before {
+  content: "\2600";
+}
+
+.theme-toggle[data-mode="dark"]::before {
+  content: "\263E";
 }
 
 .nav-item {

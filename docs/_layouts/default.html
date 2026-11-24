@@ -16,6 +16,15 @@
   {% seo %}
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#103f5f">
+  <script>
+    /* Apply stored theme (light/dark) before rendering to avoid flashing. */
+    (function () {
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) { }
+    })();
+  </script>
   <link rel="icon" type="image/png" href="{{ '/assets/images/KeeAnywhere_48x48.png' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
 </head>
@@ -30,16 +39,20 @@
         <span>{{ site.title }}</span>
       </a>
 
-      <nav class="nav-desktop" aria-label="Main">
-        {% include mainmenu.html %}
-      </nav>
-
-      <details class="nav-mobile">
-        <summary>Menu</summary>
-        <nav aria-label="Main">
+      <div class="header-actions">
+        <nav class="nav-desktop" aria-label="Main">
           {% include mainmenu.html %}
         </nav>
-      </details>
+
+        <button type="button" id="theme-toggle" class="theme-toggle" hidden></button>
+
+        <details class="nav-mobile">
+          <summary>Menu</summary>
+          <nav aria-label="Main">
+            {% include mainmenu.html %}
+          </nav>
+        </details>
+      </div>
     </div>
   </header>
 
@@ -76,6 +89,39 @@
       <span class="site-footer-credits">This is a private non-commercial web site. It is provided for information purposes only.</span>
     </div>
   </footer>
+
+  <script>
+    /* Theme toggle: automatic (system) -> light -> dark. Stored only in this browser (localStorage). */
+    (function () {
+      var button = document.getElementById('theme-toggle');
+      if (!button) return;
+      var root = document.documentElement;
+      var modes = ['auto', 'light', 'dark'];
+      var labels = { auto: 'Theme: automatic (system setting)', light: 'Theme: light', dark: 'Theme: dark' };
+
+      function current() {
+        return root.getAttribute('data-theme') || 'auto';
+      }
+
+      function apply(mode) {
+        if (mode === 'auto') root.removeAttribute('data-theme');
+        else root.setAttribute('data-theme', mode);
+        try {
+          if (mode === 'auto') localStorage.removeItem('theme');
+          else localStorage.setItem('theme', mode);
+        } catch (e) { }
+        button.setAttribute('data-mode', mode);
+        button.setAttribute('aria-label', labels[mode] + ' - click to change');
+        button.title = labels[mode] + ' - click to change';
+      }
+
+      apply(current());
+      button.hidden = false;
+      button.addEventListener('click', function () {
+        apply(modes[(modes.indexOf(current()) + 1) % modes.length]);
+      });
+    })();
+  </script>
 </body>
 
 </html>
