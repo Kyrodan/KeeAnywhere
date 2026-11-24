@@ -7,6 +7,15 @@ In folder *build* you now see two subfolders:
 
 Note: NuGet packages are restored via MSBuild (`msbuild -t:restore -p:RestorePackagesConfig=true`) - no separate *nuget.exe* needed.
 
+# CI (GitHub Actions)
+*.github\workflows\build.yml* builds PLGX, ZIP, Chocolatey package and *SHA256SUMS.txt* (uploaded as workflow artifact):
+
+* Every push and pull request on master (except changes in *docs*): build check with **dummy API keys** - artifact name ends with *-dummy-keys*, not for production use.
+* Tags *v\** (e.g. *v2.2.0*): release build with the **real API keys**. The tag must match AssemblyInformationalVersion in *AssemblyInfo.cs* (tag *v2.2.0* for version *2.2.0*), otherwise the build fails.
+* The version is read from AssemblyInformationalVersion - no version to maintain in the workflow.
+
+Real API keys for release builds: create the repository secret **KEEANYWHERE_API_KEYS** (Settings - Secrets and variables - Actions) with the complete content of your local *KeeAnywhere\ApiKeys.cs*. Update the secret whenever *ApiKeys.cs* changes. A release build fails if the secret is missing or still contains dummy keys.
+
 # API keys
 The OAuth client ids/secrets of the storage providers live in *KeeAnywhere\ApiKeys.cs*, which is **not** under version control (.gitignore).
 On the first build it is created automatically from *KeeAnywhere\ApiKeys.Template.cs* with dummy values - enough to compile, but connecting to Box, Dropbox, Google Drive, HiDrive and OneDrive won't work.
@@ -41,7 +50,6 @@ When preparing for a new release the last steps is to change the version informa
   * AssemblyVersion and AssemblyFileVersion: numeric only (e.g. 0.1.0.0) - no suffix allowed
   * AssemblyInformationalVersion: full version including suffix (e.g. 0.1.0-alpha)
 * build.cmd
-* .github\workflows\build.yml (env: version)
 * CHANGELOG.md
 * chocolatey\keepass-plugin-keeanywhere.nuspec
   * version

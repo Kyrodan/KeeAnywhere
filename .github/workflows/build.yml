@@ -1,16 +1,29 @@
 name: KeeAnywhere Build
 
+# Build check for every push/PR on master, release build for tags v* (with real API keys).
 on:
-#  push:
-#    branches: master
+  push:
+    branches: [ master ]
+    tags: [ 'v*' ]
+    paths-ignore: [ 'docs/**' ]
+  pull_request:
+    branches: [ master ]
+    paths-ignore: [ 'docs/**' ]
   workflow_dispatch:
 
-env:
-  version: 2.2.0-unstable
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: windows-2022
+    defaults:
+      run:
+        shell: pwsh
 
     steps:
     - uses: actions/checkout@v4
@@ -18,44 +31,90 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
 
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v2
-
-    - name: Setup 7zip
-      run: choco install 7zip.portable
-      
-    - name: Create Build Directory
+    # Single source of truth: AssemblyInformationalVersion in AssemblyInfo.cs
+    - name: Determine version
+      id: version
       run: |
-        mkdir build
-        # mkdir build\bin
-        mkdir build\dist
-      
-    - name: Restore Packages
-      run: nuget restore 
+        $m = Select-String -Path KeeAnywhere\Properties\AssemblyInfo.cs -Pattern '^\[assembly: AssemblyInformationalVersion\("([^"]+)"\)\]'
+        if (-not $m) { throw "AssemblyInformationalVersion not found in AssemblyInfo.cs" }
+        $version = $m.Matches[0].Groups[1].Value
+        $release = "${{ github.ref_type }}" -eq "tag"
+        if ($release -and "${{ github.ref_name }}" -ne "v$version") {
+          throw "Tag ${{ github.ref_name }} does not match version $version in AssemblyInfo.cs"
+        }
+        $artifact = if ($release) { "KeeAnywhere-$version" } else { "KeeAnywhere-$version-dummy-keys" }
+        "version=$version" >> $env:GITHUB_OUTPUT
+        "release=$($release.ToString().ToLower())" >> $env:GITHUB_OUTPUT
+        "artifact=$artifact" >> $env:GITHUB_OUTPUT
+        Write-Host "Version: $version, release build: $release"
 
-    - name: Build Solution
-      run: msbuild KeeAnywhere.sln /p:Configuration=Release /t:Clean,Build /fl /flp:logfile=build\build.log
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: packages
+        key: nuget-${{ hashFiles('KeeAnywhere/packages.config') }}
 
-    - name: Copy PLGX to dist
-      run: copy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\dist\KeeAnywhere-${{ env.version }}.plgx
+    - name: Restore packages
+      run: msbuild KeeAnywhere.sln -t:restore -p:RestorePackagesConfig=true
 
-    - name: ZIP artifacts to dist
-#      working-directory: KeeAnywhere\bin\Release
+    # Release builds only: ApiKeys.cs from secret KEEANYWHERE_API_KEYS (complete file content).
+    # All other builds use ApiKeys.Template.cs (dummy keys), created by the build automatically.
+    - name: Create ApiKeys.cs (release build)
+      if: steps.version.outputs.release == 'true'
+      env:
+        API_KEYS: ${{ secrets.KEEANYWHERE_API_KEYS }}
       run: |
-        cd KeeAnywhere\bin\Release
-        dir
-        7za a -tzip ..\..\..\build\dist\KeeAnywhere-${{ env.version }}.zip -x!*.plgx -x!*.pdb -x!*.xml -x!*.config -x!KeePass.*
-        cd ..\..\..
+        if ([string]::IsNullOrWhiteSpace($env:API_KEYS)) { throw "Secret KEEANYWHERE_API_KEYS is missing - release build would contain dummy keys." }
+        if ($env:API_KEYS -match '"dummy"') { throw "Secret KEEANYWHERE_API_KEYS still contains dummy keys." }
+        [System.IO.File]::WriteAllText("$PWD\KeeAnywhere\ApiKeys.cs", $env:API_KEYS, (New-Object System.Text.UTF8Encoding($true)))
+        Write-Host "ApiKeys.cs created from secret."
+
+    - name: Build solution
+      run: |
+        New-Item -ItemType Directory -Force -Path build\dist | Out-Null
+        msbuild KeeAnywhere.sln /p:Configuration=Release /t:Clean,Build /fl /flp:logfile=build\build.log
+        if ($LASTEXITCODE -ne 0) { throw "Build failed." }
+
+    - name: Package PLGX and ZIP
+      run: |
+        $version = "${{ steps.version.outputs.version }}"
+        Copy-Item KeeAnywhere\bin\Release\KeeAnywhere.plgx build\dist\KeeAnywhere-$version.plgx
+
+        # same 7-Zip as build.cmd (NuGet package 7-Zip.CommandLine)
+        $zip = (Get-ChildItem packages\7-Zip.CommandLine.*\tools\7za.exe | Sort-Object FullName | Select-Object -Last 1).FullName
+        if (-not $zip) { throw "7za.exe not found in packages\7-Zip.CommandLine.*" }
+        Push-Location KeeAnywhere\bin\Release
+        & $zip a -tzip "..\..\..\build\dist\KeeAnywhere-$version.zip" '-x!*.plgx' '-x!*.pdb' '-x!*.xml' '-x!*.config' '-x!KeePass.*'
+        $exit = $LASTEXITCODE
+        Pop-Location
+        if ($exit -ne 0) { throw "7-Zip failed." }
 
     - name: Package Chocolatey
       run: |
-        xcopy /s /i chocolatey build\chocolatey
-        xcopy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\chocolatey\tools
-        choco pack build\chocolatey\keepass-plugin-keeanywhere.nuspec --version ${{ env.version }} --outputdirectory build\dist  
-        
+        Copy-Item chocolatey build\chocolatey -Recurse
+        Copy-Item KeeAnywhere\bin\Release\KeeAnywhere.plgx build\chocolatey\tools
+        choco pack build\chocolatey\keepass-plugin-keeanywhere.nuspec --version ${{ steps.version.outputs.version }} --outputdirectory build\dist
+        if ($LASTEXITCODE -ne 0) { throw "choco pack failed." }
+
+    - name: Create checksums
+      run: |
+        $files = @(Get-ChildItem build\dist -File | Where-Object Name -ne 'SHA256SUMS.txt')
+        if ($files.Count -eq 0) { throw "No files in build\dist." }
+        $files |
+          ForEach-Object { "{0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name } |
+          Set-Content build\dist\SHA256SUMS.txt -Encoding ascii
+        Get-Content build\dist\SHA256SUMS.txt
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: KeeAnywhere-${{ env.version }}
-        path: "./build/dist"        
-  
+        name: ${{ steps.version.outputs.artifact }}
+        path: build/dist
+
+    - name: Upload build log
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-log
+        path: build/build.log
+        if-no-files-found: ignore
