@@ -46,16 +46,35 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         public async Task Copy(string sourcePath, string destPath)
         {
             var destFilename = CloudPath.GetFileName(destPath);
-            var destItem = await (await _api.DriveItemFromPathAsync(destPath)).GetAsync();
-            if (destItem == null)
-                throw new FileNotFoundException("OneDrive: Folder not found.", destPath);
+            var destFolder = CloudPath.GetDirectoryName(destPath);
+
+            // #429: the copy target is the parent folder of destPath (destPath itself does not exist yet).
+            DriveItem folder;
+            if (string.IsNullOrEmpty(destFolder))
+            {
+                // file in root folder
+                var drive = await _api.Me.Drive.GetAsync();
+                folder = await _api.Drives[drive.Id].Root.GetAsync();
+            }
+            else
+            {
+                folder = await (await _api.DriveItemFromPathAsync(destFolder)).GetAsync();
+            }
+
+            if (folder == null)
+                throw new FileNotFoundException("OneDrive: Folder not found.", destFolder);
+
+            // A shared folder at top level is only a link in the own drive: copy into the remote folder.
+            var parentReference = folder.RemoteItem != null
+                ? new ItemReference { DriveId = folder.RemoteItem.ParentReference.DriveId, Id = folder.RemoteItem.Id }
+                : new ItemReference { DriveId = folder.ParentReference != null ? folder.ParentReference.DriveId : null, Id = folder.Id };
 
             var body = new CopyPostRequestBody
             {
                 Name = destFilename,
-                ParentReference = new ItemReference { Id = destItem.Id }
+                ParentReference = parentReference
             };
-            
+
             await (await _api.DriveItemFromPathAsync(sourcePath))
                 .Copy.PostAsync(body);
         }

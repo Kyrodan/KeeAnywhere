@@ -62,7 +62,7 @@ When preparing for a new release the last steps is to change the version informa
 * CHANGELOG.md
 * chocolatey\keepass-plugin-keeanywhere.nuspec
   * version
-  * releaseNotes (copy of the CHANGELOG.md section of this version - only for releases)
+  * releaseNotes (copy of the CHANGELOG.md section of this version - only for releases). For patch releases (hotfixes, e.g. *2.2.1*) include the sections of **all versions of this minor version** down to *x.y.0* (e.g. *2.2.1* and *2.2.0*), so Chocolatey users see all changes since the last minor release.
 * version_manifest.txt (change only for production releases)
 
 If the required KeePass version changes, update it consistently in:

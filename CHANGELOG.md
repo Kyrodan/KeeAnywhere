@@ -1,10 +1,9 @@
-## 2.3.0 (unreleased)
-
-### New
+## 2.2.1 (2026-11-24)
 
 ### Fixed
 
-### Improved
+- \#429 OneDrive: Backup to Remote did not create backup files
+- \#504 Google Drive: login failed with "Error 401: deleted_client" (outdated OAuth client in release 2.2.0)
 
 
 ## 2.2.0 (2026-11-24)
