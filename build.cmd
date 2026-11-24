@@ -13,7 +13,9 @@ del /s /f /q build\*
 if not exist build\dist mkdir build\dist
 
 :build
-nuget.exe restore
+rem restore NuGet packages (packages.config) via MSBuild
+msbuild KeeAnywhere.sln -t:restore -p:RestorePackagesConfig=true
+if %errorlevel% NEQ 0 goto error
 msbuild KeeAnywhere.sln /p:Configuration=Release /t:Clean,Build /fl /flp:logfile=build\build.log
 if %errorlevel% NEQ 0 goto error
 

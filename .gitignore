@@ -188,3 +188,7 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 .vs/
+
+# Local KeePass test run from lib\ (test-plgx.ps1)
+lib/Plugins/
+lib/KeePass.config.xml

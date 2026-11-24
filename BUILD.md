@@ -5,6 +5,16 @@ In folder *build* you now see two subfolders:
 * bin: compiled output files
 * dist: packages for distribution
 
+Note: NuGet packages are restored via MSBuild (`msbuild -t:restore -p:RestorePackagesConfig=true`) - no separate *nuget.exe* needed.
+
+# Test
+Run *test-plgx.ps1 [-KeePassDir <path to portable KeePass>] [-Cleanup]*.
+It builds the PLGX, deploys it to KeePass, starts KeePass with *--debug* and reports whether KeePass could compile the plugin.
+All KeePass instances must be closed before.
+
+By default the KeePass in *lib* is used (the version KeeAnywhere is built against). It runs in portable mode via *lib\KeePass.config.xml* (created if missing), so the configuration of your productive KeePass installation is not touched. *lib\Plugins* and *lib\KeePass.config.xml* are ignored by git.
+Note: KeeAnywhere accounts are stored per Windows user, so test and productive use share them.
+
 # Prepare new release
 Each released version is tagged with a version tag: this tag follows [Semantic Versioning](http://semver.org/).
 When preparing for a new release the last steps is to change the version informations (e.g. 0.1.0-alpha):

@@ -18,6 +18,7 @@
 - Updated Dependencies (AWS, Box, Dropbox, Google Drive, Google Storage, OneDrive)
 - Using .Net 4.8 now
 - Using KeePass 2.62 now (minimum required version)
+- \#486 Updated Google Cloud Storage dependencies to consistent versions (fixes assembly version mismatch) - Thanks to @Fulgan
 
 
 ## 2.1.0 (2024-06-17)
