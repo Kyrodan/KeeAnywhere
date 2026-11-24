@@ -1,0 +1,48 @@
+name: Publish to Chocolatey
+
+# Runs when a GitHub release is published (manually, after reviewing the draft created by build.yml).
+# Pushes the .nupkg attached to the release to chocolatey.org. Pre-releases are skipped.
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to publish (e.g. v2.2.0)'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  chocolatey:
+    if: github.event_name == 'workflow_dispatch' || !github.event.release.prerelease
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+    - name: Download .nupkg from release
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      run: |
+        gh release download $env:TAG --repo "${{ github.repository }}" --pattern '*.nupkg' --dir dist
+        if ($LASTEXITCODE -ne 0) { throw "Could not download .nupkg from release $env:TAG." }
+        $pkg = @(Get-ChildItem dist -Filter *.nupkg)
+        if ($pkg.Count -ne 1) { throw "Expected exactly one .nupkg in release $env:TAG, found $($pkg.Count)." }
+        $version = $env:TAG -replace '^v', ''
+        if ($pkg[0].Name -ne "keepass-plugin-keeanywhere.$version.nupkg") {
+          throw "Package $($pkg[0].Name) does not match release $env:TAG."
+        }
+        Write-Host "Package: $($pkg[0].Name)"
+
+    - name: Push to chocolatey.org
+      env:
+        CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
+      run: |
+        if ([string]::IsNullOrWhiteSpace($env:CHOCOLATEY_API_KEY)) { throw "Secret CHOCOLATEY_API_KEY is missing." }
+        $pkg = (Get-ChildItem dist -Filter *.nupkg | Select-Object -First 1).FullName
+        choco push $pkg --source https://push.chocolatey.org/ --api-key $env:CHOCOLATEY_API_KEY
+        if ($LASTEXITCODE -ne 0) { throw "choco push failed." }

@@ -24,6 +24,10 @@ jobs:
     defaults:
       run:
         shell: pwsh
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      release: ${{ steps.version.outputs.release }}
+      artifact: ${{ steps.version.outputs.artifact }}
 
     steps:
     - uses: actions/checkout@v7
@@ -118,3 +122,70 @@ jobs:
         name: build-log
         path: build/build.log
         if-no-files-found: ignore
+
+  # Tags v* only: create a DRAFT GitHub release with the build artifacts and the CHANGELOG section.
+  # Review and publish it manually - publishing triggers chocolatey.yml.
+  release:
+    needs: build
+    if: needs.build.outputs.release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Download build artifact
+      uses: actions/download-artifact@v8
+      with:
+        name: ${{ needs.build.outputs.artifact }}
+        path: dist
+
+    - name: Release notes from CHANGELOG.md
+      id: notes
+      run: |
+        $version = "${{ needs.build.outputs.version }}"
+        $prerelease = $version -match '-'
+        $baseVersion = ($version -split '-')[0]
+        $lines = Get-Content CHANGELOG.md
+
+        # Section of exactly this version; for pre-releases (e.g. 2.2.0-beta) fall back to the
+        # section of the base version (2.2.0), which may still be "unreleased".
+        $candidates = @($version)
+        if ($prerelease) { $candidates += $baseVersion }
+        $start = -1
+        foreach ($candidate in $candidates) {
+          $head = "^## " + [regex]::Escape($candidate) + " \("
+          for ($i = 0; $i -lt $lines.Count; $i++) { if ($lines[$i] -match $head) { $start = $i; break } }
+          if ($start -ge 0) { break }
+        }
+        if ($start -lt 0) { throw "CHANGELOG.md has no section '## $($candidates -join "' or '## ") (...)'." }
+        if (-not $prerelease -and $lines[$start] -notmatch '\(\d{4}-\d{2}-\d{2}\)') {
+          throw "CHANGELOG.md section of $version has no release date: '$($lines[$start])'"
+        }
+        $end = $lines.Count
+        for ($i = $start + 1; $i -lt $lines.Count; $i++) { if ($lines[$i] -match '^## ') { $end = $i; break } }
+        $notes = ($lines[($start + 1)..($end - 1)] -join "`n").Trim()
+        if ($prerelease) {
+          $notes = "**Pre-release of KeeAnywhere $baseVersion for testing - not for production use.**`n`n" + $notes
+        }
+        $notes += "`n`n[Full Changelog](https://github.com/${{ github.repository }}/blob/master/CHANGELOG.md)"
+        Set-Content notes.md $notes -Encoding utf8
+        Get-Content notes.md
+
+    - name: Create draft release
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        $tag = "${{ github.ref_name }}"
+        $version = "${{ needs.build.outputs.version }}"
+        gh release view $tag *> $null
+        if ($LASTEXITCODE -eq 0) { throw "Release $tag already exists - nothing is overwritten." }
+        $ghArgs = @($tag) + @(Get-ChildItem dist -File | ForEach-Object FullName) +
+                  @('--draft', '--verify-tag', '--title', "KeeAnywhere $version", '--notes-file', 'notes.md')
+        if ($version -match '-') { $ghArgs += '--prerelease' }
+        gh release create @ghArgs
+        if ($LASTEXITCODE -ne 0) { throw "gh release create failed." }

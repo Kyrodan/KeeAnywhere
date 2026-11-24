@@ -14,7 +14,16 @@ Note: NuGet packages are restored via MSBuild (`msbuild -t:restore -p:RestorePac
 * Tags *v\** (e.g. *v2.2.0*): release build with the **real API keys**. The tag must match AssemblyInformationalVersion in *AssemblyInfo.cs* (tag *v2.2.0* for version *2.2.0*), otherwise the build fails.
 * The version is read from AssemblyInformationalVersion - no version to maintain in the workflow.
 
-Real API keys for release builds: create the repository secret **KEEANYWHERE_API_KEYS** (Settings - Secrets and variables - Actions) with the complete content of your local *KeeAnywhere\ApiKeys.cs*. Update the secret whenever *ApiKeys.cs* changes. A release build fails if the secret is missing or still contains dummy keys.
+For tags the job *release* then creates a **draft** GitHub release (only visible to maintainers) with all build artifacts and the CHANGELOG.md section of this version as release notes. The job fails if the CHANGELOG.md section is missing or has no release date (e.g. still "unreleased"), or if a release for this tag already exists.
+
+Versions with suffix (e.g. *2.2.0-beta*) are marked as pre-release. For them the CHANGELOG.md section of the base version is used if there is no own section (e.g. *## 2.2.0 (unreleased)* for *2.2.0-beta*, no release date required), with a "not for production use" note on top. Pre-releases are not pushed to Chocolatey, and version_manifest.txt stays unchanged, so KeePass doesn't offer them as update.
+
+Publishing the release (manually, after review) triggers *.github\workflows\chocolatey.yml*: it pushes the .nupkg attached to the release to chocolatey.org. Pre-releases are skipped. It can also be started manually for a given tag.
+
+Repository secrets (Settings - Secrets and variables - Actions):
+
+* **KEEANYWHERE_API_KEYS**: complete content of your local *KeeAnywhere\ApiKeys.cs*. Update it whenever *ApiKeys.cs* changes. A release build fails if it is missing or still contains dummy keys.
+* **CHOCOLATEY_API_KEY**: API key of the chocolatey.org account maintaining *keepass-plugin-keeanywhere*.
 
 # API keys
 The OAuth client ids/secrets of the storage providers live in *KeeAnywhere\ApiKeys.cs*, which is **not** under version control (.gitignore).
@@ -65,7 +74,15 @@ If the required KeePass version changes, update it consistently in:
 * chocolatey\keepass-plugin-keeanywhere.nuspec: dependency keepass
 * CHANGELOG.md
 
-After having pushed and tagged the current version, then change version to **next** unstable version (e. g. 0.2.0-unstable) - just to make clear ths is a development snapshot and generally not released to public.
+Release steps:
+
+1. Change the version information above, set the release date in CHANGELOG.md (e.g. *## 2.2.0 (2026-12-01)*), commit and push - but **not** version_manifest.txt yet (KeePass reads it directly from master for its update check).
+2. Create and push the tag: `git tag v2.2.0` and `git push origin v2.2.0`.
+3. Wait for the workflow: it builds with the real API keys and creates a draft GitHub release.
+4. Review (and test) the draft release, then publish it - this pushes the package to Chocolatey.
+5. Commit and push version_manifest.txt (production releases only), so KeePass offers the update.
+
+After that, change version to **next** unstable version (e. g. 0.2.0-unstable) - just to make clear this is a development snapshot and generally not released to public.
 
 # Version examples
 Versions are always counted upwards. Each version is unique. 
