@@ -25,8 +25,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
          never the real production keys.
         */
 
-        //TODO: Change API keys!!!
-        internal const string OneDriveClientId = "dummy";
+        internal const string OneDriveClientId = ApiKeys.OneDriveClientId;
 
         internal const string Authority = "https://login.microsoftonline.com/consumers/v2.0";
 
@@ -51,7 +50,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             if (Cache.ContainsKey(account.Id)) return Cache[account.Id];
 
-            var authProvider = new OneDriveAuthenticationProvider(CreateOidcFlow(), account.Secret);
+            var authProvider = new OneDriveAuthenticationProvider(CreateOidcFlow(), account);
 
             //var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true)
             //{
@@ -69,6 +68,11 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             Cache.Add(account.Id, api);
 
             return api;
+        }
+
+        public static void InvalidateCache(string accountId)
+        {
+            Cache.Remove(accountId);
         }
     }
 }

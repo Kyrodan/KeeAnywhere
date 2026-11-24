@@ -28,13 +28,13 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
             var file = await api.GetFileByPath(path, true);
             if (file == null)
-                return null;
+                throw new FileNotFoundException("Google Drive: File not found.", path);
 
             var stream = new MemoryStream();
             var progress = await api.Files.Get(file.Id).DownloadAsync(stream);
 
             if (progress.Status != DownloadStatus.Completed || progress.Exception != null)
-                return null;
+                throw new InvalidOperationException("Google Drive: Download failed (" + progress.Status + ").", progress.Exception);
 
             stream.Seek(0, SeekOrigin.Begin);
 

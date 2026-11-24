@@ -27,9 +27,8 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
           never the real production keys.
         */
 
-        //TODO: Change API keys!!!
-        internal const string GoogleDriveClientId = "dummy";
-        internal const string GoogleDriveClientSecret = "dummy";
+        internal const string GoogleDriveClientId = ApiKeys.GoogleDriveClientId;
+        internal const string GoogleDriveClientSecret = ApiKeys.GoogleDriveClientSecret;
 
         internal const string Authority = "https://accounts.google.com";
 

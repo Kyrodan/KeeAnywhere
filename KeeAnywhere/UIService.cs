@@ -52,6 +52,7 @@ namespace KeeAnywhere
 
             //existingAccount.Name = newAccount.Name;
             existingAccount.Secret = newAccount.Secret;
+            InvalidateProviderCache(existingAccount);
 
             return existingAccount;
         }
@@ -91,8 +92,17 @@ namespace KeeAnywhere
             else
             {
                 account.Secret = newAccount.Secret;
+                InvalidateProviderCache(account);
                 MessageService.ShowInfo("Re-Authorization succeeded!");
             }
+        }
+
+        // Cached API clients still use the old credentials - drop them after re-authorization.
+        private static void InvalidateProviderCache(AccountConfiguration account)
+        {
+            var descriptor = StorageRegistry.Descriptors.FirstOrDefault(_ => _.Type == account.Type);
+            if (descriptor != null && descriptor.InvalidateCacheAction != null)
+                descriptor.InvalidateCacheAction(account.Id);
         }
 
         public void ShowDonationDialog()

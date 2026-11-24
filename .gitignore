@@ -192,3 +192,6 @@ ModelManifest.xml
 # Local KeePass test run from lib\ (test-plgx.ps1)
 lib/Plugins/
 lib/KeePass.config.xml
+
+# Real OAuth API keys - created from KeeAnywhere/ApiKeys.Template.cs on first build
+KeeAnywhere/ApiKeys.cs

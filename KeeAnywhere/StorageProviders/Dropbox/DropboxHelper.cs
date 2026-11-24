@@ -19,11 +19,10 @@ namespace KeeAnywhere.StorageProviders.Dropbox
         never the real production keys.
        */
 
-        //TODO: Change API keys!!!
-        internal const string DropboxFullAccessClientId = "dummy";
-        internal const string DropboxFullAccessClientSecret = "dummy";
-        internal const string DropboxAppFolderOnlyClientId = "dummy";
-        internal const string DropboxAppFolderOnlyClientSecret = "dummy";
+        internal const string DropboxFullAccessClientId = ApiKeys.DropboxFullAccessClientId;
+        internal const string DropboxFullAccessClientSecret = ApiKeys.DropboxFullAccessClientSecret;
+        internal const string DropboxAppFolderOnlyClientId = ApiKeys.DropboxAppFolderOnlyClientId;
+        internal const string DropboxAppFolderOnlyClientSecret = ApiKeys.DropboxAppFolderOnlyClientSecret;
 
         public static DropboxClient GetApi(bool isRestricted, string refreshToken)
         {

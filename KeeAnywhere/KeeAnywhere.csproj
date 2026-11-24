@@ -355,6 +355,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backup\BackupProvider.cs" />
+    <Compile Include="ApiKeys.cs" />
     <Compile Include="BrowserHelper.cs" />
     <Compile Include="CloudPath.cs" />
     <Compile Include="Configuration\AccountConfiguration.cs" />
@@ -533,6 +534,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ApiKeys.Template.cs">
+      <ExcludeFromPlgx />
+    </None>
     <None Include="app.config">
       <ExcludeFromPlgx />
       <SubType>Designer</SubType>
@@ -587,6 +591,10 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
+  <Target Name="CreateApiKeysFromTemplate" BeforeTargets="BeforeBuild" Condition="!Exists('$(MSBuildProjectDirectory)\ApiKeys.cs')">
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\ApiKeys.Template.cs" DestinationFiles="$(MSBuildProjectDirectory)\ApiKeys.cs" />
+    <Message Importance="high" Text="ApiKeys.cs created from ApiKeys.Template.cs (dummy keys)." />
+  </Target>
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
     <CallTarget Targets="BuildPlgx" />
     <!--<Delete Files="$(TargetPath)" />-->

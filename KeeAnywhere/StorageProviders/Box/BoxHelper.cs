@@ -27,9 +27,8 @@ namespace KeeAnywhere.StorageProviders.Box
                never the real production keys.
               */
 
-        //TODO: Change API keys!!!
-        internal const string BoxClientId = "dummy";
-        internal const string BoxClientSecret = "dummy";
+        internal const string BoxClientId = ApiKeys.BoxClientId;
+        internal const string BoxClientSecret = ApiKeys.BoxClientSecret;
 
         internal const int Limit = 500;
 
@@ -55,6 +54,11 @@ namespace KeeAnywhere.StorageProviders.Box
             Cache.Add(account.Id, client);
 
             return client;
+        }
+
+        public static void InvalidateCache(string accountId)
+        {
+            Cache.Remove(accountId);
         }
 
         public static BoxClient GetClient()

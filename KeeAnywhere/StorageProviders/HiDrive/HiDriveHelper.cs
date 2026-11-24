@@ -19,9 +19,8 @@ namespace KeeAnywhere.StorageProviders.HiDrive
             never the real production keys.
         */
 
-        //TODO: Change API keys!!!
-        internal const string HiDriveClientId = "dummy";
-        internal const string HiDriveClientSecret = "dummy";
+        internal const string HiDriveClientId = ApiKeys.HiDriveClientId;
+        internal const string HiDriveClientSecret = ApiKeys.HiDriveClientSecret;
 
         public static IHiDriveAuthenticator GetAuthenticator()
         {

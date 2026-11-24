@@ -12,6 +12,9 @@
 - \#459 "Index was outside the bounds of array" error in Dropbox - Thanks to @CarrieForle
 - \#497 OneDrive: file path got lost when loading, saving, copying or listing files - Thanks to @Kelltomal
 - \#491 Dropbox, Box: authorization URL was passed unescaped to the browser; browser sometimes showed a connection error after successful login - Thanks to @HarryHuy
+- \#468, \#484 OneDrive: rotated refresh token was not stored, so the account had to be re-authorized after some time - Thanks to @Fulgan
+- \#484 Box, OneDrive: after re-authorization the old credentials were still used until KeePass was restarted - Thanks to @Fulgan
+- \#484 Google Drive: meaningful error message if a file is not found or the download fails - Thanks to @Fulgan
 
 ### Improved
 
@@ -19,6 +22,7 @@
 - Using .Net 4.8 now
 - Using KeePass 2.62 now (minimum required version)
 - \#486 Updated Google Cloud Storage dependencies to consistent versions (fixes assembly version mismatch) - Thanks to @Fulgan
+- Build: OAuth API keys moved to *ApiKeys.cs*, which is not under version control (created from *ApiKeys.Template.cs* with dummy values on first build, see BUILD.md) - inspired by \#491, thanks to @HarryHuy
 
 
 ## 2.1.0 (2024-06-17)

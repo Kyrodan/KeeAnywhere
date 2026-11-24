@@ -7,6 +7,14 @@ In folder *build* you now see two subfolders:
 
 Note: NuGet packages are restored via MSBuild (`msbuild -t:restore -p:RestorePackagesConfig=true`) - no separate *nuget.exe* needed.
 
+# API keys
+The OAuth client ids/secrets of the storage providers live in *KeeAnywhere\ApiKeys.cs*, which is **not** under version control (.gitignore).
+On the first build it is created automatically from *KeeAnywhere\ApiKeys.Template.cs* with dummy values - enough to compile, but connecting to Box, Dropbox, Google Drive, HiDrive and OneDrive won't work.
+
+* For release builds (and testing these providers) put the real keys into *KeeAnywhere\ApiKeys.cs*.
+* Never put real keys into *ApiKeys.Template.cs* or the *...Helper.cs* files.
+* When adding a key, add it to both *ApiKeys.Template.cs* (dummy value) and your local *ApiKeys.cs*.
+
 # Test
 Run *test-plgx.ps1 [-KeePassDir <path to portable KeePass>] [-Cleanup]*.
 It builds the PLGX, deploys it to KeePass, starts KeePass with *--debug* and reports whether KeePass could compile the plugin.
