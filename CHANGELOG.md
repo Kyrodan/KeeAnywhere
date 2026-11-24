@@ -15,12 +15,14 @@
 - \#468, \#484 OneDrive: rotated refresh token was not stored, so the account had to be re-authorized after some time - Thanks to @Fulgan
 - \#484 Box, OneDrive: after re-authorization the old credentials were still used until KeePass was restarted - Thanks to @Fulgan
 - \#484 Google Drive: meaningful error message if a file is not found or the download fails - Thanks to @Fulgan
+- Security: OneDrive libraries could leak Cookie/Proxy-Authorization headers on cross-host redirects ([GHSA-7j59-v9qr-6fq9](https://github.com/advisories/GHSA-7j59-v9qr-6fq9)) - updated Microsoft Graph to 5.105.0 and Kiota to 1.22.2 (replaces \#489)
 
 ### Improved
 
 - Updated Dependencies (AWS, Box, Dropbox, Google Drive, Google Storage, OneDrive)
 - Using .Net 4.8 now
 - Using KeePass 2.62 now (minimum required version)
+- Removed unused dependency log4net (was affected by [GHSA-4f7c-pmjv-c25w](https://github.com/advisories/GHSA-4f7c-pmjv-c25w), replaces \#482)
 - \#486 Updated Google Cloud Storage dependencies to consistent versions (fixes assembly version mismatch) - Thanks to @Fulgan
 - Build: OAuth API keys moved to *ApiKeys.cs*, which is not under version control (created from *ApiKeys.Template.cs* with dummy values on first build, see BUILD.md) - inspired by \#491, thanks to @HarryHuy
 
