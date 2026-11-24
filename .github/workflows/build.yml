@@ -26,10 +26,10 @@ jobs:
         shell: pwsh
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
 
     # Single source of truth: AssemblyInformationalVersion in AssemblyInfo.cs
     - name: Determine version
@@ -49,7 +49,7 @@ jobs:
         Write-Host "Version: $version, release build: $release"
 
     - name: Cache NuGet packages
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: packages
         key: nuget-${{ hashFiles('KeeAnywhere/packages.config') }}
@@ -106,14 +106,14 @@ jobs:
         Get-Content build\dist\SHA256SUMS.txt
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ steps.version.outputs.artifact }}
         path: build/dist
 
     - name: Upload build log
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: build-log
         path: build/build.log
