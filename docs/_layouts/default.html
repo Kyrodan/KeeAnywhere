@@ -67,23 +67,24 @@
       {% assign plgx = site.github.latest_release.assets | where_exp: "asset", "asset.name contains '.plgx'" | first %}
       <div class="banner-buttons">
         <a href="{{ plgx.browser_download_url | default: site.github.releases_url }}" class="btn btn-primary">Download {{ site.github.latest_release.tag_name }}</a>
-        <a href="{{ site.github.issues_url }}" class="btn">Found a bug?</a>
-        <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
+        <a href="{{ site.github.issues_url }}" class="btn" target="_blank" rel="noopener noreferrer">Found a bug?</a>
+        <a href="{{ site.github.repository_url }}" class="btn" target="_blank" rel="noopener noreferrer">View on GitHub</a>
       </div>
       {% endif %}
     </div>
   </div>
 
   <main id="content" class="container main-content">
-    {{ content }}
+    {% comment %} External links (absolute http/https) in page content open in a new tab, marked with an icon (CSS: a.external). {% endcomment %}
+    {{ content | replace: '<a href="http', '<a class="external" target="_blank" rel="noopener noreferrer" href="http' }}
   </main>
 
   <footer class="site-footer">
     <div class="container">
       {% if site.github.is_project_page %}
       <span class="site-footer-owner">
-        <a href="{{ site.github.repository_url }}">{{ site.github.repository_name }}</a> is maintained by
-        <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>.
+        <a class="external" href="{{ site.github.repository_url }}" target="_blank" rel="noopener noreferrer">{{ site.github.repository_name }}</a> is maintained by
+        <a class="external" href="{{ site.github.owner_url }}" target="_blank" rel="noopener noreferrer">{{ site.github.owner_name }}</a>.
       </span>
       {% endif %}
       <span class="site-footer-credits">This is a private non-commercial web site. It is provided for information purposes only.</span>

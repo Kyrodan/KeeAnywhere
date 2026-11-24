@@ -110,6 +110,19 @@ a:hover {
   text-decoration: underline;
 }
 
+/* External links: open in a new tab (see default.html), marked with an arrow.
+   The second content declaration adds alternative text for screen readers;
+   browsers without support keep the first one. Buttons never get this class. */
+a.external::after {
+  content: "\2197";
+  content: "\2197" / " (opens in new tab)";
+  display: inline-block;
+  margin-left: 0.15em;
+  font-size: 0.8em;
+  line-height: 1;
+  text-decoration: none;
+}
+
 a:focus-visible,
 summary:focus-visible {
   outline: 2px solid var(--link);
