@@ -84,6 +84,28 @@ Release steps:
 
 After that, change version to **next** unstable version (e. g. 0.2.0-unstable) - just to make clear this is a development snapshot and generally not released to public.
 
+# Prepare pre-release (alpha/beta)
+A pre-release lets users test a version before the production release. It is published as GitHub pre-release only: not pushed to Chocolatey and not offered as update by KeePass (version_manifest.txt stays unchanged).
+
+Prerequisite: repository secret **KEEANYWHERE_API_KEYS** (see CI).
+
+1. Set the version with suffix, e.g. *2.2.0-beta* (second one: *2.2.0-beta.2*):
+   * KeeAnywhere\Properties\AssemblyInfo.cs: AssemblyInformationalVersion *2.2.0-beta* (AssemblyVersion/AssemblyFileVersion stay numeric, e.g. *2.2.0.0*)
+   * build.cmd: *set version=2.2.0-beta*
+   * chocolatey\keepass-plugin-keeanywhere.nuspec: *version*
+   * CHANGELOG.md: nothing to do - the section of the base version is used (*## 2.2.0 (unreleased)*)
+2. Commit and push.
+3. Create and push the tag (must match the version exactly): `git tag v2.2.0-beta` and `git push origin v2.2.0-beta`.
+4. Wait for the workflow (Actions): it builds with the real API keys and creates a **draft** GitHub release marked as pre-release, with the release notes of *2.2.0* and a "not for production use" note.
+5. Review (and test) the draft under *Releases*, then publish it.
+6. Optional: set the version back to *2.2.0-unstable* until the next (pre-)release.
+
+Notes:
+
+* Each pre-release needs its own version and tag (*2.2.0-beta*, *2.2.0-beta.2*, ...). Never move a tag after the release has been published.
+* To rebuild the same commit (e.g. after fixing the secret), use *Re-run jobs* of the workflow run - no new tag needed. Delete an existing draft release first.
+* To replace an unpublished draft by a newer commit: delete the draft release, then move the tag: `git tag -f v2.2.0-beta` and `git push --force origin v2.2.0-beta`.
+
 # Version examples
 Versions are always counted upwards. Each version is unique. 
 Additional informations like *alpha*, *beta* only describe the characteristics of the version. 
