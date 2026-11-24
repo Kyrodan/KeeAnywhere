@@ -28,7 +28,7 @@ Supported providers:
     <docsUrl>https://keeanywhere.de/use/start</docsUrl>
     <iconUrl>https://cdn.rawgit.com/Kyrodan/KeeAnywhere/95b05e59b80690037bfb1952715d5104fbf99b71/KeeAnywhere/Resources/KeeAnywhere_48x48.png</iconUrl>
     <tags>keepass plugin backup sync cloud</tags>
-    <copyright>© 2015-2021 Daniel Bölts</copyright>
+    <copyright>© 2015-2026 Daniel Bölts</copyright>
     <licenseUrl>https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>## 2.1.0 (2024-06-17)
