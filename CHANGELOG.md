@@ -1,12 +1,15 @@
-## 2.2.0 (unrelease)
+## 2.2.0 (unreleased)
 
 ### New
 
 - \#409 Remove old Auth2-Flow (integrated browser) - was only used for Box.com
+- \#427 Fix to connect Amazon S3 compatible endpoints with custom auth region - Thanks to @ftorregrossa
 
 ### Fixed
 
 - \#301, \#347, \#365 [Windows <10 only?] System.Exception: No unused port found! - Thanks to @Jackabomb
+- \#451, \#464 NULL reference when connecting to OneDrive - Thanks to @D3-LucaPiombino
+- \#459 "Index was outside the bounds of array" error in Dropbox - Thanks to @CarrieForle
 
 ### Improved
 
