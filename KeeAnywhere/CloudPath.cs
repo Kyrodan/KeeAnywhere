@@ -113,6 +113,18 @@ namespace KeeAnywhere
             return path;
         }
 
+        public static String GetFileNameWithoutExtension(String path)
+        {
+            path = GetFileName(path);
+            if (path != null)
+            {
+                int i = path.LastIndexOf('.');
+                if (i >= 0)
+                    return path.Substring(0, i);
+            }
+            return path;
+        }
+
         public static String Combine(String path1, String path2)
         {
             if (path1 == null || path2 == null)

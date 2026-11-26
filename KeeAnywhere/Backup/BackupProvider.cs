@@ -37,7 +37,7 @@ namespace KeeAnywhere.Backup
             {
                 if (TryBackupLocal(stream, path, now))
                 {
-                    RotateLocal(path);
+                    TryRotateLocal(path);
                 }
             }
 
@@ -45,7 +45,7 @@ namespace KeeAnywhere.Backup
             {
                 if (await TryBackupRemote(path, now))
                 {
-                    await RotateRemote(path);
+                    await TryRotateRemote(path);
                 }
             }
 
@@ -54,33 +54,41 @@ namespace KeeAnywhere.Backup
 
         }
 
-        private async Task RotateRemote(string path)
+        // Removing old backups must never prevent saving the database
+        private async Task TryRotateRemote(string path)
         {
-            var folder = CloudPath.GetDirectoryName(path);
-            var items = await this.BaseProvider.GetChildrenByParentPath(folder);
-
-            var pattern = "^" + Regex.Escape(GetBackupFilenamePattern(path))
-                                     .Replace("\\*", ".*")
-                                     .Replace("\\?", ".") + "$";
-
-            var regex = new Regex(pattern);
-            var files = items.Where(item => regex.IsMatch(item.Name)).Select(item => item.Name).ToArray();
-            Array.Sort(files);
-
-            for (var i = 0; i < files.Length - _configService.PluginConfiguration.BackupCopies; i++)
+            try
             {
-                await this.BaseProvider.Delete(CloudPath.Combine(folder, files[i]));
+                var folder = CloudPath.GetDirectoryName(path);
+                var items = await this.BaseProvider.GetChildrenByParentPath(folder);
+
+                // Remote backups are named after the unmasked cloud filename (see TryBackupRemote)
+                var baseFilename = CloudPath.GetFileNameWithoutExtension(path);
+                var extension = GetBackupExtension(CloudPath.GetFileName(path));
+                var regex = new Regex("^" + Regex.Escape(baseFilename) + @"_Backup_\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}" + Regex.Escape(extension) + "$");
+
+                var files = items.Where(item => item.Name != null && regex.IsMatch(item.Name)).Select(item => item.Name).ToArray();
+                Array.Sort(files, StringComparer.Ordinal);
+
+                for (var i = 0; i < files.Length - _configService.PluginConfiguration.BackupCopies; i++)
+                {
+                    await this.BaseProvider.Delete(CloudPath.Combine(folder, files[i]));
+                }
+            }
+            catch (Exception)
+            {
+                // Ignore: old backups are removed with the next save
             }
         }
 
         private async Task<bool> TryBackupRemote(string path, DateTime saveDateTime)
         {
-            var backupFilename = GetBackupFilename(CloudPath.GetFileName(path), saveDateTime);
-            var backupFolder = CloudPath.GetDirectoryName(path);
-            var backupPath = CloudPath.Combine(backupFolder, backupFilename);
-
             try
             {
+                var backupFilename = GetBackupFilename(CloudPath.GetFileName(path), saveDateTime);
+                var backupFolder = CloudPath.GetDirectoryName(path);
+                var backupPath = CloudPath.Combine(backupFolder, backupFilename);
+
                 await this.BaseProvider.Copy(path, backupPath);
                 return true;
             }
@@ -91,17 +99,25 @@ namespace KeeAnywhere.Backup
             }
         }
 
-        private void RotateLocal(string path)
+        // Removing old backups must never prevent saving the database
+        private void TryRotateLocal(string path)
         {
-            var folder = GetBackupFolder();
-            var filenameFilter = GetBackupFilenamePattern(path);
-
-            var files = Directory.GetFiles(folder, filenameFilter, SearchOption.TopDirectoryOnly);
-            Array.Sort(files);
-
-            for (var i = 0; i < files.Length - _configService.PluginConfiguration.BackupCopies; i++)
+            try
             {
-                File.Delete(files[i]);
+                var folder = GetBackupFolder();
+                var filenameFilter = GetBackupFilenamePattern(GetLocalFilename(path));
+
+                var files = Directory.GetFiles(folder, filenameFilter, SearchOption.TopDirectoryOnly);
+                Array.Sort(files, StringComparer.Ordinal);
+
+                for (var i = 0; i < files.Length - _configService.PluginConfiguration.BackupCopies; i++)
+                {
+                    File.Delete(files[i]);
+                }
+            }
+            catch (Exception)
+            {
+                // Ignore: old backups are removed with the next save
             }
         }
 
@@ -153,21 +169,29 @@ namespace KeeAnywhere.Backup
 
         public string GetBackupFilename(string filename, DateTime saveDateTime)
         {
-            var baseFilename = Path.GetFileNameWithoutExtension(filename);
+            var baseFilename = CloudPath.GetFileNameWithoutExtension(filename);
 
-            filename = string.Format("{0}_Backup_{1:yyyy-MM-dd-HH-mm-ss}.kdbx", baseFilename, saveDateTime);
+            filename = string.Format("{0}_Backup_{1:yyyy-MM-dd-HH-mm-ss}{2}", baseFilename, saveDateTime, GetBackupExtension(filename));
 
             return filename;
         }
 
-        public string GetBackupFilenamePattern(string path)
+        public string GetBackupFilenamePattern(string filename)
         {
-            var filename = GetLocalFilename(path);
-            var baseFilename = Path.GetFileNameWithoutExtension(filename);
+            var baseFilename = CloudPath.GetFileNameWithoutExtension(filename);
 
-            filename = string.Format("{0}_Backup_????-??-??-??-??-??.kdbx", baseFilename);
+            filename = string.Format("{0}_Backup_????-??-??-??-??-??{1}", baseFilename, GetBackupExtension(filename));
 
             return filename;
+        }
+
+        // Backups keep the extension of the saved file: other files saved beside the database (e.g. the .xml file
+        // of KeeChallenge, #173) must not be backed up as .kdbx and rotated together with the database backups.
+        // Files without extension keep the former .kdbx extension.
+        private static string GetBackupExtension(string filename)
+        {
+            var extension = CloudPath.GetExtension(filename);
+            return string.IsNullOrEmpty(extension) ? ".kdbx" : extension;
         }
 
     }
