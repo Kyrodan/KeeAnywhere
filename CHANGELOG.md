@@ -8,6 +8,8 @@
 
 ### Improved
 
+- Updated Dependencies (AWS)
+
 
 ## 2.2.1 (2026-11-24)
 

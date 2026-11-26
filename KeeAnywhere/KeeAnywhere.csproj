@@ -41,10 +41,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>..\packages\AWSSDK.Core.3.7.304.17\lib\net45\AWSSDK.Core.dll</HintPath>
+      <HintPath>..\packages\AWSSDK.Core.3.7.501.1\lib\net45\AWSSDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>..\packages\AWSSDK.S3.3.7.309.5\lib\net45\AWSSDK.S3.dll</HintPath>
+      <HintPath>..\packages\AWSSDK.S3.3.7.511.8\lib\net45\AWSSDK.S3.dll</HintPath>
     </Reference>
     <Reference Include="Azure.Core, Version=1.50.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>..\packages\Azure.Core.1.50.0\lib\net472\Azure.Core.dll</HintPath>
@@ -572,10 +572,10 @@
     <Content Include="Resources\KeeAnywhere_48x48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\AWSSDK.S3.3.7.309.5\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll">
+    <Analyzer Include="..\packages\AWSSDK.S3.3.7.511.8\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll">
       <ExcludeFromPlgx />
     </Analyzer>
-    <Analyzer Include="..\packages\AWSSDK.S3.3.7.309.5\analyzers\dotnet\cs\SharedAnalysisCode.dll">
+    <Analyzer Include="..\packages\AWSSDK.S3.3.7.511.8\analyzers\dotnet\cs\SharedAnalysisCode.dll">
       <ExcludeFromPlgx />
     </Analyzer>
   </ItemGroup>

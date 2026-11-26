@@ -62,6 +62,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 Timeout = Timeout.InfiniteTimeSpan,
                 AuthenticationRegion = String.IsNullOrWhiteSpace(authRegion) ? "" : authRegion
             };
+            DisableDefaultChecksums(config);
 
             return config;
         }
@@ -75,8 +76,17 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 RegionEndpoint = region,
                 Timeout = Timeout.InfiniteTimeSpan
             };
+            DisableDefaultChecksums(config);
 
             return config;
+        }
+
+        // Since AWSSDK 3.7.412 checksums (CRC32 trailer) are calculated/validated for all requests by default,
+        // which many S3 compatible services don't support. Only use them when required by the operation.
+        private static void DisableDefaultChecksums(AmazonS3Config config)
+        {
+            config.RequestChecksumCalculation = RequestChecksumCalculation.WHEN_REQUIRED;
+            config.ResponseChecksumValidation = ResponseChecksumValidation.WHEN_REQUIRED;
         }
 
         public static AmazonS3Client GetApi(AWSCredentials credentials, AmazonS3Config config)
