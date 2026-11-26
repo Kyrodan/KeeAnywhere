@@ -55,7 +55,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
             sourcePath = RootPath(sourcePath);
             destPath = RootPath(destPath);
 
-            var response = await Api.Files.CopyAsync(sourcePath, destPath);
+            var response = await Api.Files.CopyV2Async(sourcePath, destPath);
 
             if (response == null)
                 throw new InvalidOperationException("Dropbox: Copy failed.");
@@ -64,7 +64,7 @@ namespace KeeAnywhere.StorageProviders.Dropbox
         public async Task Delete(string path)
         {
             path = RootPath(path);
-            var response = await Api.Files.DeleteAsync(path);
+            var response = await Api.Files.DeleteV2Async(path);
 
             if (response == null)
                 throw new InvalidOperationException("Dropbox: Delete failed.");

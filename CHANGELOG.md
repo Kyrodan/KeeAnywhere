@@ -12,7 +12,7 @@
 
 ### Improved
 
-- Updated Dependencies (AWS)
+- Updated Dependencies (AWS, Dropbox)
 
 
 ## 2.2.1 (2026-11-24)
