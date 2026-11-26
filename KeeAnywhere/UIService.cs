@@ -30,7 +30,7 @@ namespace KeeAnywhere
             var newAccount = await _storageService.CreateAccount(type);
             if (newAccount == null) return null;
 
-            var existingAccount = _configService.Accounts.SingleOrDefault(_ => _.Type == newAccount.Type && _.Id == newAccount.Id);
+            var existingAccount = _configService.Accounts.FirstOrDefault(_ => _.Type == newAccount.Type && _.Id == newAccount.Id);
             if (existingAccount == null) // New Account
             {
                 // ensure account's name is unique

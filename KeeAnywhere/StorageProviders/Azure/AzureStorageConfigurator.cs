@@ -28,14 +28,11 @@ namespace KeeAnywhere.StorageProviders.Azure
             if (result != DialogResult.OK)
                 return null;
 
-            var configurationName = AzureResources.Configuration_Name_Blob;
-            if (_storageType == StorageType.AzureFile)
-                configurationName = AzureResources.Configuration_Name_File;
-
             var account = new AccountConfiguration
             {
                 Type = _storageType,
-                Id = configurationName,
+                // Unique per storage account and container/share, so multiple Azure accounts can be added (#351)
+                Id = dlg.AccountName + "/" + dlg.ItemName,
                 Name = dlg.AccountName,
                 Secret = dlg.AccessToken,
                 AdditionalSettings = new Dictionary<string, string>() { { "AzureItemName", dlg.ItemName } }
