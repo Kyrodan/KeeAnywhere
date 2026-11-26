@@ -3,7 +3,7 @@
   <metadata>
     <id>keepass-plugin-keeanywhere</id>
     <title>KeePass Plugin KeeAnywhere</title>
-    <version>2.3.0-unstable</version>
+    <version>2.3.0</version>
     <authors>Daniel Bölts</authors>
     <owners>Kyrodan</owners>
     <summary>Plugin for KeePass 2.x to to add support for cloud storage providers</summary>
@@ -31,46 +31,34 @@ Supported providers:
     <copyright>© 2015-2026 Daniel Bölts</copyright>
     <licenseUrl>https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>## 2.2.1 (2026-11-24)
-
-### Fixed
-
-- \#429 OneDrive: Backup to Remote did not create backup files
-- \#504 Google Drive: login failed with "Error 401: deleted_client" (outdated OAuth client in release 2.2.0)
-
-
-## 2.2.0 (2026-11-24)
+    <releaseNotes>## 2.3.0 (2026-11-26)
 
 ### New
 
-- \#409 Remove old Auth2-Flow (integrated browser) - was only used for Box.com
-- \#427 Fix to connect Amazon S3 compatible endpoints with custom auth region - Thanks to @ftorregrossa
+- \#306 Azure Blob: a SAS token can be used instead of the account key (access restricted to a container, limited permissions and expiry date) - Thanks to @yenneferofvengerberg
 
 ### Fixed
 
-- \#496 Plugin could not be loaded in KeePass 2.62 - Thanks to @GeheimagentNr1
-- Chocolatey: detection of a portable KeePass installation (replaced deprecated Get-BinRoot)
-- \#301, \#347, \#365 [Windows &lt;10 only?] System.Exception: No unused port found! - Thanks to @Jackabomb
-- \#451, \#464 NULL reference when connecting to OneDrive - Thanks to @D3-LucaPiombino
-- \#459 "Index was outside the bounds of array" error in Dropbox - Thanks to @CarrieForle
-- \#497 OneDrive: file path got lost when loading, saving, copying or listing files - Thanks to @Kelltomal
-- \#491 Dropbox, Box: authorization URL was passed unescaped to the browser; browser sometimes showed a connection error after successful login - Thanks to @HarryHuy
-- \#468, \#484 OneDrive: rotated refresh token was not stored, so the account had to be re-authorized after some time - Thanks to @Fulgan
-- \#484 Box, OneDrive: after re-authorization the old credentials were still used until KeePass was restarted - Thanks to @Fulgan
-- \#484 Google Drive: meaningful error message if a file is not found or the download fails - Thanks to @Fulgan
-- Security: OneDrive libraries could leak Cookie/Proxy-Authorization headers on cross-host redirects ([GHSA-7j59-v9qr-6fq9](https://github.com/advisories/GHSA-7j59-v9qr-6fq9)) - updated Microsoft Graph to 5.105.0 and Kiota to 1.22.2 (replaces \#489)
+- \#424, \#475 Amazon S3: saving to S3 compatible storage failed (e.g. Cloudflare R2, Synology C2)
+- \#469 Amazon S3: Backup to Remote did not remove old backups if the database is stored in a folder
+- \#351 Azure: adding a second Blob/File storage account replaced the first one ("This account already exists")
+  _Note:_ Azure accounts added with an older version are not recognized when added again (e.g. to update the access key) - a second account is created instead. Please remove the old account in `Tools - KeeAnywhere Settings` in this case.
+- \#432 Google Drive: adding an account without granting access to Google Drive (unchecked checkbox on Google's consent page) led to "Error 403: insufficient authentication scopes" later - this is now detected when adding the account
+- \#290 Dropbox: clicking "Cancel" on the authorization page caused an unhandled exception (a possible exception when cancelling the authorization of Google Drive and OneDrive is fixed as well)
+- Cancelling the authorization in KeeAnywhere's wait dialog did not stop waiting for the browser - a later login in the browser still added the account; closing the dialog with X did not cancel at all. Box, HiDrive: same unhandled exception as in \#290 when cancelling the authorization
+- \#322, \#325, \#346 Google Drive: the file dialog crashed with "Invalid char in path" if a folder contained a file or folder whose name contains control characters (e.g. tab or newline) - such items are listed now, but can still not be opened
+- \#173 Backup: other files saved beside the database (e.g. the .xml file of KeeChallenge) were backed up as .kdbx files and rotated together with the database backups - backups now keep the extension of the saved file
+- Backup: saving failed if old backups could not be removed, or - with "Backup to Remote" - if the file name contained characters like `"` or `|`; old remote backups of such files were not removed
+- \#420 OneDrive: adding an account without name failed - the user name or email address is used then
+- \#437 Settings: the Add button could not be used with the keyboard or a screen reader
+- \#490 File dialog: account dropdown was clipped with high DPI settings (e.g. 125%)
+- \#330 KeePass waited forever when the connection was interrupted while saving or opening (Dropbox, Google Drive, Box, Amazon S3) - requests time out after 5 minutes now (a shorter timeout can be set per URL with KeePass' connection property `Timeout`, see [FAQ](https://keeanywhere.de/use/faq#timeout))
 
 ### Improved
 
-- Updated Dependencies (AWS, Box, Dropbox, Google Drive, Google Storage, OneDrive)
-- Using .Net 4.8 now
-- Using KeePass 2.62 now (minimum required version)
-- Removed unused dependency log4net (was affected by [GHSA-4f7c-pmjv-c25w](https://github.com/advisories/GHSA-4f7c-pmjv-c25w), replaces \#482)
-- \#486 Updated Google Cloud Storage dependencies to consistent versions (fixes assembly version mismatch) - Thanks to @Fulgan
-- Build: OAuth API keys moved to *ApiKeys.cs*, which is not under version control (created from *ApiKeys.Template.cs* with dummy values on first build, see BUILD.md) - inspired by \#491, thanks to @HarryHuy
-- Build: GitHub Actions workflow for building releases
-- Build: test-plgx.ps1 for testing the PLGX with a test copy of KeePass (see BUILD.md) - based on \#486, thanks to @Fulgan
-- Build: NuGet packages are restored via MSBuild, nuget.exe removed from repository
+- Error messages are readable now (e.g. missing permissions, wrong keys, network problems) instead of showing the complete technical exception; the details (incl. stack trace) can be expanded and copied to the clipboard for issue reports
+- Authorization: the browser shows whether the authorization succeeded, was denied or failed; the wait dialog explains to click Cancel if the access was denied (e.g. Box doesn't return to KeeAnywhere in this case)
+- Updated Dependencies (AWS, Dropbox)
 
 
       [Full Changelog](https://github.com/Kyrodan/KeeAnywhere/blob/master/CHANGELOG.md)
