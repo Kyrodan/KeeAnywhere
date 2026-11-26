@@ -1,3 +1,12 @@
+## 2.4.0 (unreleased)
+
+### New
+
+### Fixed
+
+### Improved
+
+
 ## 2.3.0 (2026-11-26)
 
 ### New
