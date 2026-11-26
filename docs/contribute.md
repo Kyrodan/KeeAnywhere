@@ -1,40 +1,78 @@
 ---
-title: Contribute 
-description: Giving back to the community 
+title: Contribute
+description: Giving back to the community
 ---
 Everyone is invited to contribute - every help is welcome.
 
 How can **you** help:
-* You are a user? Test, test, test and [write bug reports]({{ site.github.issues_url }}).
-* You have an idea? [File a feature request]({{ site.github.issues_url }}) (please take a look at the Blacklisted Features first).
-* You can code? Read the next section, fork the repository, complete a feature request/fix a bug and create a pull request.
+* You are a user? Test, test, test and [report bugs](#reporting-bugs).
+* You have an idea? [File a feature request]({{ site.github.issues_url }}) - but please take a look at the [out of scope features](#out-of-scope-features) first.
+* You can code? Read [Source Code Contribution](#source-code-contribution), fork the repository, fix a bug or implement a feature request and create a pull request.
+* You found a typo or something outdated in this documentation? Corrections are welcome as well - see [Documentation](#documentation).
 * You like KeeAnywhere and are willing to spend some money: [Donate](donate)
 
+# Reporting Bugs
+Before creating a new issue:
+* Please check the [FAQ](use/faq), [Known Issues](use/known_issues) and [Troubleshooting](use/troubleshooting).
+* Search the [existing issues]({{ site.github.issues_url }}) - maybe your problem is already known.
+* Make sure you are using the [latest version]({{ site.github.latest_release.html_url }}).
 
-# Blacklisted Features 
+Then [create a new issue]({{ site.github.issues_url }}/new/choose) using the bug report template and include:
+* KeeAnywhere version, KeePass version and Windows version
+* The storage provider (e.g. `OneDrive`, `Dropbox (restricted)`)
+* The complete error message (the text of the error dialog, use the "Copy" button or Ctrl+C if available)
+* The steps to reproduce the problem
+
+**Security vulnerabilities must not be reported as public issues.** Please follow the [security policy]({{ site.github.repository_url }}/security/policy) instead.
+
+# Out of Scope Features
+These features won't be accepted:
 * Saving provider credentials in a KeePass database
-* Cloud Storage Providers where I have to pay for the usage of KeeAnywhere (traffic, developer account, etc.).
-* Support for Private Cloud solutions (for which I have to manage my own instance)
-* All Providers that already support WebDav: KeePass natively supports WebDav (without File Picker, I know :-))
+* Cloud storage providers where I have to pay for the usage of KeeAnywhere (traffic, developer account, etc.)
+* Support for private cloud solutions (for which I have to manage my own instance)
+* All providers that already support WebDAV: KeePass natively supports WebDAV (without file picker, I know :-))
 
-Especially `OwnCloud` and `Pydio` both are covered by the last two topics.
+Especially `OwnCloud`, `Nextcloud` and `Pydio` are covered by the last two topics.
 
 # Source Code Contribution
-Source code contribution is welcome. Please keep in mind that this project has a vision and that your contribution should fit to this. It would be the best to talk about new ideas first (creating a new issue).
+Source code contribution is welcome. Please keep in mind that this project has a vision and that your contribution should fit to it. It would be best to talk about new ideas first by creating a new issue.
 
 ## General Rules
-1. Take a look at the list of "blacklisted features"
-2. Take a look at the issues, maybe your idea is already discussed
-3. Fork the repository and create a pull request
-4. In the end I will decide whether your pull request is accepted - therefore please discuss your ideas first. If I don't integrate your code you can use the whole source code for your own project. It's licensed under the MIT license.
+1. Take a look at the list of [out of scope features](#out-of-scope-features).
+2. Take a look at the issues - maybe your idea is already being discussed.
+3. Fork the repository and create a pull request (see [Pull Requests](#pull-requests)).
+4. In the end I will decide whether your pull request is accepted - therefore please discuss your ideas first. If I don't integrate your code, you can use the whole source code for your own project: it's licensed under the [MIT license]({{ site.github.repository_url }}/blob/master/LICENSE).
+
+By contributing, you agree that your contributions are licensed under the MIT license.
+
+## Development Environment
+Details are described in [BUILD.md]({{ site.github.repository_url }}/blob/master/BUILD.md). In short:
+* Visual Studio 2022 (or Build Tools) with the .NET Framework 4.8 Developer Pack
+* Build with `build.cmd` or Visual Studio (configuration *Release* creates the PLGX file)
+* API keys: `KeeAnywhere\ApiKeys.cs` is not under version control and is created from `ApiKeys.Template.cs` with dummy values on the first build. For testing a provider, register your own development app and put its keys into your local `ApiKeys.cs`.
+* Test the PLGX with `test-plgx.ps1`: it builds the plugin and starts a separate test copy of KeePass with it.
+
+## Technical Constraints
+KeeAnywhere is distributed as PLGX file, which is compiled by KeePass on the user's machine. This leads to some constraints:
+* **C# 5 only:** KeePass compiles the plugin with the C# 5 compiler of the .NET Framework. Don't use newer language features like `?.`, `??=`, `$"..."` string interpolation, `nameof`, expression-bodied members or pattern matching.
+* **No XML comments in `KeeAnywhere.csproj`:** the PLGX build tool fails on them.
+* NuGet packages are referenced via `packages.config` and must come from the official NuGet.org site.
+
+## Pull Requests
+* One topic per pull request, based on the current `master` branch.
+* Describe what you changed and why, and reference the related issue (e.g. `Fixes #123`).
+* Test your changes in KeePass (`test-plgx.ps1`) with the affected storage providers.
+* Please **don't** change version numbers, `CHANGELOG.md` or release files (nuspec, version manifest) - this is done when preparing a release.
+* Please **don't** commit binaries (e.g. tools like `nuget.exe`), API keys or unrelated formatting changes (whitespace, line endings, encoding/BOM).
 
 ## New Cloud Storage Provider
-If you like to implement a new provider, please use the official SDK at first choice. I prefer all dependencies as NuGet packages from the official NuGet.org site. 
+If you'd like to implement a new provider, please use the official SDK as first choice. All dependencies should be NuGet packages from the official NuGet.org site.
 
 Keep in mind that simplicity for the user is the highest goal. So avoid complicated dialogs, the need to write documentation etc.
 
-If an app registration is required (like for OAuth2 authentication) please keep in mind that I need the possibility to get an app key by myself. Providers for which I have to pay for traffic, a developer account oder something like this is not acceptable (this project is developed in my spare time).
+If an app registration is required (like for OAuth2 authentication), please keep in mind that I need the possibility to get an app key by myself. Providers for which I have to pay for traffic, a developer account or something like this are not acceptable (this project is developed in my spare time).
 
-**Never** commit production keys/secrets. Always use temporary keys for development - the production keys are kept secret by me.
+**Never** commit production keys/secrets. Use your own development keys in your local `ApiKeys.cs` (not under version control) - the production keys are kept secret by me.
 
-
+# Documentation
+This website is generated with Jekyll from the [`docs` folder]({{ site.github.repository_url }}/tree/master/docs) of the repository. Corrections and improvements are welcome as pull request, too.
