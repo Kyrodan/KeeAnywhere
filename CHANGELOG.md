@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- \#507 KeeAnywhere could not be loaded after an update if no application is registered for https links ("Application not found") - the changelog is only shown if possible now; when adding an account, the URL to open manually is shown if the browser cannot be opened
+
 ### Improved
 
 

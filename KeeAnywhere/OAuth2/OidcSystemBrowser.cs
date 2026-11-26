@@ -278,26 +278,55 @@ namespace KeeAnywhere.OAuth2
             {
                 Process.Start(url);
             }
-            catch
+            catch (Exception)
             {
-                //// hack because of this: https://github.com/dotnet/corefx/issues/10361
-                //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                //{
-                //    url = url.Replace("&", "^&");
-                //    Process.Start(new ProcessStartInfo("cmd", "/c start " + url) { CreateNoWindow = true });
-                //}
-                //else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                //{
-                //    Process.Start("xdg-open", url);
-                //}
-                //else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                //{
-                //    Process.Start("open", url);
-                //}
-                //else
-                //{
-                throw;
-                //}
+                // e.g. no application is registered for https links (#507): let the user open the URL manually
+                ShowUrlToOpenManually(url);
+            }
+        }
+
+        private const int ButtonOk = 1;
+        private const int ButtonCopy = 2;
+
+        // Shows the URL, so the user can open it in a browser manually; the authorization continues afterwards
+        private static void ShowUrlToOpenManually(string url)
+        {
+            var mainForm = KeePass.Program.MainForm;
+            if (mainForm != null && mainForm.InvokeRequired)
+            {
+                mainForm.Invoke(new Action(() => ShowUrlToOpenManually(url)));
+                return;
+            }
+
+            const string mainInstruction = "The web browser could not be opened";
+            const string content = "Please open the following URL in your web browser to continue the authorization:";
+
+            var dlg = new KeePass.UI.VistaTaskDialog();
+            dlg.WindowTitle = "KeeAnywhere";
+            dlg.MainInstruction = mainInstruction;
+            dlg.Content = content + Environment.NewLine + Environment.NewLine + url;
+            dlg.SetIcon(KeePass.UI.VtdIcon.Warning);
+            dlg.AddButton(ButtonCopy, "Copy URL", null);
+            dlg.AddButton(ButtonOk, "OK", null);
+            dlg.DefaultButtonID = ButtonCopy;
+
+            if (!dlg.ShowDialog(mainForm))
+            {
+                // Task dialogs are not supported: the text of a message box can be copied with Ctrl+C
+                KeePassLib.Utility.MessageService.ShowWarning(mainInstruction, content, url);
+                return;
+            }
+
+            if (dlg.Result == ButtonCopy)
+            {
+                try
+                {
+                    System.Windows.Forms.Clipboard.SetText(url);
+                }
+                catch (Exception)
+                {
+                    // Clipboard may be locked by another application
+                }
             }
         }
     }

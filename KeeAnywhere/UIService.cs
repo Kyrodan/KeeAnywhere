@@ -128,11 +128,19 @@ namespace KeeAnywhere
             _donationDialogAlreadyShownInThisUpgradedSession = true;
         }
 
+        // Called during plugin initialization: must never throw, otherwise the plugin isn't loaded (#507)
         public void ShowChangelog()
         {
             var version = this.GetVersionTag();
             var url = string.Format("https://github.com/Kyrodan/KeeAnywhere/blob/{0}/CHANGELOG.md", version);
-            Process.Start(url);
+            try
+            {
+                Process.Start(url);
+            }
+            catch (Exception)
+            {
+                // Showing the changelog is optional: e.g. no application is registered for https links (#507)
+            }
         }
 
         private string GetVersionTag()

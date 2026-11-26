@@ -349,7 +349,16 @@ namespace KeeAnywhere.Forms
         {
             var path = m_configService.PluginConfiguration.OfflineCacheFolder;
             if (Directory.Exists(path))
-                Process.Start(path);
+            {
+                try
+                {
+                    Process.Start(path);
+                }
+                catch (Exception ex)
+                {
+                    MessageService.ShowWarning("Offline Cache Folder could not be opened:", path, ex.Message);
+                }
+            }
             else
                 MessageService.ShowInfo("Offline Cache Folder does not exist:", path);
         }
