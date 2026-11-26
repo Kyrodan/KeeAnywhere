@@ -8,6 +8,8 @@ body:
       value: |
         Thanks for your suggestion! Please check the [out of scope features](https://keeanywhere.de/contribute#out-of-scope-features) and the [existing provider requests](https://github.com/Kyrodan/KeeAnywhere/issues?q=is%3Aissue+label%3Aprovider-request) first.
 
+        **Please note:** I don't implement new storage providers myself - new providers are welcome as **pull requests** and become [community-driven providers](https://keeanywhere.de/contribute#community-driven-providers) (contributed and tested by the community). A request without someone who implements it will most likely not be realized.
+
         KeeAnywhere supports **public cloud storage providers** only. Self-hosted solutions (private cloud, homelab, NAS apps like Nextcloud) won't be added - use WebDAV or an S3 compatible server with the `Amazon S3` provider instead, see the [FAQ](https://keeanywhere.de/use/faq#s3-compatible).
 
         A provider can only be added if it offers a free API (no paid developer account or traffic) and an app registration (e.g. for OAuth) that I can get myself.

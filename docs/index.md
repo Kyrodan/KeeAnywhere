@@ -7,15 +7,26 @@ KeeAnywhere is a [KeePass Password Safe](https://keepass.info) plugin that provi
 
 ![KeeAnywhere in Action](assets/images/KeeAnywhere_Teaser.png)
 
-# Supported providers (in alphabetical order):
-* Amazon AWS S3 (and compatible, e.g. MinIO and other self-hosted S3 servers)
-* Azure (Blob and File storage)
+# Project Status
+*Status as of November 2026 - latest release: [{{ site.github.latest_release.tag_name }}]({{ site.github.latest_release.html_url }}) ({{ site.github.latest_release.published_at | date: "%Y-%m-%d" }})*
+
+KeeAnywhere is actively maintained. I intend to keep the libraries up to date (especially for security fixes), adapt to API changes of the storage providers, fix bugs, implement smaller improvements, review pull requests and publish releases regularly.
+
+KeeAnywhere is developed in my spare time, so I can't make binding commitments - there are no guaranteed response times or release dates. If I can't maintain KeeAnywhere anymore, I'll say so here.
+
+# Supported providers (in alphabetical order)
+**Maintained** - maintained and tested by me:
+* Amazon AWS S3
 * Box
 * Dropbox
 * Google Drive
+* HiDrive
+* OneDrive
+
+**Community-driven** - contributed and tested by the community, see [Contribute](contribute#community-driven-providers):
+* Amazon S3 compatible services (e.g. MinIO and other self-hosted S3 servers)
+* Azure (Blob and File storage)
 * Google Cloud Storage
-* HiDrive 
-* OneDrive  
 
 # Key features
 * Support for multiple cloud storage providers

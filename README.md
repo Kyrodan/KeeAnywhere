@@ -1,15 +1,11 @@
 # KeeAnywhere [![GitHub release](https://img.shields.io/github/release/Kyrodan/KeeAnywhere.svg)](https://github.com/Kyrodan/KeeAnywhere/releases/latest) [![Chocolatey](https://img.shields.io/chocolatey/v/keepass-plugin-keeanywhere.svg)](https://chocolatey.org/packages/keepass-plugin-keeanywhere) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Kyrodan/KeeAnywhere/master/LICENSE)
 KeeAnywhere is a KeePass plugin that provides access to cloud storage providers (cloud drives). The main goal is to offer a simple UI while integrating deeply into KeePass. This covers all kind of users: novices, experienced and power users.
 
+**Project status:** KeeAnywhere is actively maintained - see the [homepage](https://keeanywhere.de) for details.
+
 Supported providers (in alphabetical order):
-* Amazon AWS S3
-* Azure (Blob and File storage)
-* Box
-* Dropbox
-* Google Drive
-* Google Cloud Storage
-* HiDrive
-* OneDrive
+* Maintained (maintained and tested by me): Amazon AWS S3, Box, Dropbox, Google Drive, HiDrive, OneDrive
+* Community-driven (contributed and tested by the community, see [Contribute](https://keeanywhere.de/contribute#community-driven-providers)): Amazon S3 compatible services, Azure (Blob and File storage), Google Cloud Storage
 
 ![KeeAnywhere in Action](docs/assets/images/KeeAnywhere_Teaser.png)
 

@@ -5,7 +5,7 @@ description: Giving back to the community
 Everyone is invited to contribute - every help is welcome.
 
 How can **you** help:
-* You are a user? Test, test, test and [report bugs](#reporting-bugs).
+* You are a user? Test, test, test and [report bugs](#reporting-bugs) - especially for [community-driven providers](#community-driven-providers), which I don't test myself.
 * You have an idea? [File a feature request]({{ site.github.issues_url }}) - but please take a look at the [out of scope features](#out-of-scope-features) first.
 * You can code? Read [Source Code Contribution](#source-code-contribution), fork the repository, fix a bug or implement a feature request and create a pull request.
 * You found a typo or something outdated in this documentation? Corrections are welcome as well - see [Documentation](#documentation).
@@ -90,13 +90,22 @@ KeeAnywhere is distributed as PLGX file, which is compiled by KeePass on the use
 * Please **don't** commit binaries (e.g. tools like `nuget.exe`), API keys or unrelated formatting changes (whitespace, line endings, encoding/BOM).
 
 ## New Cloud Storage Provider
-If you'd like to implement a new provider, please use the official SDK as first choice. All dependencies should be NuGet packages from the official NuGet.org site.
+I don't implement new storage providers myself anymore - but they are welcome as pull requests and become [community-driven providers](#community-driven-providers). A new provider has to fit the [criteria](#out-of-scope-features) (e.g. public cloud only, a clear benefit compared to WebDAV/FTP/S3).
+
+Please use the official SDK as first choice. All dependencies should be NuGet packages from the official NuGet.org site.
 
 Keep in mind that simplicity for the user is the highest goal. So avoid complicated dialogs, the need to write documentation etc.
 
 If an app registration is required (like for OAuth2 authentication), please keep in mind that I need the possibility to get an app key by myself. Providers for which I have to pay for traffic, a developer account or something like this are not acceptable (this project is developed in my spare time).
 
 **Never** commit production keys/secrets. Use your own development keys in your local `ApiKeys.cs` (not under version control) - the production keys are kept secret by me.
+
+## Community-driven Providers
+KeeAnywhere distinguishes between two kinds of storage providers (see the list on the [homepage](/)):
+* **Maintained providers** are maintained and tested by me.
+* **Community-driven providers** are contributed and tested by the community. I make sure they still compile and include them in releases, but I don't test them myself - whether they work depends on feedback and contributions from their users.
+
+If a community-driven provider stops working and nobody fixes it, it may be removed in a future version.
 
 # Documentation
 This website is generated with Jekyll from the [`docs` folder]({{ site.github.repository_url }}/tree/master/docs) of the repository. Corrections and improvements are welcome as pull request, too.
