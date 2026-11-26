@@ -82,7 +82,10 @@ namespace KeeAnywhere.OAuth2
 
             if (credential.IsError)
             {
-                MessageService.ShowWarning("Authorization failed:", credential.Error);
+                // Access denied by the user: the browser already shows this, like for Dropbox, Box and HiDrive
+                if (credential.Error != "access_denied")
+                    MessageService.ShowWarning("Authorization failed:", credential.ErrorDescription ?? credential.Error);
+
                 return null;
             }
 

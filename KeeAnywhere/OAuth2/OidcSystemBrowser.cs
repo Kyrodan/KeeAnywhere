@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -75,23 +77,81 @@ namespace KeeAnywhere.OAuth2
             }
         }
 
-        internal const string DefaultClosePageResponse =
-    @"<html>
-          <head><title>OAuth 2.0 Authentication Token Received</title></head>
-          <body>
-            Received verification code. You may now close this window.
-            <script type='text/javascript'>
-              // This doesn't work on every browser.
-              window.setTimeout(function() {
-                  this.focus();
-                  window.opener = this;
-                  window.open('', '_self', ''); 
-                  window.close(); 
-                }, 1000);
-              //if (window.opener) { window.opener.checkToken(); }
-            </script>
-          </body>
-        </html>";
+        // Page shown in the browser after the redirect: {0} = title, {1} = message (both HTML encoded),
+        // {2} = favicon tag, {3} = logo tag (images are embedded, nothing is loaded from external sources)
+        private const string ResponsePageTemplate =
+@"<!DOCTYPE html>
+<html>
+<head>
+<meta charset=""utf-8"">
+<meta name=""color-scheme"" content=""light dark"">
+<title>KeeAnywhere - {0}</title>
+{2}
+</head>
+<body style=""font-family: sans-serif; max-width: 36em; margin: 4em auto; padding: 0 1em"">
+{3}
+<h1>{0}</h1>
+<p>{1}</p>
+<p>You can close this window and return to KeePass.</p>
+</body>
+</html>";
+
+        private static string CreateResponsePage(NameValueCollection query)
+        {
+            var error = query != null ? query["error"] : null;
+            var code = query != null ? query["code"] : null;
+
+            string title;
+            string message;
+
+            if (error == "access_denied")
+            {
+                title = "Access denied";
+                message = "KeeAnywhere was not authorized - no account has been added.";
+            }
+            else if (!string.IsNullOrEmpty(error))
+            {
+                title = "Authorization failed";
+                message = query["error_description"] ?? error;
+            }
+            else if (!string.IsNullOrEmpty(code))
+            {
+                title = "Authorization successful";
+                message = "KeeAnywhere has been authorized.";
+            }
+            else
+            {
+                title = "Authorization failed";
+                message = "No authorization code received.";
+            }
+
+            var favicon = GetPngDataUri(PluginResources.KeeAnywhere_16x16);
+            var logo = GetPngDataUri(PluginResources.KeeAnywhere_48x48);
+
+            return string.Format(ResponsePageTemplate,
+                WebUtility.HtmlEncode(title),
+                WebUtility.HtmlEncode(message),
+                favicon != null ? "<link rel=\"icon\" type=\"image/png\" href=\"" + favicon + "\">" : "",
+                logo != null ? "<img src=\"" + logo + "\" width=\"48\" height=\"48\" alt=\"KeeAnywhere\">" : "");
+        }
+
+        // Returns null on error: a missing image must never break the authorization
+        private static string GetPngDataUri(Image image)
+        {
+            try
+            {
+                using (image)
+                using (var stream = new MemoryStream())
+                {
+                    image.Save(stream, ImageFormat.Png);
+                    return "data:image/png;base64," + Convert.ToBase64String(stream.ToArray());
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
         public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken)
         {
@@ -118,7 +178,7 @@ namespace KeeAnywhere.OAuth2
                     //    result = ProcessFormPost(context.Request);
                     //}
 
-                    await SendResponse(context.Response);
+                    await SendResponse(context.Response, context.Request.QueryString);
 
 
                     if (String.IsNullOrWhiteSpace(result))
@@ -168,7 +228,7 @@ namespace KeeAnywhere.OAuth2
 
                     var result = context.Request.QueryString;
 
-                    await SendResponse(context.Response);
+                    await SendResponse(context.Response, result);
 
                     return result;
                 }
@@ -183,9 +243,10 @@ namespace KeeAnywhere.OAuth2
             }
         }
 
-        private static async Task SendResponse(HttpListenerResponse response)
+        private static async Task SendResponse(HttpListenerResponse response, NameValueCollection query)
         {
-            var buffer = Encoding.UTF8.GetBytes(DefaultClosePageResponse);
+            var buffer = Encoding.UTF8.GetBytes(CreateResponsePage(query));
+            response.ContentType = "text/html; charset=utf-8";
             response.ContentLength64 = buffer.Length;
             var responseOutput = response.OutputStream;
             await responseOutput.WriteAsync(buffer, 0, buffer.Length);

@@ -17,6 +17,7 @@
 
 ### Improved
 
+- Authorization: the browser shows whether the authorization succeeded, was denied or failed; the wait dialog explains to click Cancel if the access was denied (e.g. Box doesn't return to KeeAnywhere in this case)
 - Updated Dependencies (AWS, Dropbox)
 
 

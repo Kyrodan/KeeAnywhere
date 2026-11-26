@@ -78,10 +78,10 @@
             this.m_lblWait.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_lblWait.Location = new System.Drawing.Point(12, 29);
             this.m_lblWait.Name = "m_lblWait";
-            this.m_lblWait.Size = new System.Drawing.Size(459, 13);
+            this.m_lblWait.Size = new System.Drawing.Size(459, 26);
             this.m_lblWait.TabIndex = 1;
-            this.m_lblWait.Text = "See your Browser for further instructions ... this window will close automaticall" +
-    "y.";
+            this.m_lblWait.Text = "See your browser for further instructions ... this window will close automatically." +
+    "\r\nIf you denied the access in the browser, please click Cancel.";
             // 
             // m_pgbWait
             // 
