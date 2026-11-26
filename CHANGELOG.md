@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- \#424, \#475 Amazon S3: saving to S3 compatible storage failed (e.g. Cloudflare R2, Synology C2)
+
 ### Improved
 
 

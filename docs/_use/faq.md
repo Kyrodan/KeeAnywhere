@@ -43,7 +43,6 @@ Use the provider `Amazon S3` - it works with public S3 compatible services as we
 _Remarks:_
 * KeeAnywhere uses path-style requests (`https://server/bucket/file`), so no DNS setup for buckets is required.
 * With HTTPS the server certificate must be trusted by Windows. If your server uses a self-signed certificate or your own CA, import the (CA) certificate into the Windows certificate store - otherwise the connection fails.
-* Cloudflare R2 is currently not supported for saving, see [#424](https://github.com/Kyrodan/KeeAnywhere/issues/424).
 
 ## How to restrict access (not giving S3FullAccess Policy) with IAM Provider?
 Here is a working sample - see details in [#187](https://github.com/Kyrodan/KeeAnywhere/issues/187):

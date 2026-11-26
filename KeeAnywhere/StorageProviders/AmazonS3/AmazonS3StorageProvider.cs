@@ -71,7 +71,9 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                 {
                     BucketName = bucket,
                     Key = filename,
-                    InputStream = stream
+                    InputStream = stream,
+                    // Many S3 compatible services (e.g. Cloudflare R2, Synology C2) don't support streaming SigV4 (STREAMING-AWS4-HMAC-SHA256-PAYLOAD)
+                    DisablePayloadSigning = IsCustomHttpsEndpoint()
                 };
 
                 var response = await api.PutObjectAsync(request);
@@ -205,6 +207,16 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             return this.GetChildrenByParentItem(new StorageProviderItem { Id = path });
         }
 
+
+        private bool IsCustomHttpsEndpoint()
+        {
+            string endpointUrl;
+            if (!_account.AdditionalSettings.TryGetValue("EndpointURL", out endpointUrl) || string.IsNullOrWhiteSpace(endpointUrl))
+                return false;
+
+            // Unsigned payloads are only safe with HTTPS (integrity is protected by TLS)
+            return endpointUrl.Trim().StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+        }
 
         private static void GetBucketAndKey(string path, out string bucket, out string filename)
         {
