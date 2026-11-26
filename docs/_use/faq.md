@@ -80,7 +80,7 @@ To use an existing database with `Google Drive (restricted)`:
 3. From now on open this new file with `File - Open - Open from Cloud Drive...`.
 
 ## Google shows "This app is blocked" when adding an account
-Google currently blocks the full access mode (`Google Drive`) for KeeAnywhere for many users. Please use `Google Drive (restricted)` instead - see the question above how to use an existing database with it.
+Google currently blocks the full access mode (`Google Drive`) for KeeAnywhere for many users, because Google requires an app verification for full access that hasn't been completed yet - see [#438](https://github.com/Kyrodan/KeeAnywhere/issues/438) for details and the current state. Please use `Google Drive (restricted)` instead - see the question above how to use an existing database with it.
 
 # Dropbox
 
