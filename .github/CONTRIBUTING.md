@@ -3,6 +3,9 @@
 Everyone is invited to contribute - every help is welcome!
 The complete contribution guide is on the website: **https://keeanywhere.de/contribute**
 
+## Be respectful
+KeeAnywhere is developed in my spare time. Please keep issues, pull requests and discussions friendly and constructive - no insults, harassment or discrimination. Instead of "+1" comments, please use the 👍 reaction. There is no guaranteed support or response time. Comments that don't follow these rules may be hidden or deleted, and discussions may be locked. Details: [Be Respectful](https://keeanywhere.de/contribute#be-respectful).
+
 ## Reporting bugs
 - Check the [FAQ](https://keeanywhere.de/use/faq), [Known Issues](https://keeanywhere.de/use/known_issues) and the [existing issues](https://github.com/Kyrodan/KeeAnywhere/issues) first, and make sure you use the [latest version](https://github.com/Kyrodan/KeeAnywhere/releases/latest).
 - Use the bug report template and include KeeAnywhere, KeePass and Windows version, the storage provider and the complete error message.

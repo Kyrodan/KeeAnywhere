@@ -11,6 +11,14 @@ How can **you** help:
 * You found a typo or something outdated in this documentation? Corrections are welcome as well - see [Documentation](#documentation).
 * You like KeeAnywhere and are willing to spend some money: [Donate](donate)
 
+# Be Respectful
+KeeAnywhere is developed in my spare time. Please keep issues, pull requests and discussions friendly and constructive - also when something doesn't work as expected:
+* Be respectful to everyone - no insults, harassment or discrimination.
+* Stay on topic. Instead of "+1" or "me too" comments, please use the 👍 reaction - or add new information that helps to solve the problem.
+* There is no guaranteed support or response time.
+
+Comments that don't follow these rules may be hidden or deleted, and discussions may be locked.
+
 # Reporting Bugs
 Before creating a new issue:
 * Please check the [FAQ](use/faq), [Known Issues](use/known_issues) and [Troubleshooting](use/troubleshooting).
