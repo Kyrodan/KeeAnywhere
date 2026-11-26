@@ -59,7 +59,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             {
                 ServiceURL = endpointURL,
                 ForcePathStyle = true,
-                Timeout = Timeout.InfiniteTimeSpan,
+                Timeout = ProxyTools.RequestTimeout,
                 AuthenticationRegion = String.IsNullOrWhiteSpace(authRegion) ? "" : authRegion
             };
             DisableDefaultChecksums(config);
@@ -74,7 +74,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             var config = new AmazonS3Config
             {
                 RegionEndpoint = region,
-                Timeout = Timeout.InfiniteTimeSpan
+                Timeout = ProxyTools.RequestTimeout
             };
             DisableDefaultChecksums(config);
 

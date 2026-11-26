@@ -122,7 +122,7 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
             };
 
             var client = new DriveService(driveInitializer);
-            client.HttpClient.Timeout = Timeout.InfiniteTimeSpan;
+            client.HttpClient.Timeout = ProxyTools.RequestTimeout;
 
             return client;
         }

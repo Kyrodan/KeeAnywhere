@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Amazon.S3;
 using KeePass;
@@ -86,6 +87,8 @@ namespace KeeAnywhere
             var s3Exception = exceptions.OfType<AmazonS3Exception>().FirstOrDefault();
             var googleException = exceptions.OfType<Google.GoogleApiException>().FirstOrDefault();
             var networkException = exceptions.FirstOrDefault(e => e is HttpRequestException || e is WebException || e is SocketException);
+            // HttpClient reports a timeout as TaskCanceledException
+            var timeoutException = exceptions.FirstOrDefault(e => e is TaskCanceledException || e is TimeoutException);
 
             if (s3Exception != null)
             {
@@ -102,6 +105,11 @@ namespace KeeAnywhere
                 message = "The server could not be reached. Please check your internet connection and proxy settings." +
                           Environment.NewLine + Environment.NewLine + networkException.Message;
                 summary = networkException.GetType().Name;
+            }
+            else if (timeoutException != null)
+            {
+                message = "The server did not respond in time. Please check your internet connection and try again.";
+                summary = timeoutException.GetType().Name;
             }
 
             if (message == null)

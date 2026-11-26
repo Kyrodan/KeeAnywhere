@@ -108,7 +108,7 @@ namespace KeeAnywhere.StorageProviders.Box
             if (request.Timeout.HasValue)
                 client.Timeout = request.Timeout.Value;
             else 
-                client.Timeout = Timeout.InfiniteTimeSpan;
+                client.Timeout = ProxyTools.RequestTimeout;
 
             return client;
         }

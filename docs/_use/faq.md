@@ -19,6 +19,14 @@ Additionally most of the cloud provider's native clients do not support multiple
 ## Does KeeAnywhere work with portable KeePass (without installation)?
 Yes! Starting with version 1.5.0 KeeAnywhere can be used portable. All settings are stored beside KeePass.exe.
 
+## What happens if the connection is interrupted while opening or saving? {#timeout}
+KeePass waits while a database is opened or saved. If the connection to the cloud storage is interrupted, KeeAnywhere cancels the request after **5 minutes** and shows an error message (before version 2.3.0 KeePass could wait forever for some storage providers).
+
+* With the Offline Cache enabled (`Tools - KeeAnywhere Settings - General`), the database is saved locally anyway and uploaded with the next successful save.
+* Without Offline Cache the database stays open in KeePass - just save it again when the connection is back.
+
+If you want KeePass to give up earlier, you can set a shorter timeout per database URL: open the database with `File - Open - Open URL...`, enter the KeeAnywhere URL (e.g. `dropbox:///Account/Database.kdbx`) and set the property `Timeout` (in milliseconds, e.g. `30000` for 30 seconds) in the advanced settings. KeePass remembers it for this URL in the list of recently used files. Values above 5 minutes have no effect.
+
 ## Can you implement private cloud providers (Nextcloud, ownCloud, homelab, etc.)?
 No, I won't: KeeAnywhere supports public cloud storage providers only (see [Contribute](/contribute#public-cloud-providers-only)). But you can use your self-hosted storage anyway:
 * Most of these solutions support WebDAV, which is natively supported by KeePass. Okay, I know, the file picker is missing then ;-)

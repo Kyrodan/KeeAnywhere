@@ -13,11 +13,15 @@ namespace KeeAnywhere.StorageProviders
 {
     public static class ProxyTools
     {
+        // Timeout for a single request: long enough for big databases on slow connections (#139),
+        // but KeePass must not wait forever if the connection is interrupted (#330)
+        public static readonly TimeSpan RequestTimeout = TimeSpan.FromMinutes(5);
+
         public static HttpClient CreateHttpClient()
         {
 
             return new HttpClient(CreateHttpClientHandler()) {
-                Timeout = Timeout.InfiniteTimeSpan
+                Timeout = RequestTimeout
             };
         }
 

@@ -50,7 +50,7 @@ namespace KeeAnywhere.Forms.ImagedComboBox
 			this.DrawMode = DrawMode.OwnerDrawFixed ;
 			DrawModes[0] = DrawMode.OwnerDrawFixed ;
 			DrawModes[1]= DrawMode.OwnerDrawVariable ;
-			base.ItemHeight = 15;
+			UpdateItemHeight();
 			ListItems = new ImageComboBoxItemCollection (this);
 		}
 
@@ -84,12 +84,28 @@ namespace KeeAnywhere.Forms.ImagedComboBox
 		{
 			get
 			{
-				return base.ItemHeight; 
+				return base.ItemHeight;
 			}
 			set
 			{
-				base.ItemHeight = value;
+				minItemHeight = value;
+				UpdateItemHeight();
 			}
+		}
+
+		// The item height set in the designer is a minimum: with high DPI (scaled font) the
+		// item height must grow with the font, otherwise the text is clipped (#490).
+		private int minItemHeight = 15;
+
+		private void UpdateItemHeight()
+		{
+			base.ItemHeight = Math.Max(minItemHeight, this.Font.Height + 2);
+		}
+
+		protected override void OnFontChanged(EventArgs e)
+		{
+			base.OnFontChanged(e);
+			UpdateItemHeight();
 		}
 
 		
@@ -250,6 +266,7 @@ namespace KeeAnywhere.Forms.ImagedComboBox
 		protected override void OnHandleCreated(EventArgs e)
 		{
 			base.OnHandleCreated (e);
+			UpdateItemHeight();
 			if((this.DropDownStyle == ComboBoxStyle.DropDown) || (this.DropDownStyle == ComboBoxStyle.Simple))
 				EditBox.AssignTextBoxHandle(this);
 		}
@@ -301,10 +318,8 @@ namespace KeeAnywhere.Forms.ImagedComboBox
                 //e.ItemHeight = (int)TextSize.Height;
                 //e.ItemWidth = (int)TextSize.Width;
 
-                var scaleX = e.Graphics.DpiX / 96.0;
-                var scaleY = e.Graphics.DpiY / 96.0;
-
-                e.ItemHeight = (int)(this.ItemHeight * scaleY);
+                // ItemHeight already grows with the (DPI scaled) font, see UpdateItemHeight
+                e.ItemHeight = this.ItemHeight;
             }
 		}
 		/// <summary>

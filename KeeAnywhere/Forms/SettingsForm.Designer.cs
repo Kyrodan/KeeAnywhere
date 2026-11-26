@@ -147,7 +147,7 @@
             this.m_btnAccountAdd.Menu = this.m_mnuAdd;
             this.m_btnAccountAdd.Name = "m_btnAccountAdd";
             this.m_btnAccountAdd.Size = new System.Drawing.Size(75, 23);
-            this.m_btnAccountAdd.TabIndex = 11;
+            this.m_btnAccountAdd.TabIndex = 10;
             this.m_btnAccountAdd.Text = "Add...";
             this.m_btnAccountAdd.UseVisualStyleBackColor = true;
             // 
@@ -162,7 +162,7 @@
             this.m_btnAccountRemove.Location = new System.Drawing.Point(490, 67);
             this.m_btnAccountRemove.Name = "m_btnAccountRemove";
             this.m_btnAccountRemove.Size = new System.Drawing.Size(75, 23);
-            this.m_btnAccountRemove.TabIndex = 10;
+            this.m_btnAccountRemove.TabIndex = 11;
             this.m_btnAccountRemove.Text = "Remove";
             this.m_btnAccountRemove.UseVisualStyleBackColor = true;
             this.m_btnAccountRemove.Click += new System.EventHandler(this.OnAccountRemove);
@@ -270,7 +270,7 @@
             this.m_btnBackupToLocalFolder.Location = new System.Drawing.Point(400, 76);
             this.m_btnBackupToLocalFolder.Name = "m_btnBackupToLocalFolder";
             this.m_btnBackupToLocalFolder.Size = new System.Drawing.Size(25, 23);
-            this.m_btnBackupToLocalFolder.TabIndex = 6;
+            this.m_btnBackupToLocalFolder.TabIndex = 4;
             this.m_btnBackupToLocalFolder.Text = "...";
             this.m_btnBackupToLocalFolder.UseVisualStyleBackColor = true;
             this.m_btnBackupToLocalFolder.Click += new System.EventHandler(this.OnSelectBackupToLocalFolder);
@@ -285,7 +285,7 @@
             0});
             this.m_numUpDownBackupCopies.Name = "m_numUpDownBackupCopies";
             this.m_numUpDownBackupCopies.Size = new System.Drawing.Size(48, 20);
-            this.m_numUpDownBackupCopies.TabIndex = 5;
+            this.m_numUpDownBackupCopies.TabIndex = 6;
             this.m_numUpDownBackupCopies.Value = new decimal(new int[] {
             10,
             0,
@@ -298,7 +298,7 @@
             this.m_lblBackupCopies.Location = new System.Drawing.Point(6, 106);
             this.m_lblBackupCopies.Name = "m_lblBackupCopies";
             this.m_lblBackupCopies.Size = new System.Drawing.Size(133, 13);
-            this.m_lblBackupCopies.TabIndex = 4;
+            this.m_lblBackupCopies.TabIndex = 5;
             this.m_lblBackupCopies.Text = "Number of Copies to keep:";
             // 
             // m_txtBackupToLocalFolder

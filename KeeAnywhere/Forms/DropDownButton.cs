@@ -17,6 +17,12 @@ namespace KeeAnywhere.Forms
         [DefaultValue(false)]
         public bool ShowMenuUnderCursor { get; set; }
 
+        public DropDownButton()
+        {
+            // Screen readers announce the button as menu button
+            AccessibleRole = AccessibleRole.ButtonMenu;
+        }
+
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
             base.OnMouseDown(mevent);
@@ -35,6 +41,22 @@ namespace KeeAnywhere.Forms
                 }
 
                 Menu.Show(this, menuLocation);
+            }
+        }
+
+        // Keyboard (Enter, Space) and screen readers only raise Click (#437)
+        protected override void OnClick(EventArgs e)
+        {
+            base.OnClick(e);
+
+            // A mouse click already opened the menu in OnMouseDown
+            if (Menu != null && !Menu.Visible)
+            {
+                Menu.Show(this, new Point(0, Height));
+
+                // Select the first item, so the menu can be used with the keyboard
+                if (Menu.Items.Count > 0)
+                    Menu.Items[0].Select();
             }
         }
 

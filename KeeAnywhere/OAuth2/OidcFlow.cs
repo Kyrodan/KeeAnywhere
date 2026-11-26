@@ -92,8 +92,12 @@ namespace KeeAnywhere.OAuth2
             if (!AreRequiredScopesGranted(credential))
                 return null;
 
-            var userId = credential.User.FindFirst(JwtClaimTypes.Subject).Value;
-            var userName = credential.User.FindFirst(JwtClaimTypes.Name).Value;
+            var userId = GetClaimValue(credential, JwtClaimTypes.Subject);
+            // Accounts without a name (e.g. OneDrive, #420): use the user name or email address instead
+            var userName = GetClaimValue(credential, JwtClaimTypes.Name)
+                           ?? GetClaimValue(credential, JwtClaimTypes.PreferredUserName)
+                           ?? GetClaimValue(credential, JwtClaimTypes.Email)
+                           ?? userId;
             var refreshToken = credential.RefreshToken;
 
             var account = new AccountConfiguration()
@@ -105,6 +109,13 @@ namespace KeeAnywhere.OAuth2
             };
 
             return account;
+        }
+
+        // Returns null if the claim is missing or empty
+        private static string GetClaimValue(LoginResult credential, string claimType)
+        {
+            var claim = credential.User != null ? credential.User.FindFirst(claimType) : null;
+            return claim != null && !string.IsNullOrWhiteSpace(claim.Value) ? claim.Value : null;
         }
 
         private bool AreRequiredScopesGranted(LoginResult credential)

@@ -3,6 +3,7 @@
 ### New
 
 - \#306 Azure Blob: a SAS token can be used instead of the account key (access restricted to a container, limited permissions and expiry date) - Thanks to @yenneferofvengerberg
+
 ### Fixed
 
 - \#424, \#475 Amazon S3: saving to S3 compatible storage failed (e.g. Cloudflare R2, Synology C2)
@@ -15,6 +16,10 @@
 - \#322, \#325, \#346 Google Drive: the file dialog crashed with "Invalid char in path" if a folder contained a file or folder whose name contains control characters (e.g. tab or newline) - such items are listed now, but can still not be opened
 - \#173 Backup: other files saved beside the database (e.g. the .xml file of KeeChallenge) were backed up as .kdbx files and rotated together with the database backups - backups now keep the extension of the saved file
 - Backup: saving failed if old backups could not be removed, or - with "Backup to Remote" - if the file name contained characters like `"` or `|`; old remote backups of such files were not removed
+- \#420 OneDrive: adding an account without name failed - the user name or email address is used then
+- \#437 Settings: the Add button could not be used with the keyboard or a screen reader
+- \#490 File dialog: account dropdown was clipped with high DPI settings (e.g. 125%)
+- \#330 KeePass waited forever when the connection was interrupted while saving or opening (Dropbox, Google Drive, Box, Amazon S3) - requests time out after 5 minutes now (a shorter timeout can be set per URL with KeePass' connection property `Timeout`, see [FAQ](https://keeanywhere.de/use/faq#timeout))
 
 ### Improved
 

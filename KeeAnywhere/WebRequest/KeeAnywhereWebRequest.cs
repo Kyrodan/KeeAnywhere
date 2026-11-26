@@ -22,6 +22,21 @@ namespace KeeAnywhere.WebRequest
         public override bool PreAuthenticate { get; set; }
         public override IWebProxy Proxy { get; set; }
 
+        // Set by KeePass from the connection property "Timeout" (milliseconds, -1 = infinite).
+        // The requests of the storage providers time out after ProxyTools.RequestTimeout anyway,
+        // so only a shorter timeout has an effect.
+        private int _timeout = (int)ProxyTools.RequestTimeout.TotalMilliseconds;
+
+        public override int Timeout
+        {
+            get { return _timeout; }
+            set
+            {
+                if (value < System.Threading.Timeout.Infinite) throw new ArgumentOutOfRangeException("value");
+                _timeout = value;
+            }
+        }
+
         public override WebHeaderCollection Headers
         {
             get
@@ -45,16 +60,23 @@ namespace KeeAnywhere.WebRequest
 
         // Task.Wait throws an AggregateException, which KeePass shows as "One or more errors occurred".
         // Throw an IOException with a readable message instead (the original exception is kept as InnerException).
-        private static void WaitForTask(Task task)
+        private void WaitForTask(Task task)
         {
+            bool isCompleted;
             try
             {
-                task.Wait();
+                isCompleted = task.Wait(_timeout);
             }
             catch (AggregateException ex)
             {
                 var inner = ex.Flatten().InnerException ?? ex;
                 throw new IOException("KeeAnywhere: " + ErrorMessageService.GetUserMessage(inner), inner);
+            }
+
+            if (!isCompleted)
+            {
+                var timeout = new TimeoutException(string.Format("No response within {0} seconds.", _timeout / 1000));
+                throw new IOException("KeeAnywhere: " + ErrorMessageService.GetUserMessage(timeout), timeout);
             }
         }
 
