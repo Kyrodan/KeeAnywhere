@@ -151,6 +151,15 @@ namespace KeeAnywhere.StorageProviders.Azure {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Access Key or SAS ähnelt.
+        /// </summary>
+        internal static string Label_Access_Token_Blob {
+            get {
+                return ResourceManager.GetString("Label_Access_Token_Blob", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Blob Path ähnelt.
         /// </summary>
         internal static string Label_Item_Name_Blob {
