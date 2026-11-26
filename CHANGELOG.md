@@ -5,6 +5,7 @@
 ### Fixed
 
 - \#424, \#475 Amazon S3: saving to S3 compatible storage failed (e.g. Cloudflare R2, Synology C2)
+- \#322, \#325, \#346 Google Drive: "Invalid char in path" error when a file or folder name contains control characters (e.g. tab or newline)
 
 ### Improved
 

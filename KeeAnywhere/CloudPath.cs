@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace KeeAnywhere
 {
-    // Alternative to System.IO.Path class *without* checking for invalid chars. Required for Bug #23
+    // Alternative to System.IO.Path class *without* checking for invalid chars. Required for Bug #23, #322, #325, #346:
+    // cloud storage providers allow chars in names that are invalid in local paths (e.g. tab or newline in Google Drive)
     public static class CloudPath
     {
         public static char DirectorySeparatorChar = '/';
@@ -19,8 +20,6 @@ namespace KeeAnywhere
         {
             if (path == null)
                 return null;
-
-            CheckInvalidPathChars(path);
 
             int length = path.Length;
             for (int i = length; --i >= 0;)
@@ -39,23 +38,10 @@ namespace KeeAnywhere
             return string.Empty;
         }
 
-        private static void CheckInvalidPathChars(string path)
-        {
-            for (int i = 0; i < path.Length; i++)
-            {
-                int c = path[i];
-
-                // Note: This list is duplicated in static char[] InvalidPathChars 
-                if (c < 32)
-                    throw new ArgumentException("Invalid char in path '" + path + "' at position " + i.ToString() + ": " + c.ToString() + " (decimal)");
-            }
-        }
-
         public static bool HasExtension(String path)
         {
             if (path != null)
             {
-                CheckInvalidPathChars(path);
                 for (int i = path.Length; --i >= 0;)
                 {
                     char ch = path[i];
@@ -76,8 +62,6 @@ namespace KeeAnywhere
         {
             if (path != null)
             {
-                CheckInvalidPathChars(path);
-
                 String s = path;
                 for (int i = path.Length; --i >= 0;)
                 {
@@ -117,8 +101,6 @@ namespace KeeAnywhere
         {
             if (path != null)
             {
-                CheckInvalidPathChars(path);
-
                 int length = path.Length;
                 for (int i = length; --i >= 0;)
                 {
@@ -136,9 +118,6 @@ namespace KeeAnywhere
             if (path1 == null || path2 == null)
                 throw new ArgumentNullException((path1 == null) ? "path1" : "path2");
             Contract.EndContractBlock();
-            CheckInvalidPathChars(path1);
-            CheckInvalidPathChars(path2);
-
             if (path2.Length == 0)
                 return path1;
 
