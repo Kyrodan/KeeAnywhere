@@ -11,7 +11,7 @@
 - \#432 Google Drive: adding an account without granting access to Google Drive (unchecked checkbox on Google's consent page) led to "Error 403: insufficient authentication scopes" later - this is now detected when adding the account
 - \#290 Dropbox: clicking "Cancel" on the authorization page caused an unhandled exception (a possible exception when cancelling the authorization of Google Drive and OneDrive is fixed as well)
 - Cancelling the authorization in KeeAnywhere's wait dialog did not stop waiting for the browser - a later login in the browser still added the account; closing the dialog with X did not cancel at all. Box, HiDrive: same unhandled exception as in \#290 when cancelling the authorization
-- \#322, \#325, \#346 Google Drive: "Invalid char in path" error when a file or folder name contains control characters (e.g. tab or newline)
+- \#322, \#325, \#346 Google Drive: the file dialog crashed with "Invalid char in path" if a folder contained a file or folder whose name contains control characters (e.g. tab or newline) - such items are listed now, but can still not be opened
 - \#173 Backup: other files saved beside the database (e.g. the .xml file of KeeChallenge) were backed up as .kdbx files and rotated together with the database backups - backups now keep the extension of the saved file
 - Backup: saving failed if old backups could not be removed, or - with "Backup to Remote" - if the file name contained characters like `"` or `|`; old remote backups of such files were not removed
 
