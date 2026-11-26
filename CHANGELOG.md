@@ -2,6 +2,7 @@
 
 ### New
 
+- \#306 Azure Blob: a SAS token can be used instead of the account key (access restricted to a container, limited permissions and expiry date) - Thanks to @yenneferofvengerberg
 ### Fixed
 
 - \#424, \#475 Amazon S3: saving to S3 compatible storage failed (e.g. Cloudflare R2, Synology C2)

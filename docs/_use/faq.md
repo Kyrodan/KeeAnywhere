@@ -68,6 +68,19 @@ Here is a working sample - see details in [#187](https://github.com/Kyrodan/KeeA
 }
 ```
 
+# Azure
+
+## How can I use a SAS token instead of the account key for Azure Blob storage? {#azure-sas}
+The account key grants full access to the complete storage account. With a SAS token (Shared Access Signature) access can be restricted to a single container, with limited permissions and an expiry date:
+1. Create a SAS token for your container (e.g. in the Azure Portal: `Storage account - Containers - <your container> - Shared access tokens`, preferably based on a stored access policy so it can be revoked). Required permissions: Read, Add, Create, Write, Delete and List.
+2. In KeeAnywhere go to `Tools - KeeAnywhere Settings...`, click `Add...` and choose `Azure Blob Storage`.
+3. Enter the name of your storage account, paste the SAS token (or the complete SAS URL) into `Access Key or SAS` and enter the container name as `Blob Path`.
+
+_Remarks:_
+* The container must already exist - KeeAnywhere cannot create it with a SAS token.
+* When the SAS token has expired, create a new one and add the account again with the same storage account and container - only the token is updated then.
+* SAS tokens are supported for Azure Blob storage only (not for Azure File storage).
+
 # Google Drive
 
 ## What is the difference between `Google Drive` and `Google Drive (restricted)`?
