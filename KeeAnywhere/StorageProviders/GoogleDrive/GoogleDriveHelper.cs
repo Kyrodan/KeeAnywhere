@@ -90,10 +90,16 @@ namespace KeeAnywhere.StorageProviders.GoogleDrive
 
         public static OidcFlow CreateOidcFlow(bool isAccessRestricted)
         {
-            if (isAccessRestricted)
-                return new OidcFlow(StorageType.GoogleDriveRestricted, Authority, GoogleDriveClientId, GoogleDriveClientSecret, ScopesRestricted);
-            else
-                return new OidcFlow(StorageType.GoogleDrive, Authority, GoogleDriveClientId, GoogleDriveClientSecret, Scopes);
+            var flow = isAccessRestricted
+                ? new OidcFlow(StorageType.GoogleDriveRestricted, Authority, GoogleDriveClientId, GoogleDriveClientSecret, ScopesRestricted)
+                : new OidcFlow(StorageType.GoogleDrive, Authority, GoogleDriveClientId, GoogleDriveClientSecret, Scopes);
+
+            // Google's consent page lets the user uncheck the access to Google Drive (#432)
+            flow.RequiredScopes = new[] { isAccessRestricted ? DriveService.Scope.DriveFile : DriveService.Scope.Drive };
+            flow.MissingScopesMessage = "Google Drive: access to your files was not granted." + System.Environment.NewLine + System.Environment.NewLine +
+                "Please add the account again and make sure the checkbox for Google Drive access is enabled on Google's consent page.";
+
+            return flow;
         }
 
         public static async Task<DriveService> GetClient(AccountConfiguration account)

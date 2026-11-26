@@ -45,7 +45,8 @@ echo Fehler im Buildvorgang
 echo !
 echo !
 echo !
-
+pause
+exit /b 1
 
 :end
 pause

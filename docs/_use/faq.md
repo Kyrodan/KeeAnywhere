@@ -82,6 +82,11 @@ To use an existing database with `Google Drive (restricted)`:
 ## Google shows "This app is blocked" when adding an account
 Google currently blocks the full access mode (`Google Drive`) for KeeAnywhere for many users, because Google requires an app verification for full access that hasn't been completed yet - see [#438](https://github.com/Kyrodan/KeeAnywhere/issues/438) for details and the current state. Please use `Google Drive (restricted)` instead - see the question above how to use an existing database with it.
 
+## Error 403: Request had insufficient authentication scopes
+On Google's consent page each permission has its own checkbox. If the checkbox for the access to Google Drive (e.g. "See, edit, create, and delete only the specific Google Drive files you use with this app") is not enabled, the account can be added, but every access fails with this error.
+
+Solution: remove the account in `Tools - KeeAnywhere Settings`, add it again and enable the checkbox for Google Drive access. Starting with version 2.3.0 KeeAnywhere detects this when adding the account.
+
 # Dropbox
 
 ## What is the difference between `Dropbox` and `Dropbox-Restricted`?
