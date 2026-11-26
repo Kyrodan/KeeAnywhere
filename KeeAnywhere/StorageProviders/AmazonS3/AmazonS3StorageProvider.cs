@@ -152,6 +152,11 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
                     string prefix;
                     GetBucketAndKey(parent.Id, out bucket, out prefix);
 
+                    // A folder path without trailing slash (e.g. "bucket/folder" from the backup rotation) would only
+                    // list the folder itself as common prefix "folder/", but not its content (#469)
+                    if (!string.IsNullOrEmpty(prefix) && !prefix.EndsWith("/"))
+                        prefix += "/";
+
                     var request = new ListObjectsV2Request
                     {
                         BucketName = bucket,
