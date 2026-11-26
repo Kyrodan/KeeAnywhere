@@ -20,6 +20,8 @@ Versions with suffix (e.g. *2.2.0-beta*) are marked as pre-release. For them the
 
 Publishing the release (manually, after review) triggers *.github\workflows\chocolatey.yml*: it pushes the .nupkg attached to the release to chocolatey.org. Pre-releases are skipped. It can also be started manually for a given tag.
 
+*.github\workflows\codeql.yml* runs GitHub code scanning (CodeQL) for C# and the workflows themselves on every push/PR on master and weekly. It uses `build-mode: none`, because the .NET Framework 4.8 project cannot be built on Linux runners. GitHub's CodeQL "default setup" must stay **disabled** (Settings - Code security), otherwise it conflicts with this workflow.
+
 Repository secrets (Settings - Secrets and variables - Actions):
 
 * **KEEANYWHERE_API_KEYS**: complete content of your local *KeeAnywhere\ApiKeys.cs*. Update it whenever *ApiKeys.cs* changes. A release build fails if it is missing or still contains dummy keys.

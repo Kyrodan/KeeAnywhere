@@ -1,0 +1,51 @@
+name: CodeQL
+
+# Code scanning without build (build-mode: none): the project targets .NET Framework 4.8,
+# which cannot be built on Linux runners. Replaces GitHub's CodeQL "default setup"
+# (must be disabled in Settings - Code security, otherwise this workflow conflicts with it).
+on:
+  push:
+    branches: [ master ]
+    paths-ignore: [ 'docs/**' ]
+  pull_request:
+    branches: [ master ]
+    paths-ignore: [ 'docs/**' ]
+  schedule:
+    - cron: '0 4 * * 1'   # weekly, Monday 04:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: csharp
+            build-mode: none
+          - language: actions
+            build-mode: none
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v4
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
+
+    - name: Perform CodeQL analysis
+      uses: github/codeql-action/analyze@v4
+      with:
+        category: /language:${{ matrix.language }}
