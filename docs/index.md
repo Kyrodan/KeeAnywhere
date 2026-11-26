@@ -8,7 +8,7 @@ KeeAnywhere is a [KeePass Password Safe](https://keepass.info) plugin that provi
 ![KeeAnywhere in Action](assets/images/KeeAnywhere_Teaser.png)
 
 # Supported providers (in alphabetical order):
-* Amazon AWS S3 (and compatible)
+* Amazon AWS S3 (and compatible, e.g. MinIO and other self-hosted S3 servers)
 * Azure (Blob and File storage)
 * Box
 * Dropbox

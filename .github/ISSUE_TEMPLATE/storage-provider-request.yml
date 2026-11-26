@@ -1,0 +1,111 @@
+name: Storage provider request
+description: Which storage provider is missing?
+title: 'New Provider: '
+labels: [ provider-request ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your suggestion! Please check the [out of scope features](https://keeanywhere.de/contribute#out-of-scope-features) and the [existing provider requests](https://github.com/Kyrodan/KeeAnywhere/issues?q=is%3Aissue+label%3Aprovider-request) first.
+
+        KeeAnywhere supports **public cloud storage providers** only. Self-hosted solutions (private cloud, homelab, NAS apps like Nextcloud) won't be added - use WebDAV or an S3 compatible server with the `Amazon S3` provider instead, see the [FAQ](https://keeanywhere.de/use/faq#s3-compatible).
+
+        A provider can only be added if it offers a free API (no paid developer account or traffic) and an app registration (e.g. for OAuth) that I can get myself.
+
+        Providers offering **WebDAV, FTP, network shares (SMB)** or an **S3 compatible API** can already be used with KeePass or with KeeAnywhere's `Amazon S3` provider (without file picker for WebDAV/FTP). For these a dedicated provider is only added if the provider's own API offers clear benefits - see [Providers with WebDAV, FTP or S3 access](https://keeanywhere.de/contribute#providers-with-webdav-ftp-or-s3-access).
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: This is a public cloud service - not a self-hosted solution (private cloud, homelab, NAS app).
+          required: true
+        - label: The provider is not already requested in the [existing provider requests](https://github.com/Kyrodan/KeeAnywhere/issues?q=is%3Aissue+label%3Aprovider-request).
+          required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: Name of provider
+    validations:
+      required: true
+
+  - type: input
+    id: website
+    attributes:
+      label: Website of provider
+      placeholder: https://
+
+  - type: input
+    id: api
+    attributes:
+      label: URL to API documentation
+      placeholder: https://
+    validations:
+      required: true
+
+  - type: dropdown
+    id: sdk
+    attributes:
+      label: Is there an official .NET SDK (NuGet package)?
+      options:
+        - "Yes"
+        - "No"
+        - Don't know
+    validations:
+      required: true
+
+  - type: dropdown
+    id: free
+    attributes:
+      label: Is the API free to use (incl. developer account)?
+      options:
+        - "Yes"
+        - "No"
+        - Don't know
+    validations:
+      required: true
+
+  - type: dropdown
+    id: app-registration
+    attributes:
+      label: Can apps be registered by anyone (e.g. OAuth app)?
+      options:
+        - "Yes"
+        - "No"
+        - Not required (e.g. access keys like S3)
+        - Don't know
+    validations:
+      required: true
+
+  - type: dropdown
+    id: other-access
+    attributes:
+      label: Which other access methods does the provider offer?
+      description: Select all that apply.
+      multiple: true
+      options:
+        - WebDAV
+        - FTP / FTPS
+        - SFTP
+        - Network share (SMB)
+        - S3 compatible API
+        - No other access method
+        - Don't know
+    validations:
+      required: true
+
+  - type: textarea
+    id: api-benefits
+    attributes:
+      label: Why should KeeAnywhere use the provider's own API?
+      description: |
+        **Required if you selected WebDAV, FTP, SFTP, SMB or S3 above.** What are the benefits of the provider's own API compared to these access methods?
+        Examples: OAuth login instead of a password, access restricted to an app folder, WebDAV/FTP limited, throttled or deprecated by the provider, versioning or shared folders.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Links to the SDK, anything else that helps.

@@ -19,8 +19,10 @@ Additionally most of the cloud provider's native clients do not support multiple
 ## Does KeeAnywhere work with portable KeePass (without installation)?
 Yes! Starting with version 1.5.0 KeeAnywhere can be used portable. All settings are stored beside KeePass.exe.
 
-## Can you implement private cloud providers (OwnCloud, Nextcloud, etc.)?
-No, I won't. Most of these providers support native WebDav which is also natively supported by KeePass. Okay, I know, the file picker is missing then ;-)
+## Can you implement private cloud providers (Nextcloud, ownCloud, homelab, etc.)?
+No, I won't: KeeAnywhere supports public cloud storage providers only (see [Contribute](/contribute#public-cloud-providers-only)). But you can use your self-hosted storage anyway:
+* Most of these solutions support WebDAV, which is natively supported by KeePass. Okay, I know, the file picker is missing then ;-)
+* With an S3 compatible server (e.g. MinIO) you can use KeeAnywhere's `Amazon S3` provider - including the file picker. See [How do I connect S3 compatible storage](#s3-compatible) below.
 
 ## How can I contribute?
 Everyone is invited to [contribute](/contribute) - every help is welcome.
@@ -29,6 +31,19 @@ Everyone is invited to [contribute](/contribute) - every help is welcome.
 The source code is licensed under the [MIT license](https://github.com/Kyrodan/KeeAnywhere/blob/master/LICENSE). The compiled binaries can be used free of charge without any warranty.
 
 # Amazon AWS S3
+
+## How do I connect S3 compatible storage (MinIO, Garage, ...)? {#s3-compatible}
+Use the provider `Amazon S3` - it works with public S3 compatible services as well as with self-hosted S3 servers (e.g. MinIO, Garage, SeaweedFS, Ceph):
+1. Go to `Tools - KeeAnywhere Settings...`, click `Add...` and choose `Amazon S3`.
+2. Enter `Access Key` and `Secret Key` of your S3 user.
+3. Under `Endpoint` select `Other URL` and enter the URL of your server, e.g. `https://minio.example.lan:9000`.
+4. If your server expects a specific region for signing requests, enter it under `Override Auth Region` (e.g. `us-east-1`, which is the default of MinIO).
+5. Click `Test`.
+
+_Remarks:_
+* KeeAnywhere uses path-style requests (`https://server/bucket/file`), so no DNS setup for buckets is required.
+* With HTTPS the server certificate must be trusted by Windows. If your server uses a self-signed certificate or your own CA, import the (CA) certificate into the Windows certificate store - otherwise the connection fails.
+* Cloudflare R2 is currently not supported for saving, see [#424](https://github.com/Kyrodan/KeeAnywhere/issues/424).
 
 ## How to restrict access (not giving S3FullAccess Policy) with IAM Provider?
 Here is a working sample - see details in [#187](https://github.com/Kyrodan/KeeAnywhere/issues/187):

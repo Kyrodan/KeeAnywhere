@@ -29,10 +29,26 @@ Then [create a new issue]({{ site.github.issues_url }}/new/choose) using the bug
 These features won't be accepted:
 * Saving provider credentials in a KeePass database
 * Cloud storage providers where I have to pay for the usage of KeeAnywhere (traffic, developer account, etc.)
-* Support for private cloud solutions (for which I have to manage my own instance)
-* All providers that already support WebDAV: KeePass natively supports WebDAV (without file picker, I know :-))
+* Self-hosted solutions (private cloud, homelab, NAS apps) - see [Public cloud providers only](#public-cloud-providers-only)
+* Providers that can already be accessed without a dedicated provider - see [Providers with WebDAV, FTP or S3 access](#providers-with-webdav-ftp-or-s3-access)
 
-Especially `OwnCloud`, `Nextcloud` and `Pydio` are covered by the last two topics.
+## Providers with WebDAV, FTP or S3 access
+Many providers can already be used without a dedicated KeeAnywhere provider (without file picker, I know :-)):
+* with the protocols built into KeePass: WebDAV, FTP, HTTP/HTTPS, local files and network shares (SMB/UNC paths, e.g. a NAS) - see [KeePass' synchronization documentation](https://keepass.info/help/v2/sync.html). SFTP, SCP and FTPS are not built into KeePass, but available via the [IOProtocolExt](https://keepass.info/plugins.html#ioprotocolext) plugin.
+* with KeeAnywhere's `Amazon S3` provider, if the provider offers an S3 compatible API (e.g. Wasabi, Backblaze B2, Synology C2).
+
+A dedicated provider for these is only added **if the provider's own API offers clear benefits**, for example:
+* login via OAuth instead of a password or app password (passwords for WebDAV/FTP are stored in KeePass' configuration, and two-factor authentication often doesn't apply)
+* access restricted to an app folder instead of the complete storage
+* better reliability, or WebDAV/FTP being limited, throttled or deprecated by the provider
+* features like versioning or shared folders that WebDAV/FTP don't offer
+
+## Public cloud providers only
+KeeAnywhere supports **public cloud storage providers** only. Self-hosted solutions - private cloud, homelab or NAS apps like `Nextcloud`, `ownCloud`, `Seafile` or `Pydio` - won't be added as dedicated providers, because I can't test and maintain all of these products, versions and configurations.
+
+You can use your self-hosted storage anyway:
+* with the protocols built into KeePass: WebDAV, FTP or network shares (most of these solutions support WebDAV), or
+* with KeeAnywhere's `Amazon S3` provider and an S3 compatible server (e.g. MinIO, Garage, SeaweedFS, Ceph) - see the [FAQ](use/faq#s3-compatible).
 
 # Source Code Contribution
 Source code contribution is welcome. Please keep in mind that this project has a vision and that your contribution should fit to it. It would be best to talk about new ideas first by creating a new issue.

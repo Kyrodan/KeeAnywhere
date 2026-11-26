@@ -1,0 +1,46 @@
+name: Feature request
+description: Suggest an idea for KeeAnywhere
+labels: [ enhancement ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your idea! Please take a look at the [out of scope features](https://keeanywhere.de/contribute#out-of-scope-features) first.
+        A missing storage provider? Please use the *Storage provider request* template instead.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: My idea is not on the list of [out of scope features](https://keeanywhere.de/contribute#out-of-scope-features) and not already requested in the [existing issues](https://github.com/Kyrodan/KeeAnywhere/issues).
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Is your feature request related to a problem? Please describe it.
+      placeholder: I'm always frustrated when ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: A clear and concise description of what you want to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Alternative solutions or workarounds you've considered.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots or anything else that helps to understand the request.
