@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Box.V2.Config;
 using KeeAnywhere.Configuration;
 using KeeAnywhere.OAuth2;
+using KeePassLib.Utility;
 
 namespace KeeAnywhere.StorageProviders.Box
 {
@@ -25,29 +26,60 @@ namespace KeeAnywhere.StorageProviders.Box
             var config = new BoxConfig(clientId, clientSecret, new Uri(redirectUri));
 
             var uri = config.AuthCodeUri;
-            var query = await browser.GetQueryStringAsync(uri.AbsoluteUri, f.CancellationToken);
+            AccountConfiguration account = null;
+            string error = null;
 
-            var code = query["code"];
-
-            var api = BoxHelper.GetClient();
-            var token = await api.Auth.AuthenticateAsync(code);
-
-            if (token == null || token.RefreshToken == null || token.AccessToken == null)
+            try
             {
-                throw new Exception("Unauthorized");
+                var query = await browser.GetQueryStringAsync(uri.AbsoluteUri, f.CancellationToken);
+
+                if (query == null) // Cancelled
+                    return null;
+
+                // e.g. "access_denied" if the user denies the access on Box' authorization page
+                var queryError = query["error"];
+                if (!string.IsNullOrEmpty(queryError))
+                {
+                    if (queryError != "access_denied")
+                        error = query["error_description"] ?? queryError;
+
+                    return null;
+                }
+
+                var code = query["code"];
+                if (string.IsNullOrEmpty(code))
+                {
+                    error = "No authorization code received.";
+                    return null;
+                }
+
+                var api = BoxHelper.GetClient();
+                var token = await api.Auth.AuthenticateAsync(code);
+
+                if (token == null || token.RefreshToken == null || token.AccessToken == null)
+                {
+                    throw new Exception("Unauthorized");
+                }
+
+                var user = await api.UsersManager.GetCurrentUserInformationAsync();
+
+                account = new AccountConfiguration
+                {
+                    Type = StorageType.Box,
+                    Id = user.Id,
+                    Name = user.Name,
+                    Secret = token.RefreshToken
+                };
+            }
+            finally
+            {
+                f.Close();
+
+                if (error != null)
+                    MessageService.ShowWarning("Authorization failed:", error);
             }
 
-            var user = await api.UsersManager.GetCurrentUserInformationAsync();
-
-            f.Close();
-
-            return new AccountConfiguration
-            {
-                Type = StorageType.Box,
-                Id = user.Id,
-                Name = user.Name,
-                Secret = token.RefreshToken
-            };
+            return account;
         }
     }
 }

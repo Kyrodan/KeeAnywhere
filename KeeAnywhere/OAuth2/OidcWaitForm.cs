@@ -70,13 +70,14 @@ namespace KeeAnywhere.OAuth2
 
         private void OnCancel(object sender, EventArgs e)
         {
-            //this.m_tokenSource.Cancel();
             this.Close();
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs e)
         {
-            if (this.DialogResult == DialogResult.Cancel)
+            // Every way of closing (Cancel button, X, Esc) cancels the authorization.
+            // When the authorization is finished, the caller closes the form after it doesn't need the token anymore.
+            if (!this.m_tokenSource.IsCancellationRequested)
             {
                 this.m_tokenSource.Cancel();
             }

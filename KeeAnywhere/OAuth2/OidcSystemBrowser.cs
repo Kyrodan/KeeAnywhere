@@ -96,7 +96,11 @@ namespace KeeAnywhere.OAuth2
         public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken)
         {
             using (var listener = _listener)
+            using (cancellationToken.Register(StopListener, listener))
             {
+                if (cancellationToken.IsCancellationRequested)
+                    return new BrowserResult { ResultType = BrowserResultType.UserCancel, Error = "Cancelled by user." };
+
                 OpenBrowser(options.StartUrl);
 
                 try
@@ -124,28 +128,42 @@ namespace KeeAnywhere.OAuth2
 
                     return new BrowserResult { Response = result, ResultType = BrowserResultType.Success };
                 }
-                catch (TaskCanceledException ex)
-                {
-                    return new BrowserResult { ResultType = BrowserResultType.Timeout, Error = ex.Message };
-                }
                 catch (Exception ex)
                 {
+                    // Cancelling stops the listener, so GetContextAsync fails
+                    if (cancellationToken.IsCancellationRequested)
+                        return new BrowserResult { ResultType = BrowserResultType.UserCancel, Error = "Cancelled by user." };
+
                     return new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = ex.Message };
                 }
+            }
+        }
+
+        // GetContextAsync doesn't support a CancellationToken: stopping the listener ends the waiting
+        private static void StopListener(object listener)
+        {
+            try
+            {
+                ((HttpListener)listener).Stop();
+            }
+            catch (Exception)
+            {
+                // Listener already closed
             }
         }
 
         public async Task<NameValueCollection> GetQueryStringAsync(string startUrl, CancellationToken cancellationToken)
         {
             using (var listener = _listener)
+            using (cancellationToken.Register(StopListener, listener))
             {
+                if (cancellationToken.IsCancellationRequested)
+                    return null;
+
+                OpenBrowser(startUrl);
+
                 try
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-
-                    OpenBrowser(startUrl);
-
                     var context = await listener.GetContextAsync();
 
                     var result = context.Request.QueryString;
@@ -154,9 +172,13 @@ namespace KeeAnywhere.OAuth2
 
                     return result;
                 }
-                catch (TaskCanceledException)
+                catch (Exception)
                 {
-                    return null;
+                    // Cancelling stops the listener, so GetContextAsync fails
+                    if (cancellationToken.IsCancellationRequested)
+                        return null;
+
+                    throw;
                 }
             }
         }

@@ -72,9 +72,12 @@ namespace KeeAnywhere.OAuth2
                 credential = null;
             }
 
+            // Check before closing: closing the wait form cancels the token
+            var isCancelled = f.CancellationToken.IsCancellationRequested;
+
             f.Close();
 
-            if (credential == null) // Cancelled by user
+            if (credential == null || isCancelled) // Cancelled by user
                 return null;
 
             if (credential.IsError)
