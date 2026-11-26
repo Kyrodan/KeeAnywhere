@@ -8,6 +8,8 @@
 
 ### Improved
 
+- \#106 Error messages explain how to re-authorize an account if its authorization is no longer valid (e.g. expired or revoked token), and if an Azure access key or SAS token is wrong or expired
+
 
 ## 2.3.0 (2026-11-26)
 

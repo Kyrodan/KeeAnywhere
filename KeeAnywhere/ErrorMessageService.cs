@@ -89,11 +89,27 @@ namespace KeeAnywhere
             var networkException = exceptions.FirstOrDefault(e => e is HttpRequestException || e is WebException || e is SocketException);
             // HttpClient reports a timeout as TaskCanceledException
             var timeoutException = exceptions.FirstOrDefault(e => e is TaskCanceledException || e is TimeoutException);
+            var authException = exceptions.FirstOrDefault(IsAuthorizationError);
+            var azureAuthException = exceptions.FirstOrDefault(IsAzureAuthenticationError);
 
             if (s3Exception != null)
             {
                 message = GetS3Message(s3Exception);
                 summary = string.Format("AmazonS3Exception, HTTP {0}, {1}", (int)s3Exception.StatusCode, s3Exception.ErrorCode);
+            }
+            else if (authException != null)
+            {
+                // e.g. expired or revoked token (#106)
+                message = "The authorization of this account is no longer valid (e.g. expired, revoked or the password was changed)." +
+                          Environment.NewLine + Environment.NewLine +
+                          "Please re-authorize the account: go to 'Tools - KeeAnywhere Settings - Accounts', select the account and click 'Check'.";
+                summary = authException.GetType().Name;
+            }
+            else if (azureAuthException != null)
+            {
+                message = "Azure denied the access - the access key or SAS token may be wrong or expired. Please check the account (remove it and add it again with a valid key or token)." +
+                          Environment.NewLine + Environment.NewLine + azureAuthException.Message;
+                summary = azureAuthException.GetType().Name;
             }
             else if (googleException != null)
             {
@@ -122,6 +138,81 @@ namespace KeeAnywhere
             }
 
             return message + Environment.NewLine + Environment.NewLine + "(" + summary + ")";
+        }
+
+        // OAuth based providers: the (refresh) token is invalid, so the account has to be re-authorized.
+        // Detected by type name, OAuth error code or HTTP 401, so no direct dependency on every provider SDK is needed.
+        private static bool IsAuthorizationError(Exception ex)
+        {
+            var typeName = ex.GetType().Name;
+
+            // Dropbox
+            if (typeName == "AuthException" || typeName == "OAuth2Exception")
+                return true;
+
+            // OAuth error codes of a failed token refresh (Google: TokenResponseException, OneDrive: ServiceException)
+            var message = ex.Message ?? string.Empty;
+            if (message.IndexOf("invalid_grant", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                message.IndexOf("unauthorized_client", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                message.IndexOf("deleted_client", StringComparison.OrdinalIgnoreCase) >= 0)
+                return true;
+
+            // HTTP 401 (e.g. OneDrive, Google Drive, Box, HiDrive) - not for S3 and Azure, which use access keys
+            return !(ex is AmazonS3Exception) && typeName != "StorageException" && GetHttpStatusCode(ex) == 401;
+        }
+
+        // Azure (Blob/File storage): wrong or expired access key or SAS token
+        private static bool IsAzureAuthenticationError(Exception ex)
+        {
+            if (ex.GetType().Name != "StorageException") return false;
+
+            var statusCode = GetHttpStatusCode(ex);
+            return statusCode == 401 || statusCode == 403;
+        }
+
+        // Reads the HTTP status code of provider specific exceptions (property names differ between the SDKs)
+        private static int GetHttpStatusCode(Exception ex)
+        {
+            var webException = ex as WebException;
+            if (webException != null)
+            {
+                var response = webException.Response as HttpWebResponse;
+                return response != null ? (int)response.StatusCode : 0;
+            }
+
+            // Azure: StorageException.RequestInformation.HttpStatusCode
+            var requestInformation = GetPropertyValue(ex, "RequestInformation");
+            if (requestInformation != null)
+                return ToStatusCode(GetPropertyValue(requestInformation, "HttpStatusCode"));
+
+            foreach (var name in new[] { "HttpStatusCode", "StatusCode", "ResponseStatusCode" })
+            {
+                var statusCode = ToStatusCode(GetPropertyValue(ex, name));
+                if (statusCode != 0) return statusCode;
+            }
+
+            return 0;
+        }
+
+        private static object GetPropertyValue(object obj, string name)
+        {
+            try
+            {
+                var property = obj.GetType().GetProperty(name, BindingFlags.Public | BindingFlags.Instance);
+                return property != null ? property.GetValue(obj, null) : null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private static int ToStatusCode(object value)
+        {
+            if (value == null) return 0;
+            if (value is HttpStatusCode) return (int)(HttpStatusCode)value;
+            if (value is int) return (int)value;
+            return 0;
         }
 
         // Complete technical details incl. stack trace
