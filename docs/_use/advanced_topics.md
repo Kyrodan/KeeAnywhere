@@ -9,10 +9,19 @@ Options:
 * `KeePass Configuration` stores account details in `KeePass.config.xml` file. This option is dedicated to "portable solutions" (= without the need to install KeeAnywhere on your computer). If you connect KeeAnywhere to a cloud provider, a token (a kind of secret) is issued by the cloud provider which - in conjunction with a secret App-ID is used to access your cloud storage. This secret is **not** your password. But: **All tokens are stored in clear text (unencrypted). Keep this in mind if you share your `KeePass.config.xml`.** This is a trade-off-decision between simple usability and lower security.
 * `Windows Credential Manager` (_deprecated_) stores account details in the credential manager of your current computer. Secrets are encrypted and can only be accessed by the currently logged in user. This option is deprecated since Version 1.3.0 and cannot be used anymore: It has limitations in the length of stored secrets which gets exceeded by some providers.
 
+With `Local User Secure Store` the accounts belong to the current **Windows user**: if several Windows users (or computers) use the same KeePass installation, each of them has to add the account in KeeAnywhere on their own. For a shared (portable) installation you can use `KeePass Configuration` instead - keep in mind that the tokens are stored unencrypted then.
+
 # Open Database by URL
 All accessible databases can be opened by its special URL. This URL can be determined e.g. via `Open from Cloud Drive...` dialog. It can be used widely in KeePass for e.g. Synchronisation, Triggers, Open URL, etc. You do not need to provide Username and Password if possible - just leave these fields blank.
 
 Details of this URL scheme can be found in the [URL Specification](url_specification).
+
+# Opening databases automatically (KeeAutoExec, triggers, command line) {#open-automatically}
+When KeePass opens a URL automatically, it may show the `Open URL` dialog or ask for server credentials, although KeeAnywhere doesn't need any (this behavior is part of KeePass, not of KeeAnywhere). Depending on how the database is opened:
+
+* **KeeAutoExec plugin:** add the string fields `IocUserName` and `IocPassword` with any non-empty value (e.g. `.`) to the AutoOpen entry - KeeAutoExec then skips the dialog.
+* **Command line or shortcut:** add the parameter `-ioiscomplete`, e.g. `KeePass.exe "dropbox:///Account/Database.kdbx" -ioiscomplete`.
+* **Trigger:** instead of the action `Open database file` use `Execute command line / URL` with `KeePass.exe` as file and `"<KeeAnywhere URL>" -ioiscomplete` as arguments.
 
 # Rename an Account
 Steps to rename an account:

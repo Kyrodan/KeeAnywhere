@@ -15,11 +15,21 @@ Internally [System.Security.Cryptography.ProtectedData](https://docs.microsoft.c
 
 
 # Proxy settings not working
+Typical symptom: adding an account in the browser works, but every access from KeePass fails with an error like `Unable to connect to the remote server`. Then your browser uses a proxy, but KeePass doesn't: set the proxy in KeePass (`Tools - Options - Advanced - Proxy...`, see [Advanced Topics](advanced_topics)) - KeeAnywhere uses these settings.
+
 For registering an account, KeeAnywhere uses system's default browser for authorization. So you have to manage its proxy settings, too.
 
 After successfully registering an account, this setting is no longer needed, as KeeAnywhere then uses its own proxy settings (from KeePass).
 
 This is a drawback, I know, but currently there is no simple alternative.
+
+# Offline Cache: Conflict opening database
+This message appears if both the offline cached database and the database in your cloud storage have been changed since the last synchronization (e.g. you saved offline on this computer and online on another one). KeeAnywhere then opens the offline cached version - the changes in the cloud are **not** contained.
+
+To merge both versions:
+1. Download the database from your cloud storage (e.g. with the web browser).
+2. In KeePass (with the database opened via KeeAnywhere) use `File - Synchronize - Synchronize with File...` and select the downloaded file.
+3. Save the database - the merged database is uploaded to your cloud storage.
 
 # Google Drive: app passwords do not work
 That's right: KeeAnywhere does not support app passwords - and it's not planned to implement it :-)
