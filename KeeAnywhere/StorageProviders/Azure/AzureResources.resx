@@ -147,6 +147,9 @@
   <data name="Keepass_Banner_Title" xml:space="preserve">
     <value>Authorize to Azure</value>
   </data>
+  <data name="Label_Access_Token_Blob" xml:space="preserve">
+    <value>Access Key or SAS</value>
+  </data>
   <data name="Label_Item_Name_Blob" xml:space="preserve">
     <value>Blob Path</value>
   </data>

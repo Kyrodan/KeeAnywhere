@@ -134,10 +134,10 @@ namespace KeeAnywhere.StorageProviders.Azure
         #endregion
 
         // For connection testing
-        public static async Task<bool> TestContainer(StorageCredentials credentials, string containerName)
+        public static async Task<bool> TestContainer(string accountName, string secret, string containerName)
         {
             var provider = new AzureBlobStorageProvider();
-            var container = await provider.GetContainer(credentials, containerName);
+            var container = await provider.GetContainer(CreateStorageAccount(accountName, secret), containerName);
             await container.ListBlobsSegmentedAsync(null);
 
             return false;
@@ -171,19 +171,22 @@ namespace KeeAnywhere.StorageProviders.Azure
                 containerName = account.AdditionalSettings["AzureItemName"];
             }
 
-            var blobContainer = await GetContainer(new StorageCredentials(account.Name, account.Secret), containerName);
+            var blobContainer = await GetContainer(CreateStorageAccount(account.Name, account.Secret), containerName);
 
             return blobContainer;
         }
 
-        private async Task<CloudBlobContainer> GetContainer(StorageCredentials credentials, string containerName)
+        private async Task<CloudBlobContainer> GetContainer(CloudStorageAccount storageAccount, string containerName)
         {
-            if (credentials == null) throw new ArgumentNullException("credentials");
+            if (storageAccount == null) throw new ArgumentNullException("storageAccount");
             if (containerName == null) throw new ArgumentNullException("containerName");
 
-            var storageAccount = new CloudStorageAccount(credentials, true);
             var cloudBlobClient = storageAccount.CreateCloudBlobClient();
             var blobContainer = cloudBlobClient.GetContainerReference(containerName);
+
+            // A container SAS is not allowed to create containers, so the container must already exist.
+            if (storageAccount.Credentials.IsSAS)
+                return blobContainer;
 
             // Create the container and set the permission  
             if (await blobContainer.CreateIfNotExistsAsync())
@@ -197,6 +200,20 @@ namespace KeeAnywhere.StorageProviders.Azure
             }
 
             return blobContainer;
+        }
+
+        // The secret is an account key or a SAS token, alone or inside a pasted SAS URL. A SAS always has a "sig"
+        // parameter. Matching a whole parameter matters: Base64 has no '?' or '&' and pads with '=' only at the end,
+        // yet a valid account key can end in "sig==".
+        private static CloudStorageAccount CreateStorageAccount(string accountName, string secret)
+        {
+            var queryStart = secret.IndexOf('?');
+            var sasToken = queryStart >= 0 ? secret.Substring(queryStart + 1) : secret;
+            var isSas = sasToken.Split('&').Any(parameter => parameter.StartsWith("sig=", StringComparison.Ordinal));
+            if (!isSas)
+                return new CloudStorageAccount(new StorageCredentials(accountName, secret), true);
+
+            return new CloudStorageAccount(new StorageCredentials(sasToken), accountName, null, true);
         }
 
         private string GetName(string id, CloudBlobDirectory parent)

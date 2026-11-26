@@ -16,6 +16,7 @@ namespace KeeAnywhere.StorageProviders.Azure
             switch (storageType)
             {
                 case StorageType.AzureBlob:
+                    m_lblAccessToken.Text = AzureResources.Label_Access_Token_Blob;
                     m_lblItemName.Text = AzureResources.Label_Item_Name_Blob;
                     this.Text = AzureResources.Form_Title_Blob;
                     break;
@@ -72,13 +73,13 @@ namespace KeeAnywhere.StorageProviders.Azure
             try
             {
                 var error = false;
-                var credentials = new StorageCredentials(this.AccountName, this.AccessToken);
                 switch (this.StorageType)
                 {
                     case StorageType.AzureBlob:
-                        error = await AzureBlobStorageProvider.TestContainer(credentials, this.ItemName);
+                        error = await AzureBlobStorageProvider.TestContainer(this.AccountName, this.AccessToken, this.ItemName);
                         break;
                     case StorageType.AzureFile:
+                        var credentials = new StorageCredentials(this.AccountName, this.AccessToken);
                         error = await AzureFileStorageProvider.TestShare(credentials, this.ItemName);
                         break;
                     default:
