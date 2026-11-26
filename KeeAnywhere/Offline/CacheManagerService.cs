@@ -121,18 +121,18 @@ namespace KeeAnywhere.Offline
 
         public void CouldNotSaveToRemote(Uri requestedUri, Exception ex)
         {
-            Task.Run(() => MessageService.ShowWarning(
-                "KeeAnywhere Offline Cache:\r\nCould not save to remote (but saved in offline cache):",
+            ErrorMessageService.ShowError(
+                "KeeAnywhere Offline Cache: Could not save to remote (but saved in offline cache)",
                 requestedUri.ToString(),
-                ex));
+                ex);
         }
 
         public void CouldNotOpenFromRemote(Uri requestedUri, Exception ex)
         {
-            Task.Run(() => MessageService.ShowWarning(
-                "KeeAnywhere Offline Cache:\r\nCould not open from remote, using offline cached version:",
+            ErrorMessageService.ShowError(
+                "KeeAnywhere Offline Cache: Could not open from remote, using offline cached version",
                 requestedUri.ToString(),
-                ex));
+                ex);
         }
 
         public void OpenWithConflict(Uri requestedUri)

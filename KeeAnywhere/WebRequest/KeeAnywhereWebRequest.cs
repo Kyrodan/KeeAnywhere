@@ -43,6 +43,20 @@ namespace KeeAnywhere.WebRequest
             _itemPath = itemPath;
         }
 
+        // Task.Wait throws an AggregateException, which KeePass shows as "One or more errors occurred".
+        // Throw an IOException with a readable message instead (the original exception is kept as InnerException).
+        private static void WaitForTask(Task task)
+        {
+            try
+            {
+                task.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                var inner = ex.Flatten().InnerException ?? ex;
+                throw new IOException("KeeAnywhere: " + ErrorMessageService.GetUserMessage(inner), inner);
+            }
+        }
 
         public override WebResponse GetResponse()
         {
@@ -81,12 +95,7 @@ namespace KeeAnywhere.WebRequest
                     }
                 });
 
-                task.Wait();
-                if (task.IsFaulted)
-                {
-                    throw new InvalidOperationException(string.Format("KeeAnywhere: Upload to folder {0} failed",
-                        _itemPath), task.Exception);
-                }
+                WaitForTask(task);
 
                 _response = new KeeAnywhereWebResponse();
             }
@@ -95,8 +104,8 @@ namespace KeeAnywhere.WebRequest
                 var task = Task.Run(async () => await _provider.Load(_itemPath));
 
                 // Issue #44: Sometimes can't load kdbx file (Dropbox, hubiC)
-                //var wrappeedStream = new WrapperStream(stream.Result); 
-                task.Wait();
+                //var wrappeedStream = new WrapperStream(stream.Result);
+                WaitForTask(task);
                 var memoryStream = task.Result as MemoryStream;
 
                 if (memoryStream == null)

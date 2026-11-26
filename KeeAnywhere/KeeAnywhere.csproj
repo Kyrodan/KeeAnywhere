@@ -367,6 +367,7 @@
     <Compile Include="ApiKeys.cs" />
     <Compile Include="BrowserHelper.cs" />
     <Compile Include="CloudPath.cs" />
+    <Compile Include="ErrorMessageService.cs" />
     <Compile Include="Configuration\AccountConfiguration.cs" />
     <Compile Include="Configuration\AccountIdentifier.cs" />
     <Compile Include="Configuration\ConfigurationInfo.cs" />

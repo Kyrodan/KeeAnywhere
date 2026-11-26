@@ -76,8 +76,7 @@ namespace KeeAnywhere
             }
             catch (Exception ex)
             {
-                MessageService.ShowWarning("Connecting to this account failed!", ex, "Try to re-authorize in next step.");
-
+                ErrorMessageService.ShowError("Connecting to this account failed!", "Try to re-authorize in next step.", ex);
             }
 
             var newAccount = await _storageService.CreateAccount(account.Type);

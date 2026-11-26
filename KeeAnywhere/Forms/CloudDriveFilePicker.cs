@@ -370,7 +370,7 @@ namespace KeeAnywhere.Forms
                 }
                 catch (Exception ex)
                 {
-                    MessageService.ShowWarning("Error getting Root node.\r\nException:", ex);
+                    ErrorMessageService.ShowError("Error getting the root folder", null, ex);
                 }
 
                 await SetSelectedItem(root);
@@ -431,7 +431,7 @@ namespace KeeAnywhere.Forms
             }
             catch (Exception ex)
             {
-                MessageService.ShowWarning("Error loading file list.\r\nException:", ex);
+                ErrorMessageService.ShowError("Error loading the file list", null, ex);
                 return info;
             }
 
