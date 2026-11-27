@@ -16,7 +16,7 @@ Please choose between manual installation and an automatic installation.
 {% assign zip = site.github.latest_release.assets | where_exp: "asset", "asset.name contains '.zip'" | first %}
 The standard way of installing KeePass plugins is to place them in the `Plugins` folder next to `KeePass.exe` (e.g. `C:\Program Files\KeePass Password Safe 2\Plugins` or `C:\Program Files (x86)\KeePass Password Safe 2\Plugins`). [Download the PLGX file]({{ plgx.browser_download_url }}) and copy it to that folder.
 
-_Remarks:_ The preferred distribution is the PLGX file. The [ZIP file]({{ zip.browser_download_url }}) is only needed for special cases. If you need it, unpack the downloaded file into a subfolder of the `Plugins` folder (e.g. `Plugins\KeeAnywhere`) - never directly into the KeePass program folder.
+_Remarks:_ The preferred distribution is the PLGX file: it's a single file (the libraries are kept separately in KeePass' plugin cache), so installing and updating is simple and no old libraries are left behind. The [ZIP file]({{ zip.browser_download_url }}) (DLL version) is only needed for special cases. If you need it, unpack the downloaded file into a subfolder of the `Plugins` folder (e.g. `Plugins\KeeAnywhere`) - never directly into the KeePass program folder.
 
 All files of the latest version (including SHA256 checksums) can be found on the [release page]({{ site.github.latest_release.html_url }}).
 
