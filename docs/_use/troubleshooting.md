@@ -1,6 +1,14 @@
 ---
 title: Troubleshooting
 ---
+# Plugin cannot be loaded after an update
+After updating, KeePass reports that KeeAnywhere cannot be loaded, e.g. with a message like
+> Method 'get_AuthenticationProvider' in type 'Microsoft.Graph.GraphServiceClient' ... does not have an implementation.
+
+or another `TypeLoadException`, `MissingMethodException` or `FileLoadException` mentioning a library (e.g. `Microsoft.Graph`).
+
+This happens if files of an older version (especially of the ZIP file) are still present in the `Plugins` folder or in the KeePass program folder: KeePass then loads old libraries. Remove all old files and clear the plugin cache as described in [Updating from an older version](installation#updating).
+
 # Could not read account configuration
 You use `Local User Secure Store` for your Account Storage Location and the following error appears:
 > Unable to parse the plugin's account configuration for the KeeAnywhere plugin from local secure store:
