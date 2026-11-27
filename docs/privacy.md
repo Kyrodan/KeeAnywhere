@@ -54,7 +54,7 @@ KeeAnywhere requests only the permissions needed to browse your storage and to o
 | Dropbox (restricted) | as Dropbox, but limited to the app folder `Apps/KeeAnywhere` | as Dropbox |
 | Google Drive | see [Google User Data](#google-user-data) | |
 | HiDrive | User role, read and write | Browse folders, open and save files |
-| OneDrive | `openid`, `profile`, `offline_access`, `Files.ReadWrite` | Identify and name the account; stay signed in without logging in again; browse folders, open and save files |
+| OneDrive | `openid`, `profile`, `offline_access`, `Files.ReadWrite` | Identify and name the account; stay signed in without logging in again; browse all folders of your OneDrive, open and save files |
 | Amazon S3, Azure, Google Cloud Storage | the permissions of the access key or SAS token you enter | Browse buckets/containers, open and save files |
 
 ## Google User Data
