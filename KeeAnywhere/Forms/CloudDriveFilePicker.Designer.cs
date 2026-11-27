@@ -102,7 +102,7 @@
             // 
             // m_ilFiletypeIcons
             // 
-            this.m_ilFiletypeIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.m_ilFiletypeIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.m_ilFiletypeIcons.ImageSize = new System.Drawing.Size(16, 16);
             this.m_ilFiletypeIcons.TransparentColor = System.Drawing.Color.Transparent;
             // 

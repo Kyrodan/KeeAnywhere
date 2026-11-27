@@ -123,7 +123,11 @@ namespace KeeAnywhere.Forms.ImagedComboBox
 				int imageindex = ((ImageComboBoxItem)Owner.Items [index ]).ImageIndex;
 				if(imageindex != -1)
 				{
-					CurrentIcon = new Bitmap(Owner.ImageList.Images [imageindex],Owner.ItemHeight,Owner.ItemHeight);
+					// Native icon size: scaling a 16x16 icon to the item height blurs it
+					Image icon = Owner.ImageList.Images [imageindex];
+					int iconSize = Math.Min(Owner.ImageList.ImageSize.Height, Owner.ItemHeight);
+					CurrentIcon = iconSize == icon.Height ? new Bitmap(icon) : new Bitmap(icon, iconSize, iconSize);
+					icon.Dispose();
 					if(Owner.RightToLeft == RightToLeft.Yes)
 						CurrentIcon.RotateFlip(RotateFlipType.RotateNoneFlipX);
 
@@ -181,12 +185,14 @@ namespace KeeAnywhere.Forms.ImagedComboBox
 						rightToLeft =  true;
 
 				}
+				// Explicit size and vertically centered: DrawImage(image, x, y) would scale by the image's DPI
+				int top = Math.Max(0, ((int)gfx.VisibleClipBounds.Height - CurrentIcon.Height) / 2);
 				if(Owner.RightToLeft == RightToLeft.Yes || rightToLeft)
 				{
-					gfx.DrawImage(CurrentIcon,gfx.VisibleClipBounds.Width - CurrentIcon.Width,0);
+					gfx.DrawImage(CurrentIcon,new Rectangle((int)gfx.VisibleClipBounds.Width - CurrentIcon.Width,top,CurrentIcon.Width,CurrentIcon.Height));
 				}
 				else if(Owner.RightToLeft == RightToLeft.No || rightToLeft)
-					gfx.DrawImage(CurrentIcon,0,0);
+					gfx.DrawImage(CurrentIcon,new Rectangle(0,top,CurrentIcon.Width,CurrentIcon.Height));
 				
 				gfx.Flush();
 				gfx.Dispose();

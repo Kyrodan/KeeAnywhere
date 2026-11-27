@@ -35,7 +35,7 @@ namespace KeeAnywhere.OAuth2
         {
             GlobalWindowManager.AddWindow(this);
 
-            Icon = PluginResources.Icon_OneDrive_16x16;
+            Icon = PluginResources.Icon_KeeAnywhere_16x16;
 
             UpdateBanner();
         }

@@ -43,7 +43,7 @@ These features won't be accepted:
 ## Providers with WebDAV, FTP or S3 access
 Many providers can already be used without a dedicated KeeAnywhere provider (without file picker, I know :-)):
 * with the protocols built into KeePass: WebDAV, FTP, HTTP/HTTPS, local files and network shares (SMB/UNC paths, e.g. a NAS) - see [KeePass' synchronization documentation](https://keepass.info/help/v2/sync.html). SFTP, SCP and FTPS are not built into KeePass, but available via the [IOProtocolExt](https://keepass.info/plugins.html#ioprotocolext) plugin.
-* with KeeAnywhere's `Amazon S3` provider, if the provider offers an S3 compatible API (e.g. Wasabi, Backblaze B2, Synology C2).
+* with KeeAnywhere's `S3 Object Storage` provider (up to version 2.3: `Amazon S3`), if the provider offers an S3 compatible API (e.g. Wasabi, Backblaze B2, Synology C2).
 
 A dedicated provider for these is only added **if the provider's own API offers clear benefits**, for example:
 * login via OAuth instead of a password or app password (passwords for WebDAV/FTP are stored in KeePass' configuration, and two-factor authentication often doesn't apply)
@@ -56,7 +56,7 @@ KeeAnywhere supports **public cloud storage providers** only. Self-hosted soluti
 
 You can use your self-hosted storage anyway:
 * with the protocols built into KeePass: WebDAV, FTP or network shares (most of these solutions support WebDAV), or
-* with KeeAnywhere's `Amazon S3` provider and an S3 compatible server (e.g. MinIO, Garage, SeaweedFS, Ceph) - see the [FAQ](use/faq#s3-compatible).
+* with KeeAnywhere's `S3 Object Storage` provider (up to version 2.3: `Amazon S3`) and an S3 compatible server (e.g. MinIO, Garage, SeaweedFS, Ceph) - see the [FAQ](use/faq#s3-compatible).
 
 # Source Code Contribution
 Source code contribution is welcome. Please keep in mind that this project has a vision and that your contribution should fit to it. It would be best to talk about new ideas first by creating a new issue.

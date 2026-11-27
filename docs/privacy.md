@@ -10,7 +10,7 @@ KeeAnywhere and me - the author - respects your privacy. I do not collect, store
 ## Granting Access
 To grant KeeAnywhere access to your cloud provider, KeeAnywhere opens the login page of your cloud provider in your default web browser, where you enter your username and password. KeeAnywhere never sees the entered username and password - they are neither used nor stored by KeeAnywhere in any way in any place. If you log in to your cloud provider and allow KeeAnywhere to access your data, a unique access token is created and transmitted to KeeAnywhere. This access token needs to be stored for loading and saving your files (especially your KeePass Password Safe databases). The storage location and encryption level for this access token depends on your selection of the account storage location. Use 'Local User Secure Store' for maximum possible security. For most storage providers the access token has a limited validity and expires after a time period if not used. It is also possible to revoke access for KeeAnywhere in all cloud providers (see [Revoking Access](#revoking-access)).
 
-For storage providers using access keys instead of a login (e.g. Amazon S3, Azure, Google Cloud Storage), the entered keys are stored in the same way as the access tokens.
+For storage providers using access keys instead of a login (e.g. S3 Object Storage, Azure, Google Cloud Storage), the entered keys are stored in the same way as the access tokens.
 
 ## Your Data in Cloud Storage
 
@@ -43,7 +43,7 @@ Removing an account in the KeeAnywhere settings deletes the stored access token 
 | Google Drive | [Third-party apps & services](https://myaccount.google.com/connections) |
 | HiDrive | HiDrive web interface: account settings |
 | OneDrive | Personal account: [Apps and services](https://account.live.com/consent/Manage), work or school account: [My Apps](https://myapps.microsoft.com) |
-| Amazon S3, Azure, Google Cloud Storage | Delete or rotate the access key or SAS token in the provider's console |
+| S3 Object Storage, Azure, Google Cloud Storage | Delete or rotate the access key or SAS token in the provider's console |
 
 ## Permissions per Provider
 
@@ -57,7 +57,7 @@ KeeAnywhere requests only the permissions needed to browse your storage and to o
 | Google Drive | see [Google User Data](#google-user-data) | |
 | HiDrive | User role, read and write | Browse folders, open and save files |
 | OneDrive | `openid`, `profile`, `offline_access`, `Files.ReadWrite` | Identify and name the account; stay signed in without logging in again; browse all folders of your OneDrive, open and save files |
-| Amazon S3, Azure, Google Cloud Storage | the permissions of the access key or SAS token you enter | Browse buckets/containers, open and save files |
+| S3 Object Storage, Azure, Google Cloud Storage | the permissions of the access key or SAS token you enter | Browse buckets/containers, open and save files |
 
 ## Google User Data
 

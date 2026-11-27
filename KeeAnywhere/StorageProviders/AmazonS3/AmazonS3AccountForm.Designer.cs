@@ -304,7 +304,7 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
             this.MinimizeBox = false;
             this.Name = "AmazonS3AccountForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Amazon S3 Account Configuration";
+            this.Text = "S3 Object Storage Account Configuration";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.Load += new System.EventHandler(this.OnFormLoad);

@@ -143,9 +143,9 @@ namespace KeeAnywhere {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
         /// </summary>
-        internal static System.Drawing.Icon Icon_OneDrive_16x16 {
+        internal static System.Drawing.Icon Icon_KeeAnywhere_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Icon_OneDrive_16x16", resourceCulture);
+                object obj = ResourceManager.GetObject("Icon_KeeAnywhere_16x16", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

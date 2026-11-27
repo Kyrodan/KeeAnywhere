@@ -20,7 +20,6 @@ namespace KeeAnywhere.StorageProviders
 
             var isUnix = NativeLib.IsUnix();
 
-            d.Add(new StorageDescriptor(StorageType.AmazonS3, "Amazon S3", "s3", account => new AmazonS3StorageProvider(account), () => new AmazonS3StorageConfigurator(), PluginResources.AmazonS3_16x16));
             d.Add(new StorageDescriptor(StorageType.AzureBlob, "Azure Blob Storage", "azureblob", account => new AzureBlobStorageProvider(account), () => new AzureStorageConfigurator(StorageType.AzureBlob), PluginResources.Azure_16x16));
             d.Add(new StorageDescriptor(StorageType.AzureFile, "Azure File Storage", "azurefile", account => new AzureFileStorageProvider(account), () => new AzureStorageConfigurator(StorageType.AzureFile), PluginResources.Azure_16x16));
             if (!isUnix) d.Add(new StorageDescriptor(StorageType.Box, "Box", "box", account => new BoxStorageProvider(account), () => new BoxStorageConfigurator(), PluginResources.Box_16x16, BoxHelper.InvalidateCache));
@@ -31,8 +30,10 @@ namespace KeeAnywhere.StorageProviders
             d.Add(new StorageDescriptor(StorageType.GoogleDriveRestricted, "Google Drive (restricted)", "gdrive-r", account => new GoogleDriveStorageProvider(account), () => new GoogleDriveStorageConfigurator(true), PluginResources.GoogleDrive_16x16));
             d.Add(new StorageDescriptor(StorageType.HiDrive, "HiDrive", "hidrive", account => new HiDriveStorageProvider(account), () => new HiDriveStorageConfigurator(), PluginResources.HiDrive_16x16));
             d.Add(new StorageDescriptor(StorageType.OneDrive, "OneDrive", "onedrive", account => new OneDriveStorageProvider(account), () => new OneDriveStorageConfigurator(), PluginResources.OneDrive_16x16, OneDriveHelper.InvalidateCache));
+            d.Add(new StorageDescriptor(StorageType.AmazonS3, "S3 Object Storage", "s3", account => new AmazonS3StorageProvider(account), () => new AmazonS3StorageConfigurator(), PluginResources.AmazonS3_16x16));
 
-            Descriptors = d.ToArray();
+            // Shown in this order (menus, account lists): alphabetically by the displayed name
+            Descriptors = d.OrderBy(_ => _.FriendlyName, System.StringComparer.OrdinalIgnoreCase).ToArray();
         }
 
         public static IEnumerable<StorageDescriptor> Descriptors;

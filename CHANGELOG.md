@@ -9,6 +9,8 @@
 ### Improved
 
 - \#106 Error messages explain how to re-authorize an account if its authorization is no longer valid (e.g. expired or revoked token), and if an Azure access key or SAS token is wrong or expired
+- Storage providers: current logos of Google Drive, OneDrive and Box; the icons are displayed sharp and with smooth edges in the account lists; the providers are sorted alphabetically and the account list shows the readable provider name
+- S3: the provider is named "S3 Object Storage" and shown with a neutral icon, as it supports Amazon S3 and S3 compatible services
 
 
 ## 2.3.0 (2026-11-26)

@@ -43,7 +43,7 @@ KeeAnywhere supports KeePass's Proxy settings. Go to `Tools - Options...`, selec
 
 # How KeeAnywhere accesses your cloud storage {#how-it-works}
 * **When:** KeeAnywhere only accesses your cloud storage when KeePass asks for it - when you open, save or synchronize a database (also via URL, triggers or other plugins) and when you browse in the `Open from Cloud Drive...` dialog. Nothing happens in the background.
-* **Connection:** There is no permanent connection. Each operation consists of single HTTPS requests to the provider's API. KeeAnywhere doesn't store your password - only an authorization token, which is used to request a short-lived access token when needed (for Amazon S3 and Azure: the access key).
+* **Connection:** There is no permanent connection. Each operation consists of single HTTPS requests to the provider's API. KeeAnywhere doesn't store your password - only an authorization token, which is used to request a short-lived access token when needed (for S3 and Azure: the access key).
 * **Opening:** The complete database file is downloaded.
 * **Saving:** Before saving, KeePass checks whether the database in the cloud has been changed in the meantime (e.g. on another computer) and offers to synchronize (merge) both versions. Then the complete database file is uploaded and replaces the file in the cloud - so a versioning of your provider keeps the previous versions. Afterwards KeePass reads the file again to verify it.
 * **Merging** of two versions only happens via KeePass' synchronization (see [Synchronization](#synchronization)), never automatically by KeeAnywhere.

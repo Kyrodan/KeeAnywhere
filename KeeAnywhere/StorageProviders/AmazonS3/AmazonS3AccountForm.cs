@@ -23,11 +23,11 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
         {
             GlobalWindowManager.AddWindow(this);
 
-            this.Icon = PluginResources.Icon_OneDrive_16x16;
+            this.Icon = PluginResources.Icon_KeeAnywhere_16x16;
 
             BannerFactory.CreateBannerEx(this, m_bannerImage,
-                PluginResources.KeeAnywhere_48x48, "Authorize to Amazon S3",
-                "Please enter your Amazon S3 credentials here.");
+                PluginResources.KeeAnywhere_48x48, "Authorize to S3 Object Storage",
+                "Please enter your Amazon S3 or S3 compatible credentials here.");
 
             m_rbTypeAmazon.Checked = true;
         }

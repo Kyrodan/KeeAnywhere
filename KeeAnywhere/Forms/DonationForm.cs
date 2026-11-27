@@ -23,7 +23,7 @@ namespace KeeAnywhere.Forms
         {
             GlobalWindowManager.AddWindow(this);
 
-            this.Icon = PluginResources.Icon_OneDrive_16x16;
+            this.Icon = PluginResources.Icon_KeeAnywhere_16x16;
 
             BannerFactory.CreateBannerEx(this, m_bannerImage,
                 PluginResources.KeeAnywhere_48x48, "Donate for KeeAnywhere",

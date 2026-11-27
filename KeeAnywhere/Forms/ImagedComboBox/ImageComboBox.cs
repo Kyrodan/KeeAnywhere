@@ -358,10 +358,14 @@ namespace KeeAnywhere.Forms.ImagedComboBox
 
 			if(item.ImageIndex != -1)
 			{	
+				// Draw the icon in its native size (scaling a 16x16 icon to the item height blurs it),
+				// only shrink it if the item is smaller than the icon
 				Image theIcon = this.ImageList.Images [item.ImageIndex ];
-				Bitmap ImageToDraw = new Bitmap (theIcon,e.Bounds.Height-1,e.Bounds.Height-1);
+				int iconSize = Math.Min(this.ImageList.ImageSize.Height, e.Bounds.Height);
+				Bitmap ImageToDraw = iconSize == theIcon.Height ? new Bitmap(theIcon) : new Bitmap(theIcon, iconSize, iconSize);
 				int IconHeight = ImageToDraw.Height;
 				int IconWidth = ImageToDraw.Width;
+				int iconTop = e.Bounds.Y + (e.Bounds.Height - IconHeight) / 2;
 				int offset = 1;
 				if(this.RightToLeft == RightToLeft.Yes)
 				{
@@ -369,7 +373,7 @@ namespace KeeAnywhere.Forms.ImagedComboBox
 					format.Alignment = StringAlignment.Far;
 					RectangleF itemRect = new RectangleF ((float)(e.Bounds.X-offset),(float)(e.Bounds .Y),(float)(e.Bounds.Width-IconWidth-indent-offset) ,(float)(e.Bounds.Height));
 					e.Graphics.DrawString (item.Text,item.Font,new SolidBrush (e.ForeColor),itemRect,format);
-					Rectangle imageRect = new Rectangle(e.Bounds.X+offset+(e.Bounds.Width-(IconWidth+indent)),e.Bounds.Y,IconWidth,IconHeight);
+					Rectangle imageRect = new Rectangle(e.Bounds.X+offset+(e.Bounds.Width-(IconWidth+indent)),iconTop,IconWidth,IconHeight);
 					e.Graphics.DrawImage(ImageToDraw,imageRect);
 				}
 				else
@@ -377,9 +381,11 @@ namespace KeeAnywhere.Forms.ImagedComboBox
 					format.Alignment = StringAlignment.Near ;
 					RectangleF itemRect = new RectangleF ((float)(e.Bounds.X+IconWidth+indent+offset),(float)(e.Bounds .Y),(float)(e.Bounds .Width-IconWidth-indent-offset),(float)(e.Bounds.Height)) ;
 					e.Graphics.DrawString (item.Text,item.Font,new SolidBrush (e.ForeColor),itemRect,format);
-					Rectangle imageRect = new Rectangle(e.Bounds.X+offset+indent,e.Bounds.Y,IconWidth,IconHeight);
+					Rectangle imageRect = new Rectangle(e.Bounds.X+offset+indent,iconTop,IconWidth,IconHeight);
 					e.Graphics.DrawImage(ImageToDraw,imageRect);
 				}
+				ImageToDraw.Dispose();
+				theIcon.Dispose();
 			}
 			else
 			{

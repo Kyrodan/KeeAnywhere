@@ -88,7 +88,7 @@ namespace KeeAnywhere.Forms
         {
             GlobalWindowManager.AddWindow(this);
 
-            Icon = PluginResources.Icon_OneDrive_16x16;
+            Icon = PluginResources.Icon_KeeAnywhere_16x16;
 
             UpdateBanner();
 
@@ -162,7 +162,10 @@ namespace KeeAnywhere.Forms
             ImageComboBoxItem item;
             StorageDescriptor descriptor = null;
 
-            foreach (var account in m_configService.Accounts.OrderBy(_ => _.Type).ThenBy(_ => _.Name))
+            // Same order as the providers in StorageRegistry (alphabetically by the displayed name)
+            var providerOrder = StorageRegistry.Descriptors.Select(_ => _.Type).ToList();
+
+            foreach (var account in m_configService.Accounts.OrderBy(_ => providerOrder.IndexOf(_.Type)).ThenBy(_ => _.Name))
             {
                 if (descriptor == null || (account.Type != descriptor.Type))
                 {

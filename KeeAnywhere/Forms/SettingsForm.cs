@@ -67,7 +67,7 @@ namespace KeeAnywhere.Forms
         {
             GlobalWindowManager.AddWindow(this);
 
-            this.Icon = PluginResources.Icon_OneDrive_16x16;
+            this.Icon = PluginResources.Icon_KeeAnywhere_16x16;
 
             BannerFactory.CreateBannerEx(this, m_bannerImage,
                 PluginResources.KeeAnywhere_48x48, "KeeAnywhere Settings",
@@ -154,15 +154,16 @@ namespace KeeAnywhere.Forms
 
             foreach (var account in m_configService.Accounts.OrderBy(_ => _.Type).ThenBy(_ => _.Name))
             {
-                if (StorageRegistry.Descriptors.All(_ => _.Type != account.Type)) 
+                var descriptor = StorageRegistry.Descriptors.FirstOrDefault(_ => _.Type == account.Type);
+                if (descriptor == null)
                     continue;
-                
+
                 var lvi = new ListViewItem(account.Name);
                 var lviNew = m_lvAccounts.Items.Add(lvi);
 
                 lviNew.Tag = account;
                 lviNew.ImageKey = account.Type.ToString();
-                lviNew.SubItems.Add(account.Type.ToString());
+                lviNew.SubItems.Add(descriptor.FriendlyName);
                 lviNew.SubItems.Add(account.Id);
                 lviNew.SubItems.Add(account.Secret);
                 lviNew.Group = m_lvAccounts.Groups[account.Type.ToString()];
