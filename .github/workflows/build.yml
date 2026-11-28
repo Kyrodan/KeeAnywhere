@@ -96,7 +96,10 @@ jobs:
     - name: Package Chocolatey
       run: |
         Copy-Item chocolatey build\chocolatey -Recurse
-        Copy-Item KeeAnywhere\bin\Release\KeeAnywhere.plgx build\chocolatey\tools
+        # the Chocolatey package contains the DLL version (content of the ZIP file)
+        $zip = (Get-ChildItem packages\7-Zip.CommandLine.*\tools\7za.exe | Sort-Object FullName | Select-Object -Last 1).FullName
+        & $zip x "build\dist\KeeAnywhere-${{ steps.version.outputs.version }}.zip" -obuild\chocolatey\tools\KeeAnywhere
+        if ($LASTEXITCODE -ne 0) { throw "7-Zip failed." }
         choco pack build\chocolatey\keepass-plugin-keeanywhere.nuspec --version ${{ steps.version.outputs.version }} --outputdirectory build\dist
         if ($LASTEXITCODE -ne 0) { throw "choco pack failed." }
 

@@ -33,7 +33,7 @@ if (! $installPath) {
 if (! $installPath) {
   Write-Verbose "Searching $env:Path for unregistered install..."
   $installFullName = (Get-Command keepass -ErrorAction SilentlyContinue).Path
-  if (! $installFullName) {
+  if ($installFullName) {
     $installPath = [io.path]::GetDirectoryName($installFullName)
   }
 }
@@ -49,7 +49,6 @@ if ($pluginPath.Count -eq 0) {
   throw "Plugins directory not found."
 }
 
-$installFile = Join-Path $pluginPath "$($packageName).plgx"
-Remove-Item -Path $installFile `
-            -Force `
-            -ErrorAction SilentlyContinue
+Remove-Item -Path (Join-Path $pluginPath "KeeAnywhere") -Recurse -Force -ErrorAction SilentlyContinue
+# PLGX file of versions up to 2.3.0
+Remove-Item -Path (Join-Path $pluginPath "$($packageName).plgx") -Force -ErrorAction SilentlyContinue
