@@ -24,9 +24,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task<Stream> Load(string path)
         {
-            var stream = await (await _api.DriveItemFromPathAsync(path))
-                                    .Content
-                                    .GetAsync();
+            var stream = await _api.RequestByPathAsync(path, _ => _.Content.GetAsync());
 
             return stream;
         }
@@ -34,9 +32,12 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task Save(Stream stream, string path)
         {
-            var uploadedItem = await (await _api.DriveItemFromPathAsync(path))
-                        .Content
-                        .PutAsync(stream);
+            var start = stream.CanSeek ? stream.Position : 0;
+            var uploadedItem = await _api.RequestByPathAsync(path, _ =>
+            {
+                if (stream.CanSeek) stream.Position = start; // a retry sends the complete stream again
+                return _.Content.PutAsync(stream);
+            });
 
             if (uploadedItem == null)
                 throw new InvalidOperationException("Save to OneDrive failed.");
@@ -53,12 +54,11 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             if (string.IsNullOrEmpty(destFolder))
             {
                 // file in root folder
-                var drive = await _api.Me.Drive.GetAsync();
-                folder = await _api.Drives[drive.Id].Root.GetAsync();
+                folder = await _api.Drives[await _api.GetDefaultDriveIdAsync()].Root.GetAsync();
             }
             else
             {
-                folder = await (await _api.DriveItemFromPathAsync(destFolder)).GetAsync();
+                folder = await _api.RequestByPathAsync(destFolder, _ => _.GetAsync());
             }
 
             if (folder == null)
@@ -75,19 +75,17 @@ namespace KeeAnywhere.StorageProviders.OneDrive
                 ParentReference = parentReference
             };
 
-            await (await _api.DriveItemFromPathAsync(sourcePath))
-                .Copy.PostAsync(body);
+            await _api.RequestByPathAsync(sourcePath, _ => _.Copy.PostAsync(body));
         }
 
         public async Task Delete(string path)
         {
-            await (await _api.DriveItemFromPathAsync(path)).DeleteAsync();
+            await _api.RequestByPathAsync(path, async _ => { await _.DeleteAsync(); return true; });
         }
 
         public async Task<StorageProviderItem> GetRootItem()
         {
-            var rootItem = await _api.Me.Drive.GetAsync();
-            var odItem = await _api.Drives[rootItem.Id].Root.GetAsync();
+            var odItem = await _api.Drives[await _api.GetDefaultDriveIdAsync()].Root.GetAsync();
 
             if (odItem == null)
                 return null;
@@ -117,7 +115,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
         {
-            var odChildren = await (await _api.DriveItemFromPathAsync(path)).Children.GetAsync();
+            var odChildren = await _api.RequestByPathAsync(path, _ => _.Children.GetAsync());
             var children =
                 odChildren.Value.Select(odItem => CreateStorageProviderItemFromOneDriveItem(odItem)).ToArray();
 
