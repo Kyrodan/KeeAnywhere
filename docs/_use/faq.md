@@ -119,6 +119,12 @@ From KeeAnywhere's perspective Dropbox can be accessed in two modes: `Full Acces
 
 # OneDrive
 
+## What is the difference between `OneDrive` and `OneDrive (restricted)`? {#onedrive-restricted}
+`OneDrive` has access to all files of your OneDrive (including shared folders added to *My files*).
+`OneDrive (restricted)` (available starting with version 2.4.0) has access to its own app folder `Apps/KeeAnywhere` only - the rest of your OneDrive is not accessible for KeeAnywhere. The folder is created when you add the account; move your database into it to use it.
+
+OneDrive doesn't allow to grant access to a folder of your choice - the app folder is the only option. Shared folders can't be used with `OneDrive (restricted)`.
+
 ## How do I open a database someone shared with me? {#onedrive-shared}
 KeeAnywhere shows the content of *My files* in your OneDrive. Items that only appear in the *Shared* view of OneDrive aren't visible - Microsoft has deprecated the interface behind this view, so KeeAnywhere doesn't offer it.
 

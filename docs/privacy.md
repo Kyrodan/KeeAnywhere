@@ -2,7 +2,7 @@
 title: Privacy Statement
 description: Your privacy is respected!
 ---
-*Last updated: 2026-11-27*
+*Last updated: 2026-11-28*
 
 ## Data Usage, Advertisements, Costs
 KeeAnywhere and me - the author - respects your privacy. I do not collect, store, transmit or use any of your data. KeeAnywhere is free from advertisements. You can use KeeAnywhere free of any costs or license fees.
@@ -57,6 +57,7 @@ KeeAnywhere requests only the permissions needed to browse your storage and to o
 | Google Drive | see [Google User Data](#google-user-data) | |
 | HiDrive | User role, read and write | Browse folders, open and save files |
 | OneDrive | `openid`, `profile`, `offline_access`, `Files.ReadWrite` | Identify and name the account; stay signed in without logging in again; browse all folders of your OneDrive, open and save files |
+| OneDrive (restricted) | `openid`, `profile`, `offline_access`, `Files.ReadWrite.AppFolder` (starting with version 2.4.0) | as OneDrive, but limited to the app folder `Apps/KeeAnywhere` |
 | S3 Object Storage, Azure, Google Cloud Storage | the permissions of the access key or SAS token you enter | Browse buckets/containers, open and save files |
 
 ## Google User Data

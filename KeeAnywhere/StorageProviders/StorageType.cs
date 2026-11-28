@@ -14,5 +14,6 @@ namespace KeeAnywhere.StorageProviders
         GoogleDriveRestricted,
         HiDrive,
         OneDrive,
+        OneDriveRestricted,
     }
 }

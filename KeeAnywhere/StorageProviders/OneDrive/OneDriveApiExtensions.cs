@@ -1,5 +1,6 @@
 using Microsoft.Graph;
 using Microsoft.Graph.Drives.Item.Items.Item;
+using Microsoft.Graph.Models;
 using Microsoft.Kiota.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -28,9 +29,26 @@ namespace KeeAnywhere.StorageProviders.OneDrive
         {
             public string DriveId;
             public readonly Dictionary<string, TopFolder> TopFolders = new Dictionary<string, TopFolder>(StringComparer.OrdinalIgnoreCase);
+            public bool AppFolderOnly;
+            public string AppFolderId;
         }
 
         private static readonly ConditionalWeakTable<GraphServiceClient, PathCache> PathCaches = new ConditionalWeakTable<GraphServiceClient, PathCache>();
+
+        // OneDrive (restricted) (#391): the client only has access to the app folder Apps/KeeAnywhere
+        // (special folder "approot"), so all paths are relative to it.
+        public static void UseAppFolderAsRoot(this GraphServiceClient api)
+        {
+            PathCaches.GetOrCreateValue(api).AppFolderOnly = true;
+        }
+
+        public static async Task<DriveItem> GetRootFolderAsync(this GraphServiceClient api)
+        {
+            var driveId = await api.GetDefaultDriveIdAsync();
+            return PathCaches.GetOrCreateValue(api).AppFolderOnly
+                ? await api.Drives[driveId].Special["approot"].GetAsync()
+                : await api.Drives[driveId].Root.GetAsync();
+        }
 
         public static async Task<string> GetDefaultDriveIdAsync(this GraphServiceClient api)
         {
@@ -116,13 +134,22 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             if (string.IsNullOrEmpty(path)) throw new ArgumentOutOfRangeException("path");
             var parts = path.Split('/');
             var defaultDriveId = await api.GetDefaultDriveIdAsync();
+            var cache = PathCaches.GetOrCreateValue(api);
+
+            if (cache.AppFolderOnly)
+            {
+                // no shared folders in the app folder, the app folder's id never changes
+                if (cache.AppFolderId == null)
+                    cache.AppFolderId = (await api.Drives[defaultDriveId].Special["approot"].GetAsync()).Id;
+
+                return api.Drives[defaultDriveId].Items[cache.AppFolderId].ItemWithPath(Uri.EscapeDataString(path));
+            }
 
             if (parts.Length == 1)
             {
                 return api.Drives[defaultDriveId].Root.ItemWithPath(parts[0]);
             }
 
-            var cache = PathCaches.GetOrCreateValue(api);
             TopFolder top;
             lock (cache)
             {
