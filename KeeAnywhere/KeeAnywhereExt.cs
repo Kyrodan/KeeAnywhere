@@ -97,7 +97,7 @@ namespace KeeAnywhere
                     _tsOpenFromCloudDrive = new ToolStripMenuItem("Open from Cloud Drive...",
                         PluginResources.KeeAnywhere_16x16);
                     _tsOpenFromCloudDrive.Click += OnOpenFromCloudDrive;
-                    _tsOpenFromCloudDrive.ShortcutKeys = Keys.Control | Keys.Alt | Keys.O;
+                    ApplyShortcut();
                     openMenu.DropDownItems.Add(_tsOpenFromCloudDrive);
                 }
 
@@ -195,7 +195,7 @@ namespace KeeAnywhere
 
             if (result == DialogResult.Yes)
             {
-                _uiService.ShowSettingsDialog();
+                ShowSettingsDialog();
             }
 
             return false;
@@ -247,7 +247,23 @@ namespace KeeAnywhere
 
         private void OnShowSetting(object sender, EventArgs e)
         {
+            ShowSettingsDialog();
+        }
+
+        private void ShowSettingsDialog()
+        {
             _uiService.ShowSettingsDialog();
+            ApplyShortcut(); // may have been changed in the settings
+        }
+
+        private void ApplyShortcut()
+        {
+            if (_tsOpenFromCloudDrive == null) return;
+
+            var keys = _configService.PluginConfiguration.OpenFromCloudDriveShortcut ?? PluginConfiguration.DefaultOpenFromCloudDriveShortcut;
+
+            // ShortcutKeys throws on invalid combinations (e.g. a letter without modifier)
+            _tsOpenFromCloudDrive.ShortcutKeys = ToolStripManager.IsValidShortcut(keys) ? keys : Keys.None;
         }
 
         private static void FixDependencyLoading()

@@ -27,6 +27,9 @@ KeePass waits while a database is opened or saved. If the connection to the clou
 
 If you want KeePass to give up earlier, you can set a shorter timeout per database URL: open the database with `File - Open - Open URL...`, enter the KeeAnywhere URL (e.g. `dropbox:///Account/Database.kdbx`) and set the property `Timeout` (in milliseconds, e.g. `30000` for 30 seconds) in the advanced settings. KeePass remembers it for this URL in the list of recently used files. Values above 5 minutes have no effect.
 
+## The shortcut Ctrl+Alt+O opens KeeAnywhere instead of typing a character {#shortcut}
+On some keyboard layouts `AltGr` is the same as `Ctrl+Alt` - e.g. `AltGr+O` for `ó` on Polish keyboards then opens `Open from Cloud Drive...`. Starting with version 2.4.0 you can change or remove the shortcut in `Tools - KeeAnywhere Settings - General - Keyboard Shortcut`.
+
 ## Can you implement private cloud providers (Nextcloud, ownCloud, homelab, etc.)?
 No, I won't: KeeAnywhere supports public cloud storage providers only (see [Contribute](/contribute#public-cloud-providers-only)). But you can use your self-hosted storage anyway:
 * Most of these solutions support WebDAV, which is natively supported by KeePass. Okay, I know, the file picker is missing then ;-)
