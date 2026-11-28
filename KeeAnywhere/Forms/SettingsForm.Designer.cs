@@ -44,6 +44,9 @@
             this.m_rbStorageLocation_LocalUserSecureStore = new System.Windows.Forms.RadioButton();
             this.lblAccountStorageLocation = new System.Windows.Forms.Label();
             this.m_tabGeneral = new System.Windows.Forms.TabPage();
+            this.m_gbShortcuts = new System.Windows.Forms.GroupBox();
+            this.m_lblOpenFromCloudDrive = new System.Windows.Forms.Label();
+            this.m_hkOpenFromCloudDrive = new KeePass.UI.HotKeyControlEx();
             this.m_gbBackup = new System.Windows.Forms.GroupBox();
             this.m_btnBackupToLocalFolder = new System.Windows.Forms.Button();
             this.m_numUpDownBackupCopies = new System.Windows.Forms.NumericUpDown();
@@ -83,6 +86,7 @@
             this.m_gbBackup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_numUpDownBackupCopies)).BeginInit();
             this.m_gbOfflineCache.SuspendLayout();
+            this.m_gbShortcuts.SuspendLayout();
             this.m_tabAbout.SuspendLayout();
             this.m_mnuHelp.SuspendLayout();
             this.m_pnlFormButtons.SuspendLayout();
@@ -108,7 +112,7 @@
             this.m_tcSettings.Location = new System.Drawing.Point(12, 66);
             this.m_tcSettings.Name = "m_tcSettings";
             this.m_tcSettings.SelectedIndex = 0;
-            this.m_tcSettings.Size = new System.Drawing.Size(598, 287);
+            this.m_tcSettings.Size = new System.Drawing.Size(598, 339);
             this.m_tcSettings.TabIndex = 5;
             // 
             // m_tabAccounts
@@ -124,7 +128,7 @@
             this.m_tabAccounts.Location = new System.Drawing.Point(4, 22);
             this.m_tabAccounts.Name = "m_tabAccounts";
             this.m_tabAccounts.Padding = new System.Windows.Forms.Padding(3);
-            this.m_tabAccounts.Size = new System.Drawing.Size(590, 261);
+            this.m_tabAccounts.Size = new System.Drawing.Size(590, 313);
             this.m_tabAccounts.TabIndex = 1;
             this.m_tabAccounts.Text = "Accounts";
             this.m_tabAccounts.UseVisualStyleBackColor = true;
@@ -237,12 +241,13 @@
             // 
             // m_tabGeneral
             // 
+            this.m_tabGeneral.Controls.Add(this.m_gbShortcuts);
             this.m_tabGeneral.Controls.Add(this.m_gbBackup);
             this.m_tabGeneral.Controls.Add(this.m_gbOfflineCache);
             this.m_tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.m_tabGeneral.Name = "m_tabGeneral";
             this.m_tabGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.m_tabGeneral.Size = new System.Drawing.Size(590, 261);
+            this.m_tabGeneral.Size = new System.Drawing.Size(590, 313);
             this.m_tabGeneral.TabIndex = 0;
             this.m_tabGeneral.Text = "General";
             this.m_tabGeneral.UseVisualStyleBackColor = true;
@@ -339,6 +344,35 @@
             this.m_chkBackupToRemote.UseVisualStyleBackColor = true;
             this.m_chkBackupToRemote.CheckedChanged += new System.EventHandler(this.OnBackupChanged);
             // 
+            // m_gbShortcuts
+            // 
+            this.m_gbShortcuts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_gbShortcuts.Controls.Add(this.m_hkOpenFromCloudDrive);
+            this.m_gbShortcuts.Controls.Add(this.m_lblOpenFromCloudDrive);
+            this.m_gbShortcuts.Location = new System.Drawing.Point(6, 261);
+            this.m_gbShortcuts.Name = "m_gbShortcuts";
+            this.m_gbShortcuts.Size = new System.Drawing.Size(578, 46);
+            this.m_gbShortcuts.TabIndex = 3;
+            this.m_gbShortcuts.TabStop = false;
+            this.m_gbShortcuts.Text = "Keyboard Shortcut";
+            // 
+            // m_lblOpenFromCloudDrive
+            // 
+            this.m_lblOpenFromCloudDrive.AutoSize = true;
+            this.m_lblOpenFromCloudDrive.Location = new System.Drawing.Point(6, 20);
+            this.m_lblOpenFromCloudDrive.Name = "m_lblOpenFromCloudDrive";
+            this.m_lblOpenFromCloudDrive.Size = new System.Drawing.Size(124, 13);
+            this.m_lblOpenFromCloudDrive.TabIndex = 0;
+            this.m_lblOpenFromCloudDrive.Text = "Open from Cloud Drive:";
+            // 
+            // m_hkOpenFromCloudDrive
+            // 
+            this.m_hkOpenFromCloudDrive.Location = new System.Drawing.Point(145, 17);
+            this.m_hkOpenFromCloudDrive.Name = "m_hkOpenFromCloudDrive";
+            this.m_hkOpenFromCloudDrive.Size = new System.Drawing.Size(180, 20);
+            this.m_hkOpenFromCloudDrive.TabIndex = 1;
+            // 
             // m_gbOfflineCache
             // 
             this.m_gbOfflineCache.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -391,7 +425,7 @@
             this.m_tabAbout.Controls.Add(this.m_lblAboutHeader);
             this.m_tabAbout.Location = new System.Drawing.Point(4, 22);
             this.m_tabAbout.Name = "m_tabAbout";
-            this.m_tabAbout.Size = new System.Drawing.Size(590, 261);
+            this.m_tabAbout.Size = new System.Drawing.Size(590, 313);
             this.m_tabAbout.TabIndex = 2;
             this.m_tabAbout.Text = "About";
             this.m_tabAbout.UseVisualStyleBackColor = true;
@@ -543,7 +577,7 @@
             this.m_pnlFormButtons.Controls.Add(this.m_btnHelp, 0, 0);
             this.m_pnlFormButtons.Controls.Add(this.m_btnOK, 2, 0);
             this.m_pnlFormButtons.Controls.Add(this.m_btnCancel, 3, 0);
-            this.m_pnlFormButtons.Location = new System.Drawing.Point(8, 359);
+            this.m_pnlFormButtons.Location = new System.Drawing.Point(8, 411);
             this.m_pnlFormButtons.Margin = new System.Windows.Forms.Padding(0);
             this.m_pnlFormButtons.Name = "m_pnlFormButtons";
             this.m_pnlFormButtons.RowCount = 1;
@@ -579,7 +613,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
-            this.ClientSize = new System.Drawing.Size(622, 397);
+            this.ClientSize = new System.Drawing.Size(622, 449);
             this.Controls.Add(this.m_pnlFormButtons);
             this.Controls.Add(this.m_tcSettings);
             this.Controls.Add(this.m_bannerImage);
@@ -602,6 +636,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.m_numUpDownBackupCopies)).EndInit();
             this.m_gbOfflineCache.ResumeLayout(false);
             this.m_gbOfflineCache.PerformLayout();
+            this.m_gbShortcuts.ResumeLayout(false);
+            this.m_gbShortcuts.PerformLayout();
             this.m_tabAbout.ResumeLayout(false);
             this.m_mnuHelp.ResumeLayout(false);
             this.m_pnlFormButtons.ResumeLayout(false);
@@ -645,6 +681,9 @@
         private System.Windows.Forms.ToolStripMenuItem m_mnuHelp_Donate;
         private System.Windows.Forms.TableLayoutPanel m_pnlFormButtons;
         private System.Windows.Forms.GroupBox m_gbOfflineCache;
+        private System.Windows.Forms.GroupBox m_gbShortcuts;
+        private System.Windows.Forms.Label m_lblOpenFromCloudDrive;
+        private KeePass.UI.HotKeyControlEx m_hkOpenFromCloudDrive;
         private System.Windows.Forms.Button m_btnOpenCacheFolder;
         private System.Windows.Forms.Button m_btnClearCache;
         private System.Windows.Forms.GroupBox m_gbBackup;

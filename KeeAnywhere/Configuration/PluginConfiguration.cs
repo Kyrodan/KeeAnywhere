@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -59,6 +60,13 @@ namespace KeeAnywhere.Configuration
 
         [DataMember]
         public AccountIdentifier FilePickerLastUsedAccount { get; set; }
+
+        // Shortcut of "Open from Cloud Drive..." (#426): null = default, Keys.None = no shortcut
+        // (Ctrl+Alt+O is AltGr+O, which some keyboard layouts need for characters like 'ó')
+        [DataMember]
+        public Keys? OpenFromCloudDriveShortcut { get; set; }
+
+        public static readonly Keys DefaultOpenFromCloudDriveShortcut = Keys.Control | Keys.Alt | Keys.O;
 
         [DataMember]
         public DateTime DonationDialogLastShown { get; set; }

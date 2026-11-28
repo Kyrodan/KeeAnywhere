@@ -45,6 +45,7 @@ namespace KeeAnywhere.Forms
             cfg.IsBackupToLocalEnabled = m_chkBackupToLocal.Checked;
             cfg.BackupToLocalFolder = m_txtBackupToLocalFolder.Text;
             cfg.BackupCopies = (int)m_numUpDownBackupCopies.Value;
+            cfg.OpenFromCloudDriveShortcut = m_hkOpenFromCloudDrive.HotKey;
 
 
             if (m_rbStorageLocation_LocalUserSecureStore.Checked)
@@ -184,6 +185,7 @@ namespace KeeAnywhere.Forms
             m_chkBackupToRemote.Checked = cfg.IsBackupToRemoteEnabled;
             m_txtBackupToLocalFolder.Text = cfg.BackupToLocalFolder;
             m_numUpDownBackupCopies.Value = cfg.BackupCopies;
+            m_hkOpenFromCloudDrive.HotKey = cfg.OpenFromCloudDriveShortcut ?? PluginConfiguration.DefaultOpenFromCloudDriveShortcut;
 
             UpdateCacheButtonState();
             UpdateBackupState();
