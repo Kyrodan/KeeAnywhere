@@ -117,6 +117,13 @@ From KeeAnywhere's perspective Dropbox can be accessed in two modes: `Full Acces
 
 *Remarks:* If you use another client (e.g. KeePass2Android on your smartphone) that also uses the restricted `App` mode, KeeAnywhere cannot read its data in restricted mode - you have to use an (unrestricted) Dropbox account in at least one of these Apps.
 
+# HiDrive
+
+## How do I open a database in a "Common" folder? {#hidrive-common}
+Starting with version 2.4.0 the file dialog starts at the root of your HiDrive: your personal folder is `users/<your user name>`, the common folders are in `public`. Folders you can only read are listed as well, so you can navigate to them.
+
+Databases opened with an older version (paths relative to your personal folder) keep working.
+
 # OneDrive
 
 ## How do I open a database someone shared with me? {#onedrive-shared}
