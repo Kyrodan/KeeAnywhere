@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
@@ -59,6 +60,10 @@ namespace KeeAnywhere.Configuration
 
         [DataMember]
         public AccountIdentifier FilePickerLastUsedAccount { get; set; }
+
+        // Last folder in the file dialog per account (#174): key "Type:Name", value path of the folder
+        [DataMember]
+        public Dictionary<string, string> FilePickerLastUsedFolders { get; set; }
 
         [DataMember]
         public DateTime DonationDialogLastShown { get; set; }

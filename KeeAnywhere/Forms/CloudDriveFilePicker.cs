@@ -222,6 +222,9 @@ namespace KeeAnywhere.Forms
 
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
+            if (DialogResult == DialogResult.OK)
+                SaveLastUsedFolder();
+
             GlobalWindowManager.RemoveWindow(this);
         }
 
@@ -250,8 +253,34 @@ namespace KeeAnywhere.Forms
                 
             }
 
-            await SetProvider(provider);
+            await SetProvider(provider, GetLastUsedFolder(account));
             SetWaitState(false);
+        }
+
+        private static string GetFolderKey(AccountConfiguration account)
+        {
+            return account.Type + ":" + account.Name;
+        }
+
+        private string GetLastUsedFolder(AccountConfiguration account)
+        {
+            var folders = m_configService.PluginConfiguration.FilePickerLastUsedFolders;
+            string folder;
+            return folders != null && folders.TryGetValue(GetFolderKey(account), out folder) ? folder : null;
+        }
+
+        // #174: remember the folder of the chosen file per account
+        private void SaveLastUsedFolder()
+        {
+            var item = m_cbAccounts.SelectedItem as ImageComboBoxItem;
+            var account = item != null ? item.Item as AccountConfiguration : null;
+            if (account == null) return;
+
+            var config = m_configService.PluginConfiguration;
+            if (config.FilePickerLastUsedFolders == null)
+                config.FilePickerLastUsedFolders = new Dictionary<string, string>();
+
+            config.FilePickerLastUsedFolders[GetFolderKey(account)] = string.Join("/", m_stack.Select(_ => _.Name).Reverse());
         }
 
         private void SetWaitState(bool isWait)
@@ -352,7 +381,7 @@ namespace KeeAnywhere.Forms
             return extension.ToLower() == ".kdbx" ? IconDatabase : IconDocument;
         }
 
-        private async Task SetProvider(IStorageProvider provider)
+        private async Task SetProvider(IStorageProvider provider, string lastUsedFolder)
         {
             if (m_provider == provider) return;
 
@@ -376,8 +405,29 @@ namespace KeeAnywhere.Forms
                     ErrorMessageService.ShowError("Error getting the root folder", null, ex);
                 }
 
-                await SetSelectedItem(root);
+                await SetSelectedItem(await OpenFolderPath(root, lastUsedFolder));
             }
+        }
+
+        // Opens the folders of the path one by one (pushed to m_stack); stops at a folder that doesn't exist anymore
+        private async Task<StorageProviderItem> OpenFolderPath(StorageProviderItem root, string path)
+        {
+            var current = root;
+            if (root == null || string.IsNullOrEmpty(path)) return current;
+
+            foreach (var name in path.Split('/'))
+            {
+                var info = await GetItemInfo(current);
+                if (info.Children == null) break;
+
+                var folder = info.Children.FirstOrDefault(_ => _.Type == StorageProviderItemType.Folder && _.Name == name);
+                if (folder == null) break;
+
+                m_stack.Push(folder);
+                current = folder;
+            }
+
+            return current;
         }
 
         private async void OnItemDoubleClick(object sender, EventArgs e)
