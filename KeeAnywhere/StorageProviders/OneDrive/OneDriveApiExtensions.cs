@@ -11,13 +11,23 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 {
     public static class OneDriveApiExtensions
     {
-        // Path resolution per account (#508): the own drive id never changes, the top folders
-        // (drive id and item id, also of shared folders) only rarely. Bound to the GraphServiceClient,
+        // Path resolution per account (#508): the own drive id never changes; a top folder (drive id and
+        // item id, also of shared folders) is kept for a few minutes - enough for open, save and verify,
+        // short enough that a renamed or replaced folder is found again. Bound to the GraphServiceClient,
         // which OneDriveHelper caches per account and drops on re-authorization.
+        private static readonly TimeSpan TopFolderLifetime = TimeSpan.FromMinutes(5);
+
+        private class TopFolder
+        {
+            public string DriveId;
+            public string ItemId;
+            public DateTime Expires;
+        }
+
         private class PathCache
         {
             public string DriveId;
-            public readonly Dictionary<string, string[]> TopFolders = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
+            public readonly Dictionary<string, TopFolder> TopFolders = new Dictionary<string, TopFolder>(StringComparer.OrdinalIgnoreCase);
         }
 
         private static readonly ConditionalWeakTable<GraphServiceClient, PathCache> PathCaches = new ConditionalWeakTable<GraphServiceClient, PathCache>();
@@ -113,18 +123,21 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             }
 
             var cache = PathCaches.GetOrCreateValue(api);
-            string[] top;
+            TopFolder top;
             lock (cache)
             {
                 cache.TopFolders.TryGetValue(parts[0], out top);
             }
 
-            if (top == null)
+            if (top == null || top.Expires < DateTime.UtcNow)
             {
                 var topFolder = await api.Drives[defaultDriveId].Root.ItemWithPath(Uri.EscapeDataString(parts[0])).GetAsync();
-                var driveId = topFolder.RemoteItem == null ? topFolder.ParentReference.DriveId : topFolder.RemoteItem.ParentReference.DriveId;
-                var topFolderId = topFolder.RemoteItem == null ? topFolder.Id : topFolder.RemoteItem.Id;
-                top = new[] { driveId, topFolderId };
+                top = new TopFolder
+                {
+                    DriveId = topFolder.RemoteItem == null ? topFolder.ParentReference.DriveId : topFolder.RemoteItem.ParentReference.DriveId,
+                    ItemId = topFolder.RemoteItem == null ? topFolder.Id : topFolder.RemoteItem.Id,
+                    Expires = DateTime.UtcNow + TopFolderLifetime
+                };
                 lock (cache)
                 {
                     cache.TopFolders[parts[0]] = top;
@@ -134,7 +147,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             // The top folder's apparent name can be different from its
             // actual name, so don't use the name as part of the path at all.
             // We have the id, so navigate from there instead.
-            return api.Drives[top[0]].Items[top[1]].ItemWithPath(Uri.EscapeDataString(string.Join("/",parts.Skip(1))));
+            return api.Drives[top.DriveId].Items[top.ItemId].ItemWithPath(Uri.EscapeDataString(string.Join("/",parts.Skip(1))));
         }
 
     }
