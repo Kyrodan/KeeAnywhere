@@ -131,6 +131,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write       # attestations: signing via Sigstore with the workflow's identity
+      attestations: write
     defaults:
       run:
         shell: pwsh
@@ -143,6 +145,15 @@ jobs:
       with:
         name: ${{ needs.build.outputs.artifact }}
         path: dist
+
+    # Build provenance: users can verify a download with "gh attestation verify <file> --repo Kyrodan/KeeAnywhere"
+    - name: Attest build provenance
+      uses: actions/attest-build-provenance@v4
+      with:
+        subject-path: |
+          dist/*.plgx
+          dist/*.zip
+          dist/*.nupkg
 
     - name: Release notes from CHANGELOG.md
       id: notes
