@@ -117,3 +117,15 @@ From KeeAnywhere's perspective Dropbox can be accessed in two modes: `Full Acces
 
 *Remarks:* If you use another client (e.g. KeePass2Android on your smartphone) that also uses the restricted `App` mode, KeeAnywhere cannot read its data in restricted mode - you have to use an (unrestricted) Dropbox account in at least one of these Apps.
 
+# OneDrive
+
+## How do I open a database someone shared with me? {#onedrive-shared}
+KeeAnywhere shows the content of *My files* in your OneDrive. Items that only appear in the *Shared* view of OneDrive aren't visible - Microsoft has deprecated the interface behind this view, so KeeAnywhere doesn't offer it.
+
+To use a shared database, add the shared **folder** to your own OneDrive:
+1. The owner shares the **folder** that contains the database (`.kdbx`), not only the file itself - with edit permission, if you want to save changes.
+2. Open OneDrive on the web, go to *Shared*, right-click the folder and choose `Add shortcut to My files`.
+3. In KeePass choose `File - Open - Open from Cloud Drive...` and select your OneDrive account. The shared folder appears in the root of your OneDrive - open the database from there.
+
+*Remarks:* OneDrive offers shortcuts for folders only, so a single shared file can't be opened this way - share the containing folder instead.
+
