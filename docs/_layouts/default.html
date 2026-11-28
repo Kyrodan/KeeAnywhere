@@ -64,9 +64,9 @@
       {% endif %}
 
       {% if site.github.is_project_page and page.url == '/' %}
-      {% assign plgx = site.github.latest_release.assets | where_exp: "asset", "asset.name contains '.plgx'" | first %}
       <div class="banner-buttons">
-        <a href="{{ plgx.browser_download_url | default: site.github.releases_url }}" class="btn btn-primary">Download {{ site.github.latest_release.tag_name }}</a>
+        <!-- the ZIP file has to be unpacked into a subfolder - the installation page explains it and links the files -->
+        <a href="{{ '/use/installation' | relative_url }}" class="btn btn-primary">Download {{ site.github.latest_release.tag_name }}</a>
         <a href="{{ site.github.issues_url }}" class="btn" target="_blank" rel="noopener noreferrer">Found a bug?</a>
         <a href="{{ site.github.repository_url }}" class="btn" target="_blank" rel="noopener noreferrer">View on GitHub</a>
       </div>

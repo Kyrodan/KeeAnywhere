@@ -31,7 +31,7 @@ if (! $installPath) {
 if (! $installPath) {
   Write-Verbose "Searching $env:Path for unregistered install..."
   $installFullName = (Get-Command keepass -ErrorAction SilentlyContinue).Path
-  if (! $installFullName) {
+  if ($installFullName) {
     $installPath = [io.path]::GetDirectoryName($installFullName)
   }
 }
@@ -47,14 +47,19 @@ if ($pluginPath.Count -eq 0) {
   $pluginPath = Join-Path $installPath "Plugins"
   [System.IO.Directory]::CreateDirectory($pluginPath)
 }
-$installFile = Join-Path $pluginPath "$($packageName).plgx"
-$sourceFile = Join-Path $toolsDir "KeeAnywhere.plgx"
-Copy-Item -Path "$sourceFile" -Destination "$installFile" 
-
-if ( Get-Process -Name "KeePass" `
-                 -ErrorAction SilentlyContinue ) {
-  Write-Warning "$($packageSearch) is currently running. Plugin will be available at next restart of $($packageSearch)." 
-} else {
-  Write-Host "$($packageName) will be loaded the next time KeePass is started."
-  Write-Host "Please note this plugin may require additional configuration. Look for a new entry in KeePass' Menu>Tools"
+# The DLLs of a loaded plugin are locked, so KeePass must be closed
+if (Get-Process -Name "KeePass" -ErrorAction SilentlyContinue) {
+  Write-Warning "$($packageSearch) is running. Please save any opened databases and close $($packageSearch) before installing or updating KeeAnywhere."
+  throw
 }
+
+# Versions up to 2.3.0 were installed as PLGX file - remove it, otherwise KeeAnywhere is loaded twice
+Remove-Item -Path (Join-Path $pluginPath "$($packageName).plgx") -Force -ErrorAction SilentlyContinue
+
+# DLL version in its own subfolder; clear it first, so no libraries of an older version are left
+$installDir = Join-Path $pluginPath "KeeAnywhere"
+Remove-Item -Path $installDir -Recurse -Force -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path $toolsDir "KeeAnywhere") -Destination $installDir -Recurse
+
+Write-Host "$($packageName) will be loaded the next time KeePass is started."
+Write-Host "Please note this plugin may require additional configuration. Look for a new entry in KeePass' Menu>Tools"

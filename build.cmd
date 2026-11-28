@@ -30,7 +30,9 @@ if %errorlevel% NEQ 0 goto error
 
 :package_chocolatey
 xcopy /s /i chocolatey build\chocolatey
-xcopy KeeAnywhere\bin\Release\KeeAnywhere.plgx build\chocolatey\tools
+rem the Chocolatey package contains the DLL version (content of the ZIP file)
+%zip% x build\dist\KeeAnywhere-%version%.zip -obuild\chocolatey\tools\KeeAnywhere
+if %errorlevel% NEQ 0 goto error
 choco pack build\chocolatey\keepass-plugin-keeanywhere.nuspec --version %version% --outputdirectory build\dist  
 if %errorlevel% NEQ 0 goto error
 

@@ -250,6 +250,8 @@
     </Reference>
     <Reference Include="PlgxTool, Version=0.1.2.41667, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PlgxTool.1.0.3\lib\net40\PlgxTool.exe</HintPath>
+      <Private>False</Private>
+      <ExcludeFromPlgx />
     </Reference>
     <Reference Include="Std.UriTemplate, Version=2.0.8.0, Culture=neutral, PublicKeyToken=c118b0afb4598f9a, processorArchitecture=MSIL">
       <HintPath>..\packages\Std.UriTemplate.2.0.8\lib\netstandard2.0\Std.UriTemplate.dll</HintPath>

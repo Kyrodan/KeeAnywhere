@@ -77,7 +77,7 @@ Details are described in [BUILD.md]({{ site.github.repository_url }}/blob/master
 * Test the PLGX with `test-plgx.ps1`: it builds the plugin and starts a separate test copy of KeePass with it.
 
 ## Technical Constraints
-KeeAnywhere is distributed as PLGX file, which is compiled by KeePass on the user's machine. This leads to some constraints:
+Besides the DLL version (ZIP file), KeeAnywhere is distributed as PLGX file, which is compiled by KeePass on the user's machine. This leads to some constraints:
 * **C# 5 only:** KeePass compiles the plugin with the C# 5 compiler of the .NET Framework. Don't use newer language features like `?.`, `??=`, `$"..."` string interpolation, `nameof`, expression-bodied members or pattern matching.
 * **No XML comments in `KeeAnywhere.csproj`:** the PLGX build tool fails on them.
 * NuGet packages are referenced via `packages.config` and must come from the official NuGet.org site.
