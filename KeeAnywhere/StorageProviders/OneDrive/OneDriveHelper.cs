@@ -36,11 +36,22 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             "Files.ReadWrite"
         };
 
+        // OneDrive (restricted): access to the app folder Apps/KeeAnywhere only (#391)
+        public static readonly string[] ScopesRestricted = {
+            OidcConstants.StandardScopes.OpenId,
+            OidcConstants.StandardScopes.Profile,
+            "offline_access",
+            "Files.ReadWrite.AppFolder"
+        };
+
         private static readonly IDictionary<string, GraphServiceClient> Cache = new Dictionary<string, GraphServiceClient>();
 
-        public static OidcFlow CreateOidcFlow()
+        public static OidcFlow CreateOidcFlow(bool isAccessRestricted)
         {
-            return new OidcFlow(StorageType.OneDrive, Authority, OneDriveClientId, null, Scopes)
+            return new OidcFlow(
+                isAccessRestricted ? StorageType.OneDriveRestricted : StorageType.OneDrive,
+                Authority, OneDriveClientId, null,
+                isAccessRestricted ? ScopesRestricted : Scopes)
             {
                 PrepareLoginRequest = request => { request.FrontChannelExtraParameters.Add("prompt", "select_account"); } // login
             };
@@ -48,9 +59,12 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public static GraphServiceClient GetApi(AccountConfiguration account)
         {
-            if (Cache.ContainsKey(account.Id)) return Cache[account.Id];
+            // the same Microsoft account can be added as OneDrive and as OneDrive (restricted)
+            var key = GetCacheKey(account.Type, account.Id);
+            if (Cache.ContainsKey(key)) return Cache[key];
 
-            var authProvider = new OneDriveAuthenticationProvider(CreateOidcFlow(), account);
+            var isAccessRestricted = account.Type == StorageType.OneDriveRestricted;
+            var authProvider = new OneDriveAuthenticationProvider(CreateOidcFlow(isAccessRestricted), account);
 
             //var httpProvider = new HttpProvider(ProxyTools.CreateHttpClientHandler(), true)
             //{
@@ -64,15 +78,22 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             var handlers = GraphClientFactory.CreateDefaultHandlers();
             var httpClient = GraphClientFactory.Create(handlers, "v1.0", "Global", ProxyTools.GetProxy());
             var api = new GraphServiceClient(httpClient, authProvider);
+            if (isAccessRestricted) api.UseAppFolderAsRoot();
 
-            Cache.Add(account.Id, api);
+            Cache.Add(key, api);
 
             return api;
         }
 
         public static void InvalidateCache(string accountId)
         {
-            Cache.Remove(accountId);
+            Cache.Remove(GetCacheKey(StorageType.OneDrive, accountId));
+            Cache.Remove(GetCacheKey(StorageType.OneDriveRestricted, accountId));
+        }
+
+        private static string GetCacheKey(StorageType type, string accountId)
+        {
+            return type + "/" + accountId;
         }
     }
 }

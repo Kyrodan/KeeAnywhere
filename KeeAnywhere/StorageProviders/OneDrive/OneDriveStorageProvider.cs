@@ -54,7 +54,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
             if (string.IsNullOrEmpty(destFolder))
             {
                 // file in root folder
-                folder = await _api.Drives[await _api.GetDefaultDriveIdAsync()].Root.GetAsync();
+                folder = await _api.GetRootFolderAsync();
             }
             else
             {
@@ -85,7 +85,7 @@ namespace KeeAnywhere.StorageProviders.OneDrive
 
         public async Task<StorageProviderItem> GetRootItem()
         {
-            var odItem = await _api.Drives[await _api.GetDefaultDriveIdAsync()].Root.GetAsync();
+            var odItem = await _api.GetRootFolderAsync();
 
             if (odItem == null)
                 return null;

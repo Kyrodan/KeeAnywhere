@@ -29,7 +29,8 @@ namespace KeeAnywhere.StorageProviders
             d.Add(new StorageDescriptor(StorageType.GoogleDrive, "Google Drive", "gdrive", account => new GoogleDriveStorageProvider(account), () => new GoogleDriveStorageConfigurator(false), PluginResources.GoogleDrive_16x16));
             d.Add(new StorageDescriptor(StorageType.GoogleDriveRestricted, "Google Drive (restricted)", "gdrive-r", account => new GoogleDriveStorageProvider(account), () => new GoogleDriveStorageConfigurator(true), PluginResources.GoogleDrive_16x16));
             d.Add(new StorageDescriptor(StorageType.HiDrive, "HiDrive", "hidrive", account => new HiDriveStorageProvider(account), () => new HiDriveStorageConfigurator(), PluginResources.HiDrive_16x16));
-            d.Add(new StorageDescriptor(StorageType.OneDrive, "OneDrive", "onedrive", account => new OneDriveStorageProvider(account), () => new OneDriveStorageConfigurator(), PluginResources.OneDrive_16x16, OneDriveHelper.InvalidateCache));
+            d.Add(new StorageDescriptor(StorageType.OneDrive, "OneDrive", "onedrive", account => new OneDriveStorageProvider(account), () => new OneDriveStorageConfigurator(false), PluginResources.OneDrive_16x16, OneDriveHelper.InvalidateCache));
+            d.Add(new StorageDescriptor(StorageType.OneDriveRestricted, "OneDrive (restricted)", "onedrive-r", account => new OneDriveStorageProvider(account), () => new OneDriveStorageConfigurator(true), PluginResources.OneDrive_16x16, OneDriveHelper.InvalidateCache));
             d.Add(new StorageDescriptor(StorageType.AmazonS3, "S3 Object Storage", "s3", account => new AmazonS3StorageProvider(account), () => new AmazonS3StorageConfigurator(), PluginResources.AmazonS3_16x16));
 
             // Shown in this order (menus, account lists): alphabetically by the displayed name
