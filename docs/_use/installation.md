@@ -20,6 +20,15 @@ _Remarks:_ The preferred distribution is the PLGX file: it's a single file (the 
 
 All files of the latest version (including SHA256 checksums) can be found on the [release page]({{ site.github.latest_release.html_url }}).
 
+### Verify a download {#verify}
+Starting with version 2.4.0, the release files (PLGX, ZIP and Chocolatey package) have a [build provenance attestation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations): it proves that a file was built unmodified from this repository by its release workflow. To check a downloaded file, use the [GitHub CLI](https://cli.github.com/):
+
+```
+gh attestation verify KeeAnywhere-2.4.0.zip --repo Kyrodan/KeeAnywhere
+```
+
+_Remarks:_ This proves the origin of the file, not that the code is free of bugs.
+
 ## Automatic Installation using Chocolatey/Scoop
 [Chocolatey](https://chocolatey.org/) is a package manager for Windows. To install KeeAnywhere (and KeePass, if not present) just type `choco install keepass-plugin-keeanywhere` in a command shell.
 
