@@ -21,11 +21,33 @@ namespace KeeAnywhere.StorageProviders.HiDrive
             this.account = account;
         }
 
+        // #324: the file dialog starts at the HiDrive root, so paths chosen there start with one of its
+        // folders ("users/<name>/..." = Personal, "public/..." = Common) and are absolute. Older paths
+        // (up to 2.3) are relative to the home folder and keep working.
+        // shortcut: a path in the home folder starting with a folder named "users" or "public" is taken
+        // as absolute - reopen such a database via the file dialog once.
+        private static readonly string[] RootFolders = { "users", "public" };
+
+        private class Location
+        {
+            public string Path;
+            public string Pid;
+        }
+
+        private async Task<Location> GetLocation(string path)
+        {
+            var firstPart = path.Split('/')[0];
+            if (RootFolders.Contains(firstPart, StringComparer.OrdinalIgnoreCase))
+                return new Location { Path = "/" + path, Pid = null };
+
+            return new Location { Path = string.IsNullOrEmpty(path) ? null : path, Pid = await GetHomeId() };
+        }
+
         public async Task<Stream> Load(string path)
         {
             var api = await GetApi();
-            var pid = await GetHomeId();
-            var stream = await api.File.Download(path, pid).ExecuteAsync();
+            var location = await GetLocation(path);
+            var stream = await api.File.Download(location.Path, location.Pid).ExecuteAsync();
 
             return stream;
         }
@@ -33,12 +55,10 @@ namespace KeeAnywhere.StorageProviders.HiDrive
         public async Task Save(Stream stream, string path)
         {
             var api = await GetApi();
-            var pid = await GetHomeId();
-
-            var pathname = CloudPath.GetDirectoryName(path);
+            var folder = await GetLocation(CloudPath.GetDirectoryName(path));
             var filename = CloudPath.GetFileName(path);
 
-            var item = await api.File.Upload(filename, String.IsNullOrEmpty(pathname) ? null : pathname, pid, UploadMode.CreateOrUpdate).ExecuteAsync(stream);
+            var item = await api.File.Upload(filename, folder.Path, folder.Pid, UploadMode.CreateOrUpdate).ExecuteAsync(stream);
 
             if (item == null)
                 throw new InvalidOperationException("HiDrive: Save failed.");
@@ -47,24 +67,45 @@ namespace KeeAnywhere.StorageProviders.HiDrive
         public async Task Copy(string sourcePath, string destPath)
         {
             var api = await GetApi();
-            var pid = await GetHomeId();
+            var source = await GetLocation(sourcePath);
+            var dest = await GetLocation(destPath);
 
-            await api.File.Copy(sourcePath, pid, destPath, pid).ExecuteAsync();
+            await api.File.Copy(source.Path, source.Pid, dest.Path, dest.Pid).ExecuteAsync();
         }
 
         public async Task Delete(string path)
         {
             var api = await GetApi();
-            var pid = await GetHomeId();
+            var location = await GetLocation(path);
 
-            await api.File.Delete(path, pid).ExecuteAsync();
+            await api.File.Delete(location.Path, location.Pid).ExecuteAsync();
         }
 
         public async Task<StorageProviderItem> GetRootItem()
         {
             var api = await GetApi();
 
-            var user = await api.User.Me.Get(new[] {User.Fields.HomeId, User.Fields.Home }).ExecuteAsync();
+            DirectoryItem root = null;
+            try
+            {
+                root = await api.Directory.Get("/", null, new[] { DirectoryMember.None }, new[] { DirectoryBaseItem.Fields.Id }).ExecuteAsync();
+            }
+            catch (Exception)
+            {
+                // e.g. no read permission for the root: fall back to the home folder (paths relative to it)
+            }
+
+            if (root != null)
+            {
+                return new StorageProviderItem
+                {
+                    Id = root.Id,
+                    Name = "/",
+                    Type = StorageProviderItemType.Folder,
+                };
+            }
+
+            var user = await api.User.Me.Get(new[] { User.Fields.HomeId, User.Fields.Home }).ExecuteAsync();
 
             return new StorageProviderItem
             {
@@ -72,6 +113,12 @@ namespace KeeAnywhere.StorageProviders.HiDrive
                 Name = user.Home,
                 Type = StorageProviderItemType.Folder,
             };
+        }
+
+        // Folders only need to be readable (e.g. "/" and "/users" aren't writable), files must be writable to save a database
+        private static bool IsListed(DirectoryChildItem item)
+        {
+            return item.IsReadable.Value && (item.Type == "dir" || item.IsWritable.Value);
         }
 
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentItem(StorageProviderItem parent)
@@ -88,7 +135,7 @@ namespace KeeAnywhere.StorageProviders.HiDrive
                 .Get(null, parent.Id, new [] {DirectoryMember.Directory, DirectoryMember.File }, fields)
                 .ExecuteAsync();
 
-            var items = dir.Members.Where(_ => _.IsReadable.Value && _.IsWritable.Value).Select(_ => new StorageProviderItem
+            var items = dir.Members.Where(IsListed).Select(_ => new StorageProviderItem
             {
                 Id = _.Id,
                 Name = _.Name,
@@ -106,7 +153,8 @@ namespace KeeAnywhere.StorageProviders.HiDrive
         public async Task<IEnumerable<StorageProviderItem>> GetChildrenByParentPath(string path)
         {
             var api = await GetApi();
-            var pid = await GetHomeId();
+            var location = await GetLocation(path);
+            var pid = location.Pid;
 
             var fields = new[]
             {
@@ -115,10 +163,10 @@ namespace KeeAnywhere.StorageProviders.HiDrive
 
             var dir = await api
                 .Directory
-                .Get(path, pid, new[] { DirectoryMember.Directory, DirectoryMember.File }, fields)
+                .Get(location.Path, pid, new[] { DirectoryMember.Directory, DirectoryMember.File }, fields)
                 .ExecuteAsync();
 
-            var items = dir.Members.Where(_ => _.IsReadable.Value && _.IsWritable.Value).Select(_ => new StorageProviderItem
+            var items = dir.Members.Where(IsListed).Select(_ => new StorageProviderItem
             {
                 Id = _.Id,
                 Name = _.Name,
