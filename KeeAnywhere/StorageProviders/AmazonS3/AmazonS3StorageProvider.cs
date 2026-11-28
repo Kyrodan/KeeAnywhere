@@ -49,24 +49,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
 
                 GetBucketAndKey(path, out bucket, out filename);
 
-                try // Does parent folder exists, if not root?
-                {
-                    var folderName = CloudPath.GetDirectoryName(filename);
-
-                    if (!string.IsNullOrEmpty(folderName))
-                    {
-                        await api.GetObjectMetadataAsync(bucket, folderName + "/");
-                    }
-                }
-                catch (AmazonS3Exception ex)
-                {
-                    //if (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    //    throw new FileNotFoundException("Amazon S3: File not found.", );
-
-                    //status wasn't not found, so throw the exception
-                    throw;
-                }
-
+                // No check for a parent "folder": S3 has no real folders - folders listed from key prefixes
+                // often have no "folder/" object, and PutObject creates the key anyway
                 var request = new PutObjectRequest
                 {
                     BucketName = bucket,
@@ -132,6 +116,22 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
         {
             using (var api = AmazonS3Helper.GetApi(_account))
             {
+                string fixedBucket;
+                if (parent.Id == "/" && _account.AdditionalSettings.TryGetValue("Bucket", out fixedBucket) && !string.IsNullOrEmpty(fixedBucket))
+                {
+                    // #248: only the configured bucket (or folder), so s3:ListAllMyBuckets isn't needed
+                    return new[]
+                    {
+                        new StorageProviderItem
+                        {
+                            Id = fixedBucket,
+                            Name = fixedBucket,
+                            Type = StorageProviderItemType.Folder,
+                            ParentReferenceId = parent.Id
+                        }
+                    };
+                }
+
                 if (parent.Id == "/")
                 {
                     var response = await api.ListBucketsAsync();

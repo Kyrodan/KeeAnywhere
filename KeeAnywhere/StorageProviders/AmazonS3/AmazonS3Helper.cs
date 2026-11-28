@@ -15,6 +15,15 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
 {
     public static class AmazonS3Helper
     {
+        // Bucket setting "bucket" or "bucket/folder" (#248): returns { bucket, prefix }, prefix is null or ends with "/"
+        public static string[] GetBucketSetting(string setting)
+        {
+            var index = setting.IndexOf('/');
+            return index < 0
+                ? new[] { setting, null }
+                : new[] { setting.Substring(0, index), setting.Substring(index + 1) + "/" };
+        }
+
         public static AmazonS3Client GetApi(AccountConfiguration account)
         {
             if (account.AdditionalSettings == null)

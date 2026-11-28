@@ -39,6 +39,9 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
 
             account.AdditionalSettings.Add("UseSessionToken", Convert.ToString(dlg.UseSessionToken));
             account.AdditionalSettings.Add("SessionToken", dlg.SessionToken);
+            if (!string.IsNullOrEmpty(dlg.Bucket))
+                account.AdditionalSettings.Add("Bucket", dlg.Bucket);
+
             return account;
         }
     }

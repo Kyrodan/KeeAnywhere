@@ -84,7 +84,17 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
 
                 using (var api = AmazonS3Helper.GetApi(credentials, config))
                 {
-                    var buckets = await api.ListBucketsAsync();
+                    if (string.IsNullOrEmpty(this.Bucket))
+                    {
+                        await api.ListBucketsAsync();
+                    }
+                    else
+                    {
+                        // #248: with a fixed bucket, s3:ListAllMyBuckets isn't needed - s3:ListBucket on this bucket is enough
+                        var bucket = AmazonS3Helper.GetBucketSetting(this.Bucket);
+                        await api.ListObjectsV2Async(new Amazon.S3.Model.ListObjectsV2Request { BucketName = bucket[0], Prefix = bucket[1], MaxKeys = 1 });
+                    }
+
                     m_lblTestResult.Text = "Connection succeeded.";
                     this.TestResult = true;
                 }
@@ -116,7 +126,8 @@ namespace KeeAnywhere.StorageProviders.AmazonS3
         public bool UseSessionToken { get { return m_chkUseSessionToken.Checked; } }
         public RegionEndpoint AWSRegion { get { return (RegionEndpoint) m_cmbRegion.SelectedItem; } }
         public string EndpointUrl { get { return m_cmbEndpointUrl.Text.Trim(); } }
-        public bool IsAmazon { get { return m_rbTypeAmazon.Checked; } } 
+        public bool IsAmazon { get { return m_rbTypeAmazon.Checked; } }
+        public string Bucket { get { return m_txtBucket.Text.Trim().Trim('/'); } }
 
         protected bool? TestResult { get; set; }
 

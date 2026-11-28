@@ -194,3 +194,6 @@ temp/
 
 # Real OAuth API keys - created from KeeAnywhere/ApiKeys.Template.cs on first build
 KeeAnywhere/ApiKeys.cs
+
+# Local notes for Claude Code
+/CLAUDE.md

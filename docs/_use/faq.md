@@ -76,6 +76,8 @@ Here is a working sample - see details in [#187](https://github.com/Kyrodan/KeeA
 }
 ```
 
+Starting with version 2.4.0 you can omit `s3:ListAllMyBuckets`: enter the bucket (e.g. `my-bucket-name`) or a folder in it (e.g. `my-bucket-name/keepass`) in the field `Bucket (optional)` when adding the account. KeeAnywhere then only shows this bucket or folder and doesn't list the other buckets. `s3:ListBucket` (on the bucket) and `s3:GetObject`, `s3:PutObject` and `s3:DeleteObject` (on its objects, `s3:DeleteObject` for the backup rotation) are enough then.
+
 # Azure
 
 ## How can I use a SAS token instead of the account key for Azure Blob storage? {#azure-sas}
